@@ -1,12 +1,12 @@
 # CodersCamp 2020 Project 4 
-### Node.js backend app for CodersCamp participants data storage
+### Node.js backend app for CodersCamp participants
 
 ## Goal
 
 To build an application that will allow 
 - CodersCamp organizers to store and manage the information about the attendees
 - Mentors to manage their group (input results, check the progress)
-- Attendees to check their test and project grades and see if they will receive the certificate (with calculated required future grades)
+- Attendees to check their test and project grades and see if they will receive the certificate (with the forecast it they will get certified)
 
 ## Requirements
 
@@ -25,7 +25,7 @@ To build an application that will allow
     - *OPTIONAL: newsfeed - checking the information posted by the organisers*
     - *OPTIONAL: course roadmap - something like process.st, so all the data about the course sections with description, links and functionality to show how much time is left to finish each section*
     - *OPTIONAL: posting the project results*
-        - each team could post their results straight in the app and then other teams could easily check other team's project outcome (not sure if every team will like it but it might make the course more competitive and allow us to check other projects/solutions more easily). We could also add here a possibility to make project private?
+        - each team could post their results straight in the app and then everyone could easily check other team's project outcome. We could also add here a possibility to make project private (?)
     - *OPTIONAL: recruitment mode - user could apply for the course straight from the app*
 
 - **Mentor functionalities**
@@ -69,13 +69,43 @@ There should be a database prepared, that will allow the application to store th
    - user final grade (do we need it?)
    - certificate (boolean?)
    - user birth date (do we need it?)
-- 
+- other stuff to be added....
 
 ### Additional functionalities
 As it is required to use an external service in the project - let's use the mailing system as proposed by the CodersCamp organizers to handle password setup and informing users about the added grades or news from the organisers
 
 
 ## Project organization
-- **Month 1**
+Let's describe it at the beginning of the project to have a high-level overview of what's to be done for each weekin order to meet the deadline
+
+- **Month 1** - backend application
 - Week 1
-    - finalising the 
+    - finalising the requirements
+    - defining the data structure
+    - setting up the database
+    - tech setup of the project
+    - setting up the db connection within the app
+    - RESULT: project ready to be started
+- Week 2
+    - goal
+    - RESULT: e.g. we can push and pull the user data from the db by sending the crafted requests
+- Week 3
+    - goal 
+    - RESULT: e.g. we can handle the course data from the db by sending the crafted requests AND authentication service works
+- Week 4
+    - goal
+    - RESULT: e.g. mailing service sends the emails with login info, we can handle all the data with crafted requests ...
+
+- **Month 2** - frontend application
+- Week 1
+    - goal  
+    - RESULT:  
+- Week 2
+    - goal
+    - RESULT:
+- Week 3
+    - goal
+    - RESULT:
+- Week 4
+    - goal
+    - RESULT:
