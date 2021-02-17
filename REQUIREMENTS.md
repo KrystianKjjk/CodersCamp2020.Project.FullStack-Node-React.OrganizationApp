@@ -75,7 +75,7 @@ There should be a database prepared, that will allow the application to store th
 As it is required to use an external service in the project - let's use the mailing system as proposed by the CodersCamp organizers to handle password setup and informing users about the added grades or news from the organisers
 
 
-## Project organization
+## Project plan
 Let's describe it at the beginning of the project to have a high-level overview of what's to be done for each week in order to meet the final deadline easier :) Example below, let's fill it later once we will select the functionalities we need.
 
 - **Month 1** - backend application
