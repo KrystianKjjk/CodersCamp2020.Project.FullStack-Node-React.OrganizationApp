@@ -8,8 +8,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
-    "start:dev": "parcel -p 8765 watch ./Api/Src/App.ts",
-    "build": "parcel build ./Api/Src/App.ts --public-url ./"
+    "start:dev": "parcel -p 8765 watch ./Api/App.ts",
+    "build": "parcel build ./Api/App.ts --public-url ./"
   },
   "repository": {
     "type": "git",
