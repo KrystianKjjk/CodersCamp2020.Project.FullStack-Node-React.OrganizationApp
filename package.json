@@ -1,0 +1,69 @@
+{
+  "name": "coderscamp2020.project.fullstack-node-react.organizationapp",
+  "version": "1.0.0",
+  "description": "Organization Application - CodersCamp 2021 Node.js project",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
+    "start:dev": "parcel -p 8765 watch ./Api/Src/App.ts",
+    "build": "parcel build ./Api/Src/App.ts --public-url ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrystianKjjk/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp.git"
+  },
+  "keywords": [
+    "coderscamp",
+    "organization",
+    "node.js",
+    "typescript",
+    "frontend",
+    "backend",
+    "fullstack",
+    "api",
+    "rest",
+    "mongodb",
+    "database",
+    "nosql"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KrystianKjjk/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp/issues"
+  },
+  "homepage": "https://github.com/KrystianKjjk/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@testing-library/dom": "^7.29.4",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.22",
+    "jest": "^26.0.0",
+    "jest-transform-stub": "^2.0.0",
+    "parcel": "^1.12.4",
+    "prettier": "^2.2.1",
+    "sass": "^1.32.5",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "testRegex": "\\(test|spec)\\.(jsx?|tsx?)$",
+    "coverageDirectory": "../Coverage",
+    "collectCoverageFrom": [
+      "./Api/Src/**"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(png)$": "jest-transform-stub"
+    }
+  }
+}
