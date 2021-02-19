@@ -54,7 +54,7 @@
       "json",
       "ts"
     ],
-    "testRegex": "\\(test|spec)\\.(jsx?|tsx?)$",
+    "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
     "coverageDirectory": "../Coverage",
     "collectCoverageFrom": [
       "./Api/Src/**"
