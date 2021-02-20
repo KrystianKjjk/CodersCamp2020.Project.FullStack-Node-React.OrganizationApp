@@ -2,14 +2,14 @@
   "name": "coderscamp2020.project.fullstack-node-react.organizationapp",
   "version": "1.0.0",
   "description": "Organization Application - CodersCamp 2021 Node.js project",
-  "main": "index.ts",
+  "main": "./Api/index.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
-    "start:dev": "parcel -p 8765 watch ./Api/App.ts",
-    "build": "parcel build ./Api/App.ts --public-url ./"
+    "start:dev": "parcel -p 8765 watch ./Api/index.ts",
+    "build": "parcel build ./Api/index.ts --public-url ./"
   },
   "repository": {
     "type": "git",
