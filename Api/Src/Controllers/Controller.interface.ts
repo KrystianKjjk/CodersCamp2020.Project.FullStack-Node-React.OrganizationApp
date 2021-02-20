@@ -1,8 +1,8 @@
 import * as express from 'express';
 
-interface Controller {
+interface IController {
     path: string;
     router: express.Router;
 }
 
-export default Controller;
+export default IController;

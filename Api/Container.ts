@@ -1,11 +1,11 @@
 class Container {
-    dependencies: object;
-    
+    [prop: string]: any;
+    private dependencies: object;
     constructor(){
         this.dependencies = {};
     }
 
-    declare(name: string, cb: (c: Container) => object){
+    declare(name: string, cb: (c: Container) => any){
         Object.defineProperty(this, name, {
             get: () => {
                 if(!this.dependencies.hasOwnProperty(name)){
