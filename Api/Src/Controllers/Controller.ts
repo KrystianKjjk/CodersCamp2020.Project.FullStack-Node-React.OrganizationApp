@@ -8,6 +8,7 @@ class Controller implements IController {
   
   constructor(path: string, routes: IRoutesGroup) {
     this.path = path;
+    this.router = express.Router();
     this.intializeRoutes(routes);
   }
 
@@ -15,7 +16,7 @@ class Controller implements IController {
     for (const method in routes) {
         routes[method].forEach((rout: Rout) => {
             const param = rout.param ? '/:' + rout.param : '';
-            this.router[method](this.path + param, rout);
+            this.router[method](this.path + param, rout.handler);
         })
     }
   }

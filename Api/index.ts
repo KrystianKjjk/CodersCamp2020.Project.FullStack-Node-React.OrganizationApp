@@ -1,4 +1,4 @@
-let appContainer = require('./App');
+import appContainer from './App';
 
-let app = appContainer.App;
+const app = appContainer.App;
 app.listen();

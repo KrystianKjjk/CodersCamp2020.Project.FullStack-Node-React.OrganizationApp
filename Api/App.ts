@@ -13,9 +13,10 @@ class App {
   constructor(mongoUrl: string, middlewares: any[], controllers: Controller[], port: string) {
     this.app = express();
     this.port = port;
-    this.connectToTheDatabase(mongoUrl);
+    //this.connectToTheDatabase(mongoUrl);
     this.initializeMiddlewares(middlewares);
     this.initializeControllers(controllers);
+    return this;
   }
  
   public listen() {
