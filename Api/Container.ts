@@ -1,18 +1,18 @@
 class Container {
-    services: object;
+    dependencies: object;
     
     constructor(){
-        this.services = {};
+        this.dependencies = {};
     }
 
-    service(name: string, cb: (c: Container) => object){
+    declare(name: string, cb: (c: Container) => object){
         Object.defineProperty(this, name, {
             get: () => {
-                if(!this.services.hasOwnProperty(name)){
-                    this.services[name] = cb(this);
+                if(!this.dependencies.hasOwnProperty(name)){
+                    this.dependencies[name] = cb(this);
                 }
 
-                return this.services[name];
+                return this.dependencies[name];
             },
             configurable: true,
             enumerable: true
@@ -21,3 +21,5 @@ class Container {
         return this;
     }
 }
+
+export default Container;
