@@ -9,7 +9,7 @@
     "test:cov": "jest --coverage",
     "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
     "start:dev": "npx nodemon ./Api/index.ts",
-    "build": "parcel build ./Api/index.ts --public-url ./Api/"
+    "build": "parcel build ./Api/index.ts --public-url ./"
   },
   "repository": {
     "type": "git",
