@@ -1,23 +1,9 @@
-import IRoutesGroup from './RoutesGroup.interface';
-import * as express from 'express';
+import * as express from "express";
+import SampleController from "../Controllers/SampleController";
 
-function getHelloWorld(req: express.Request, res: express.Response, next?: express.NextFunction){
-    res.status(200).json({msg: 'Hello World'});
-}
-const helloWorld = {
-    path: 'hello/world/',
-    handler: getHelloWorld
-}
-const helloWorldParam = {
-    param: 'world',
-    handler: (req: express.Request, res: express.Response, next?: express.NextFunction) => {
-        const world = req.params.world
-        res.status(200).json({msg: 'Hello ' + world});
-    }
-}
-
-
-const sampleRoutes = {
-    get: [helloWorld, helloWorldParam]
+const sampleRoutes = (router: express.Router, controller: SampleController) => {
+    router.route("/helloWorld").get(controller.getHelloWorld);
+    router.route("/helloWorld/:world").get(controller.getHelloWorldParam);
+    router.route("/helloWorld/:world").post(controller.postHelloWorldParam);
 };
 export default sampleRoutes;
