@@ -18,7 +18,7 @@ class App {
       this.app = express();
       this.router = router;
       this.port = port;
-      //this.connectToTheDatabase(mongoUrl);
+      this.connectToTheDatabase(mongoUrl);
       this.initializeMiddlewares(middlewares);
       this.initializeRouter();
       return this;
@@ -32,6 +32,7 @@ class App {
 
   private connectToTheDatabase(mongoUrl: string) {
       mongoose.connect(mongoUrl);
+      console.log(`App connected to the MongoDB at ${mongoUrl}`);
   }
 
   private initializeMiddlewares(middlewares: any[]) {
