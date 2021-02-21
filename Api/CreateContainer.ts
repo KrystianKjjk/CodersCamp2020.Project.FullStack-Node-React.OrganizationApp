@@ -12,22 +12,21 @@ const appContainer = new Container();
 appContainer.declare("Port", (c) => process.env.PORT);
 appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
 // Middlewares
-const middlewares = [bodyParser.json()];
+const middlewares = [
+  bodyParser.json()
+];
 appContainer.declare("Middlewares", (c) => middlewares);
 // Services
 appContainer.declare("SampleService", (c) => new SampleService());
 // Controllers
 appContainer.declare("SampleController", (c) => new SampleController(c.SampleService));
 // Routes
-appContainer.declare("Routes", c => [(router: express.Router) => sampleRoutes(router, c.SampleController)]);
+appContainer.declare("Routes", c => [
+  sampleRoutes(c.SampleController)
+]);
 // Create router
-appContainer.declare( "Router", (c) => {
-  const router = express.Router();
-  c.Routes.forEach((routes: (router: express.Router) => void) => {
-    routes(router);
-  });
-  return router;
-});
+type Routes = (router: express.Router) => express.Router;
+appContainer.declare( "Router", (c) =>  c.Routes.reduce( (router: express.Router, addRoutes: Routes) => addRoutes(router), express.Router() ) );
 appContainer.declare(
   "App",
   (c) =>
