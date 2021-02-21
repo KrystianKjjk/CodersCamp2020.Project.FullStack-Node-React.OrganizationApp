@@ -31,8 +31,8 @@ class App {
   }
 
   private connectToTheDatabase(mongoUrl: string) {
-      mongoose.connect(mongoUrl);
-      console.log(`App connected to the MongoDB at ${mongoUrl}`);
+      mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+      console.log(`App connected to MongoDB Atlas`);
   }
 
   private initializeMiddlewares(middlewares: any[]) {

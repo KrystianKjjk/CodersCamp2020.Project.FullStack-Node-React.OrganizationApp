@@ -67,7 +67,8 @@
     },
     "moduleNameMapper": {
       "\\.(png)$": "jest-transform-stub"
-    }
+    },
+    "testEnvironment": "node"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
