@@ -12,7 +12,7 @@ describe.skip('MongoDB Atlas connection test', () => {
 
     test('Should be connected with MongoDB Atlas', () =>{
         const connectionState = connection.connection.readyState;
-        expect(connectionState).toBe(1); //readyState will be 0 if connection is
+        expect(connectionState).toBe(1); //readyState will be 1 if connection is established
     })
 
     afterAll(async () => {
