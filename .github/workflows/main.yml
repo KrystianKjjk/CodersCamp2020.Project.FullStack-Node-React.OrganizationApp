@@ -26,4 +26,4 @@ jobs:
         if: always()
         with:
           name: organization-app-dist
-          path: ./dist
+          path: ./Api/dist
