@@ -4,7 +4,7 @@ require('dotenv').config();
 
 describe('MongoDB Atlas connection test', () => {
     let connection;
-
+    console.log(process.env);
     beforeAll(async () => {
         jest.resetModules();
         connection = await mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true});
