@@ -14,7 +14,7 @@ export enum UserStatus {
 };
 
 export interface UserModel {
-    userName: string,
+    username: string,
     name: string,
     surname: string,
     email: string,
@@ -25,7 +25,7 @@ export interface UserModel {
 };
 
 const UserSchema = new mongoose.Schema({
-    userName: {
+    username: {
         type: String, 
         required: true,
         index: true,
