@@ -8,5 +8,9 @@ export interface Grade {
     taskPoints: number,
     taskMaxPoints: number,
     projectPoints: number,
-    projectMaxPoints: number
+    projectMaxPoints: number,
+    rolePoints:number,
+    roleMaxPoints:number,
+    additionalPoints:number,
+    additionalMaxPoints:number
 }
