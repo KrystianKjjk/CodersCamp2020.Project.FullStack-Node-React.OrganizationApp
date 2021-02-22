@@ -18,7 +18,7 @@ class App {
       this.app = express();
       this.router = router;
       this.port = port;
-      //this.connectToTheDatabase(mongoUrl);
+      this.connectToTheDatabase(mongoUrl);
       this.initializeMiddlewares(middlewares);
       this.initializeRouter();
       return this;
@@ -31,7 +31,8 @@ class App {
   }
 
   private connectToTheDatabase(mongoUrl: string) {
-      mongoose.connect(mongoUrl);
+      mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+      console.log(`App connected to MongoDB Atlas`);
   }
 
   private initializeMiddlewares(middlewares: any[]) {
