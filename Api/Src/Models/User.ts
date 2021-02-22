@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 // import {Grade} from './Grade' - add grade when create grades model
 
 export enum UserType {
+    Candidate,
     Participant,
     Mentor, 
     Admin,
