@@ -6,13 +6,20 @@ export enum UserType {
     Admin,
 };
 
+export enum UserStatus {
+    Active, 
+    Deleted, 
+    Archived,
+};
+
 export interface UserModel {
     userName: string,
-    firstName: string,
-    lastName: string,
+    name: string,
+    surname: string,
     email: string,
-    userType: UserType,
+    type: UserType,
     password: string
+    status: UserStatus
 };
 
 const UserSchema = new mongoose.Schema({
@@ -21,11 +28,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         index: true,
     },
-    firstName: {
+    name: {
         type: String,
         required: true,
     },
-    lastName: {
+    surname: {
         type: String,
         required: true,
     },
@@ -35,13 +42,17 @@ const UserSchema = new mongoose.Schema({
         match: [/\S+@\S+\.\S+/, 'is invalid'],
         index: true,
     },
-    userType: {
+    type: {
         type: Number,
         default: 0,
     },
     password:  {
         type: String,
         required: true,
+    },
+    status: {
+        type: Number,
+        default: 0,
     },
   }, {timestamps: true});
 
