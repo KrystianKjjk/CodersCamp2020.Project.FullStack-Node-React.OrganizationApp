@@ -18,8 +18,8 @@ export interface UserModel {
     surname: string,
     email: string,
     type: UserType,
-    password: string
-    status: UserStatus
+    password: string,
+    status: UserStatus,
 };
 
 const UserSchema = new mongoose.Schema({
