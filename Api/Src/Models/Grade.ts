@@ -5,8 +5,8 @@ export interface Grade {
     projectId: number,
     testPoints: number,
     testMaxPoints: number,
-    testAssignmentPoints: number,
-    testAssignmentMaxPoints: number,
+    taskPoints: number,
+    taskMaxPoints: number,
     projectPoints: number,
     projectMaxPoints: number
 }

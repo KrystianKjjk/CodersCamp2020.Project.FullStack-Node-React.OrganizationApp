@@ -5,4 +5,5 @@ interface Project {
     sectionId: number,
     projectName: string,
     projectUrl: string,
+    description?:string
 }

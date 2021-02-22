@@ -1,6 +1,7 @@
 export interface Section {
     id: number,
-    name: string
-    startDate: Date
-    endDate: Date
+    name: string,
+    startDate: Date,
+    endDate: Date,
+    description?:string
 }
