@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+// import {Grade} from './Grade' - add grade when create grades model
 
 export enum UserType {
     Participant,
@@ -20,6 +21,7 @@ export interface UserModel {
     type: UserType,
     password: string,
     status: UserStatus,
+    // grades: Grade[], - add grade when create grades model
 };
 
 const UserSchema = new mongoose.Schema({
