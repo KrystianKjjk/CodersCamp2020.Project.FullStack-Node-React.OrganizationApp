@@ -6,6 +6,7 @@ import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import 'dotenv/config';
+import UserModel from './Src/Models/User';
 import UserRepository from './Src/Repositories/User';
 
 const appContainer = new Container();
@@ -18,7 +19,7 @@ const middlewares = [
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 // Models
-// appContainer.declare('UserModel', (c) => new UserModel())
+appContainer.declare('UserModel', (c) => UserModel);
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 // Services
