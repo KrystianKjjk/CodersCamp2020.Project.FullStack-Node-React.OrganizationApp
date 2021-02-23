@@ -60,7 +60,7 @@
     "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
     "coverageDirectory": "../Coverage",
     "collectCoverageFrom": [
-      "./Api/Src/**"
+      "./Api/Src/Services/**"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
