@@ -6,6 +6,7 @@ import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import 'dotenv/config';
+import UserRepository from './Src/Repositories/User';
 
 const appContainer = new Container();
 // Mongo config
@@ -16,12 +17,16 @@ const middlewares = [
   bodyParser.json()
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
+// Models
+// appContainer.declare('UserModel', (c) => new UserModel())
+// Repositories
+appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 // Services
 appContainer.declare("SampleService", (c) => new SampleService());
 // Controllers
 appContainer.declare("SampleController", (c) => new SampleController(c.SampleService));
 // Routes
-appContainer.declare("Routes", c => [
+appContainer.declare("Routes", (c) => [
   sampleRoutes(c.SampleController)
 ]);
 // Create router
