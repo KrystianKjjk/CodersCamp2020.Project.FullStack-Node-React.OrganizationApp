@@ -6,6 +6,9 @@ import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import 'dotenv/config';
+import courseRoutes from './Src/Routes/CourseRoute';
+import CourseController from './Src/Controllers/CourseController';
+import CourseService from './Src/Services/CourseService';
 
 const appContainer = new Container();
 // Mongo config
@@ -18,11 +21,14 @@ const middlewares = [
 appContainer.declare("Middlewares", (c) => middlewares);
 // Services
 appContainer.declare("SampleService", (c) => new SampleService());
+appContainer.declare("CourseService", (c)=>new CourseService());
 // Controllers
 appContainer.declare("SampleController", (c) => new SampleController(c.SampleService));
+appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 // Routes
 appContainer.declare("Routes", c => [
-  sampleRoutes(c.SampleController)
+  sampleRoutes(c.SampleController),
+  courseRoutes(c.CourseController)
 ]);
 // Create router
 type Routes = (router: express.Router) => express.Router;
