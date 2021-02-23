@@ -10,7 +10,7 @@ export enum UserType {
 
 export enum UserStatus {
     Active, 
-    Deleted, 
+    Resigned,
     Archived,
 };
 
