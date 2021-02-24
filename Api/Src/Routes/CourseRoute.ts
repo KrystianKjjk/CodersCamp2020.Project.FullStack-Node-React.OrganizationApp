@@ -3,7 +3,9 @@ import CourseController from '../Controllers/CourseController';
 
 const courseRoute = (controller: CourseController) => {
     return (router: express.Router) => {
-        router.route("/courses").get(controller.getHelloWorld);
+        router.route("/courses").get(controller.getCourses);
+        router.route("/courses/:id").get(controller.getCourseById);
+        router.route("/courses").post(controller.createCourse);
         // router.route("/helloWorld/:world").get(controller.getHelloWorldParam);
         // router.route("/helloWorld/:world").post(controller.postHelloWorldParam);
         return router;
