@@ -14,4 +14,6 @@ for (let i = 0; i < nUsers; i++) {
         password: `Pass${i}`
     } as UserModel);
 }
-console.log('All users: ', userRepo.getAll());
+userRepo.getAll().then((users => {
+    console.log('All users: ', users);
+}));
