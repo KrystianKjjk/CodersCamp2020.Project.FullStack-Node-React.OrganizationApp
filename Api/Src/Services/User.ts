@@ -1,7 +1,7 @@
 import UserRepository from '../Repositories/User';
 import { UserModel as User } from '../Models/User';
 import * as mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 
 export default class UserService {
@@ -31,11 +31,16 @@ export default class UserService {
     }
 
     async createUser(user: User) {
+        const rounds = 10;
+        bcrypt.hash(user.password, rounds, (err, enc) => {
+            if(err) throw err;
+            user.password = enc;
+        });
         return this.repository.create(user);
     }
 
-    async updateUser(id: mongoose.ObjectId, user: User) {
-        return this.repository.updateById(id, user);
+    async updateUser(id: mongoose.ObjectId, props: object) {
+        return this.repository.updateById(id, props);
     }
 
     async deleteUser(id: mongoose.ObjectId) {

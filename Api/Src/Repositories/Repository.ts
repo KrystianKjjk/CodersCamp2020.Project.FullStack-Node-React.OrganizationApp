@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export type MongoModel = mongoose.Model<mongoose.Document>;
+export type MongoModel = mongoose.Model<any & mongoose.Document>;
 
 export class Repository {
     model: MongoModel;
@@ -13,15 +13,15 @@ export class Repository {
         return this.model.find({});
     };
     async getById(id: mongoose.ObjectId) {
-        return this.model.find(id);
+        return this.model.findOne(id);
     };
     async create(obj: object) {
-        return this.model.create(obj);
+        this.model.create(obj);
     };
     async updateById(id: mongoose.ObjectId, obj: object) {
-        return this.model.updateOne({id}, obj);
+        this.model.updateOne({id}, obj);
     };
     async deleteById(id: mongoose.ObjectId) {
-        return this.model.deleteOne({id});
+        this.model.deleteOne({id});
     };
 }
