@@ -12,13 +12,10 @@ export default class UserService {
     }
 
     async logIn(email: string, password: string) {
-        const users = await this.repository.getByEmail(email);
-        if(users.length < 1) return null;
-        let user = users[0] as User & mongoose.Document;
-        bcrypt.compare(password, user.password, (err, same) => {
-            if(err) throw err;
-            if(!same) user = null;
-        })
+        const user = await this.repository.getByEmail(email);
+        if(!user) return null;
+        const same = await bcrypt.compare(password, user.password)
+        if(!same) return null;
         return user;
     }
 
@@ -32,10 +29,7 @@ export default class UserService {
 
     async createUser(user: User) {
         const rounds = 10;
-        bcrypt.hash(user.password, rounds, (err, enc) => {
-            if(err) throw err;
-            user.password = enc;
-        });
+        user.password = await bcrypt.hash(user.password, rounds);
         return this.repository.create(user);
     }
 

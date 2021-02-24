@@ -5,7 +5,7 @@ import UserDbModel from '../Src/Models/User';
 import { Document, ObjectId } from 'mongoose';
 
 class TestRepository extends UserRepository {
-    private users: Array<UserModel & Document>;
+    users: Array<UserModel & Document>;
     constructor() {
         super(UserDbModel);
         this.users = [];
@@ -23,9 +23,13 @@ class TestRepository extends UserRepository {
         return this.users.find(user => user._id === id);
     };
 
+    async getByEmail(email: string) {
+        return this.users.find(user => user.email === email);
+    }
+
     async create(user: UserModel) {
         const newUser = new this.model(user) as UserModel & Document;
-        this.users[newUser._id] = newUser;
+        this.users.push(newUser);
     };
 
     async updateById(id: ObjectId, props: object) {
@@ -34,19 +38,19 @@ class TestRepository extends UserRepository {
     };
 
     async deleteById(id: ObjectId) {
-        this.users.filter(user => user._id !== id)
+        this.users = this.users.filter(user => user._id !== id)
     };
-    
+
 }
 
 const testRepo = new TestRepository()
 const service = new UserService(testRepo);
 
-describe('Test UserService ', async () => {
+describe('Test UserService ', () => {
     const nUsers = 10;
-    const users = await service.getUsers();
+    let users: Array<UserModel & Document>;
     
-    test(`create ${nUsers} users`, async () => {
+    beforeEach(async () => {
         for (let i = 0; i < nUsers; i++) {
             await service.createUser({
                 username: `User${i}`,
@@ -56,6 +60,14 @@ describe('Test UserService ', async () => {
                 password: `Pass${i}`
             } as UserModel);
         }
+        users = await service.getUsers();
+    });
+
+    afterEach(async () => {
+        await testRepo.clear();
+    });
+    
+    test(`create ${nUsers} users`, () => {
         expect(users).toHaveLength(nUsers);
     });
     
@@ -66,21 +78,26 @@ describe('Test UserService ', async () => {
     test('update user', async () => {
         const newSurname = 'newSurname';
         await service.updateUser(users[0]._id, {surname: newSurname});
+        users = await service.getUsers();
         expect(users[0].surname).toBe(newSurname);
     });
 
     test('log in', async () => {
         const user = users[0];
+        // correct email and password
         const loggedUser = await service.logIn(user.email, 'Pass0');
         expect(loggedUser).toEqual(user);
-        const notLoggedUser = await service.logIn(user.email, 'WrongPassword');
-        expect(notLoggedUser).toBeNull();
+        // incorrect password
+        expect(await service.logIn(user.email, 'WrongPassword')).toBeNull();
+        // incorrect email
+        expect(await service.logIn('WrongEmail', 'Pass0')).toBeNull();
     });
 
     test('delete user', async () => {
         const deletedId = users[0]._id
         await service.deleteUser(deletedId);
-        expect(users.findIndex((user: Document) => user._id === deletedId)).toBe(false);
+        users = await service.getUsers();
+        expect(users.findIndex((user: Document) => user._id === deletedId)).toBe(-1);
     });
 
 });
