@@ -44,6 +44,7 @@ const UserSchema = new mongoose.Schema({
         required: true, 
         match: [/\S+@\S+\.\S+/, 'is invalid'],
         index: true,
+        unique: true,
     },
     type: {
         type: Number,
