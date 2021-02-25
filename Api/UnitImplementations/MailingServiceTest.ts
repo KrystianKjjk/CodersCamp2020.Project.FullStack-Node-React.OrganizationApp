@@ -6,8 +6,8 @@ dotenv.config();
 let mailTest = new MailingService(nodemailer);
 
 const message = {
-    from: 'filip.szwedo@gmail.com', // Sender address
-    to: 'filip.szwedo@gmail.comm',         // add your email here :)
+    from: 'test@test.com', // Sender address
+    to: 'test@test.com',         // add your email here :)
     subject: 'tescik', // Subject line
     text: 'mailik' // Plain text body
 };
