@@ -1,4 +1,4 @@
-import { UserModel } from '../Models/User';
+import UserModel from '../Models/User';
 import UserService from '../Services/User';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
@@ -18,8 +18,13 @@ export default class UserController {
     }
     
     register = async (req: Request, res: Response) => {
-        const user: UserModel = req.body;
-        await this.service.createUser(user);
-        res.status(201).json({message: 'Register succeed'});
+        try{
+            const user = new UserModel(req.body);
+            user.validate();
+            await this.service.createUser(user);
+            return res.status(201).json({message: 'Register succeed'});
+        } catch(err) {
+            return res.status(500).json({message: err.message});
+        };
     }
 }
