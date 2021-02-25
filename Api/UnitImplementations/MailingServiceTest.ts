@@ -1,8 +1,9 @@
 import MailingService from '../Src/Services/MailingService'
 import * as dotenv from 'dotenv';
+import * as nodemailer from 'nodemailer';
 dotenv.config();
 
-let mailTest = new MailingService;
+let mailTest = new MailingService(nodemailer);
 
 const message = {
     from: 'filip.szwedo@gmail.com', // Sender address

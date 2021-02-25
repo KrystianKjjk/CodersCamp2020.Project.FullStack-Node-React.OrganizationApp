@@ -1,5 +1,3 @@
-import * as nodemailer from 'nodemailer';
-
 interface Message {
     from: string,
     to: string,
@@ -7,11 +5,15 @@ interface Message {
     text: string,
 };
 
+interface Nodemailer {
+    createTransport({host, port, auth:{user, pass}})
+}
+
 export default class MailingService {
     private transport;
 
-    constructor(){
-            this.transport = nodemailer.createTransport({
+    constructor(mailer: Nodemailer){
+            this.transport = mailer.createTransport({
                 host: process.env.MAIL_HOST,
                 port: process.env.MAIL_PORT,
                 auth: {
