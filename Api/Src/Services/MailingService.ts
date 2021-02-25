@@ -6,7 +6,7 @@ interface Message {
 };
 
 interface Nodemailer {
-    createTransport({host, port, auth:{user, pass}})
+    createTransport({service, auth:{user, pass}})
 }
 
 export default class MailingService {
@@ -14,8 +14,7 @@ export default class MailingService {
 
     constructor(mailer: Nodemailer){
             this.transport = mailer.createTransport({
-                host: process.env.MAIL_HOST,
-                port: process.env.MAIL_PORT,
+                service: process.env.MAIL_SERVICE,
                 auth: {
                   user: process.env.MAIL_USERNAME,
                   pass: process.env.MAIL_PW

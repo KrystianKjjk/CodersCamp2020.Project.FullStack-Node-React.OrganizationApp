@@ -7,7 +7,7 @@ let mailTest = new MailingService(nodemailer);
 
 const message = {
     from: 'test@test.com', // Sender address
-    to: 'test@test.com',         // add your email here :)
+    to: 'your@mail.com',         // add your email here :)
     subject: 'tescik', // Subject line
     text: 'mailik' // Plain text body
 };
