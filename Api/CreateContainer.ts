@@ -2,9 +2,11 @@ import Container from './Container';
 import SampleController from './Src/Controllers/SampleController';
 import sampleRoutes from './Src/Routes/SampleRoutes';
 import SampleService from './Src/Services/SampleService';
+import MailingService from './Src/Services/MailingService'
 import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 
 const appContainer = new Container();
@@ -18,6 +20,7 @@ const middlewares = [
 appContainer.declare("Middlewares", (c) => middlewares);
 // Services
 appContainer.declare("SampleService", (c) => new SampleService());
+appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 // Controllers
 appContainer.declare("SampleController", (c) => new SampleController(c.SampleService));
 // Routes
