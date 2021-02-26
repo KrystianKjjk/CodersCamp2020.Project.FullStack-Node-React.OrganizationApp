@@ -1,148 +1,32 @@
-import { now } from "mongoose";
+import * as mongoose from 'mongoose';
 import { Course } from "../Models/Course";
-import { Section } from "../Models/Section";
+import CourseRepository from "../Repositories/CourseRepository";
+
 export default class CourseService {
-  getCourses = async () => {
-    const HTMLSection: Section = {
-      id: 1,
-      name: "HTML i CSS Section",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
+  private courseRepository: CourseRepository;
 
-    const JavaScriptSection: Section = {
-      id: 2,
-      name: "JavaScript",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
+  constructor(courseRepository: CourseRepository){
+    this.courseRepository = courseRepository;
+  }
 
-    const course1: Course = {
-      id: 1,
-      name: "CodersCamp 2020",
-      sections: [HTMLSection, JavaScriptSection],
-    };
-
-    const course2: Course = {
-      id: 2,
-      name: "CodersCamp 2021",
-      sections: [HTMLSection],
-    };
-
-    let courses = [course1, course2];
-    return courses;
+  getCourses = async (): Promise<(Course & mongoose.Document<Course>)[]> => {
+    return this.courseRepository.getAll();
   };
 
-  getCourseById = async (c) => {
-    const HTMLSection: Section = {
-      id: 1,
-      name: "HTML i CSS Section",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const JavaScriptSection: Section = {
-      id: 2,
-      name: "JavaScript",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const course1: Course = {
-      id: 1,
-      name: "CodersCamp 2020",
-      sections: [HTMLSection, JavaScriptSection],
-    };
-
-    const course2: Course = {
-      id: 2,
-      name: "CodersCamp 2021",
-      sections: [HTMLSection],
-    };
-
-    let courses = [course1, course2];
-    const foundCourse = courses.find((course) => course.id === parseInt(c));
-    return foundCourse;
+  getCourseById = async (courseId: mongoose.Types.ObjectId) => {
+    return this.courseRepository.getById(courseId);
   };
 
-  createCourse = async (course) => {
-    const HTMLSection: Section = {
-      id: 1,
-      name: "HTML i CSS Section",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const JavaScriptSection: Section = {
-      id: 2,
-      name: "JavaScript",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const course1: Course = {
-      id: 1,
-      name: "CodersCamp 2020",
-      sections: [HTMLSection, JavaScriptSection],
-    };
-
-    const course2: Course = {
-      id: 2,
-      name: "CodersCamp 2021",
-      sections: [HTMLSection],
-    };
-
-    let courses = [course1, course2];
-
-    courses.push(course);
-    console.log(courses);
-    return courses;
+  createCourse = async (course: Course) => {
+    return this.courseRepository.create(course);
   };
-  updateCourse = async (updatedCourse) => {
-    const HTMLSection: Section = {
-      id: 1,
-      name: "HTML i CSS Section",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const JavaScriptSection: Section = {
-      id: 2,
-      name: "JavaScript",
-      startDate: new Date(),
-      endDate: new Date(),
-    };
-
-    const course1: Course = {
-      id: 1,
-      name: "CodersCamp 2020",
-      sections: [HTMLSection, JavaScriptSection],
-    };
-
-    const course2: Course = {
-      id: 2,
-      name: "CodersCamp 2021",
-      sections: [HTMLSection],
-    };
-
-    let courses = [course1, course2];
-    let index = courses.findIndex(
-      (course) => course.id === updatedCourse.id
-    );
-    courses[index] = updatedCourse;
-    //(if foundCourse!)retrn 404
-
-    return courses;
+  
+  updateCourse = async (id: mongoose.Types.ObjectId, course: Course) => {
+    return this.courseRepository.updateById(id, course);
   };
+
+  deleteCourse = async (courseId: mongoose.Types.ObjectId) => {
+    return this.courseRepository.deleteById(courseId);
+  }
 }
 
-// const course2:Course={
-//     id:2,
-//     name:'CodersCamp 2021',
-//     sections:[{
-//         id:1,
-//         name:'HTML i CSS Section',
-//         startDate: new Date(),
-//         endDate:new Date()
-//     }]
-// }
