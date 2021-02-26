@@ -1,7 +1,4 @@
 import Container from './Container';
-import SampleController from './Src/Controllers/SampleController';
-import sampleRoutes from './Src/Routes/SampleRoutes';
-import SampleService from './Src/Services/SampleService';
 import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
@@ -10,7 +7,7 @@ import 'dotenv/config';
 import UserModel from './Src/Models/User';
 import UserRepository from './Src/Repositories/User';
 import UserService from './Src/Services/User';
-import UserController from './Src/Controllers/UserController';
+import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
 const appContainer = new Container();
