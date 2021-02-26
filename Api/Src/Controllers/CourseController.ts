@@ -57,14 +57,19 @@ getCourseById = async(
   res.status(200).json({course});
 }
 
-// postHelloWorldParam = (
-//   req: express.Request,
-//   res: express.Response,
-//   next?: express.NextFunction
-// ) => {
-//   console.log(req.params);
-//   const world = req.params.world;
-//   res.status(201).json({ msg: `Hello ${world}` });
-// } 
+updateCourse = async(
+  req: express.Request,
+  res: express.Response,
+  next?: express.NextFunction
+) => {
+  // console.log(req.params.id);
+  const course = await this.service.updateCourse(req.body);
+  console.log(course);
+  res.status(201).json({course});
+}
 
 }
+
+
+
+

@@ -1,108 +1,140 @@
-import { now } from 'mongoose';
-import {Course} from '../Models/Course'; 
-import {Section} from '../Models/Section';
+import { now } from "mongoose";
+import { Course } from "../Models/Course";
+import { Section } from "../Models/Section";
 export default class CourseService {
-
-
-    getCourses = async() => {
-
-const HTMLSection:Section={
-    id:1,
-    name:'HTML i CSS Section',
-    startDate: new Date(),
-    endDate:new Date()
-}
-
-const JavaScriptSection:Section={
-    id:2,
-    name:'JavaScript',
-    startDate:new Date(),
-    endDate:new Date()
-}
-
-const course1:Course={id:1,
-name:'CodersCamp 2020',
-sections:[HTMLSection, JavaScriptSection]
-};
-
-const course2:Course={
-    id:2,
-    name:'CodersCamp 2021',
-    sections:[HTMLSection]
-}
-
-let courses=[course1, course2];
-return courses;
-}
-
-getCourseById=async(c) => {
-
-    const HTMLSection:Section={
-        id:1,
-        name:'HTML i CSS Section',
-        startDate: new Date(),
-        endDate:new Date()
-    }
-    
-    const JavaScriptSection:Section={
-        id:2,
-        name:'JavaScript',
-        startDate:new Date(),
-        endDate:new Date()
-    }
-    
-    const course1:Course={id:1,
-    name:'CodersCamp 2020',
-    sections:[HTMLSection, JavaScriptSection]
+  getCourses = async () => {
+    const HTMLSection: Section = {
+      id: 1,
+      name: "HTML i CSS Section",
+      startDate: new Date(),
+      endDate: new Date(),
     };
-    
-    const course2:Course={
-        id:2,
-        name:'CodersCamp 2021',
-        sections:[HTMLSection]
-    }
-    
-    let courses=[course1, course2];
-    const foundCourse=courses.find(course=>course.id===parseInt(c))
+
+    const JavaScriptSection: Section = {
+      id: 2,
+      name: "JavaScript",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const course1: Course = {
+      id: 1,
+      name: "CodersCamp 2020",
+      sections: [HTMLSection, JavaScriptSection],
+    };
+
+    const course2: Course = {
+      id: 2,
+      name: "CodersCamp 2021",
+      sections: [HTMLSection],
+    };
+
+    let courses = [course1, course2];
+    return courses;
+  };
+
+  getCourseById = async (c) => {
+    const HTMLSection: Section = {
+      id: 1,
+      name: "HTML i CSS Section",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const JavaScriptSection: Section = {
+      id: 2,
+      name: "JavaScript",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const course1: Course = {
+      id: 1,
+      name: "CodersCamp 2020",
+      sections: [HTMLSection, JavaScriptSection],
+    };
+
+    const course2: Course = {
+      id: 2,
+      name: "CodersCamp 2021",
+      sections: [HTMLSection],
+    };
+
+    let courses = [course1, course2];
+    const foundCourse = courses.find((course) => course.id === parseInt(c));
     return foundCourse;
-    }
+  };
 
-createCourse=async(course)=>{
-    const HTMLSection:Section={
-        id:1,
-        name:'HTML i CSS Section',
-        startDate: new Date(),
-        endDate:new Date()
-    }
-    
-    const JavaScriptSection:Section={
-        id:2,
-        name:'JavaScript',
-        startDate:new Date(),
-        endDate:new Date()
-    }
-    
-    const course1:Course={id:1,
-    name:'CodersCamp 2020',
-    sections:[HTMLSection, JavaScriptSection]
+  createCourse = async (course) => {
+    const HTMLSection: Section = {
+      id: 1,
+      name: "HTML i CSS Section",
+      startDate: new Date(),
+      endDate: new Date(),
     };
-    
-    const course2:Course={
-        id:2,
-        name:'CodersCamp 2021',
-        sections:[HTMLSection]
-    }
-    
-    let courses=[course1, course2];
-    
+
+    const JavaScriptSection: Section = {
+      id: 2,
+      name: "JavaScript",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const course1: Course = {
+      id: 1,
+      name: "CodersCamp 2020",
+      sections: [HTMLSection, JavaScriptSection],
+    };
+
+    const course2: Course = {
+      id: 2,
+      name: "CodersCamp 2021",
+      sections: [HTMLSection],
+    };
+
+    let courses = [course1, course2];
+
     courses.push(course);
     console.log(courses);
     return courses;
+  };
+  updateCourse = async (updatedCourse) => {
+    const HTMLSection: Section = {
+      id: 1,
+      name: "HTML i CSS Section",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const JavaScriptSection: Section = {
+      id: 2,
+      name: "JavaScript",
+      startDate: new Date(),
+      endDate: new Date(),
+    };
+
+    const course1: Course = {
+      id: 1,
+      name: "CodersCamp 2020",
+      sections: [HTMLSection, JavaScriptSection],
+    };
+
+    const course2: Course = {
+      id: 2,
+      name: "CodersCamp 2021",
+      sections: [HTMLSection],
+    };
+
+    let courses = [course1, course2];
+    let index = courses.findIndex(
+      (course) => course.id === updatedCourse.id
+    );
+    courses[index] = updatedCourse;
+    //(if foundCourse!)retrn 404
+
+    return courses;
+  };
 }
-
-
-}
-
 
 // const course2:Course={
 //     id:2,
@@ -114,4 +146,3 @@ createCourse=async(course)=>{
 //         endDate:new Date()
 //     }]
 // }
-
