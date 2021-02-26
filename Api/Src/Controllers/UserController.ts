@@ -18,13 +18,15 @@ export default class UserController {
     }
     
     register = async (req: Request, res: Response) => {
-        try{
+        try {
             const user = new UserModel(req.body);
             await user.validate();
             await this.service.createUser(user);
             res.status(201).json({message: 'Register succeed'});
         } catch(err) {
+            if(err.name === 'ValidationError')
+                return res.status(400).json({message: err.message})
             res.status(500).json({message: err.message});
-        };
+        }
     }
 }
