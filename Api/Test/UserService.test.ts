@@ -2,7 +2,7 @@ import UserService from '../Src/Services/User';
 import UserRepository from '../Src/Repositories/User';
 import { UserModel } from '../Src/Models/User';
 import UserDbModel from '../Src/Models/User';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 class TestRepository extends UserRepository {
     users: Array<UserModel & Document>;
@@ -19,7 +19,7 @@ class TestRepository extends UserRepository {
         return this.users;
     };
 
-    async getById(id: ObjectId) {
+    async getById(id: Types.ObjectId) {
         return this.users.find(user => user._id === id);
     };
 
@@ -32,12 +32,12 @@ class TestRepository extends UserRepository {
         this.users.push(newUser);
     };
 
-    async updateById(id: ObjectId, props: object) {
+    async updateById(id: Types.ObjectId, props: object) {
         const index = this.users.findIndex(user => user._id === id);
         Object.assign(this.users[index], props)
     };
 
-    async deleteById(id: ObjectId) {
+    async deleteById(id: Types.ObjectId) {
         this.users = this.users.filter(user => user._id !== id)
     };
 
@@ -77,9 +77,17 @@ describe('Test UserService ', () => {
 
     test('update user', async () => {
         const newSurname = 'newSurname';
-        await service.updateUser(users[0]._id, {surname: newSurname});
+        const newPassword = 'newPassword';
+        await service.updateUser(users[0]._id, {
+            surname: newSurname, 
+            password: newPassword
+        });
+        await service.updateUser(users[1]._id, {
+            surname: newSurname + '1', 
+        });
         users = await service.getUsers();
         expect(users[0].surname).toBe(newSurname);
+        expect(users[1].surname).toBe(newSurname + '1');
     });
 
     test('log in', async () => {
