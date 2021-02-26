@@ -6,6 +6,8 @@ const projectRoutes = (controller: ProjectController) => {
         router.route("/projects").get(controller.getAllProjects);
         router.route("/projects/:id").get(controller.getProject);
         router.route("/projects").get(controller.createProject);
+        router.route("/projects/:id").get(controller.updateProject);
+        router.route("/projects/:id").get(controller.deleteProject);
         return router;
     }
 
