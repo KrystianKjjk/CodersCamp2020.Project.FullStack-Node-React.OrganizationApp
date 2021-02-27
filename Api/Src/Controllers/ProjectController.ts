@@ -59,7 +59,7 @@ export default class ProjectController {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const project = await this.service.findProjectById(id);
         if (!project) res.status(404).json({message: 'Project not found'});
-        const deletedProject = await this.service.deleteProjectById(id);
-        res.status(200).json(deletedProject);
+        await this.service.deleteProjectById(id);
+        res.status(200).json({message: 'Project was deleted'});
     };
 }
