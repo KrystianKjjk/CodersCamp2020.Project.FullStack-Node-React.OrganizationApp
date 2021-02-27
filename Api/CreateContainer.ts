@@ -28,7 +28,7 @@ appContainer.declare("Middlewares", (c) => middlewares);
 
 // Models
 appContainer.declare('UserModel', (c) => UserModel);
-appContainer.declare("Project", (c) => new Project());
+appContainer.declare("Project", (c) => Project);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
