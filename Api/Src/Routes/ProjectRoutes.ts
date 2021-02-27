@@ -5,9 +5,9 @@ const projectRoutes = (controller: ProjectController) => {
     return (router: express.Router) => {
         router.route("/projects").get(controller.getAllProjects);
         router.route("/projects/:id").get(controller.getProject);
-        router.route("/projects").get(controller.createProject);
-        router.route("/projects/:id").get(controller.updateProject);
-        router.route("/projects/:id").get(controller.deleteProject);
+        router.route("/projects").post(controller.createProject);
+        router.route("/projects/:id").patch(controller.updateProject);
+        router.route("/projects/:id").delete(controller.deleteProject);
         return router;
     }
 
