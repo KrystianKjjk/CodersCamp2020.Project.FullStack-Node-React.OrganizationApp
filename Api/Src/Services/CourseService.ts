@@ -17,11 +17,11 @@ export default class CourseService {
     return this.courseRepository.getById(courseId);
   };
 
-  createCourse = async (course: Course) => {
+  createCourse = async (course: Course & mongoose.Document<Course>) => {
     return this.courseRepository.create(course);
   };
   
-  updateCourse = async (id: mongoose.Types.ObjectId, course: Course) => {
+  updateCourse = async (id: mongoose.Types.ObjectId, course: Course & mongoose.Document<Course>) => {
     return this.courseRepository.updateById(id, course);
   };
 

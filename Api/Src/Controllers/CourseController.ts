@@ -62,14 +62,20 @@ export default class CourseController {
   ) => {
     try {
       const courseId = new mongoose.Types.ObjectId(req.params.id);
-      const updatedCourse = await this.service.updateCourse(courseId, req.body);
+      const course = new CourseSchema(req.body);
+      await course.validate();
+      const updatedCourse = await this.service.updateCourse(courseId, course);
       if (!updatedCourse) {
         return res.status(404).json({ message: "Course not found" });
       }
-      const course = await this.service.getCourseById(courseId);
-      return res.status(201).json(course);
+      const fetchedCourse = await this.service.getCourseById(courseId);
+      return res.status(201).json(fetchedCourse);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      const errorMessage = { message: error.message };
+      if (error.name === "ValidationError") {
+        return res.status(400).json(errorMessage);
+      }
+      return res.status(500).json(errorMessage);
     }
   };
 
