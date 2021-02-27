@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export type MongoModel = mongoose.Model<mongoose.Document>;
+export type MongoModel = mongoose.Model<any & mongoose.Document>;
 
 export class Repository {
     model: MongoModel;
@@ -12,16 +12,16 @@ export class Repository {
     async getAll() {
         return this.model.find({});
     };
-    async getById(id: mongoose.ObjectId) {
-        return this.model.find(id);
+    async getById(id: mongoose.Types.ObjectId) {
+        return this.model.findOne(id);
     };
     async create(obj: object) {
-        return this.model.create(obj);
+        this.model.create(obj);
     };
-    async updateById(id: mongoose.ObjectId, obj: object) {
-        return this.model.updateOne({id}, obj);
+    async updateById(id: mongoose.Types.ObjectId, obj: object) {
+        return await this.model.findByIdAndUpdate(id, obj, {useFindAndModify: false, upsert: false});
     };
-    async deleteById(id: mongoose.ObjectId) {
+    async deleteById(id: mongoose.Types.ObjectId) {
         return this.model.deleteOne({id});
     };
 }
