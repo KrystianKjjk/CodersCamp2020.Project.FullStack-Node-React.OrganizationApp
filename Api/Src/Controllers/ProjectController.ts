@@ -21,7 +21,7 @@ export default class ProjectController {
         req: express.Request,
         res: express.Response,
     ) => {
-        const id = new mongoose.Schema.Types.ObjectId(req.params.id);
+        const id = new mongoose.Types.ObjectId(req.params.id);
         const project = await this.service.findProjectById(id);
         if (!project) res.status(404).json({message: 'Project not found'});
         res.status(200).json(project);
@@ -43,7 +43,7 @@ export default class ProjectController {
         res: express.Response,
     ) => {     
         const projectData = req.body;
-        const id = new mongoose.Schema.Types.ObjectId(req.params.id);
+        const id = new mongoose.Types.ObjectId(req.params.id);
         const validatedProjectData = this.service.validateProjectData(projectData, false) as null | Partial<Omit<Project, "_id">>;
         const project = await this.service.findProjectById(id);
         if (!project) res.status(404).json({message: 'Project not found'});
@@ -56,7 +56,7 @@ export default class ProjectController {
         req: express.Request,
         res: express.Response,
     ) => {     
-        const id = new mongoose.Schema.Types.ObjectId(req.params.id);
+        const id = new mongoose.Types.ObjectId(req.params.id);
         const project = await this.service.findProjectById(id);
         if (!project) res.status(404).json({message: 'Project not found'});
         const deletedProject = await this.service.deleteProjectById(id);

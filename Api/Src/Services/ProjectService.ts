@@ -16,7 +16,7 @@ class ProjectService {
         return this.projectRepository.getAll();
     };
 
-    async findProjectById(id: mongoose.ObjectId) {
+    async findProjectById(id: mongoose.Types.ObjectId) {
         return this.projectRepository.getById(id);
     };
 
@@ -24,11 +24,11 @@ class ProjectService {
         return this.projectRepository.create(validatedProjectData);
     }
 
-    async updateProjectById(id: mongoose.ObjectId, validatedProjectData: Partial<Omit<Project, "_id">>) {
+    async updateProjectById(id: mongoose.Types.ObjectId, validatedProjectData: Partial<Omit<Project, "_id">>) {
         return this.projectRepository.updateById(id, validatedProjectData);
     };
 
-    async deleteProjectById(id: mongoose.ObjectId) {
+    async deleteProjectById(id: mongoose.Types.ObjectId) {
         return this.projectRepository.deleteById(id);
     };
 
