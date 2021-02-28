@@ -5,16 +5,15 @@ import {Repository} from '../Src/Repositories/Repository'
 import { UserModel } from '../Src/Models/User';
 import { PasswordResetTokenModel } from '../Src/Models/PasswordResetToken';
 import UserDbModel from '../Src/Models/User';
+import TokenDbModel from '../Src/Models/PasswordResetToken'
 import { Document, Types } from 'mongoose';
 import { notDeepEqual } from 'assert';
 
-class TestRepository extends UserRepository {
+class TestUserRepository extends UserRepository {
     users: Array<UserModel & Document>;
-    tokens: Array<PasswordResetTokenModel & Document>;
     constructor() {
         super(UserDbModel);
         this.users = [];
-        this.tokens = []
     };
 
     async clear() {
@@ -42,36 +41,63 @@ class TestRepository extends UserRepository {
     async deleteById(id: Types.ObjectId) {
         this.users = this.users.filter(user => user._id !== id)
     };
-
 }
 
-const testRepo = new TestRepository()
-const service = new PasswordService(testRepo, testRepo);
-const userService = new UserService(testRepo);
+class TestTokenRepository extends Repository {
+    tokens: Array<PasswordResetTokenModel & Document>;
+    constructor() {
+        super(TokenDbModel);
+        this.tokens = []
+    };
+
+    async getById(id: Types.ObjectId) {
+        return this.tokens.find(user => user._id === id);
+    };
+
+    async create(token: PasswordResetTokenModel) {
+        const newToken = new this.model(token) as PasswordResetTokenModel & Document;
+        this.tokens.push(newToken);
+    };
+}
+
+const testUserRepo = new TestUserRepository()
+const testTokenRepo = new TestTokenRepository()
+const service = new PasswordService(testUserRepo, testTokenRepo);
+const userService = new UserService(testUserRepo);
 
 describe('Test Password Service', () => {
-    const nUsers = 10;
     let users: Array<UserModel & Document>;
     
     beforeEach(async () => {
-        for (let i = 0; i < nUsers; i++) {
             await userService.createUser({
-                username: `User${i}`,
-                email: `user${i}@app.com`,
-                name: `UserName${i}`,
-                surname: `UserSurname${i}`,
-                password: `Pass${i}`
+                username: `User1`,
+                email: `user1@app.com`,
+                name: `UserName1`,
+                surname: `UserSurname1`,
+                password: `Pass1`
             } as UserModel);
-        }
+        
         users = await userService.getUsers();
     });
 
     test('change password', async () => {
         const testId = users[0]._id;
-        const oldPassword = `Pass${0}`;
+        const oldPassword = `Pass1`;
         await service.changePassword(testId, oldPassword, "test");
         const user = await userService.findUserById(testId);        
         expect(user.password).not.toBe(oldPassword);
+    });
+
+    test('password reset token created', async () => {
+        const testId = users[0]._id;
+        await service.requestPasswordReset(testId);
+        const token = await service.passwordTokenRepository.getById(testId);        
+        expect(token).toBeTruthy();
+    });
+
+    //need to think how to get the token from the db - leaving empty for now not to make this any longer
+    test('reset password', async () => {
+        const testId = users[0]._id;    
     });
 
 });

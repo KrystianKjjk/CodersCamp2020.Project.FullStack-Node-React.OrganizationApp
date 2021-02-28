@@ -1,14 +1,14 @@
 import * as mongoose from 'mongoose';
 
 export interface PasswordResetTokenModel{
-    userId: String,
+    _id: String,
     token: String,
     createdAt: Date
 }
 
 const Schema = mongoose.Schema;
 const tokenSchema = new Schema({
-    userId:{
+    _id:{
         type: Schema.Types.ObjectId,
         required: true,
         ref: "user"

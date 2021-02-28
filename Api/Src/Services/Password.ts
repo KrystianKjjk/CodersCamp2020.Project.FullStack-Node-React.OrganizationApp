@@ -22,19 +22,20 @@ export default class PasswordService{
         if (token) await this.passwordTokenRepository.deleteById(userId);
 
         let resetToken = crypto.randomBytes(32).toString("hex");
+        console.log(resetToken);
         const hashedResetToken = await bcrypt.hash(resetToken, this.rounds)
 
         this.passwordTokenRepository.create({
-            userId: user._id,
+            _id: user._id,
             token: hashedResetToken,
             createdAt: Date.now()
         })
-
         return user.email;
     }
 
     async resetPassword(userId:mongoose.Types.ObjectId, token: string, password: string){
         let resetToken = await this.passwordTokenRepository.getById(userId);
+        console.log(resetToken);
         if (!resetToken) throw new Error("Invalid or expired password reset token");
         const isValid = await bcrypt.compare(token, resetToken.token);
         if (!isValid) throw new Error("Invalid or expired password reset token");
@@ -53,9 +54,7 @@ export default class PasswordService{
         if (!user) throw new Error("Invalid user");
         const passwordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!passwordMatch) throw new Error("Invalid pw");
-        user.password = await bcrypt.hash(newPassword, this.rounds);
-                
+        user.password = await bcrypt.hash(newPassword, this.rounds);                
         this.userRepository.updateById(id, user);
     }
-
 } 
