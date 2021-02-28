@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export interface passwordResetTokenModel{
+export interface PasswordResetTokenModel{
     userId: String,
     token: String,
     createdAt: Date
@@ -24,4 +24,4 @@ const tokenSchema = new Schema({
     }
 })
 
-export default mongoose.model<passwordResetTokenModel & mongoose.Document>('PasswordResetToken', tokenSchema);
+export default mongoose.model<PasswordResetTokenModel & mongoose.Document>('PasswordResetToken', tokenSchema);

@@ -48,6 +48,7 @@ export default class PasswordService{
     }
 
     async changePassword(id:mongoose.Types.ObjectId, oldPassword:string, newPassword:string): Promise<void> {
+        if (oldPassword === newPassword) throw new Error("Old and new passwords are the same");
         const user = await this.userRepository.getById(id);
         if (!user) throw new Error("Invalid user");
         const passwordMatch = await bcrypt.compare(oldPassword, user.password);
