@@ -1,7 +1,9 @@
 import Container from './Container';
+import MailingService from './Src/Services/MailingService'
 import App from './App';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 
 import UserModel from './Src/Models/User';
@@ -29,6 +31,7 @@ appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 
 // Services
+appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 
 // Controllers
