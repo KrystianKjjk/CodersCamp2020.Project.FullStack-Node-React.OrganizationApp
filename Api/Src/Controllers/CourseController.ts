@@ -63,6 +63,7 @@ export default class CourseController {
     try {
       const courseId = new mongoose.Types.ObjectId(req.params.id);
       const course = new CourseSchema(req.body);
+      course._id = courseId;
       await course.validate();
       const updatedCourse = await this.service.updateCourse(courseId, course);
       if (!updatedCourse) {
