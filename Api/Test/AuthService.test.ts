@@ -1,15 +1,22 @@
 import AuthService from '../Src/Services/AuthService';
 import UserRepository from '../Src/Repositories/User';
 import { UserModel } from '../Src/Models/User';
-import { Document, Types } from 'mongoose';
 import User from '../Src/Models/User';
 import * as mongoose from 'mongoose';
 
 type UserType = UserModel & mongoose.Document;
+
 process.env.JWT_PRIVATE_KEY = 'thisisprivatekey';
 
+const user = {
+    name: `Test`,
+    surname: `Test`,
+    email: `test@test.pl`,
+    password: `Test123!`
+};
+
 class TestRepository extends UserRepository {
-    users: Array<UserType>;
+    users: UserType [];
 
     constructor() {
         super(User);
@@ -21,7 +28,7 @@ class TestRepository extends UserRepository {
     }
 
     async create(user: UserModel) {
-        const newUser = new this.model(user) as UserModel & Document;
+        const newUser = await new this.model(user) as UserType;
         this.users.push(newUser);
     };
 
@@ -31,20 +38,15 @@ const repo = new TestRepository();
 const service = new AuthService(repo);
 
 
-describe('Test AuthService ', () => {
-    let user = {
-        name: `Test`,
-        surname: `Test`,
-        email: `test@test.pl`,
-        password: `Test123!`
-    };
 
-    (async () => {
+describe('Test AuthService ', () => {
+
+    beforeEach(async () => {
         const password = await service.hashPassword(user as UserType);
         let user2 = Object.assign({}, user);
         user2.password = password;
         await service.saveUser(user2 as UserType);
-    })();
+    });
 
     test(`generate token`, () => {
         expect(typeof service.generateToken(user as UserType)).toBe('string');
@@ -56,7 +58,7 @@ describe('Test AuthService ', () => {
         expect(typeof await service.hashPassword(user as UserType)).toBe('string');
     });
     test(`check password`, async () => {
-        expect(await service.checkPassword(user.password, repo.users[0])).toBe(true);
+        expect(await service.checkPassword(user.password, repo.users[0] as UserType)).toBe(true);
     });
     test(`is admin`, async () => {
         let token = service.generateToken(repo.users[0]);
@@ -72,7 +74,6 @@ describe('Test AuthService ', () => {
     });
     test(`is candidate`, async () => {
         let token = service.generateToken(repo.users[0]);
-        console.log(repo.users[0]);
         expect(await service.isCandidate(token)).toBe(true);
     });
 
