@@ -10,6 +10,7 @@ class App {
   private port: string;
 
   constructor(
+      jwtKey: string,
       mongoUrl: string,
       middlewares: any[],
       router: express.Router,
@@ -18,6 +19,7 @@ class App {
       this.app = express();
       this.router = router;
       this.port = port;
+      this.checkJWTPrivateKey(jwtKey);
       this.connectToTheDatabase(mongoUrl);
       this.initializeMiddlewares(middlewares);
       this.initializeRouter();
@@ -29,6 +31,13 @@ class App {
           console.log(`App listening on the port ${this.port}`);
       });
   }
+
+  private checkJWTPrivateKey(jwtKey: string) {
+    if(jwtKey === undefined || jwtKey.length === 0) {
+        console.log('FATAL ERROR jwt key is not defined.');
+        process.exit(1);
+        }
+    }
 
   private connectToTheDatabase(mongoUrl: string) {
       mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
