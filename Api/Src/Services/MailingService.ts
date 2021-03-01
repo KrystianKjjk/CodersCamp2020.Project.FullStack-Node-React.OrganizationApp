@@ -32,9 +32,7 @@ export default class MailingService {
                   user: process.env.MAIL_USERNAME,
                   pass: process.env.MAIL_PW
                 }
-              });
-
-            this.transport.use("compile", hbs(handlebarsOptions));
+              }).use("compile", hbs(handlebarsOptions));
     }
 
     sendMail(message: Message){
