@@ -1,4 +1,4 @@
-import PasswordService from '../Src/Services/Password';
+import PasswordService from '../Src/Services/PasswordService';
 import UserService from '../Src/Services/User';
 import UserRepository from '../Src/Repositories/User';
 import {Repository} from '../Src/Repositories/Repository'
