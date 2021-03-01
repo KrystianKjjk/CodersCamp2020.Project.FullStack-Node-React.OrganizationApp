@@ -1,5 +1,4 @@
 import * as hbs from 'nodemailer-express-handlebars'
-import * as path from 'path';
 
 interface Message {
     from: string,
@@ -18,7 +17,7 @@ const handlebarsOptions = {
     partialsDir: "./Api/Utils/",
     layoutsDir: "./Api/Utils/"
   },
-  viewPath: path.resolve("./Api/Utils/"),
+  viewPath: "./Api/Utils/",
   extName: ".hbs"
 };
 
@@ -32,10 +31,11 @@ export default class MailingService {
                   user: process.env.MAIL_USERNAME,
                   pass: process.env.MAIL_PW
                 }
-              }).use("compile", hbs(handlebarsOptions));
+              });
     }
 
     sendMail(message: Message){
+        this.transport.use('compile', hbs(handlebarsOptions));
         this.transport.sendMail(message, function(err, info){
             if (err) {
                 console.log(err)
