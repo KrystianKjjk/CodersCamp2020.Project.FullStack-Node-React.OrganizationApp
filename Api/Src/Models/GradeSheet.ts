@@ -15,26 +15,35 @@ export interface GradeSheet {
     } >;
 };
 
+const GradesSchema = new mongoose.Schema({
+    grades: {
+        type: Object,
+        default: {}
+    }
+})
+
 const GradeSheetSchema = new mongoose.Schema({
     projectID: {
         type: mongoose.Schema.Types.ObjectId, 
-        required: true,
-        ref: 'Project'
+        ref: 'Project',
+        required: true
     },
     angagement: {
         type: Number, 
-        required: true,
+        default: NaN,
     },
     mentorReviewer: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }],
+    mentorGrades: GradesSchema,
     mentorReviewerGrades: [{
-        mentor: mongoose.Schema.Types.ObjectId,
-        grades: {
-            type: Object,
+        mentor: {
+            type: mongoose.Schema.Types.ObjectId,
             required: true
-        }
+        },
+        grades: GradesSchema
     }]
   }, {timestamps: true});
 
