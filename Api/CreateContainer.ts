@@ -13,9 +13,9 @@ import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
 import PasswordResetTokenModel from './Src/Models/PasswordResetToken';
-import PasswordService from './Src/Services/Password';
-import PasswordController from './Src/Controllers/Password';
-import PasswordRoutes from './Src/Routes/Password';
+import PasswordService from './Src/Services/PasswordService';
+import PasswordController from './Src/Controllers/PasswordController';
+import PasswordRoutes from './Src/Routes/PasswordRoutes';
 import { Repository } from './Src/Repositories/Repository';
 
 const appContainer = new Container();

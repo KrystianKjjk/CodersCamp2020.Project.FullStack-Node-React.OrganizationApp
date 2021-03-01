@@ -1,4 +1,4 @@
-import PasswordController from '../Controllers/Password';
+import PasswordController from '../Controllers/PasswordController';
 import * as express from 'express';
 
 

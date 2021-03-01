@@ -1,7 +1,6 @@
-import PasswordService from '../Services/Password';
+import PasswordService from '../Services/PasswordService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
-
 
 interface MailingService{
     sendMail: Function
@@ -39,12 +38,12 @@ export default class PasswordController{
         const token = req.body.token;
         const password = req.body.password;
         try{
-            const passwordReset = await this.passwordService.resetPassword(userId, token, password);
+            await this.passwordService.resetPassword(userId, token, password);
             res.status(200).json({message: 'Password changed'});
         }
         catch(err){
             console.log(err)
-            res.status(500).json({message: `Password reset request not sent`});
+            res.status(500).json({message: `Password not changed`});
         }   
     }
 
