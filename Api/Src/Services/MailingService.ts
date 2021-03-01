@@ -34,7 +34,7 @@ export default class MailingService {
                 }
               });
 
-            this.transport.use('compile', hbs(handlebarsOptions));
+            this.transport.use("compile", hbs(handlebarsOptions));
     }
 
     sendMail(message: Message){
