@@ -9,7 +9,6 @@ class ProjectService {
     projectRepository: ProjectRepository;
     constructor(projectRepository: ProjectRepository) {
         this.projectRepository = projectRepository;
-        return this;
     };
 
     async getProjects() {
