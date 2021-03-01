@@ -32,19 +32,4 @@ export default class GradeSheetRepository extends Repository {
         return await this.updateById(gradeSheetId, updateQuery);
     }
 
-    async createGrade(obj: GradeSheet) {
-        obj.mentorReviewerGrades = obj.mentorReviewerGrades
-            .filter(grades => obj.mentorReviewer.includes(grades.mentor));
-        for (let i in obj.mentorReviewer) {
-            const mentor = obj.mentorReviewer[i];
-            const index = obj.mentorReviewerGrades.findIndex(grades => grades.mentor === mentor);
-            if (index > 0)
-                obj.mentorReviewerGrades[index] = {
-                    mentor,
-                    grades: {}
-                }
-        }
-        this.create(obj);
-    }
-
 };
