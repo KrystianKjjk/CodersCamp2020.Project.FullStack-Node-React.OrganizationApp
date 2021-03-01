@@ -1,3 +1,6 @@
+import * as hbs from 'nodemailer-express-handlebars'
+import * as path from 'path';
+
 interface Message {
     from: string,
     to: string,
@@ -8,6 +11,16 @@ interface Message {
 interface Nodemailer {
     createTransport({service, auth:{user, pass}})
 }
+
+const handlebarsOptions = {
+  viewEngine: {
+    extName: ".hbs",
+    partialsDir: "./Api/Utils/",
+    layoutsDir: "./Api/Utils/"
+  },
+  viewPath: path.resolve("./Api/Utils/"),
+  extName: ".hbs"
+};
 
 export default class MailingService {
     private transport;
@@ -20,6 +33,8 @@ export default class MailingService {
                   pass: process.env.MAIL_PW
                 }
               });
+
+            this.transport.use('compile', hbs(handlebarsOptions));
     }
 
     sendMail(message: Message){

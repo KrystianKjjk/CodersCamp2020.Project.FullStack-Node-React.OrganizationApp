@@ -18,14 +18,17 @@ export default class PasswordController{
     requestPasswordReset = async (req:Request, res:Response) => {
         const userId = new mongoose.Types.ObjectId(req.body.id);
         try{
-            const userEmail = await this.passwordService.requestPasswordReset(userId);
+            const passwordRequestOutput = await this.passwordService.requestPasswordReset(userId);
             this.mailingService.sendMail({
                 from: 'coderscamp@fastmail.com',
-                to: userEmail,
+                to: passwordRequestOutput.email,
                 subject: 'CodersCamp password reset',
-                text: 'password to be changed'
+                template: 'requestResetPassword',
+                context:{
+                    link: passwordRequestOutput.link
+                }
             });
-            res.status(200).json({'message': `Password reset request sent to ${userEmail}`});
+            res.status(200).json({'message': `Password reset request sent to ${passwordRequestOutput.email}`});
         }
         catch(err){
             console.log(err)

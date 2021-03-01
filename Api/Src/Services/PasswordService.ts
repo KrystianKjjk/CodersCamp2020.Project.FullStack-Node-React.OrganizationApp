@@ -1,9 +1,8 @@
-import { UserModel as User} from '../Models/User'
 import UserRepository from '../Repositories/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import passwordResetToken from '../Models/PasswordResetToken'
 import * as crypto from 'crypto'
+import 'dotenv/config';
 
 export default class PasswordService{
     userRepository: UserRepository;
@@ -18,19 +17,24 @@ export default class PasswordService{
     async requestPasswordReset(userId: mongoose.Types.ObjectId) {
         const user = await this.userRepository.getById(userId);
         if (!user) throw new Error ("User does not exist!");
-        let token = await this.passwordTokenRepository.getById(userId);        
+        let token = await this.passwordTokenRepository.getById(userId);
         if (token) await this.passwordTokenRepository.deleteById(userId);
-
+        
         let resetToken = crypto.randomBytes(32).toString("hex");
         console.log(resetToken);
         const hashedResetToken = await bcrypt.hash(resetToken, this.rounds)
 
-        this.passwordTokenRepository.create({
+        await this.passwordTokenRepository.create({
             _id: user._id,
             token: hashedResetToken,
             createdAt: Date.now()
         })
-        return user.email;
+        const link = `${process.env.PAGE_URL}/passwordReset?token=${resetToken}&id=${user._id}`;
+        console.log(link);
+        return {
+            email: user.email, 
+            link: link
+        };
     }
 
     async resetPassword(userId:mongoose.Types.ObjectId, token: string, password: string){
