@@ -19,8 +19,9 @@ import jsonErrorHandler from './Src/Middlewares/Error';
 
 const appContainer = new Container();
 
-// jwt key
+// JWT .ENV
 appContainer.declare("jwtKey", (c) => process.env.JWT_PRIVATE_KEY);
+appContainer.declare("jwtExpiresIn", (c) => process.env.JWT_TOKEN_EXPIRESIN);
 
 // Mongo config
 appContainer.declare("Port", (c) => process.env.PORT);
@@ -41,7 +42,7 @@ appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 
 // Services
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
-appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository));
+appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));

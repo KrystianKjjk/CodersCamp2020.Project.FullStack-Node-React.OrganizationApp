@@ -1,4 +1,3 @@
-import {JWT_TOKEN_EXPIRESIN} from "../../Constants";
 import {UserModel} from "../Models/User";
 import { UserType} from "../Models/User";
 import * as mongoose from 'mongoose';
@@ -11,13 +10,13 @@ type User = UserModel & mongoose.Document;
 export default class AuthService {
     private saltRounds: number = 10;
 
-    constructor(private repository: UserRepository) { }
+    constructor(private repository: UserRepository, private jwtPrivateKey: string, private jwtTokenExpiresIn) { }
 
     generateToken = (user: User): string => {
         return jwt.sign(
             { _id: user._id, type: user.type },
-            process.env.JWT_PRIVATE_KEY,
-            { expiresIn: JWT_TOKEN_EXPIRESIN });
+            this.jwtPrivateKey,
+            { expiresIn: this.jwtTokenExpiresIn });
     };
 
     findUser = async (email: string) => {

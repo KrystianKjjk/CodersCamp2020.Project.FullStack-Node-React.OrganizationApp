@@ -25,9 +25,8 @@ export default class AuthController {
     }
 
     login = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
-
         try {
-            let user = await this.service.findUser(req.body.email);
+            const user = await this.service.findUser(req.body.email);
             if (!user) return res.status(401).json({message: 'Invalid email or password.'});
             const result = await this.service.checkPassword(req.body.password, user);
             if (!result) return res.status(401).json({message: 'Invalid email or password.'});

@@ -7,6 +7,7 @@ import * as mongoose from 'mongoose';
 type UserType = UserModel & mongoose.Document;
 
 process.env.JWT_PRIVATE_KEY = 'thisisprivatekey';
+process.env.JWT_TOKEN_EXPIRESIN = '20m';
 
 const user = {
     name: `Test`,
@@ -35,9 +36,7 @@ class TestRepository extends UserRepository {
 }
 
 const repo = new TestRepository();
-const service = new AuthService(repo);
-
-
+const service = new AuthService(repo, process.env.JWT_PRIVATE_KEY, process.env.JWT_TOKEN_EXPIRESIN = '20m');
 
 describe('Test AuthService ', () => {
 
@@ -76,5 +75,4 @@ describe('Test AuthService ', () => {
         let token = service.generateToken(repo.users[0]);
         expect(await service.isCandidate(token)).toBe(true);
     });
-
 });
