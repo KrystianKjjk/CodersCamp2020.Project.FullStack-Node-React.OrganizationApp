@@ -18,17 +18,18 @@ export default class UserService {
     }
 
     async createGradeSheet(gradeSheet: GradeSheet) {
-        if(!gradeSheet.mentorReviewerGrades) gradeSheet.mentorReviewerGrades = []
+        if(!gradeSheet.mentorReviewerGrades) gradeSheet.mentorReviewerGrades = [];
+        if(!gradeSheet.mentorReviewer) gradeSheet.mentorReviewer = [];
         gradeSheet.mentorReviewerGrades = gradeSheet.mentorReviewerGrades
             .filter(grades => gradeSheet.mentorReviewer.includes(grades.mentor));
         for (let i in gradeSheet.mentorReviewer) {
             const mentor = gradeSheet.mentorReviewer[i];
             const index = gradeSheet.mentorReviewerGrades.findIndex(grades => grades.mentor === mentor);
-            if (index > 0)
-                gradeSheet.mentorReviewerGrades[index] = {
+            if (index === -1 )
+                gradeSheet.mentorReviewerGrades.push({
                     mentor,
                     grades: {}
-                }
+                });
         }
         return this.repository.create(gradeSheet);
     }

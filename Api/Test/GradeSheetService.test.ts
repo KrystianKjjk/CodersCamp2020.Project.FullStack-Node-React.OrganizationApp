@@ -2,7 +2,8 @@ import GradeSheetService from '../Src/Services/GradeSheetService';
 import GradeSheetRepository from '../Src/Repositories/GradeSheetRepository';
 import { GradeSheet } from '../Src/Models/GradeSheet';
 import GradeSheetDbModel from '../Src/Models/GradeSheet';
-import { Document, Types } from 'mongoose';
+import { Document, Mongoose, Types } from 'mongoose';
+
 
 class TestRepository extends GradeSheetRepository {
     gradeSheets: Array<GradeSheet & Document>;
@@ -47,9 +48,41 @@ describe('Test GradeSheetService ', () => {
     let gradeSheets: Array<GradeSheet & Document>;
     
     beforeEach(async () => {
-        for (let i = 0; i < nSheets; i++) {
-            await service.createGradeSheet({} as GradeSheet);
+        await service.createGradeSheet({
+            projectID: new Types.ObjectId(),
+            angagement: 1,
+            mentorReviewer: null,
+            mentorGrades: {
+                design: 1,
+                extra: 2,
+            },
+            mentorReviewerGrades: null,
+        } as GradeSheet);
+
+        for (let i = 0; i < nSheets - 1; i++) {
+            const mentorReviewerId = new Types.ObjectId();
+            const reviewerGrades = {
+                mentor: mentorReviewerId,
+                grades: {
+                    code: Math.round(Math.random() * 10),
+                    repo: Math.round(Math.random() * 10),
+                    extra: Math.round(Math.random() * 10),
+                }
+            };
+            const mentorReviewerGrades = i/nSheets > 0.5 ? [reviewerGrades] : [];
+            await service.createGradeSheet({
+                projectID: new Types.ObjectId(),
+                angagement: 1,
+                mentorReviewer: [mentorReviewerId],
+                mentorGrades: {
+                    code: Math.round(Math.random() * 10),
+                    repo: Math.round(Math.random() * 10),
+                    extra: Math.round(Math.random() * 10),
+                },
+                mentorReviewerGrades,
+            } as GradeSheet);
         }
+        
         gradeSheets = await service.getGradeSheets();
     });
 
