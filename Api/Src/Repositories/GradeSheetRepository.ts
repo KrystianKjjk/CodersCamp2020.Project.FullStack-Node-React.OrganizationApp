@@ -5,7 +5,16 @@ import * as mongoose from 'mongoose';
 export default class GradeSheetRepository extends Repository { 
     async addMentorReviewer(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
         const updateQuery = {
-            $push: mentorId
+            mentorReviewer: {
+                $push: mentorId
+            }
+        }
+        return await this.updateById(gradeSheetId, updateQuery);
+    }
+
+    async setMentorReviewers(gradeSheetId: mongoose.Types.ObjectId, mentorIds: mongoose.Types.ObjectId[]) {
+        const updateQuery = {
+            mentorReviewer: mentorIds
         }
         return await this.updateById(gradeSheetId, updateQuery);
     }
