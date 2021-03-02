@@ -18,6 +18,7 @@ export default class UserService {
     }
 
     async createGradeSheet(gradeSheet: GradeSheet) {
+        if(!gradeSheet.mentorReviewerGrades) gradeSheet.mentorReviewerGrades = []
         gradeSheet.mentorReviewerGrades = gradeSheet.mentorReviewerGrades
             .filter(grades => gradeSheet.mentorReviewer.includes(grades.mentor));
         for (let i in gradeSheet.mentorReviewer) {
