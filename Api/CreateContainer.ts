@@ -19,10 +19,10 @@ import CourseModel from './Src/Models/Course';
 import CourseRepository from './Src/Repositories/CourseRepository';
 
 import UserModel from './Src/Models/User';
-import UserRepository from './Src/Repositories/User';
-import UserService from './Src/Services/User';
-import UserController from './Src/Controllers/User';
-import userRoutes from './Src/Routes/User';
+import UserRepository from './Src/Repositories/UserRepository';
+import UserService from './Src/Services/UserService';
+import UserController from './Src/Controllers/UserController';
+import userRoutes from './Src/Routes/UserRoutes';
 
 const appContainer = new Container();
 
