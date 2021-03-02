@@ -17,7 +17,7 @@ export default class UserService {
         return this.repository.getAll();
     }
 
-    async createUser(gradeSheet: GradeSheet) {
+    async createGradeSheet(gradeSheet: GradeSheet) {
         gradeSheet.mentorReviewerGrades = gradeSheet.mentorReviewerGrades
             .filter(grades => gradeSheet.mentorReviewer.includes(grades.mentor));
         for (let i in gradeSheet.mentorReviewer) {
@@ -44,7 +44,7 @@ export default class UserService {
         return await this.repository.setMentorReviewerGrade(gradeSheetId, mentorId, gradeName, grade);
     }
 
-    async deleteUser(id: mongoose.Types.ObjectId) {
+    async deleteGradeSheet(id: mongoose.Types.ObjectId) {
         return this.repository.deleteById(id);
     }
 
