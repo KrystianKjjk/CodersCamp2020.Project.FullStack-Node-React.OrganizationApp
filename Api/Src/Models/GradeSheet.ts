@@ -15,13 +15,6 @@ export interface GradeSheet {
     } >;
 };
 
-const GradesSchema = new mongoose.Schema({
-    grades: {
-        type: Object,
-        default: {}
-    }
-})
-
 const GradeSheetSchema = new mongoose.Schema({
     projectID: {
         type: mongoose.Schema.Types.ObjectId, 
@@ -37,13 +30,19 @@ const GradeSheetSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     }],
-    mentorGrades: GradesSchema,
+    mentorGrades: {
+        type: Object,
+        default: {}
+    },
     mentorReviewerGrades: [{
         mentor: {
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
-        grades: GradesSchema
+        grades: {
+            type: Object,
+            default: {}
+        }
     }]
   }, {timestamps: true});
 
