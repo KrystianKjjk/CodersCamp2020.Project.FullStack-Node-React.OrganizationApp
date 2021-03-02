@@ -38,6 +38,10 @@ export default class UserService {
         return await this.repository.addMentorReviewer(gradeSheetId, mentorId);
     }
 
+    async setMentorReviewers(gradeSheetId: mongoose.Types.ObjectId, mentorIds: mongoose.Types.ObjectId[]) {
+        return await this.repository.setMentorReviewers(gradeSheetId, mentorIds);
+    }
+
     async setMentorGrade(gradeSheetId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
         return await this.repository.setMentorGrade(gradeSheetId, gradeName, grade);
     }
