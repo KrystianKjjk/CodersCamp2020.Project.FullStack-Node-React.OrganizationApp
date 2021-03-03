@@ -46,7 +46,7 @@ appContainer.declare("Middlewares", (c) => middlewares);
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
-appContainer.declare("GradeSheet", (c) => GradeSheetModel);
+appContainer.declare("GradeSheetModel", (c) => GradeSheetModel);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
