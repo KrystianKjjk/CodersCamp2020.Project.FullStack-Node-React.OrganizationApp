@@ -24,6 +24,12 @@ import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
+import teamsRoutes from './Src/Routes/TeamsRoutes';
+import TeamsController from './Src/Controllers/TeamsController';
+import TeamsService from './Src/Services/TeamsService';
+import Teams from './Src/Models/Teams';
+import TeamsRepository from './Src/Repositories/TeamsRepository';
+
 const appContainer = new Container();
 
 // Mongo config
@@ -40,28 +46,32 @@ appContainer.declare("Middlewares", (c) => middlewares);
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
+appContainer.declare("Teams", (c) => Teams);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseModel));
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
+appContainer.declare("TeamsRepository", (c) => new TeamsRepository(c.Teams));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
+appContainer.declare("TeamsService", (c) => new TeamsService(c.TeamsRepository));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
-
+appContainer.declare("TeamsController", (c) => new TeamsController(c.TeamsService));
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
+  teamsRoutes(c.TeamsController),
 ]);
 
 // Create router
