@@ -24,6 +24,12 @@ import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
+import SectionModel from './Src/Models/Section';
+import SectionRepository from './Src/Repositories/SectionRepository';
+import SectionService from './Src/Services/SectionService';
+import SectionController from './Src/Controllers/SectionController';
+import sectionRoutes from './Src/Routes/SectionRoutes';
+
 const appContainer = new Container();
 
 // Mongo config
@@ -40,28 +46,32 @@ appContainer.declare("Middlewares", (c) => middlewares);
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
+appContainer.declare("Section", (c) => SectionModel);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseModel));
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
+appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
+appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
-
+appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
+  sectionRoutes(c.SectionController),
 ]);
 
 // Create router
