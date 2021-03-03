@@ -24,6 +24,12 @@ import UserService from './Src/Services/UserService';
 import UserController from './Src/Controllers/UserController';
 import userRoutes from './Src/Routes/UserRoutes';
 
+import GradeSheetModel from './Src/Models/GradeSheet';
+import GradeSheetRepository from './Src/Repositories/GradeSheetRepository';
+import GradeSheetService from './Src/Services/GradeSheetService';
+import GradeSheetController from './Src/Controllers/GradeSheetController';
+import gradeSheetRoutes from './Src/Routes/GradeSheetRoutes';
+
 const appContainer = new Container();
 
 // Mongo config
@@ -40,28 +46,33 @@ appContainer.declare("Middlewares", (c) => middlewares);
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
+appContainer.declare("GradeSheet", (c) => GradeSheetModel);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseModel));
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
+appContainer.declare("GradeSheetRepository", (c) => new GradeSheetRepository(c.GradeSheetModel));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
+appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
+appContainer.declare("GradeSheetController", (c) => new GradeSheetController(c.GradeSheetService));
 
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
+  gradeSheetRoutes(c.GradeSheetController),
 ]);
 
 // Create router
