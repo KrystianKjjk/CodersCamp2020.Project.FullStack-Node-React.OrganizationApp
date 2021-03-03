@@ -13,19 +13,19 @@ export default class SectionService {
     return this.sectionRepository.getAll();
   };
 
-  getSectionById = async (courseId: mongoose.Types.ObjectId) => {
-    return this.sectionRepository.getById(courseId);
+  getSectionById = async (sectionId: mongoose.Types.ObjectId) => {
+    return this.sectionRepository.getById(sectionId);
   };
 
-  createSection = async (course: Section & mongoose.Document<Section>) => {
-    return this.sectionRepository.create(course);
+  createSection = async (section: Section & mongoose.Document<Section>) => {
+    return this.sectionRepository.create(section);
   };
   
-  updateSection = async (id: mongoose.Types.ObjectId, course: Section & mongoose.Document<Section>) => {
-    return this.sectionRepository.updateById(id, course);
+  updateSection = async (id: mongoose.Types.ObjectId, section: Section & mongoose.Document<Section>) => {
+    return this.sectionRepository.updateById(id, section);
   };
 
-  deleteSection = async (courseId: mongoose.Types.ObjectId) => {
-    return this.sectionRepository.deleteById(courseId);
+  deleteSection = async (sectionId: mongoose.Types.ObjectId) => {
+    return this.sectionRepository.deleteById(sectionId);
   }
 }
