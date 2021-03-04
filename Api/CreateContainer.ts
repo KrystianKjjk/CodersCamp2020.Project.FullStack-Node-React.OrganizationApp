@@ -14,9 +14,6 @@ import AuthService from "./Src/Services/AuthService";
 import AuthController from "./Src/Controllers/AuthController";
 import authRoutes from "./Src/Routes/AuthRoutes";
 
-import jsonErrorHandler from './Src/Middlewares/Error';
-
-
 const appContainer = new Container();
 
 // JWT .ENV
@@ -29,8 +26,7 @@ appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
 
 // Middlewares
 const middlewares = [
-    bodyParser.json(),
-    jsonErrorHandler
+    bodyParser.json()
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
