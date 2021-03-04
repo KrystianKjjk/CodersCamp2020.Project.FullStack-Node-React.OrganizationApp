@@ -10,12 +10,11 @@ const teamsRoutes = (controller: TeamsController) => {
         router.route("/teams/:id").delete(controller.deleteTeam);
         router.route("/teams/:id").patch(controller.updateTeam);
         
-        // router.route("/teams/:id/users").post(controller.addUserToTeam);
+        router.route("/teams/:id/users").post(controller.addUserToTeam);
         // router.route("/teams/:id/users/:id").delete(controller.deleteUserFromTeam);
         
-        // router.route("/teams/:id/mentor").post(controller.addMentorToTeam);
-        // router.route("/teams/:id/mentor/:id").patch(controller.updateMentorFromTeam);
-        // router.route("/teams/:id/mentor/:id").delete(controller.deleteMentorFromTeam);
+        router.route("/teams/:id/mentor").post(controller.addMentorToTeam);
+        router.route("/teams/:id/mentor/").delete(controller.deleteMentorFromTeam);
         return router;
     }
 
