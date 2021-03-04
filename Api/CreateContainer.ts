@@ -9,7 +9,7 @@ import UserRepository from './Src/Repositories/User';
 import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
-import errorHandler from './Src/Middlewares/ErrorHandler';
+import ErrorMiddleware from './Src/Middlewares/Error';
 
 const appContainer = new Container();
 
@@ -18,7 +18,7 @@ appContainer.declare("Port", (c) => process.env.PORT);
 appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
 
 //error handler
-appContainer.declare("ErrorHandler", (c) => new errorHandler());
+appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 
 // Middlewares
 const middlewares = [
@@ -56,7 +56,7 @@ appContainer.declare(
           c.Middlewares,
           c.Router,
           c.Port,
-          c.ErrorHandler
+          c.ErrorMiddleware
       )
 );
 

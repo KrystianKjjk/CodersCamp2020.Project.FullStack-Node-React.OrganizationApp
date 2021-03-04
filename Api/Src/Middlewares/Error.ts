@@ -4,7 +4,7 @@ class extendedError extends SyntaxError {
     status: number;
 }
 
-export default class ErrorHandler {
+export default class ErrorMiddleware {
 
     serverError = (err: extendedError, req: express.Request, res: express.Response, next?: express.NextFunction) => {
         return res.status(500).json({message: err.message})

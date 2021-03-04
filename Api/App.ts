@@ -11,7 +11,7 @@ class App {
       middlewares: any[],
       router: express.Router,
       port: string,
-      errorHandler: any
+      errorMiddleware: any
   ) {
       this.app = express();
       this.router = router;
@@ -19,7 +19,7 @@ class App {
       this.connectToTheDatabase(mongoUrl);
       this.initializeMiddlewares(middlewares);
       this.initializeRouter();
-      this.initializeErrorHandlers(errorHandler);
+      this.initializeErrorMiddlewares(errorMiddleware);
       return this;
   }
 
@@ -42,9 +42,9 @@ class App {
   private initializeRouter() {
       this.app.use("/api", this.router);
   }
-  private initializeErrorHandlers(errorHandler: any) {
-      this.app.use(errorHandler.notFoundError);
-      this.app.use(errorHandler.serverError);
+  private initializeErrorMiddlewares(middlewares: any) {
+      this.app.use(middlewares.notFoundError);
+      this.app.use(middlewares.serverError);
 
   }
 }
