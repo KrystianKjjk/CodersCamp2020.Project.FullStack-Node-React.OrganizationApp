@@ -4,8 +4,8 @@ import * as mongoose from 'mongoose';
 export default class TeamsRepository extends Repository { 
     async addUserToTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
         const updateQuery = {
-            users: {
-                $push: userId
+            $push: {
+                users: userId
             }
         }
         return await this.updateById(teamId, updateQuery);
@@ -13,9 +13,7 @@ export default class TeamsRepository extends Repository {
 
     async addMentorToTeam(teamId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
         const updateQuery = {
-            mentor: {
-                $push: mentorId
-            }
+            mentor: mentorId
         }
         return await this.updateById(teamId, updateQuery);
     }
@@ -26,6 +24,15 @@ export default class TeamsRepository extends Repository {
         }
         return await this.updateById(teamId, updateQuery);
     }
+
+    async deleteMentorFromTeam(teamId: mongoose.Types.ObjectId) {
+        const updateQuery = {
+            mentor: null
+        }
+        return await this.updateById(teamId, updateQuery);
+    }
+
+
 
     
 };

@@ -40,6 +40,9 @@ class TeamsService {
         return await this.teamsRepository.setUsersToTeam(teamId, userIds);
     }
 
+    async deleteMentorFromTeam(teamId: mongoose.Types.ObjectId) {
+        return await this.teamsRepository.deleteMentorFromTeam(teamId);
+    }
 }
 
 export default TeamsService;
