@@ -1,8 +1,5 @@
-
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-
-
 
 class App {
   public app: express.Application;
@@ -13,7 +10,8 @@ class App {
       mongoUrl: string,
       middlewares: any[],
       router: express.Router,
-      port: string
+      port: string,
+      errorHandler: any
   ) {
       this.app = express();
       this.router = router;
@@ -21,6 +19,7 @@ class App {
       this.connectToTheDatabase(mongoUrl);
       this.initializeMiddlewares(middlewares);
       this.initializeRouter();
+      this.initializeErrorHandlers(errorHandler);
       return this;
   }
 
@@ -42,6 +41,11 @@ class App {
   }
   private initializeRouter() {
       this.app.use("/api", this.router);
+  }
+  private initializeErrorHandlers(errorHandler: any) {
+      this.app.use(errorHandler.notFoundError);
+      this.app.use(errorHandler.serverError);
+
   }
 }
 
