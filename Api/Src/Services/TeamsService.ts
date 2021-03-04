@@ -36,12 +36,12 @@ class TeamsService {
         return await this.teamsRepository.addMentorToTeam(teamId, mentorId);
     }
 
-    async setUsersToTeam(teamId: mongoose.Types.ObjectId, userIds: mongoose.Types.ObjectId[]) {
-        return await this.teamsRepository.setUsersToTeam(teamId, userIds);
-    }
-
     async deleteMentorFromTeam(teamId: mongoose.Types.ObjectId) {
         return await this.teamsRepository.deleteMentorFromTeam(teamId);
+    }
+
+    async deleteUserFromTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
+        return await this.teamsRepository.deleteUserFromTeam(teamId, userId);
     }
 }
 

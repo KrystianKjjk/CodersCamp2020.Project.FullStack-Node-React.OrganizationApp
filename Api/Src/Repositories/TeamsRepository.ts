@@ -2,6 +2,10 @@ import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
 
 export default class TeamsRepository extends Repository { 
+    async create(obj: object) {
+        return this.model.create(obj);
+    };
+
     async addUserToTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
         const updateQuery = {
             $push: {
@@ -18,13 +22,6 @@ export default class TeamsRepository extends Repository {
         return await this.updateById(teamId, updateQuery);
     }
 
-    async setUsersToTeam(teamId: mongoose.Types.ObjectId, userIds: mongoose.Types.ObjectId[]) {
-        const updateQuery = {
-            users: userIds
-        }
-        return await this.updateById(teamId, updateQuery);
-    }
-
     async deleteMentorFromTeam(teamId: mongoose.Types.ObjectId) {
         const updateQuery = {
             mentor: null
@@ -32,7 +29,13 @@ export default class TeamsRepository extends Repository {
         return await this.updateById(teamId, updateQuery);
     }
 
-
-
+    async deleteUserFromTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
+        const updateQuery = {
+            $pull: { 
+            users: userId
+            }
+        }
+        return await this.updateById(teamId, updateQuery);
+    }
     
 };

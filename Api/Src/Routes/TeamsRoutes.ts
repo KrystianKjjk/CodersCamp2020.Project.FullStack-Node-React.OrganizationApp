@@ -11,7 +11,7 @@ const teamsRoutes = (controller: TeamsController) => {
         router.route("/teams/:id").patch(controller.updateTeam);
         
         router.route("/teams/:id/users").post(controller.addUserToTeam);
-        // router.route("/teams/:id/users/:id").delete(controller.deleteUserFromTeam);
+        router.route("/teams/:teamId/users/:userId").delete(controller.deleteUserFromTeam);
         
         router.route("/teams/:id/mentor").post(controller.addMentorToTeam);
         router.route("/teams/:id/mentor/").delete(controller.deleteMentorFromTeam);
