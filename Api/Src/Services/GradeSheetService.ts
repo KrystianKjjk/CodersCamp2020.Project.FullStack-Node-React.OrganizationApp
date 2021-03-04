@@ -18,6 +18,7 @@ export default class UserService {
     }
 
     async createGradeSheet(gradeSheet: GradeSheet) {
+        if(!gradeSheet.mentorGrades) gradeSheet.mentorGrades = {};
         if(!gradeSheet.mentorReviewerGrades) gradeSheet.mentorReviewerGrades = [];
         if(!gradeSheet.mentorReviewer) gradeSheet.mentorReviewer = [];
         gradeSheet.mentorReviewerGrades = gradeSheet.mentorReviewerGrades
