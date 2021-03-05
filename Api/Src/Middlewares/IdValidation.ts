@@ -9,7 +9,7 @@ const idValidation = (req:express.Request, res:express.Response, next:express.Ne
         next();
     }
     catch (error) {
-        return res.status(400).json({message: "error.message"})
+        return res.status(400).json({message: error.message})
     }
 }
 
