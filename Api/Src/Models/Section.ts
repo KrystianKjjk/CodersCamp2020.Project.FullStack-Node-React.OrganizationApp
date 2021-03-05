@@ -1,18 +1,15 @@
 import * as mongoose from 'mongoose';
 
 export interface Section {
-    projectId: string,
     name: string,
     startDate: Date,
     endDate: Date,
+    testDate?: Date,    //optional as it might not be known from the very start
     description?: string
-    materials?: Object
+    materials?: string //materials reference
 }
 
 const SectionSchema = new mongoose.Schema({
-    projectId: {
-        type: String 
-    },
     name: {
         type: String,
         required: true
@@ -24,11 +21,14 @@ const SectionSchema = new mongoose.Schema({
     endDate: {
         type: Date,
     },
+    testDate: {
+        type: Date,
+    },
     description:{
         type: String
     },
     materials:{
-        type: Object
+        type: String
     }
 })
 

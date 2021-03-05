@@ -53,13 +53,11 @@ describe("Section Service", () => {
     test("should fetch all sections", async ()=>{
         const section = new SectionSchema({
             name: "Typescript", 
-            projectId: '123123',
             startDate: Date.now(),
             endDate: Date.now()
         });
         const section2 = new SectionSchema({
             name: "Javascript", 
-            projectId: '123123',
             startDate: Date.now(),
             endDate: Date.now()
         });
@@ -74,7 +72,6 @@ describe("Section Service", () => {
     test("should delete section", async()=>{
         const section = new SectionSchema({
             name: "Typescript", 
-            projectId: '123123',
             startDate: Date.now(),
             endDate: Date.now()
         });
