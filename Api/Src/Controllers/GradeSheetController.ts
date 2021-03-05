@@ -31,6 +31,10 @@ export default class UserController {
 
     setMentorReviewers = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
+        if (req.body.mentorIds instanceof Array)
+            return res.status(400).json({
+                message: "MentorIds should be an array of strings"
+            })
         const mentorIds = req.body.mentorIds.map((id: string) => new mongoose.Types.ObjectId(id));
         const sheet = await this.gradeSheetService.setMentorReviewers(id, mentorIds);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
@@ -52,7 +56,7 @@ export default class UserController {
         const gradeName: string = req.body.gradeName;
         const grade: number = req.body.grade;
         const sheet = await this.gradeSheetService.setMentorReviewerGrade(id, mentorId, gradeName, grade);
-        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
         res.status(200).json({message: 'Mentor reviewer grade set'});
     }
 
