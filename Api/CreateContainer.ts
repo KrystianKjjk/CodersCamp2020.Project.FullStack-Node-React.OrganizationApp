@@ -6,6 +6,8 @@ import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 
+import idValidation from './Src/Middlewares/IdValidation'
+
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
 import ProjectService from './Src/Services/ProjectService';
@@ -32,7 +34,8 @@ appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
 
 // Middlewares
 const middlewares = [
-  bodyParser.json()
+  bodyParser.json(),
+  idValidation
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
