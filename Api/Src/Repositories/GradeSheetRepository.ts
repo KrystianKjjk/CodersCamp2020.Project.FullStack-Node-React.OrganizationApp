@@ -6,7 +6,11 @@ export default class GradeSheetRepository extends Repository {
     async addMentorReviewer(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
         const updateQuery = {
             $push: {
-                mentorReviewer: mentorId
+                mentorReviewer: mentorId,
+                mentorReviewerGrades: {
+                    mentor: mentorId,
+                    grades: { }
+                }
             }
         }
         return await this.updateById(gradeSheetId, updateQuery);
@@ -21,24 +25,23 @@ export default class GradeSheetRepository extends Repository {
 
     async setMentorGrade(gradeSheetId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
         const updateQuery = {
-            $set: {
-                mentorGrade: { }
-            }
+            $set: { }
         }
-        updateQuery.$set.mentorGrade[gradeName] = grade;
+        updateQuery.$set[`mentorGrades.${gradeName}`] = grade;
         return await this.updateById(gradeSheetId, updateQuery);
     }
 
     async setMentorReviewerGrade(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
         const updateQuery = {
-            $set: {
-                mentorReviewerGrades: { }
-            }
+            $set: { }
         }
         const sheet = await this.getById(gradeSheetId) as GradeSheet;
-        const index = sheet.mentorReviewerGrades.findIndex(grade => grade.mentor === mentorId);
-        updateQuery.$set.mentorReviewerGrades[index].grades[gradeName] = grade;
-        return await this.updateById(gradeSheetId, updateQuery);
+        const index = sheet.mentorReviewerGrades.findIndex(grade => `${grade.mentor}` === `${mentorId}`);
+        console.log(index);
+        if (index > -1) {
+            updateQuery.$set[`mentorReviewerGrades.${index}.grades.${gradeName}`] = grade;
+            return await this.updateById(gradeSheetId, updateQuery);
+        } else return null;
     }
 
 };
