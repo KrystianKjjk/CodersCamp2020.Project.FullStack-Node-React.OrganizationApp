@@ -24,6 +24,12 @@ import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
+import TeamProjectModel from './Src/Models/TeamProject';
+import TeamProjectRepository from './Src/Repositories/TeamProjectRepository';
+import TeamProjectService from './Src/Services/TeamProjectService';
+import TeamProjectController from './Src/Controllers/TeamProjectController';
+import teamProjectRoutes from './Src/Routes/TeamProjectRoute';
+
 const appContainer = new Container();
 
 // Mongo config
@@ -39,22 +45,26 @@ appContainer.declare("Middlewares", (c) => middlewares);
 // Models
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
+appContainer.declare('TeamProjectModel', (c) => TeamProjectModel);
 appContainer.declare("Project", (c) => Project);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseModel));
+appContainer.declare('TeamProjectRepository', (c) => new TeamProjectRepository(c.TeamProjectModel));
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
+appContainer.declare("TeamProjectService", (c)=>new TeamProjectService(c.TeamProjectRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
+appContainer.declare("TeamProjectController",(c)=> new TeamProjectController(c.TeamProjectService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
 
 
@@ -62,6 +72,7 @@ appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
+  teamProjectRoutes(c.TeamProjectController)
 ]);
 
 // Create router

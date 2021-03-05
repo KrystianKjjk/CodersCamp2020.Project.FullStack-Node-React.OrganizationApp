@@ -1,10 +1,9 @@
-//Wspolne dla uczestnikow przypisanych do konkretnego mentora, poniewaz kazda grupa moze robic inny projekt
+//Jest to propozycja projektu tworzona przez administratora CodersCamp. 
+//Przy rozpoczynaniu konkretnego projektu mentor musi utworzyc TeamProject.
 import * as mongoose from 'mongoose';
 
 export interface Project {
     _id: mongoose.ObjectId,
-    teamId?: mongoose.ObjectId,
-    parentProjectId?: mongoose.ObjectId,
     sectionId: number,
     projectName: string,
     projectUrl: string,
@@ -12,14 +11,6 @@ export interface Project {
 }
 
 const ProjectSchema = new mongoose.Schema({
-    teamId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Teams'
-    },
-    parentProjectId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project'
-    },
     sectionId: {
         type: Number, 
         required: true,
