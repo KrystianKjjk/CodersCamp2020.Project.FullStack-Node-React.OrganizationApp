@@ -5,8 +5,7 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
-
-import idValidation from './Src/Middlewares/IdValidation'
+import 'express-async-errors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -35,7 +34,6 @@ appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
 // Middlewares
 const middlewares = [
   bodyParser.json(),
-  idValidation
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
