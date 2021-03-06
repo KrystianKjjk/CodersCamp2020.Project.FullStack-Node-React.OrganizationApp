@@ -5,24 +5,18 @@ import {SchemaTypes} from "mongoose";
 
 export interface Grade {
     sectionId: mongoose.Types.ObjectId,
-    gradeSheetId: mongoose.Types.ObjectId,
     testPoints: number,
     testMaxPoints: number,
     taskPoints: number,
     taskMaxPoints: number,
-    additionalPoints:number,
-    additionalMaxPoints:number
+    projectPoints: number
 }
 
-const GradeSchema = new mongoose.Schema({
+export const GradeSchema = new mongoose.Schema({
     sectionId: {
         type: SchemaTypes.ObjectId,
         ref: 'Section',
         required: true
-    },
-    gradeSheetId: {
-        type: SchemaTypes.ObjectId,
-        ref: 'GradeSheet'
     },
     testPoints: {
         type: Number
@@ -36,10 +30,7 @@ const GradeSchema = new mongoose.Schema({
     taskMaxPoints: {
         type: Number
     },
-    additionalPoints: {
-        type: Number
-    },
-    additionalMaxPoints: {
+    projectPoints: {
         type: Number
     }
 })
