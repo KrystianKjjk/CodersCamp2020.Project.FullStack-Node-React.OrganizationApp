@@ -28,8 +28,8 @@ export default class GradeController {
             const grades = await this.service.getGrades();
             return res.status(200).json(grades);
         }
-        catch (error) {
-            return res.status(500).json({ message: error.message });
+        catch (err) {
+            return res.status(500).json({ message: err.message });
         }
     }
 
@@ -39,10 +39,10 @@ export default class GradeController {
             const grade = await this.service.findGrade(id);
             return grade ?
                 res.status(200).json(grade)
-                : res.status(404).json({ message: "Course not found" });
+                : res.status(404).json({ message: "Grade not found" });
         }
-        catch (error) {
-            return res.status(500).json({ message: error.message });
+        catch (err) {
+            return res.status(500).json({ message: err.message });
         }
     }
 
@@ -70,10 +70,10 @@ export default class GradeController {
            const grade = await this.service.deleteGrade(id);
            return grade ?
                res.status(200).json(grade)
-               : res.status(404).json({ message: "Course not found" });
+               : res.status(404).json({ message: "Grade not found" });
        }
-       catch (error) {
-           return res.status(500).json({ message: error.message });
+       catch (err) {
+           return res.status(500).json({ message: err.message });
         }
     }
 }
