@@ -16,6 +16,9 @@ export default class CourseService {
     findGrade = async (id: mongoose.Types.ObjectId) => {
         return this.repository.getById(id);
     }
+    updateGrade = async (id: mongoose.Types.ObjectId, grade: GradeType) => {
+        return this.repository.updateById(id, grade);
+    };
     deleteGrade = async (id: mongoose.Types.ObjectId) => {
         return this.repository.deleteById(id);
     }

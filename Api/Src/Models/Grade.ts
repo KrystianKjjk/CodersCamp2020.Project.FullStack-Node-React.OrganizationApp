@@ -22,7 +22,7 @@ const GradeSchema = new mongoose.Schema({
     },
     gradeSheetId: {
         type: SchemaTypes.ObjectId,
-        ref: 'Course'
+        ref: 'GradeSheet'
     },
     testPoints: {
         type: Number
