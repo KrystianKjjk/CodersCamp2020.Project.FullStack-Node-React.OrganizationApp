@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as mongoose from 'mongoose';
 
-const idValidation = (req:express.Request, res:express.Response, next) => {
+const idValidation = (req:express.Request, res:express.Response, next:express.NextFunction) => {
     //check if id is of objectId type, otherwise throw an error
     try {
         new mongoose.Types.ObjectId(req.params.id);
