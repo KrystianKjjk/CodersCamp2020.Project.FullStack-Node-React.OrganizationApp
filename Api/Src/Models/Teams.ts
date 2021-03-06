@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export interface Teams {
+    _id: mongoose.Types.ObjectId,
     mentor: mongoose.Types.ObjectId;
     users: mongoose.Types.ObjectId[];
     projects: mongoose.Types.ObjectId[];
