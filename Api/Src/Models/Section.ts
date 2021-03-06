@@ -20,16 +20,27 @@ const SectionSchema = new mongoose.Schema({
     },
     endDate: {
         type: Date,
+        validate: [endDateValidator, 'End date must be after the start date!']
     },
     testDate: {
         type: Date,
+        validate: [testDateValidator, 'Test date must be between start and end dates!']
     },
     description:{
-        type: String
+        type: String,
+        minLength: 16
     },
     materials:{
         type: String
     }
 })
+
+function endDateValidator(value) {
+    return this.startDate < value;
+}
+
+function testDateValidator(value) {
+    return this.endDate >= value && this.startDate < value;
+}
 
 export default mongoose.model<Section & mongoose.Document>('Section', SectionSchema);
