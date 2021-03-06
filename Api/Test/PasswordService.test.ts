@@ -1,6 +1,6 @@
 import PasswordService from '../Src/Services/PasswordService';
-import UserService from '../Src/Services/User';
-import UserRepository from '../Src/Repositories/User';
+import UserService from '../Src/Services/UserService';
+import UserRepository from '../Src/Repositories/UserRepository';
 import {Repository} from '../Src/Repositories/Repository'
 import { UserModel } from '../Src/Models/User';
 import { PasswordResetTokenModel } from '../Src/Models/PasswordResetToken';
