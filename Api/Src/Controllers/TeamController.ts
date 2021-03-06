@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import * as mongoose from 'mongoose';
-import { Teams } from "../Models/Teams";
-import TeamsService from '../Services/TeamsService';
+import TeamsService from '../Services/TeamService';
 
 export default class TeamsController {
     service: TeamsService;
@@ -25,7 +24,6 @@ export default class TeamsController {
         const teamData = req.body;
         const newTeam = await this.service.createTeam(teamData);
         res.status(201).json({...newTeam, message: 'Team was created'});
-
     };
 
     updateTeam = async (req: Request, res: Response) => {
@@ -47,27 +45,19 @@ export default class TeamsController {
     };
     
     addUserToTeam = async (req: Request, res: Response) => {
-        const id = new mongoose.Types.ObjectId(req.params.id);
+        const teamId = new mongoose.Types.ObjectId(req.params.id);
         const userId = new mongoose.Types.ObjectId(req.body.userId);
-        const team = await this.service.addUserToTeam(id, userId);
-        if(team === null) return res.status(404).json({message: 'Team not found'});
+        const team = await this.service.addUserToTeam(teamId, userId);
+        if(!team) return res.status(404).json({message: 'Team not found'});
         res.status(200).json({message: 'User added to team'});
     }
 
     addMentorToTeam = async (req: Request, res: Response) => {
-        const id = new mongoose.Types.ObjectId(req.params.id);
+        const teamId = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.body.mentorId);
-        const team = await this.service.addMentorToTeam(id, mentorId);
-        if(team === null) return res.status(404).json({message: 'Team not found'});
+        const team = await this.service.addMentorToTeam(teamId, mentorId);
+        if(!team) return res.status(404).json({message: 'Team not found'});
         res.status(200).json({message: 'Mentor added to team'});
-    }
-
-    deleteMentorFromTeam = async (req: Request, res: Response) => {
-        const id = new mongoose.Types.ObjectId(req.params.id);
-        const team = await this.service.findTeamById(id);
-        if (!team) res.status(404).json({message: 'Team not found'});
-        await this.service.deleteMentorFromTeam(id);
-        res.status(200).json({message: 'Mentor was deleted'});
     }
 
     deleteUserFromTeam = async (req: Request, res: Response) => {
@@ -77,5 +67,13 @@ export default class TeamsController {
         if (!team) res.status(404).json({message: 'Team not found'});
         await this.service.deleteUserFromTeam(teamId, userId);
         res.status(200).json({message: 'User was deleted'});
+    }
+
+    deleteMentorFromTeam = async (req: Request, res: Response) => {
+        const teamId = new mongoose.Types.ObjectId(req.params.id);
+        const team = await this.service.findTeamById(teamId);
+        if (!team) res.status(404).json({message: 'Team not found'});
+        await this.service.deleteMentorFromTeam(teamId);
+        res.status(200).json({message: 'Mentor was deleted'});
     }
 }

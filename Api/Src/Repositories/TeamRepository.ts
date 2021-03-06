@@ -1,7 +1,7 @@
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
 
-export default class TeamsRepository extends Repository { 
+export default class TeamRepository extends Repository { 
     async create(obj: object) {
         return this.model.create(obj);
     };
@@ -12,6 +12,16 @@ export default class TeamsRepository extends Repository {
                 users: userId
             }
         }
+        
+        return await this.updateById(teamId, updateQuery);
+    }
+
+    async deleteUserFromTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
+        const updateQuery = {
+            $pull: { 
+                users: userId
+            }
+        }
         return await this.updateById(teamId, updateQuery);
     }
 
@@ -19,6 +29,7 @@ export default class TeamsRepository extends Repository {
         const updateQuery = {
             mentor: mentorId
         }
+
         return await this.updateById(teamId, updateQuery);
     }
 
@@ -26,16 +37,7 @@ export default class TeamsRepository extends Repository {
         const updateQuery = {
             mentor: null
         }
-        return await this.updateById(teamId, updateQuery);
-    }
 
-    async deleteUserFromTeam(teamId: mongoose.Types.ObjectId, userId: mongoose.Types.ObjectId) {
-        const updateQuery = {
-            $pull: { 
-            users: userId
-            }
-        }
         return await this.updateById(teamId, updateQuery);
     }
-    
 };

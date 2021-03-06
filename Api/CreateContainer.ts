@@ -24,11 +24,11 @@ import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
 
-import teamsRoutes from './Src/Routes/TeamsRoutes';
-import TeamsController from './Src/Controllers/TeamsController';
-import TeamsService from './Src/Services/TeamsService';
-import Teams from './Src/Models/Teams';
-import TeamsRepository from './Src/Repositories/TeamsRepository';
+import teamsRoutes from './Src/Routes/TeamRoutes';
+import TeamController from './Src/Controllers/TeamController';
+import TeamService from './Src/Services/TeamService';
+import Team from './Src/Models/Team';
+import TeamRepository from './Src/Repositories/TeamRepository';
 
 const appContainer = new Container();
 
@@ -46,32 +46,32 @@ appContainer.declare("Middlewares", (c) => middlewares);
 appContainer.declare('UserModel', (c) => UserModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
-appContainer.declare("Teams", (c) => Teams);
+appContainer.declare("Team", (c) => Team);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
 appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseModel));
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
-appContainer.declare("TeamsRepository", (c) => new TeamsRepository(c.Teams));
+appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
-appContainer.declare("TeamsService", (c) => new TeamsService(c.TeamsRepository));
+appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
-appContainer.declare("TeamsController", (c) => new TeamsController(c.TeamsService));
+appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
-  teamsRoutes(c.TeamsController),
+  teamsRoutes(c.TeamController),
 ]);
 
 // Create router

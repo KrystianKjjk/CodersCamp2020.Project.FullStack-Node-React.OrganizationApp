@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 
-export interface Teams {
+export interface Team {
     _id: mongoose.Types.ObjectId,
     mentor: mongoose.Types.ObjectId;
     users: mongoose.Types.ObjectId[];
     projects: mongoose.Types.ObjectId[];
 };
 
-const TeamsSchema = new mongoose.Schema({
+const TeamSchema = new mongoose.Schema({
     mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -23,4 +23,4 @@ const TeamsSchema = new mongoose.Schema({
 
   }, {timestamps: true});
 
-  export default mongoose.model<Teams & mongoose.Document>('Teams', TeamsSchema);
+  export default mongoose.model<Team & mongoose.Document>('Team', TeamSchema);

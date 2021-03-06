@@ -1,7 +1,7 @@
 import * as express from "express";
-import TeamsController from "../Controllers/TeamsController";
+import TeamController from "../Controllers/TeamController";
 
-const teamsRoutes = (controller: TeamsController) => {
+const teamsRoutes = (controller: TeamController) => {
     return (router: express.Router) => {
         router.route("/teams").get(controller.getTeamsList);
         router.route("/teams/:id").get(controller.getTeamByID);
