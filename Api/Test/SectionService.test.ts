@@ -15,7 +15,7 @@ class TestSectionRepository implements SectionRepository {
     };
 
     async getById(id: mongoose.Types.ObjectId){
-        return this.sections.find(project => project._id === id);
+        return this.sections.find(section => section._id === id);
     };
 
     async create(section: SectionDBModel){
@@ -87,7 +87,6 @@ describe("Section Service", () => {
     test("should update section", async ()=>{
         const section = new SectionSchema({
             name: "Typescript", 
-            projectId: '123123',
             startDate: Date.now(),
             endDate: Date.now()
         });
