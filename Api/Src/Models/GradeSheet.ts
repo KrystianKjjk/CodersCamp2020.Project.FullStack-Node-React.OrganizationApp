@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 export interface GradeSheet {
     projectID: mongoose.Types.ObjectId;
-    angagement: number;
+    engagement: number;
     mentorReviewer: mongoose.Types.ObjectId[];
     mentorGrades: {
         [prop: string]: number;
@@ -21,7 +21,7 @@ const GradeSheetSchema = new mongoose.Schema({
         ref: 'Project',
         required: true
     },
-    angagement: {
+    engagement: {
         type: Number, 
         default: NaN,
     },

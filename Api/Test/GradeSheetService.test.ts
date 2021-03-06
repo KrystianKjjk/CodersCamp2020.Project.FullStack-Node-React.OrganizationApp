@@ -72,7 +72,7 @@ describe('Test GradeSheetService ', () => {
     beforeEach(async () => {
         await service.createGradeSheet({
             projectID: new Types.ObjectId(),
-            angagement: 1,
+            engagement: 1,
             mentorReviewer: null,
             mentorGrades: {
                 design: 1,
@@ -94,7 +94,7 @@ describe('Test GradeSheetService ', () => {
             const mentorReviewerGrades = i/nSheets > 0.5 ? [reviewerGrades] : [];
             await service.createGradeSheet({
                 projectID: new Types.ObjectId(),
-                angagement: 1,
+                engagement: 1,
                 mentorReviewer: [mentorReviewerId],
                 mentorGrades: {
                     code: Math.round(Math.random() * 10),

@@ -3,7 +3,7 @@ import GradeSheetService from '../Services/GradeSheetService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 
-export default class UserController {
+export default class GradeSheetController {
     gradeSheetService: GradeSheetService;
     constructor(gradeSheetService: GradeSheetService) {
         this.gradeSheetService = gradeSheetService;
@@ -31,7 +31,7 @@ export default class UserController {
 
     setMentorReviewers = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        if (req.body.mentorIds instanceof Array)
+        if ( !(req.body.mentorIds instanceof Array) )
             return res.status(400).json({
                 message: "MentorIds should be an array of strings"
             })
