@@ -3,3 +3,4 @@ node_modules
 Coverage
 Dist
 ./Api/Dist
+launch.json
