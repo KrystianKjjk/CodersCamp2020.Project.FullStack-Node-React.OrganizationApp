@@ -16,11 +16,11 @@ class TeamsService {
         return this.teamsRepository.getById(id);
     };
 
-    async createTeam(team: Teams & mongoose.Document<Teams>) {
+    async createTeam(team: Omit<Teams, "_id">) {
         return this.teamsRepository.create(team);
     }
 
-    async updateTeam(id: mongoose.Types.ObjectId, team: Teams & mongoose.Document<Teams>) {
+    async updateTeam(id: mongoose.Types.ObjectId, team: Partial<Omit<Teams, "_id">>) {
         return this.teamsRepository.updateById(id, team);
       };
     
