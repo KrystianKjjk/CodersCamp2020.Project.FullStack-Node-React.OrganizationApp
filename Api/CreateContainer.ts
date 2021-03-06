@@ -90,7 +90,10 @@ appContainer.declare("PasswordController", (c) => new PasswordController(c.Maili
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
 appContainer.declare("GradeSheetController", (c) => new GradeSheetController(c.GradeSheetService));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 68b399df6925d3a059b5dd8ce1e0e7dde4f3b9ca
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
 
 appContainer.declare("Routes", (c) => [
