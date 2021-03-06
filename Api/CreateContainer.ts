@@ -23,6 +23,7 @@ import UserRepository from './Src/Repositories/User';
 import UserService from './Src/Services/User';
 import UserController from './Src/Controllers/User';
 import userRoutes from './Src/Routes/User';
+import ErrorMiddleware from './Src/Middlewares/Error';
 
 import AuthService from "./Src/Services/AuthService";
 import AuthController from "./Src/Controllers/AuthController";
@@ -43,6 +44,9 @@ appContainer.declare("jwtExpiresIn", (c) => process.env.JWT_TOKEN_EXPIRESIN);
 // Mongo config
 appContainer.declare("Port", (c) => process.env.PORT);
 appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
+
+//error handler
+appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 
 // Middlewares
 const middlewares = [
@@ -102,7 +106,8 @@ appContainer.declare(
           c.MongoUrl,
           c.Middlewares,
           c.Router,
-          c.Port
+          c.Port,
+          c.ErrorMiddleware
       )
 );
 
