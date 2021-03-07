@@ -5,6 +5,8 @@ export interface Section {
     startDate: Date,
     endDate: Date,
     testDate?: Date,    //optional as it might not be known from the very start
+    testLink?: string,
+    testDescription?: string,
     description?: string
     materials?: string //materials reference
 }
@@ -25,6 +27,12 @@ const SectionSchema = new mongoose.Schema({
     testDate: {
         type: Date,
         validate: [testDateValidator, 'Test date must be between start and end dates!']
+    },
+    testLink: {
+        type: String,
+    },
+    testDescription: {
+        type: String,
     },
     description:{
         type: String,
