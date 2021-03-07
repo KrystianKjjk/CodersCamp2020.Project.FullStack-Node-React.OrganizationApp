@@ -1,15 +1,17 @@
 import * as mongoose from 'mongoose';
 import {Grade} from './Grade';
+import * as Joi from "joi";
+const passwordComplexity = require("joi-password-complexity");
 
 export enum UserType {
     Candidate,
     Participant,
-    Mentor, 
+    Mentor,
     Admin,
 };
 
 export enum UserStatus {
-    Active, 
+    Active,
     Resigned,
     Archived,
 };
@@ -26,11 +28,6 @@ export interface UserModel {
 };
 
 const UserSchema = new mongoose.Schema({
-    username: {
-        type: String, 
-        required: true,
-        index: true,
-    },
     name: {
         type: String,
         required: true,
@@ -40,8 +37,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     email: {
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
         match: [/\S+@\S+\.\S+/, 'is invalid'],
         index: true,
         unique: true,
@@ -58,6 +55,29 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-  }, {timestamps: true});
+}, {timestamps: true});
 
-  export default mongoose.model<UserModel & mongoose.Document>('User', UserSchema);
+export function validateUserRegistration(user) {
+    const schema = Joi.object({
+        name: Joi.string().min(3).max(30).required(),
+        surname: Joi.string().min(3).max(30).required(),
+        email: Joi.string().email().required(),
+        // default: min: 8, max: 26, lowerCase: 1, upperCase: 1, numeric: 1, symbol: 1, requirementCount: 4,
+        password: passwordComplexity().required(),
+        confirmPassword: Joi.any().valid(Joi.ref('password')).required()
+            .label('Confirm password').messages({ 'any.only': '{{#label}} does not match' }),
+    });
+
+    return schema.validate(user);
+}
+
+export function validateUserLogin(user) {
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(8).max(26).required(),
+    });
+
+    return schema.validate(user);
+}
+
+export default mongoose.model<UserModel & mongoose.Document>('User', UserSchema);
