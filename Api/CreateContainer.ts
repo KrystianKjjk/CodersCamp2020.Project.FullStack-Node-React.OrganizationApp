@@ -53,6 +53,8 @@ import SectionService from './Src/Services/SectionService';
 import SectionController from './Src/Controllers/SectionController';
 import sectionRoutes from './Src/Routes/SectionRoutes';
 
+import AuthGradeController from "./Src/Controllers/GradeAuthController";
+
 const appContainer = new Container();
 
 // JWT .ENV
@@ -110,13 +112,14 @@ appContainer.declare("TeamController", (c) => new TeamController(c.TeamService))
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
+appContainer.declare("AuthGradeController", (c) => new AuthGradeController(c.TeamService, c.AuthService));
 
 appContainer.declare("Routes", (c) => [
     userRoutes(c.UserController),
     authRoutes(c.AuthController),
     courseRoutes(c.CourseController),
     projectRoutes(c.ProjectController),
-    gradeRoutes(c.GradeController),
+    gradeRoutes(c.GradeController, c.AuthGradeController),
     PasswordRoutes(c.PasswordController),
     teamsRoutes(c.TeamController),
     sectionRoutes(c.SectionController)
