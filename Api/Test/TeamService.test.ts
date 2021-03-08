@@ -83,9 +83,9 @@ describe("Teams Service", () => {
 
     it("persists team model", async () => {
         await service.createTeam(team1);
-        const fetchedProject = await service.findTeamById(team1._id);
+        const fetchedTeam = await service.findTeamById(team1._id);
 
-        expect(fetchedProject).toEqual(team1);
+        expect(fetchedTeam).toEqual(team1);
     });
 
     it("can list out all teams", async () => {
