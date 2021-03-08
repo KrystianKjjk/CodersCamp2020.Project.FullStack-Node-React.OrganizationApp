@@ -3,11 +3,11 @@ import * as mongoose from 'mongoose';
 
 export default class TeamRepository extends Repository {
     async getAll() {
-        return this.model.find({}).populate('users').populate('mentor').populate('projects');
+        return this.model.find({}).populate('users').populate('mentor');
     };
 
     async getById(id: mongoose.Types.ObjectId) {
-        return this.model.findOne(id).populate('users').populate('mentor').populate('projects');
+        return this.model.findOne(id).populate('users').populate('mentor');
     };
 
     async create(obj: object) {
