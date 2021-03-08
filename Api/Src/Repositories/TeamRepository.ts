@@ -1,7 +1,15 @@
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
 
-export default class TeamRepository extends Repository { 
+export default class TeamRepository extends Repository {
+    async getAll() {
+        return this.model.find({}).populate('users').populate('mentor').populate('projects');
+    };
+
+    async getById(id: mongoose.Types.ObjectId) {
+        return this.model.findOne(id).populate('users').populate('mentor').populate('projects');
+    };
+
     async create(obj: object) {
         return this.model.create(obj);
     };
