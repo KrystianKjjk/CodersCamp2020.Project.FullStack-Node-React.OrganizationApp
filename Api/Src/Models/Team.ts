@@ -4,7 +4,6 @@ export interface Team {
     _id: mongoose.Types.ObjectId,
     mentor: mongoose.Types.ObjectId;
     users: mongoose.Types.ObjectId[];
-    projects: mongoose.Types.ObjectId[];
 };
 
 const TeamSchema = new mongoose.Schema({
@@ -15,10 +14,6 @@ const TeamSchema = new mongoose.Schema({
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
-    projects: [{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Project',
     }],
 
   }, {timestamps: true});

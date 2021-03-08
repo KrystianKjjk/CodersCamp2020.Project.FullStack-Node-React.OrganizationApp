@@ -69,14 +69,12 @@ describe("Teams Service", () => {
         _id: mongoose.Types.ObjectId(),
         mentor: mongoose.Types.ObjectId(), 
         users: [mongoose.Types.ObjectId()], 
-        projects: [mongoose.Types.ObjectId()],
     };
 
     const team2 = {
         _id: mongoose.Types.ObjectId(),
         mentor: mongoose.Types.ObjectId(), 
         users: [mongoose.Types.ObjectId()], 
-        projects: [mongoose.Types.ObjectId()],
     };
 
     beforeEach(() => {
@@ -112,7 +110,6 @@ describe("Teams Service", () => {
 
         expect(updatedTeam.mentor).not.toEqual(team1.mentor); // changed
         expect(updatedTeam.users).toEqual(team1.users); // stayed the same
-        expect(updatedTeam.projects).toEqual(team1.projects); // stayed the same
     });
 
     it("should add new users to team and delete these users from a team", async () => {
