@@ -1,6 +1,6 @@
 import * as express from "express";
 import ProjectController from "../Controllers/ProjectController";
-import idValidation from '../Middlewares/IdValidation'
+import idValidation from '../Middlewares/IdValidation';
 
 const projectRoutes = (controller: ProjectController) => {
     return (router: express.Router) => {
@@ -11,6 +11,5 @@ const projectRoutes = (controller: ProjectController) => {
         router.route("/projects/:id").delete(idValidation, controller.deleteProject);
         return router;
     }
-
 };
 export default projectRoutes;
