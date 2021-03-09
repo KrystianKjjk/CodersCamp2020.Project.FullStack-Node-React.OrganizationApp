@@ -3,6 +3,10 @@ import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
 
 export default class GradeSheetRepository extends Repository { 
+    async getReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
+        return await this.model.findOne({_id: gradeSheetId}, {mentorReviewerGrades: 1, _id: 0});
+    }
+
     async addMentorReviewer(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
         const sheet = await this.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if(sheet === null) return null;
