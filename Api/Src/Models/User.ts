@@ -17,7 +17,6 @@ export enum UserStatus {
 };
 
 export interface UserModel {
-    username: string,
     name: string,
     surname: string,
     email: string,
