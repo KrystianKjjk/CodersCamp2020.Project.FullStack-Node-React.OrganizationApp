@@ -1,4 +1,4 @@
-import GradeSheetModel, { GradeSheet } from '../Models/GradeSheet';
+import { GradeSheet } from '../Models/GradeSheet';
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
 
