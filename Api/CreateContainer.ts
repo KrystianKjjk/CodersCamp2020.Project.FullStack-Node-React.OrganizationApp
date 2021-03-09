@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
+import 'express-async-errors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';

@@ -1,0 +1,664 @@
+swagger: '2.0'
+info: 
+  title: App for CodersCamp mentors and participants
+  version: 1.0.0
+tags:
+- name: user
+  description: Operations about user
+- name: course
+  description: Operations about course
+- name: project
+  description: Operations about project
+- name: section
+  description: Operations about section
+paths:
+  /users/login:
+    post:
+      tags: 
+        - user
+      summary: Log in user
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                example: john@gmail.com
+              password:
+                type: string
+                example: examplePassword
+      responses:
+        200:
+          description: Successfully logged in
+        401:
+          description: Log in failed
+  /users/register:
+    post:
+      tags:
+        - user
+      summary: Register user
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+              - name
+              - surname
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+              name: 
+                type: string
+              surname: 
+                type: string
+      responses:
+        200: 
+          description: Register succeed
+        400:
+          description: ValidationError
+        500: 
+          description: Registration failure
+  /users:
+    get:
+      tags:
+        - user
+      summary: Fetch users
+      produces:
+        - application/json
+      parameters:
+        - name: courseId
+          in: query
+          type: number
+        - name: mentorId
+          in: query
+          type: number
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+  /users/{id}:
+    get:
+      tags:
+        - user
+      summary: Fetch user
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200: 
+          description: Success
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: User not found
+    patch:
+      tags:
+        - user
+      summary: Update user
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: User updated
+          schema:
+            $ref: '#/definitions/User'
+        404: 
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: User deleted
+        404:
+          description: User not found
+  /users/requestpasswordreset:
+    post:
+      tags:
+        - user
+      summary: Request for email to reset password
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                example: 60392978e2219023e463c5e1
+      responses:
+        200: 
+          description: Email sent to user with provided id
+        500: 
+          description: Email not sent
+  /users/resetpassword:
+    post:
+      tags:
+        - user
+      summary: Reset password for user
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - id
+              - token
+              - password
+            properties:
+              id:
+                type: string
+                example: 60392978e2219023e463c5e1
+              token:
+                type: string
+                example: 9708ba32ed88ac3433603cfb0fe708744abd00554383a82f616021035cb1658d
+              password: 
+                type: string
+                example: password
+      responses:
+        200: 
+          description: Password changed
+        500: 
+          description: Password not changed
+  /users/changepassword:
+    post:
+      tags:
+        - user
+      summary: Change password when the old one is known
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - id
+              - oldPassword
+              - newPassword
+            properties:
+              id:
+                type: string
+                example: 60392978e2219023e463c5e1
+              oldPassword:
+                type: string
+                example: password
+              newPassword:
+                type: string
+                example: another-password123
+      responses:
+        200: 
+          description: Email sent to user with provided id
+        500: 
+          description: Email not sent
+  /courses:
+    post:
+      tags:
+        - course
+      summary: Add course
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Course'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Course'
+        400:
+          description: Validation error
+    get:
+      tags:
+        - course
+      summary: Fetch courses
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Course'
+  /courses/{id}:
+    get:
+      tags:
+        - course
+      summary: Fetch course by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Course'
+        404:
+          description: Course not found
+    put:
+      tags:
+        - course
+      summary: Update course
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Course'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Course'
+        404:
+          description: Course not found
+        400:
+          description: Validation error
+    delete:
+      tags:
+        - course
+      summary: Delete course
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Success
+        404:
+          description: Course not found
+  /projects:
+    post:
+      tags:
+        - project
+      summary: Create project
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Project'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Project'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - project
+      summary: Fetch projects
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+  /projects/{id}:
+    get:
+      tags:
+        - project
+      summary: Fetch project by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Project'
+        404:
+          description: Project not found
+    patch:
+      tags:
+        - project
+      summary: Update project
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Project'
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Project'
+        404:
+          description: Project not found
+        400:
+          description: Provided data not correct
+    delete:
+      tags:
+        - project
+      summary: Delete project
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Project was deleted
+        404:
+          description: Project not found
+  /sections:
+    post:
+      tags:
+        - section
+      summary: Create section
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Section'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Section'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - section
+      summary: Fetch sections
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Section'
+  /sections/{id}:
+    get:
+      tags:
+        - section
+      summary: Fetch section by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Section'
+        404:
+          description: Section not found
+    patch:
+      tags:
+        - section
+      summary: Update section
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Section'
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Section'
+        404:
+          description: Section not found
+        400:
+          description: Provided data not correct
+    delete:
+      tags:
+        - section
+      summary: Delete section
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Section was deleted
+        404:
+          description: Section not found
+definitions:
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+        example: john@gmail.com
+      password:
+        type: string
+        example: examplePassword
+      username:
+        type: string
+        example: Johny
+      name:
+        type: string
+        example: John
+      surname:
+        type: string
+        example: Doe
+      type:
+        type: number
+        default: 0
+        example: 0
+      status:
+        type: number
+        default: 0
+        example: 0
+      grades:
+        type: array
+        items:
+          $ref: '#/definitions/Grade'
+  Grade:
+    type: object
+    properties:
+      id: 
+        type: number
+        example: 1
+      sectionId: 
+        type: number
+        example: 2
+      projectId: 
+        type: number
+        example: 3
+      testPoints: 
+        type: number
+        example: 90
+      testMaxPoints: 
+        type: number
+        example: 100
+      taskPoints: 
+        type: number
+        example: 30
+      taskMaxPoints: 
+        type: number
+        example: 35
+      projectPoints: 
+        type: number
+        example: 100
+      projectMaxPoints: 
+        type: number
+        example: 100
+      rolePoints:
+        type: number
+        example: 20
+      roleMaxPoints:
+        type: number
+        example: 100
+      additionalPoints:
+        type: number
+        example: 30
+      additionalMaxPoints:
+        type: number
+        example: 100
+  Course:
+    type: object
+    properties:
+      _id:
+        type: string
+        example: '4'
+      name:
+        type: string
+        example: 'CodersCamp 2021'
+      description:
+        type: string
+        example: 'Some description...'
+      sections:
+        type: array
+        items:
+          $ref: '#/definitions/Section'
+  Section:
+    type: object
+    properties:
+      id: 
+        type: number
+        example: 5
+      name: 
+        type: string
+        example: TypeScript
+      startDate:
+        type: string
+        example: 01-02-2021
+      endDate:
+        type: string
+        example: 21-02-2021
+      testDate:
+        type: string
+        example: 21-02-2021
+      description:
+        type: string
+        example: this is your section blablabla
+      materials:
+        type: string
+        example: reference id of materials
+  Project:
+    type: object
+    properties:
+      _id:
+        type: number
+        example: 5
+      sectionId:
+        type: number
+        example: 4
+      projectName:
+        type: string
+        example: FitNotFat
+      projectUrl:
+        type: string
+        example: 'github.com/FitNotFat'
+      description:
+        type: string
+        example: 'Some description...'
+# Added by API Auto Mocking Plugin
+# Added by API Auto Mocking Plugin
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /CodersCamp2021/CodersCampAPI/1.0.0
+schemes:
+ - https
