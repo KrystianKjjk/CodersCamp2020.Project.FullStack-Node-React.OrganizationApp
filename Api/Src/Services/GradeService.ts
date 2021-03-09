@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 import GradeRepository from "../Repositories/GradeRepository";
 import { GradeType } from "../Models/Grade";
 
-export default class CourseService {
+export default class GradeService {
 
     constructor(private repository: GradeRepository) {}
 
