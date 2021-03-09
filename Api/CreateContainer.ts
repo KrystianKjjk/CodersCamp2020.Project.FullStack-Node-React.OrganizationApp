@@ -5,6 +5,19 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
+import 'express-async-errors';
+
+import ProjectController from './Src/Controllers/ProjectController';
+import projectRoutes from './Src/Routes/ProjectRoutes';
+import ProjectService from './Src/Services/ProjectService';
+import ProjectRepository from './Src/Repositories/ProjectRepository';
+import Project from './Src/Models/Project';
+
+import courseRoutes from './Src/Routes/CourseRoute';
+import CourseController from './Src/Controllers/CourseController';
+import CourseService from './Src/Services/CourseService';
+import CourseModel from './Src/Models/Course';
+import CourseRepository from './Src/Repositories/CourseRepository';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -41,6 +54,13 @@ import SectionService from './Src/Services/SectionService';
 import SectionController from './Src/Controllers/SectionController';
 import sectionRoutes from './Src/Routes/SectionRoutes';
 
+import gradeRoutes from "./Src/Routes/GradeRoutes";
+import GradeController from "./Src/Controllers/GradeController";
+import GradeService from "./Src/Services/GradeService";
+import GradeRepository from "./Src/Repositories/GradeRepository";
+import GradeModel from "./Src/Models/Grade";
+
+
 const appContainer = new Container();
 
 // JWT .ENV
@@ -62,10 +82,12 @@ appContainer.declare("Middlewares", (c) => middlewares);
 
 // Models
 appContainer.declare('UserModel', (c) => UserModel);
-appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
 appContainer.declare("Section", (c) => SectionModel);
+appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
+appContainer.declare("Grade", (c) => GradeModel);
+
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
@@ -73,6 +95,7 @@ appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseMod
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
 appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
+appContainer.declare("GradeRepository", (c) => new GradeRepository(c.Grade));
 
 
 // Services
@@ -83,6 +106,8 @@ appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository)
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
+appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository));
+
 
 
 // Controllers
@@ -92,6 +117,8 @@ appContainer.declare("CourseController",(c)=> new CourseController(c.CourseServi
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
+appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
+
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
@@ -99,7 +126,8 @@ appContainer.declare("Routes", (c) => [
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
   sectionRoutes(c.SectionController),
-  authRoutes(c.AuthController)
+  authRoutes(c.AuthController),
+  gradeRoutes(c.GradeController)
 ]);
 
 // Create router
