@@ -23,7 +23,7 @@ export default class GradeSheetController {
 
     addMentorReviewer = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        const mentorId = new mongoose.Types.ObjectId(req.body.mentorId);
+        const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
         const sheet = await this.gradeSheetService.addMentorReviewer(id, mentorId);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Mentor reviewer added'});
@@ -52,7 +52,7 @@ export default class GradeSheetController {
 
     setMentorReviewerGrade = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        const mentorId = new mongoose.Types.ObjectId(req.body.mentorId);
+        const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
         const gradeName: string = req.body.gradeName;
         const grade: number = req.body.grade;
         const sheet = await this.gradeSheetService.setMentorReviewerGrade(id, mentorId, gradeName, grade);
