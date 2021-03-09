@@ -39,7 +39,7 @@ class App {
     }
 
   private connectToTheDatabase(mongoUrl: string) {
-      mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+      mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true,});
       console.log(`App connected to MongoDB Atlas`);
   }
 
