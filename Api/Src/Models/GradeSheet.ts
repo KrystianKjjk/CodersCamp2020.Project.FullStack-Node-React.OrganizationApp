@@ -23,7 +23,7 @@ const GradeSheetSchema = new mongoose.Schema({
     },
     engagement: {
         type: Number, 
-        default: NaN,
+        default: 0,
     },
     mentorReviewer: [{
         type: mongoose.Schema.Types.ObjectId,
