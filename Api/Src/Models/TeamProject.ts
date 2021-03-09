@@ -14,7 +14,8 @@ export interface TeamProject {
 const TeamProjectSchema = new mongoose.Schema({
     teamId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Team'
+        ref: 'Team',
+        required: true
     },
     parentProjectId: {
         type: mongoose.Schema.Types.ObjectId,
