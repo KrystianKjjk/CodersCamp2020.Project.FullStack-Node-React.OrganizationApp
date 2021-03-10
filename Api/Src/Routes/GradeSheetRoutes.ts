@@ -8,10 +8,14 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
         router.get('/grade/sheets/:id/reviewers/:mentorId/grades', c.getReviewerGrades);
         router.get('/grade/sheets', c.getGradeSheets);
         router.post('/grade/sheets', c.createGradeSheet);
-        router.patch('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
-        router.patch('/grade/sheets/:id/reviewers', c.setMentorReviewers);
+        router.post('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
+        router.post('/grade/sheets/:id/add/participant/:participantId', c.addParticipant);
+        router.put('/grade/sheets/:id/reviewers', c.setMentorReviewers);
         router.patch('/grade/sheets/:id/mentor/grades', c.setMentorGrade);
         router.patch('/grade/sheets/:id/reviewers/:mentorId/grades', c.setMentorReviewerGrade);
+        router.patch('/grade/sheets/:id/participants', c.updateParticipants);
+        router.put('/grade/sheets/:id/participants', c.setParticipants);
+        router.delete('/grade/sheets/:id/participants/:participantId', c.removeParticipant);
         router.delete('/grade/sheets/:id', c.deleteGradeSheet);
         return router;
     }
