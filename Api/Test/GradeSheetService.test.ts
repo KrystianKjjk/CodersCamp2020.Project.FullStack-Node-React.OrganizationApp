@@ -40,8 +40,9 @@ class TestRepository extends GradeSheetRepository {
 
     async addMentorReviewer(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
         const gradeSheet = await this.getById(gradeSheetId);
-        const reviewers = [...gradeSheet.mentorReviewer, mentorId];
-        this.updateById(gradeSheetId, {mentorReviewer: reviewers});
+        if(gradeSheet.mentorReviewer.includes(mentorId)) return gradeSheet;
+        gradeSheet.mentorReviewer.push(mentorId);
+        return gradeSheet;
     }
 
     async setMentorReviewers(gradeSheetId: Types.ObjectId, mentorIds: Types.ObjectId[]) {
@@ -58,6 +59,7 @@ class TestRepository extends GradeSheetRepository {
         const reviewerGrades = this.gradeSheets[index].mentorReviewerGrades;
         const reviewerIndex = reviewerGrades.findIndex(grades => grades.mentor === mentorId);
         reviewerGrades[reviewerIndex].grades[gradeName] = grade;
+        return this.gradeSheets[index];
     }
 
 }
@@ -72,7 +74,7 @@ describe('Test GradeSheetService ', () => {
     beforeEach(async () => {
         await service.createGradeSheet({
             projectID: new Types.ObjectId(),
-            engagement: 1,
+            participants: [],
             mentorReviewer: null,
             mentorGrades: {
                 design: 1,
@@ -94,7 +96,7 @@ describe('Test GradeSheetService ', () => {
             const mentorReviewerGrades = i/nSheets > 0.5 ? [reviewerGrades] : [];
             await service.createGradeSheet({
                 projectID: new Types.ObjectId(),
-                engagement: 1,
+                participants: [],
                 mentorReviewer: [mentorReviewerId],
                 mentorGrades: {
                     code: Math.round(Math.random() * 10),

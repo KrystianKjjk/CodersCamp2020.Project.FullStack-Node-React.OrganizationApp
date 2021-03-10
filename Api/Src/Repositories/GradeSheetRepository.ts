@@ -1,7 +1,7 @@
 import { GradeSheet, Participant } from '../Models/GradeSheet';
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 export default class GradeSheetRepository extends Repository { 
     async getReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
