@@ -2,7 +2,12 @@ import * as mongoose from 'mongoose';
 
 export interface GradeSheet {
     projectID: mongoose.Types.ObjectId;
-    engagement: number;
+    participants: {
+        participandId: mongoose.Types.ObjectId;
+        engagement: number;
+        role: string;
+        rolePoints: number;
+    }[];
     mentorReviewer: mongoose.Types.ObjectId[];
     mentorGrades: {
         [prop: string]: number;
@@ -21,10 +26,25 @@ const GradeSheetSchema = new mongoose.Schema({
         ref: 'Project',
         required: true
     },
-    engagement: {
-        type: Number, 
-        default: 0,
-    },
+    participants: [{
+        participantID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        engagement: {
+            type: Number,
+            default: 0
+        },
+        role: {
+            type: String,
+            default: ''
+        },
+        rolePoints: {
+            type: Number,
+            default: 0
+        }
+    }],
     mentorReviewer: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
