@@ -2,7 +2,7 @@ import GradeSheetService from '../Src/Services/GradeSheetService';
 import GradeSheetRepository from '../Src/Repositories/GradeSheetRepository';
 import { GradeSheet } from '../Src/Models/GradeSheet';
 import GradeSheetDbModel from '../Src/Models/GradeSheet';
-import { Document, Mongoose, Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 
 class TestRepository extends GradeSheetRepository {
@@ -21,8 +21,12 @@ class TestRepository extends GradeSheetRepository {
     };
 
     async getById(id: Types.ObjectId) {
-        return this.gradeSheets.find(sheet => sheet._id === id);
+        return this.gradeSheets.find(sheet => `${sheet._id}` === `${id}`) ?? null;
     };
+
+    async getIndexById(id: Types.ObjectId) {
+        return this.gradeSheets.findIndex(sheet => `${sheet._id}` === `${id}`);
+    }
 
     async create(gradeSheet: GradeSheet) {
         const newGradeSheet = new this.model(gradeSheet) as GradeSheet & Document;
@@ -30,17 +34,18 @@ class TestRepository extends GradeSheetRepository {
     };
 
     async updateById(id: Types.ObjectId, props: object) {
-        const index = this.gradeSheets.findIndex(sheet => sheet._id === id);
+        const index = await this.getIndexById(id);
         Object.assign(this.gradeSheets[index], props)
     };
 
     async deleteById(id: Types.ObjectId) {
-        this.gradeSheets = this.gradeSheets.filter(sheet => sheet._id !== id)
+        this.gradeSheets = this.gradeSheets.filter(sheet => `${sheet._id}` !== `${id}`);
     };
 
     async addMentorReviewer(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
-        const gradeSheet = await this.getById(gradeSheetId);
-        if(gradeSheet.mentorReviewer.includes(mentorId)) return gradeSheet;
+        const index = await this.getIndexById(gradeSheetId);
+        const gradeSheet = this.gradeSheets[index];
+        if(gradeSheet.mentorReviewer.findIndex(mentor => `${mentor}` === `${mentorId}`) > -1) return gradeSheet;
         gradeSheet.mentorReviewer.push(mentorId);
         return gradeSheet;
     }
@@ -50,16 +55,25 @@ class TestRepository extends GradeSheetRepository {
     }
 
     async setMentorGrade(gradeSheetId: Types.ObjectId, gradeName: string, grade: number) {
-        const index = this.gradeSheets.findIndex(sheet => sheet._id === gradeSheetId);
-        this.gradeSheets[index].mentorGrades[gradeName] = grade;
+        const sheet = await this.getById(gradeSheetId);
+        sheet.mentorGrades[gradeName] = grade;
+    }
+
+    async getReviewerGrades(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
+        const sheet = await this.getById(gradeSheetId);
+        return sheet.mentorReviewerGrades.find(grade => `${grade.mentor}` === `${mentorId}`)
     }
 
     async setMentorReviewerGrade(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId, gradeName: string, grade: number) {
-        const index = this.gradeSheets.findIndex(sheet => sheet._id === gradeSheetId);
+        const index = await this.getIndexById(gradeSheetId);
         const reviewerGrades = this.gradeSheets[index].mentorReviewerGrades;
-        const reviewerIndex = reviewerGrades.findIndex(grades => grades.mentor === mentorId);
+        const reviewerIndex = reviewerGrades.findIndex(grade => `${grade.mentor}` === `${mentorId}`);
         reviewerGrades[reviewerIndex].grades[gradeName] = grade;
         return this.gradeSheets[index];
+    }
+
+    async save(doc: Document) {
+        return doc;
     }
 
 }
@@ -149,7 +163,7 @@ describe('Test GradeSheetService ', () => {
         expect(gradeSheets[idx].mentorGrades[gradeName]).toBe(grade);
     });
 
-    test('set mentor reviewer grade', async () => {
+    test('get/set mentor reviewer grades', async () => {
         const idx = 7;
         const sheetId = gradeSheets[idx]._id;
         const mentorId = gradeSheets[idx].mentorReviewer[0];
@@ -157,6 +171,8 @@ describe('Test GradeSheetService ', () => {
         const grade = 321;
         await service.setMentorReviewerGrade(sheetId, mentorId, gradeName, grade);
         expect(gradeSheets[idx].mentorReviewerGrades[0].grades[gradeName]).toBe(grade);
+        const grades = await service.getReviewerGrades(sheetId, mentorId);
+        expect(grades.grades[gradeName]).toBe(grade);
     });
 
     test('delete sheet', async () => {
@@ -166,4 +182,32 @@ describe('Test GradeSheetService ', () => {
         expect(gradeSheets.findIndex((sheet: Document) => sheet._id === deletedId)).toBe(-1);
     });
 
+    test('get/set/update/delete participants', async () => {
+        const idx = 7;
+        const sheetId = gradeSheets[idx]._id;
+        const participantID = Types.ObjectId();
+        await service.addParticipant(sheetId, participantID);
+        expect(`${gradeSheets[idx].participants[0].participantID}`).toBe(`${participantID}`);
+        await service.addParticipant(sheetId, participantID);
+        expect(gradeSheets[idx].participants).toHaveLength(1);
+        expect(await service.addParticipant(Types.ObjectId(), participantID)).toBeNull();
+
+        const engagement = 100;
+        const participants = [{participantID, engagement}, {participantID: Types.ObjectId(), engagement}];
+        await service.updateParticipants(sheetId, participants);
+        expect(await service.updateParticipants(Types.ObjectId(), participants)).toBeNull();
+        expect(gradeSheets[idx].participants[0].engagement).toBe(engagement);
+        
+        const newParticipants = [{participantID}, {participantID: Types.ObjectId()}];
+        await service.setParticipants(sheetId, newParticipants);
+        expect(await service.setParticipants(Types.ObjectId(), newParticipants)).toBeNull();
+        expect(gradeSheets[idx].participants).toHaveLength(newParticipants.length);
+
+        expect(await service.removeParticipant(Types.ObjectId(), participantID)).toBeNull();
+        expect(gradeSheets[idx].participants).toHaveLength(2);
+        await service.removeParticipant(sheetId, participantID);
+        expect(gradeSheets[idx].participants).toHaveLength(1);
+        expect(await service.removeParticipant(sheetId, Types.ObjectId())).toBeNull();
+        expect(gradeSheets[idx].participants.find(part => `${part.participantID}` === `${participantID}`)).toBeUndefined();
+    });
 });

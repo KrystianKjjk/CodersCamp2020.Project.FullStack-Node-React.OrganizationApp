@@ -24,4 +24,7 @@ export class Repository {
     async deleteById(id: mongoose.Types.ObjectId) {
         return this.model.findByIdAndDelete(id);
     };
+    async save(doc: mongoose.Document) {
+        return doc.save();
+    }
 }
