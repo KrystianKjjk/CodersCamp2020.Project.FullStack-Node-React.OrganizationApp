@@ -1,13 +1,15 @@
 import * as mongoose from 'mongoose';
 
+export interface Participant {
+    participantID: mongoose.Types.ObjectId;
+    engagement?: number;
+    role?: string;
+    rolePoints?: number;
+};
+
 export interface GradeSheet {
     projectID: mongoose.Types.ObjectId;
-    participants: {
-        participandId: mongoose.Types.ObjectId;
-        engagement: number;
-        role: string;
-        rolePoints: number;
-    }[];
+    participants: Participant[];
     mentorReviewer: mongoose.Types.ObjectId[];
     mentorGrades: {
         [prop: string]: number;
