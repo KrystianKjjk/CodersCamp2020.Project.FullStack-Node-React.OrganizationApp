@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
+import 'express-async-errors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -41,6 +42,12 @@ import TeamService from './Src/Services/TeamService';
 import Team from './Src/Models/Team';
 import TeamRepository from './Src/Repositories/TeamRepository';
 
+import gradeRoutes from "./Src/Routes/GradeRoutes";
+import GradeController from "./Src/Controllers/GradeController";
+import GradeService from "./Src/Services/GradeService";
+import GradeRepository from "./Src/Repositories/GradeRepository";
+import GradeModel from "./Src/Models/Grade";
+
 const appContainer = new Container();
 
 // JWT .ENV
@@ -62,10 +69,11 @@ appContainer.declare("Middlewares", (c) => middlewares);
 
 // Models
 appContainer.declare('UserModel', (c) => UserModel);
-appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
 appContainer.declare('CourseModel', (c) => CourseModel);
 appContainer.declare("Project", (c) => Project);
 appContainer.declare("Team", (c) => Team);
+appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
+appContainer.declare("Grade", (c) => GradeModel);
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
@@ -73,6 +81,7 @@ appContainer.declare('CourseRepository', (c) => new CourseRepository(c.CourseMod
 appContainer.declare("ProjectRepository", (c) => new ProjectRepository(c.Project));
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
+appContainer.declare("GradeRepository", (c) => new GradeRepository(c.Grade));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
@@ -82,6 +91,8 @@ appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository)
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
+appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository));
+
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService));
@@ -90,6 +101,8 @@ appContainer.declare("CourseController",(c)=> new CourseController(c.CourseServi
 appContainer.declare("ProjectController", (c) => new ProjectController(c.ProjectService));
 appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
+appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
+
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
@@ -97,7 +110,8 @@ appContainer.declare("Routes", (c) => [
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
   teamsRoutes(c.TeamController),
-  authRoutes(c.AuthController)
+  authRoutes(c.AuthController),
+  gradeRoutes(c.GradeController),
 ]);
 
 // Create router
