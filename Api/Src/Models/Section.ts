@@ -35,7 +35,8 @@ const SectionSchema = new mongoose.Schema({
         type: String,
     },
     referenceProjectId: {
-        type: String
+        type: String,
+        ref: 'Project'
     },
     description:{
         type: String,

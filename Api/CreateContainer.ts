@@ -19,18 +19,6 @@ import CourseService from './Src/Services/CourseService';
 import CourseModel from './Src/Models/Course';
 import CourseRepository from './Src/Repositories/CourseRepository';
 
-import ProjectController from './Src/Controllers/ProjectController';
-import projectRoutes from './Src/Routes/ProjectRoutes';
-import ProjectService from './Src/Services/ProjectService';
-import ProjectRepository from './Src/Repositories/ProjectRepository';
-import Project from './Src/Models/Project';
-
-import courseRoutes from './Src/Routes/CourseRoute';
-import CourseController from './Src/Controllers/CourseController';
-import CourseService from './Src/Services/CourseService';
-import CourseModel from './Src/Models/Course';
-import CourseRepository from './Src/Repositories/CourseRepository';
-
 import UserModel from './Src/Models/User';
 import UserRepository from './Src/Repositories/User';
 import UserService from './Src/Services/User';
