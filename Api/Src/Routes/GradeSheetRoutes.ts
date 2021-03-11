@@ -8,6 +8,8 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
         router.get('/grade/sheets', c.getGradeSheets);
         router.get('/grade/sheets/:id/reviewers/:mentorId/grades', c.getReviewerGrades);
         router.get('/participants/:id/grade/sheets', c.getParticipantGradeSheets);
+        router.get('/mentors/:id/grade/sheets', c.getMentorGradeSheets);
+        router.get('/reviewers/:id/grade/sheets', c.getReviewerGradeSheets);
         router.post('/grade/sheets', c.createGradeSheet);
         router.post('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
         router.post('/grade/sheets/:id/add/participant/:participantId', c.addParticipant);

@@ -21,12 +21,27 @@ export default class GradeSheetRepository extends Repository {
     }
 
     async getMentorGradeSheets(userId: mongoose.Types.ObjectId): Promise<GradeSheet[]> {
-        return this.model.find({
-            $or: [
-                { mentorReviewer: { $elemMatch: { mentor: userId } } },
-                { mentor: userId }
-            ]
-        });
+        const filter = {
+            mentorID: userId,
+        };
+        const projection = {
+            _id: 0,
+        };
+        return this.model.find(filter, projection);
+    }
+
+    async getReviewerGradeSheets(userId: mongoose.Types.ObjectId): Promise<GradeSheet[]> {
+        const filter = {
+            reviewers: userId,
+        };
+        const projection = {
+            _id: 0,
+            mentorID: 1,
+            "participants.participantID": 1,
+            "participants.role": 1,
+            mentorReviewerGrades: { $elemMatch: { mentorID: userId } },
+        };
+        return this.model.find(filter, projection);
     }
 
     async addMentorReviewer(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {

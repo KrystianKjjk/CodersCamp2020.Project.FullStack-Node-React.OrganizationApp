@@ -27,6 +27,14 @@ export default class GradeSheetService {
         return await this.repository.getParticipantGradeSheets(userId);
     }
 
+    async getMentorGradeSheets(userId: mongoose.Types.ObjectId) {
+        return await this.repository.getMentorGradeSheets(userId);
+    }
+
+    async getReviewerGradeSheets(userId: mongoose.Types.ObjectId) {
+        return await this.repository.getReviewerGradeSheets(userId);
+    }
+
     async createGradeSheet(gradeSheet: GradeSheet) {
         if(!gradeSheet.participants) gradeSheet.participants = [];
         if(!gradeSheet.mentorGrades) gradeSheet.mentorGrades = {};

@@ -35,6 +35,18 @@ export default class GradeSheetController {
         res.status(200).json(sheets);
     }
 
+    getMentorGradeSheets = async (req: Request, res: Response) => {
+        const userId = new mongoose.Types.ObjectId(req.params.id);
+        const sheets = await this.gradeSheetService.getMentorGradeSheets(userId);
+        res.status(200).json(sheets);
+    }
+
+    getReviewerGradeSheets = async (req: Request, res: Response) => {
+        const userId = new mongoose.Types.ObjectId(req.params.id);
+        const sheets = await this.gradeSheetService.getReviewerGradeSheets(userId);
+        res.status(200).json(sheets);
+    }
+
     addMentorReviewer = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
