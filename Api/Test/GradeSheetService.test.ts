@@ -3,6 +3,7 @@ import GradeSheetRepository from '../Src/Repositories/GradeSheetRepository';
 import { GradeSheet } from '../Src/Models/GradeSheet';
 import GradeSheetDbModel from '../Src/Models/GradeSheet';
 import { Document, Types } from 'mongoose';
+import * as _ from 'lodash';
 
 
 class TestRepository extends GradeSheetRepository {
@@ -52,11 +53,6 @@ class TestRepository extends GradeSheetRepository {
 
     async setMentorReviewers(gradeSheetId: Types.ObjectId, mentorIds: Types.ObjectId[]) {
         this.updateById(gradeSheetId, {mentorReviewer: mentorIds});
-    }
-
-    async setMentorGrade(gradeSheetId: Types.ObjectId, gradeName: string, grade: number) {
-        const sheet = await this.getById(gradeSheetId);
-        sheet.mentorGrades[gradeName] = grade;
     }
 
     async getReviewerGrades(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
@@ -156,11 +152,18 @@ describe('Test GradeSheetService ', () => {
 
     test('set mentor grade', async () => {
         const idx = 7;
+        const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
         const gradeName = 'ExtraGrade';
-        const grade = 111;
-        await service.setMentorGrade(sheetId, gradeName, grade);
-        expect(gradeSheets[idx].mentorGrades[gradeName]).toBe(grade);
+        const grade = 111
+        const grades = {[gradeName]: grade, 'Design': 10, 'repo': 9, 'App': 10};
+        await service.setMentorGrade(sheetId, grades);
+        for (let name in grades)
+            expect(gradeSheets[idx].mentorGrades[name]).toBe(grades[name]);
+        for (let name in sheet)
+            if ( !(name in grades) )
+                expect(gradeSheets[idx].mentorGrades[name]).toBe(sheet.mentorGrades[name]);
+        expect(await service.setMentorGrade(Types.ObjectId(), grades)).toBeNull();
     });
 
     test('get/set mentor reviewer grades', async () => {

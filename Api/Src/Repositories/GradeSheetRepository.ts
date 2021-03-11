@@ -27,14 +27,6 @@ export default class GradeSheetRepository extends Repository {
         return await this.updateById(gradeSheetId, updateQuery);
     }
 
-    async setMentorGrade(gradeSheetId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
-        const updateQuery = {
-            $set: { }
-        }
-        updateQuery.$set[`mentorGrades.${gradeName}`] = grade;
-        return await this.updateById(gradeSheetId, updateQuery);
-    }
-
     async setMentorReviewerGrade(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
         const grades = {};
         grades[gradeName] = grade;
