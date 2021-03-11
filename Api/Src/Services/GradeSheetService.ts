@@ -23,6 +23,10 @@ export default class GradeSheetService {
         return sheet.mentorReviewerGrades.find((elem) => `${elem.mentor}` === `${mentorId}`);
     }
 
+    async getParticipantGradeSheets(userId: mongoose.Types.ObjectId) {
+        return await this.repository.getParticipantGradeSheets(userId);
+    }
+
     async createGradeSheet(gradeSheet: GradeSheet) {
         if(!gradeSheet.participants) gradeSheet.participants = [];
         if(!gradeSheet.mentorGrades) gradeSheet.mentorGrades = {};

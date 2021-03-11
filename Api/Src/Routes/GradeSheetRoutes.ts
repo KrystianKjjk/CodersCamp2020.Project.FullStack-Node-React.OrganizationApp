@@ -5,8 +5,9 @@ import * as express from 'express';
 export default function gradeSheetRoutes(c: GradeSheetController) {
     return (router: express.Router) => {
         router.get('/grade/sheets/:id', c.getGradeSheet);
-        router.get('/grade/sheets/:id/reviewers/:mentorId/grades', c.getReviewerGrades);
         router.get('/grade/sheets', c.getGradeSheets);
+        router.get('/grade/sheets/:id/reviewers/:mentorId/grades', c.getReviewerGrades);
+        router.get('/participants/:id/grade/sheets', c.getParticipantGradeSheets);
         router.post('/grade/sheets', c.createGradeSheet);
         router.post('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
         router.post('/grade/sheets/:id/add/participant/:participantId', c.addParticipant);
