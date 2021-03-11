@@ -158,20 +158,21 @@ describe('Test GradeSheetService ', () => {
 
     test('get/set mentor reviewer grades', async () => {
         const idx = 7;
-        const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
+        const prevSheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
         const mentorIdx = 0;
         const mentorId = gradeSheets[idx].mentorReviewer[0];
-        const grades = {'ExtraGrade': 33, 'Design': 11, 'repo': 12, 'App': 13};
-        await service.setMentorReviewerGrades(sheetId, mentorId, grades);
-        for (let name in grades)
-            expect(gradeSheets[idx].mentorReviewerGrades[mentorIdx].grades[name]).toBe(grades[name]);
-        for (let name in sheet.mentorReviewerGrades[mentorIdx].grades)
-            if ( !(name in grades) )
-                expect(gradeSheets[idx].mentorReviewerGrades[mentorIdx].grades[name])
-                    .toBe(sheet.mentorReviewerGrades[mentorIdx].grades[name]);
-        expect(await service.setMentorReviewerGrades(Types.ObjectId(), mentorId, grades)).toBeNull();
-        expect(await service.setMentorReviewerGrades(sheetId, Types.ObjectId(), grades)).toBeNull();
+        const setGrades = {'ExtraGrade': 33, 'Design': 11, 'repo': 12, 'App': 13};
+        await service.setMentorReviewerGrades(sheetId, mentorId, setGrades);
+        const reviewerGrades = await service.getReviewerGrades(sheetId, mentorId);
+        for (let name in setGrades)
+            expect(reviewerGrades.grades[name]).toBe(setGrades[name]);
+        for (let name in reviewerGrades.grades)
+            if ( !(name in setGrades) )
+                expect(reviewerGrades.grades[name])
+                    .toBe(prevSheet.mentorReviewerGrades[mentorIdx].grades[name]);
+        expect(await service.setMentorReviewerGrades(Types.ObjectId(), mentorId, setGrades)).toBeNull();
+        expect(await service.setMentorReviewerGrades(sheetId, Types.ObjectId(), setGrades)).toBeNull();
     });
 
     test('delete sheet', async () => {
