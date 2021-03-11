@@ -154,9 +154,7 @@ describe('Test GradeSheetService ', () => {
         const idx = 7;
         const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
-        const gradeName = 'ExtraGrade';
-        const grade = 111
-        const grades = {[gradeName]: grade, 'Design': 10, 'repo': 9, 'App': 10};
+        const grades = {'ExtraGrade': 111, 'Design': 10, 'repo': 9, 'App': 10};
         await service.setMentorGrade(sheetId, grades);
         for (let name in grades)
             expect(gradeSheets[idx].mentorGrades[name]).toBe(grades[name]);
