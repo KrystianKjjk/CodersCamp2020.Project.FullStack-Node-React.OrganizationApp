@@ -73,7 +73,7 @@ export default class GradeSheetController {
         const participantId = new mongoose.Types.ObjectId(req.params.participantId);
         const sheet = await this.gradeSheetService.addParticipant(id, participantId);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
-        res.status(200).json({message: 'Mentor reviewer grade set'});
+        res.status(200).json({message: 'Participant added'});
     }
 
     updateParticipants = async (req: Request, res: Response) => {
