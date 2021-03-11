@@ -36,20 +36,17 @@ import AuthService from "./Src/Services/AuthService";
 import AuthController from "./Src/Controllers/AuthController";
 import authRoutes from "./Src/Routes/AuthRoutes";
 
-<<<<<<< HEAD
 import TeamProjectModel from './Src/Models/TeamProject';
 import TeamProjectRepository from './Src/Repositories/TeamProjectRepository';
 import TeamProjectService from './Src/Services/TeamProjectService';
 import TeamProjectController from './Src/Controllers/TeamProjectController';
 import teamProjectRoutes from './Src/Routes/TeamProjectRoute';
-=======
 import teamsRoutes from './Src/Routes/TeamRoutes';
 import TeamController from './Src/Controllers/TeamController';
 import TeamService from './Src/Services/TeamService';
 import Team from './Src/Models/Team';
 import TeamRepository from './Src/Repositories/TeamRepository';
 
->>>>>>> main
 import gradeRoutes from "./Src/Routes/GradeRoutes";
 import GradeController from "./Src/Controllers/GradeController";
 import GradeService from "./Src/Services/GradeService";
@@ -121,11 +118,8 @@ appContainer.declare("Routes", (c) => [
   PasswordRoutes(c.PasswordController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
-<<<<<<< HEAD
   teamProjectRoutes(c.TeamProjectController),
-=======
   teamsRoutes(c.TeamController),
->>>>>>> main
   authRoutes(c.AuthController),
   gradeRoutes(c.GradeController),
 ]);
