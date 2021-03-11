@@ -10,7 +10,8 @@
     "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
     "start": "ts-node ./Api/index.ts",
     "start:dev": "npx nodemon ./Api/index.ts",
-    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts"
+    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts",
+    "build": "parcel build ./Api/index.ts --public-url ./ --target node --bundle-node-modules --cache-dir ./Api/.cache -d ./Api/dist"
   },
   "repository": {
     "type": "git",
