@@ -1,4 +1,5 @@
-//Wspolne dla uczestnikow przypisanych do konkretnego mentora, poniewaz kazda grupa moze robic inny projekt
+//Jest to propozycja projektu tworzona przez administratora CodersCamp. 
+//Przy rozpoczynaniu konkretnego projektu mentor musi utworzyc TeamProject.
 import * as mongoose from 'mongoose';
 
 export interface Project {
