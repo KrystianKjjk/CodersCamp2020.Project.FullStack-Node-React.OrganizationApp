@@ -119,7 +119,7 @@ appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository))
 
 
 // Controllers
-appContainer.declare("UserController", (c) => new UserController(c.UserService));
+appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService));
 appContainer.declare("PasswordController", (c) => new PasswordController(c.MailingService, c.PasswordService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("TeamProjectController",(c)=> new TeamProjectController(c.TeamProjectService));

@@ -4,9 +4,12 @@ import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 
+interface MailingService{
+    sendMail: Function
+}
 class TokenService {
-    secret: string;
-    constructor(secret: string){
+    secret: string;    
+    constructor(secret: string){        
         this.secret = secret;
     }
     generateToken(payload: object, expiresIn: string = '1h') {
@@ -17,9 +20,12 @@ class TokenService {
 export default class UserController {
     userService: UserService;
     authService: TokenService;
-    constructor(userService: UserService, authService = new TokenService('secret')) {
+    mailingService: MailingService;
+
+    constructor(userService: UserService,  mailingService: MailingService, authService = new TokenService('secret'),) {
         this.userService = userService;
         this.authService = authService;
+        this.mailingService = mailingService;
     }
 
     getUser = async (req: Request, res: Response) => {
@@ -54,6 +60,20 @@ export default class UserController {
             await user.validate();
             await this.userService.createUser(user);
             res.status(201).json({message: 'Register succeed'});
+
+            //Mailing the user
+            this.mailingService.sendMail({
+                from: 'coderscamp@fastmail.com',
+                to: user.email,
+                subject: 'Welcome to CodersCamp',
+                template: 'welcomeEmail',
+                context:{
+                    userName: user.name,
+                    email: user.email,
+                    appLink: process.env.PAGE_URL || "https://coderscamp.edu.pl/"
+                }
+            });
+
         } catch(err) {
             if(err.name === 'ValidationError')
                 return res.status(400).json({message: err.message})
