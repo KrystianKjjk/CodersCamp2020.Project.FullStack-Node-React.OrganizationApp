@@ -60,14 +60,6 @@ class TestRepository extends GradeSheetRepository {
         return sheet.mentorReviewerGrades.find(grade => `${grade.mentor}` === `${mentorId}`)
     }
 
-    async setMentorReviewerGrade(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId, gradeName: string, grade: number) {
-        const index = await this.getIndexById(gradeSheetId);
-        const reviewerGrades = this.gradeSheets[index].mentorReviewerGrades;
-        const reviewerIndex = reviewerGrades.findIndex(grade => `${grade.mentor}` === `${mentorId}`);
-        reviewerGrades[reviewerIndex].grades[gradeName] = grade;
-        return this.gradeSheets[index];
-    }
-
     async save(doc: Document) {
         return doc;
     }
@@ -155,25 +147,31 @@ describe('Test GradeSheetService ', () => {
         const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
         const grades = {'ExtraGrade': 111, 'Design': 10, 'repo': 9, 'App': 10};
-        await service.setMentorGrade(sheetId, grades);
+        await service.setMentorGrades(sheetId, grades);
         for (let name in grades)
             expect(gradeSheets[idx].mentorGrades[name]).toBe(grades[name]);
-        for (let name in sheet)
+        for (let name in sheet.mentorGrades)
             if ( !(name in grades) )
                 expect(gradeSheets[idx].mentorGrades[name]).toBe(sheet.mentorGrades[name]);
-        expect(await service.setMentorGrade(Types.ObjectId(), grades)).toBeNull();
+        expect(await service.setMentorGrades(Types.ObjectId(), grades)).toBeNull();
     });
 
     test('get/set mentor reviewer grades', async () => {
         const idx = 7;
+        const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
+        const mentorIdx = 0;
         const mentorId = gradeSheets[idx].mentorReviewer[0];
-        const gradeName = 'ExtraRevGrade';
-        const grade = 321;
-        await service.setMentorReviewerGrade(sheetId, mentorId, gradeName, grade);
-        expect(gradeSheets[idx].mentorReviewerGrades[0].grades[gradeName]).toBe(grade);
-        const grades = await service.getReviewerGrades(sheetId, mentorId);
-        expect(grades.grades[gradeName]).toBe(grade);
+        const grades = {'ExtraGrade': 33, 'Design': 11, 'repo': 12, 'App': 13};
+        await service.setMentorReviewerGrades(sheetId, mentorId, grades);
+        for (let name in grades)
+            expect(gradeSheets[idx].mentorReviewerGrades[mentorIdx].grades[name]).toBe(grades[name]);
+        for (let name in sheet.mentorReviewerGrades[mentorIdx].grades)
+            if ( !(name in grades) )
+                expect(gradeSheets[idx].mentorReviewerGrades[mentorIdx].grades[name])
+                    .toBe(sheet.mentorReviewerGrades[mentorIdx].grades[name]);
+        expect(await service.setMentorReviewerGrades(Types.ObjectId(), mentorId, grades)).toBeNull();
+        expect(await service.setMentorReviewerGrades(sheetId, Types.ObjectId(), grades)).toBeNull();
     });
 
     test('delete sheet', async () => {

@@ -53,7 +53,7 @@ export default class GradeSheetController {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const gradeName: string = req.body.gradeName;
         const grades: {[gradeName: string]: number} = req.body.grades;
-        const sheet = await this.gradeSheetService.setMentorGrade(id, grades);
+        const sheet = await this.gradeSheetService.setMentorGrades(id, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Mentor grade set'});
     }
@@ -61,9 +61,8 @@ export default class GradeSheetController {
     setMentorReviewerGrade = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
-        const gradeName: string = req.body.gradeName;
-        const grade: number = req.body.grade;
-        const sheet = await this.gradeSheetService.setMentorReviewerGrade(id, mentorId, gradeName, grade);
+        const grades: {[gradeName: string]: number} = req.body.grades;
+        const sheet = await this.gradeSheetService.setMentorReviewerGrades(id, mentorId, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
         res.status(200).json({message: 'Mentor reviewer grade set'});
     }

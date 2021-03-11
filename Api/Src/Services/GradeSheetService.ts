@@ -50,7 +50,7 @@ export default class GradeSheetService {
         return await this.repository.setMentorReviewers(gradeSheetId, mentorIds);
     }
 
-    async setMentorGrade(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}) {
+    async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if(sheet === null) return null;
         Object.assign(sheet.mentorGrades, grades);
@@ -58,8 +58,13 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
-    async setMentorReviewerGrade(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, gradeName: string, grade: number) {
-        return await this.repository.setMentorReviewerGrade(gradeSheetId, mentorId, gradeName, grade);
+    async setMentorReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}) {
+        const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
+        if( sheet === null || !(sheet.mentorReviewer.includes(mentorId)) ) return null;
+        const index = sheet.mentorReviewerGrades.findIndex(grade => `${grade.mentor}` === `${mentorId}`);
+        Object.assign(sheet.mentorReviewerGrades[index].grades, grades);
+        sheet.markModified('mentorReviewerGrades');
+        return await this.repository.save(sheet);
     }
 
     async addParticipant(gradeSheetId: mongoose.Types.ObjectId, participantId: mongoose.Types.ObjectId) {
