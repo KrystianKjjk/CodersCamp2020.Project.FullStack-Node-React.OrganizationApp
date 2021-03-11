@@ -10,12 +10,13 @@ export interface Participant {
 export interface GradeSheet {
     projectID: mongoose.Types.ObjectId;
     participants: Participant[];
-    mentorReviewer: mongoose.Types.ObjectId[];
+    mentorID: mongoose.Types.ObjectId;
+    reviewers: mongoose.Types.ObjectId[];
     mentorGrades: {
         [prop: string]: number;
     };
     mentorReviewerGrades: Array< {
-        mentor: mongoose.Types.ObjectId;
+        mentorID: mongoose.Types.ObjectId;
         grades: {
             [prop: string]: number;
         };
@@ -26,6 +27,11 @@ const GradeSheetSchema = new mongoose.Schema({
     projectID: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Project',
+        required: true
+    },
+    mentorID: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User',
         required: true
     },
     participants: [{
@@ -47,7 +53,7 @@ const GradeSheetSchema = new mongoose.Schema({
             default: 0
         }
     }],
-    mentorReviewer: [{
+    reviewers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -57,7 +63,7 @@ const GradeSheetSchema = new mongoose.Schema({
         default: {}
     },
     mentorReviewerGrades: [{
-        mentor: {
+        mentorID: {
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },

@@ -46,18 +46,14 @@ class TestRepository extends GradeSheetRepository {
     async addMentorReviewer(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
         const index = await this.getIndexById(gradeSheetId);
         const gradeSheet = this.gradeSheets[index];
-        if(gradeSheet.mentorReviewer.findIndex(mentor => `${mentor}` === `${mentorId}`) > -1) return gradeSheet;
-        gradeSheet.mentorReviewer.push(mentorId);
+        if(gradeSheet.reviewers.findIndex(mentor => `${mentor}` === `${mentorId}`) > -1) return gradeSheet;
+        gradeSheet.reviewers.push(mentorId);
         return gradeSheet;
-    }
-
-    async setMentorReviewers(gradeSheetId: Types.ObjectId, mentorIds: Types.ObjectId[]) {
-        this.updateById(gradeSheetId, {mentorReviewer: mentorIds});
     }
 
     async getReviewerGrades(gradeSheetId: Types.ObjectId, mentorId: Types.ObjectId) {
         const sheet = await this.getById(gradeSheetId);
-        return sheet.mentorReviewerGrades.find(grade => `${grade.mentor}` === `${mentorId}`)
+        return sheet.mentorReviewerGrades.find(grade => `${grade.mentorID}` === `${mentorId}`)
     }
 
     async save(doc: Document) {
@@ -76,8 +72,9 @@ describe('Test GradeSheetService ', () => {
     beforeEach(async () => {
         await service.createGradeSheet({
             projectID: new Types.ObjectId(),
+            mentorID: new Types.ObjectId(),
             participants: [],
-            mentorReviewer: null,
+            reviewers: null,
             mentorGrades: {
                 design: 1,
                 extra: 2,
@@ -88,7 +85,7 @@ describe('Test GradeSheetService ', () => {
         for (let i = 0; i < nSheets - 1; i++) {
             const mentorReviewerId = new Types.ObjectId();
             const reviewerGrades = {
-                mentor: mentorReviewerId,
+                mentorID: mentorReviewerId,
                 grades: {
                     code: Math.round(Math.random() * 10),
                     repo: Math.round(Math.random() * 10),
@@ -98,8 +95,9 @@ describe('Test GradeSheetService ', () => {
             const mentorReviewerGrades = i/nSheets > 0.5 ? [reviewerGrades] : [];
             await service.createGradeSheet({
                 projectID: new Types.ObjectId(),
+                mentorID: new Types.ObjectId(),
                 participants: [],
-                mentorReviewer: [mentorReviewerId],
+                reviewers: [mentorReviewerId],
                 mentorGrades: {
                     code: Math.round(Math.random() * 10),
                     repo: Math.round(Math.random() * 10),
@@ -128,18 +126,18 @@ describe('Test GradeSheetService ', () => {
         const idx = 0;
         const sheetId = gradeSheets[idx]._id;
         const mentorId = new Types.ObjectId();
-        expect(gradeSheets[idx].mentorReviewer).toHaveLength(0);
+        expect(gradeSheets[idx].reviewers).toHaveLength(0);
         await service.addMentorReviewer(sheetId, mentorId);
-        expect(gradeSheets[idx].mentorReviewer).toHaveLength(1);
+        expect(gradeSheets[idx].reviewers).toHaveLength(1);
     });
 
     test('set mentor reviewers', async () => {
         const idx = 1;
         const sheetId = gradeSheets[idx]._id;
-        const mentorIds = [];
-        expect(gradeSheets[idx].mentorReviewer).toHaveLength(1);
+        const mentorIds = [gradeSheets[idx].reviewers[0], new Types.ObjectId()];
+        expect(gradeSheets[idx].reviewers).toHaveLength(1);
         await service.setMentorReviewers(sheetId, mentorIds);
-        expect(gradeSheets[idx].mentorReviewer).toHaveLength(0);
+        expect(gradeSheets[idx].reviewers).toHaveLength(mentorIds.length);
     });
 
     test('set mentor grade', async () => {
@@ -161,7 +159,7 @@ describe('Test GradeSheetService ', () => {
         const prevSheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
         const mentorIdx = 0;
-        const mentorId = gradeSheets[idx].mentorReviewer[0];
+        const mentorId = gradeSheets[idx].reviewers[0];
         const setGrades = {'ExtraGrade': 33, 'Design': 11, 'repo': 12, 'App': 13};
         await service.setMentorReviewerGrades(sheetId, mentorId, setGrades);
         const reviewerGrades = await service.getReviewerGrades(sheetId, mentorId);
