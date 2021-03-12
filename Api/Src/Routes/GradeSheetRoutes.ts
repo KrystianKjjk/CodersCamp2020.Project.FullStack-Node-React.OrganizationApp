@@ -23,6 +23,11 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
         router.put('/grade/sheets/:id/participants', propValid(validateParticipants, 'participants'), idValidation, c.setParticipants);
         router.delete('/grade/sheets/:id/participants/:participantId', idsValidation(), c.removeParticipant);
         router.delete('/grade/sheets/:id', idValidation, c.deleteGradeSheet);
+        router.patch('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
+        router.patch('/grade/sheets/:id/reviewers', c.setMentorReviewers);
+        router.patch('/grade/sheets/:id/mentor/grades', c.setMentorGrades);
+        router.patch('/grade/sheets/:id/reviewers/:mentorId/grades', c.setMentorReviewerGrades);
+        router.delete('/grade/sheets/:id', c.deleteGradeSheet);
         return router;
     }
 }
