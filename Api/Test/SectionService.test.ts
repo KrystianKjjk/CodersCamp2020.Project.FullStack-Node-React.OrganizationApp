@@ -6,7 +6,7 @@ import { Section } from '../Src/Models/Section';
 
 type SectionDBModel = Section & {_id: mongoose.Types.ObjectId};
 
-class TestSectionRepository implements SectionRepository {
+class TestSectionRepository extends SectionRepository {
     private sections: Array<SectionDBModel> = [];
     model: any;
 
@@ -39,7 +39,7 @@ describe("Section Service", () => {
     let service: SectionService;
 
     beforeEach(() => {
-        service = new SectionService(new TestSectionRepository());
+        service = new SectionService(new TestSectionRepository(SectionSchema));
     })
 
     test("should create section and fetch it", async()=>{
