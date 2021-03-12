@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export interface Section {
+    _id: mongoose.Types.ObjectId,
     name: string,
     startDate: Date,
     endDate: Date,
@@ -30,7 +31,7 @@ const TestSchema = new mongoose.Schema({
         required: true,
     },
     testDate: {
-        type: String,
+        type: Date,
         validate: [testDateValidator, 'Test date must be between start and end dates!']
     },
     testUrl: {
