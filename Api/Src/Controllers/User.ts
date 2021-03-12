@@ -8,8 +8,8 @@ interface MailingService{
     sendMail: Function
 }
 class TokenService {
-    secret: string;    
-    constructor(secret: string){        
+    secret: string;
+    constructor(secret: string){
         this.secret = secret;
     }
     generateToken(payload: object, expiresIn: string = '1h') {
@@ -22,7 +22,7 @@ export default class UserController {
     authService: TokenService;
     mailingService: MailingService;
 
-    constructor(userService: UserService,  mailingService: MailingService, authService = new TokenService('secret'),) {
+    constructor(userService: UserService,  mailingService: MailingService, authService = new TokenService('secret')) {
         this.userService = userService;
         this.authService = authService;
         this.mailingService = mailingService;
