@@ -99,7 +99,7 @@ appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository)
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
-appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository));
+appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository, c.UserService));
 appContainer.declare("PasswordService", (c) => new PasswordService(c.UserRepository, c.PasswordResetTokenRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 
@@ -112,7 +112,7 @@ appContainer.declare("TeamController", (c) => new TeamController(c.TeamService))
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
-appContainer.declare("AuthGradeController", (c) => new AuthGradeController(c.TeamService, c.AuthService));
+appContainer.declare("AuthGradeController", (c) => new AuthGradeController(c.TeamService, c.AuthService, c.UserService));
 
 appContainer.declare("Routes", (c) => [
     userRoutes(c.UserController),

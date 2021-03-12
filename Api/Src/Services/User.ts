@@ -2,6 +2,7 @@ import UserRepository from '../Repositories/User';
 import { UserModel as User } from '../Models/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import {GradeType} from "../Models/Grade";
 
 
 export default class UserService {
@@ -21,6 +22,14 @@ export default class UserService {
 
     async findUserById(id: mongoose.Types.ObjectId) {
         return this.repository.getById(id);
+    }
+
+    async deleteGradeById(id: mongoose.Types.ObjectId) {
+        return this.repository.deleteGradeById(id);
+    }
+
+    async updateGradeById(id: mongoose.Types.ObjectId, grade: GradeType) {
+        return this.repository.updateGradeById(id, grade);
     }
 
     async getUsers(): Promise<(User & mongoose.Document<User>)[]> {
@@ -45,6 +54,10 @@ export default class UserService {
 
     async deleteUser(id: mongoose.Types.ObjectId) {
         return this.repository.deleteById(id);
+    }
+
+    async getUserByGradeId(gradeId: mongoose.Types.ObjectId) {
+        return this.repository.getByGradeId(gradeId);
     }
 
 }
