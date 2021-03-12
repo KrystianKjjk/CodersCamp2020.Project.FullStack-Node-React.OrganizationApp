@@ -1,5 +1,5 @@
 import UserModel from '../Models/User';
-import UserService from '../Services/User';
+import UserService from '../Services/UserService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 

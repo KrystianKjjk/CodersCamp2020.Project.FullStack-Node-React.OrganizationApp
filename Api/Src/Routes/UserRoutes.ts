@@ -1,4 +1,4 @@
-import UserController from '../Controllers/User';
+import UserController from '../Controllers/UserController';
 import * as express from 'express';
 import idValidation from '../Middlewares/IdValidation';
 import { HasId } from '../Middlewares/HasRole';
