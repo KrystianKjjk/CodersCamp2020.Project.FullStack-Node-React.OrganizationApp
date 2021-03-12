@@ -8,6 +8,7 @@ const sectionRoutes = (controller: SectionController) => {
         router.route("/sections").post(controller.createSection);
         router.route("/sections/:id").put(controller.updateSection);
         router.route("/sections/:id").delete(controller.deleteSection);
+        router.route("/courses/:id/sections").get(controller.getSectionsByCourseId);
         return router;
     }
 };
