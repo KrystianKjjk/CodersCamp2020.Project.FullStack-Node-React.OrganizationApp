@@ -1,20 +1,43 @@
 import * as mongoose from 'mongoose';
-import {Test} from '../Models/Team';
-import TestRepository from '../Repositories/TestRepository';
+import { Test } from '../Models/Section';
+import SectionRepository from '../Repositories/SectionRepository';
 
 class TestService {
-    testRepository: TestRepository;
-    constructor(testRepository: TestRepository) {
-        this.testRepository = testRepository;
+    sectionRepository: SectionRepository;
+    constructor(sectionRepository: SectionRepository) {
+        this.sectionRepository = sectionRepository;
     };
 
-    async addTest(sectionId: mongoose.Types.ObjectId, test: object) {
-        return this.testRepository.addTest(sectionId, test);
+    async addTest(sectionId: mongoose.Types.ObjectId, test: Test) {
+        const updateQuery = {
+            $push: {
+                test: test
+            }
+        }
+        return await this.sectionRepository.updateById(sectionId, updateQuery);
     }
 
+    async updateTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId, test: Test) {
+        const updateQueryFields = {};
+        Object.keys(test).forEach(key => {
+            updateQueryFields[`test.$.${key}`] = test[key]
+        });
+    
+        const filterQuery = {'test._id': testId};
+        const updateQuery = {$set: updateQueryFields}
+        
+        return await this.sectionRepository.updateByQuery(filterQuery, updateQuery);
+    } 
 
     async deleteTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId) {
-        return this.testRepository.deleteTest(sectionId, testId);
+        const updateQuery = {
+            $pull: {
+            test: { 
+                _id: testId
+            }
+        }
+    }
+        return await this.sectionRepository.updateById(sectionId, updateQuery);
     }
 
 }
