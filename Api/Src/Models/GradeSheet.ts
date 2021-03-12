@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as Joi from "joi";
+
 
 export interface Participant {
     participantID: mongoose.Types.ObjectId;
@@ -72,6 +74,41 @@ const GradeSheetSchema = new mongoose.Schema({
             default: {}
         }
     }]
-  }, {timestamps: true});
+}, {timestamps: true});
 
-  export default mongoose.model<GradeSheet & mongoose.Document>('GradeSheet', GradeSheetSchema);
+function validateId(id: any) {
+    if( !(mongoose.Types.ObjectId.isValid(id)) )
+        throw new Error("id is invalid");
+    return id;
+}
+
+export function validateParticipants(participants: any) {
+    const joiParticipant = Joi.object({
+        participantID: Joi.custom(validateId).required(),
+        engagement: Joi.number(),
+        role: Joi.string(),
+        rolePoints: Joi.number(),
+    });
+    const joiParticipants = Joi.array().items(joiParticipant);   
+    return joiParticipants.validate(participants);
+}
+
+function validateGrade(grades: any) {
+    const nameIsString = Object.keys(grades).every(name => typeof name === 'string');
+    const gradeIsNumber = Object.values(grades).every(grade => typeof grade === 'number');
+    if (nameIsString && gradeIsNumber) return grades;
+    throw new Error("some grade is invalid");
+}
+
+export function validateGrades(grades: any) {
+    const schema = Joi.custom(validateGrade);
+    return schema.validate(grades);
+}
+
+export function validateReviewers(reviewers: any) {
+    const joiReviewer = Joi.custom(validateId);
+    const joiReviewers = Joi.array().items(joiReviewer);
+    return joiReviewers.validate(reviewers);
+}
+
+export default mongoose.model<GradeSheet & mongoose.Document>('GradeSheet', GradeSheetSchema);

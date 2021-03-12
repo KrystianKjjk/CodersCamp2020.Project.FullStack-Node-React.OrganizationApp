@@ -57,17 +57,13 @@ export default class GradeSheetController {
 
     setMentorReviewers = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        if ( !(req.body.mentorIds instanceof Array) )
-            return res.status(400).json({
-                message: "MentorIds should be an array of strings"
-            })
-        const mentorIds = req.body.mentorIds.map((id: string) => new mongoose.Types.ObjectId(id));
+        const mentorIds = req.body.reviewers.map((id: string) => new mongoose.Types.ObjectId(id));
         const sheet = await this.gradeSheetService.setMentorReviewers(id, mentorIds);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Mentor reviewers set'});
     }
 
-    setMentorGrade = async (req: Request, res: Response) => {
+    setMentorGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const gradeName: string = req.body.gradeName;
         const grades: {[gradeName: string]: number} = req.body.grades;
@@ -76,7 +72,7 @@ export default class GradeSheetController {
         res.status(200).json({message: 'Mentor grade set'});
     }
 
-    setMentorReviewerGrade = async (req: Request, res: Response) => {
+    setMentorReviewerGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
         const grades: {[gradeName: string]: number} = req.body.grades;
@@ -95,10 +91,6 @@ export default class GradeSheetController {
 
     updateParticipants = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        if ( !(req.body.participants instanceof Array) )
-            return res.status(400).json({
-                message: "Participants should be an array"
-            });
         const participants: Participant[] = req.body.participants
             .map((part: Participant) => ({...part, participantID: new mongoose.Types.ObjectId(part.participantID)}));
         const sheet = await this.gradeSheetService.updateParticipants(id, participants);
@@ -108,10 +100,6 @@ export default class GradeSheetController {
 
     setParticipants = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        if ( !(req.body.participants instanceof Array) )
-            return res.status(400).json({
-                message: "Participants should be an array"
-            });
         const participants: Participant[] = req.body.participants
             .map((part: Participant) => ({...part, participantID: new mongoose.Types.ObjectId(part.participantID)}));
         const sheet = await this.gradeSheetService.setParticipants(id, participants);
