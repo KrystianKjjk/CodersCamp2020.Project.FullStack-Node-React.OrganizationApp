@@ -37,7 +37,7 @@ export default class UserController {
     updateUser = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const user = await this.userService.updateUser(id, req.body);
-        if(user === null) return res.status(404).json({message: 'User not found'});
+        if(!user) return res.status(404).json({message: 'User not found'});
         res.status(200).json({message: 'User updated'});
     }
 

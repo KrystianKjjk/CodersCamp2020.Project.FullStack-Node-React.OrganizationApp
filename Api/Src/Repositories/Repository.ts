@@ -22,6 +22,6 @@ export class Repository {
         return await this.model.findByIdAndUpdate(id, obj, {useFindAndModify: false, upsert: false});
     };
     async deleteById(id: mongoose.Types.ObjectId) {
-        return this.model.findByIdAndDelete(id);
+        return this.model.findByIdAndDelete({_id: id});
     };
 }
