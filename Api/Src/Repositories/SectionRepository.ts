@@ -5,7 +5,12 @@ export default class SectionRepository extends Repository {
     async getAll() {
         return this.model.find({}).populate('referenceProjectId');
     };
+    
     async getById(id: mongoose.Types.ObjectId) {
         return this.model.findOne(id).populate('referenceProjectId');
+    };
+
+    async updateByQuery(query: object, obj: object) {
+        return await this.model.updateOne(query, obj, {useFindAndModify: false, upsert: false});
     };
 }
