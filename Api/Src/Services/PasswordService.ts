@@ -1,4 +1,4 @@
-import UserRepository from '../Repositories/User';
+import UserRepository from '../Repositories/UserRepository';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto'
