@@ -19,6 +19,16 @@ export default class TeamProjectController {
     return res.status(200).json(teamProjects);
   };
 
+  getTeamProjectsByTeamId = async (
+    req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction
+  ) => {
+    const id = new mongoose.Types.ObjectId(req.params.id);
+    const teamProjects = await this.service.getTeamProjectsByTeamId(id);
+    return res.status(200).json(teamProjects);
+  };
+
   getTeamProjectById = async (
     req: express.Request,
     res: express.Response,
