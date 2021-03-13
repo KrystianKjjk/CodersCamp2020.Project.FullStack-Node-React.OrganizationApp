@@ -1,4 +1,4 @@
-import UserRepository from '../Repositories/User';
+import UserRepository from '../Repositories/UserRepository';
 import { UserModel as User } from '../Models/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
