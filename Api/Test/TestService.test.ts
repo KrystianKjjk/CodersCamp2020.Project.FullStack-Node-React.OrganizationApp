@@ -57,6 +57,11 @@ class TestSectionTestsRepository implements SectionRepository {
         })
     };
 
+    async getSectionsByCourseId(course: mongoose.Types.ObjectId){
+        const sections = this.section.filter((section) => course.equals(section.course));
+        return sections;
+    }
+
 };
 
 describe("Test Section Service", () => {
