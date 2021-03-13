@@ -17,6 +17,8 @@ const teamsRoutes = (controller: TeamController) => {
         
         router.route("/teams/:id/mentor").post(HasRole([UserType.Admin]), controller.addMentorToTeam);
         router.route("/teams/:id/mentor/").delete(HasRole([UserType.Admin]), controller.deleteMentorFromTeam);
+        
+        router.route("/courses/:id/teams").get(HasRole([UserType.Admin]), controller.getTeamsByCourseId);
         return router;
     }
 

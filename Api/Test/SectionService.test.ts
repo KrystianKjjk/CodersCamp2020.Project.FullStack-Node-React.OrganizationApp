@@ -33,6 +33,10 @@ class TestSectionRepository implements SectionRepository {
 
         return sectionAfterUpdate;
     };
+    async getSectionsByCourseId(course: mongoose.Types.ObjectId){
+        const sections = this.sections.filter((section) => course.equals(section.course));
+        return sections;
+    }
 };
 
 describe("Section Service", () => {
@@ -68,6 +72,28 @@ describe("Section Service", () => {
         const fetchedSections= await service.getSections();
         expect(fetchedSections.length).toBe(2);
     });
+
+    test("should fetch sections by course id",async()=>{
+        const courseId = mongoose.Types.ObjectId();
+        const section1 = new SectionSchema({
+            name: "Typescript", 
+            startDate: Date.now(),
+            endDate: Date.now(),
+            course:courseId
+        });
+        const section2 = new SectionSchema({
+            name: "Javascript", 
+            startDate: Date.now(),
+            endDate: Date.now(),
+            course:courseId
+        });
+        
+        await service.createSection(section1);
+        await service.createSection(section2);
+
+        const fetchedSections = await service.getSectionsByCourseId(section1.course);
+        expect(fetchedSections.length).toBe(2);
+    })
 
     test("should delete section", async()=>{
         const section = new SectionSchema({

@@ -10,6 +10,7 @@ const courseRoute = (controller: TeamProjectController) => {
         router.route("/teams/projects").post(HasRole([UserType.Admin]), controller.createTeamProject);
         router.route("/teams/projects/:id").put(HasRole([UserType.Admin]), controller.updateTeamProject);
         router.route("/teams/projects/:id").delete(HasRole([UserType.Admin]), controller.deleteTeamProject);
+        router.route("/teams/:id/projects").get(HasRole([UserType.Admin]), controller.getTeamProjectsByTeamId);
         return router;
     }
 };

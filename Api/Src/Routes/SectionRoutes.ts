@@ -10,6 +10,7 @@ const sectionRoutes = (controller: SectionController) => {
         router.route("/sections").post(HasRole([UserType.Admin]), controller.createSection);
         router.route("/sections/:id").put(HasRole([UserType.Admin]), controller.updateSection);
         router.route("/sections/:id").delete(HasRole([UserType.Admin]), controller.deleteSection);
+        router.route("/courses/:id/sections").get(HasRole([UserType.Admin]), controller.getSectionsByCourseId);
         return router;
     }
 };
