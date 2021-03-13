@@ -17,7 +17,7 @@ class TestService {
         return await this.sectionRepository.updateById(sectionId, updateQuery);
     }
 
-    async updateTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId, test: Test) {
+    async updateTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId, test: object) {
         const updateQueryFields = {};
         Object.keys(test).forEach(key => {
             updateQueryFields[`test.$.${key}`] = test[key]
@@ -32,11 +32,11 @@ class TestService {
     async deleteTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId) {
         const updateQuery = {
             $pull: {
-            test: { 
-                _id: testId
+                test: { 
+                    _id: testId
+                }
             }
         }
-    }
         return await this.sectionRepository.updateById(sectionId, updateQuery);
     }
 

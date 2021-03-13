@@ -33,6 +33,10 @@ class TestSectionRepository implements SectionRepository {
 
         return sectionAfterUpdate;
     };
+
+    async updateByQuery(query: object, obj: object) {
+        return; // we don't need implementation for it 
+    };
 };
 
 describe("Section Service", () => {
