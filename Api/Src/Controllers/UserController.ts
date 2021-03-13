@@ -2,24 +2,11 @@ import UserModel from '../Models/User';
 import UserService from '../Services/UserService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
-import * as jwt from 'jsonwebtoken';
-
-class TokenService {
-    secret: string;
-    constructor(secret: string){
-        this.secret = secret;
-    }
-    generateToken(payload: object, expiresIn: string = '1h') {
-        return jwt.sign(payload, this.secret, { expiresIn })
-    }
-}
 
 export default class UserController {
     userService: UserService;
-    authService: TokenService;
-    constructor(userService: UserService, authService = new TokenService('secret')) {
+    constructor(userService: UserService) {
         this.userService = userService;
-        this.authService = authService;
     }
 
     getUser = async (req: Request, res: Response) => {
@@ -61,16 +48,11 @@ export default class UserController {
         }
     }
 
-    logIn = async (req: Request, res: Response) => {
-        const email = req.body.email;
-        const password = req.body.password;
-        const user = await this.userService.logIn(email, password);
-        if(user === null) return res.status(200).json({message: 'Log in failed'});
-        const token = this.authService.generateToken({
-            id: user._id,
-            type: user.type
-        });
-        res.status(200).json({token}); 
+    getUserInfoById = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const user = await this.userService.getUserInfoById(id);
+        if(!user) return res.status(404).json({message: 'User not found'});
+        res.status(200).json(user);
     }
 
 }
