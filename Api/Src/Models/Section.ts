@@ -8,7 +8,7 @@ export interface Section {
     tests: Object[],    //table of references to tests (theoretical, practical, sample test etc.) - object interface to be prepared
     referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
-    materials?: string //materials reference
+    materials?: mongoose.Types.ObjectId[] //materials reference
 }
 
 const SectionSchema = new mongoose.Schema({
@@ -42,9 +42,9 @@ const SectionSchema = new mongoose.Schema({
         type: String,
         minLength: 16
     },
-    materials:{
-        type: String
-    }
+    materials: [{
+        type: mongoose.Types.ObjectId
+    }]
 })
 
 function endDateValidator(value) {
