@@ -8,7 +8,8 @@ export interface Section {
     tests: Test[],
     referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
-    materials?: string //materials reference
+    materials?: string, //materials reference
+    course: mongoose.Types.ObjectId
 }
 
 export enum TestType {
@@ -70,6 +71,10 @@ const SectionSchema = new mongoose.Schema({
     },
     materials:{
         type: String
+    },
+    course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
     }
 });
 

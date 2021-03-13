@@ -13,6 +13,8 @@ const sectionRoutes = (sectionController: SectionController, testController: Tes
         router.route("/sections/:id/test").post(testController.addTest);
         router.route("/sections/:sectionId/test/:testId").patch(testController.updateTest);
         router.route("/sections/:sectionId/test/:testId").delete(testController.deleteTest);
+
+        router.route("/courses/:id/sections").get(sectionController.getSectionsByCourseId);
         return router;
     }
 };

@@ -1,5 +1,5 @@
 import AuthService from '../Src/Services/AuthService';
-import UserRepository from '../Src/Repositories/User';
+import UserRepository from '../Src/Repositories/UserRepository';
 import { UserModel } from '../Src/Models/User';
 import User from '../Src/Models/User';
 import * as mongoose from 'mongoose';

@@ -17,6 +17,15 @@ export default class SectionController {
         return res.status(200).json(allSections);
     };
 
+    getSectionsByCourseId = async (
+        req: express.Request,
+        res: express.Response
+    ) => {
+        const courseId = new mongoose.Types.ObjectId(req.params.id);
+        const allSections = await this.service.getSectionsByCourseId(courseId);
+        return res.status(200).json(allSections);
+    };
+
     getSectionById = async (
         req: express.Request,
         res: express.Response

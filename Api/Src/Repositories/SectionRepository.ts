@@ -13,4 +13,8 @@ export default class SectionRepository extends Repository {
     async updateByQuery(query: object, obj: object) {
         return await this.model.updateOne(query, obj, {useFindAndModify: false, upsert: false});
     };
+
+    async getSectionsByCourseId(courseId: mongoose.Types.ObjectId) {
+        return this.model.find({course:courseId}).populate('referenceProjectId');
+    };
 }

@@ -1,5 +1,5 @@
-import UserService from '../Src/Services/User';
-import UserRepository from '../Src/Repositories/User';
+import UserService from '../Src/Services/UserService';
+import UserRepository from '../Src/Repositories/UserRepository';
 import { UserModel } from '../Src/Models/User';
 import UserDbModel from '../Src/Models/User';
 import { Document, Types } from 'mongoose';
