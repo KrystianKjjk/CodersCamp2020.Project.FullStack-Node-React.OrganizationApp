@@ -8,4 +8,7 @@ export default class SectionRepository extends Repository {
     async getById(id: mongoose.Types.ObjectId) {
         return this.model.findOne(id).populate('referenceProjectId');
     };
+    async getSectionsByCourseId(courseId: mongoose.Types.ObjectId) {
+        return this.model.find({course:courseId}).populate('referenceProjectId');
+    };
 }

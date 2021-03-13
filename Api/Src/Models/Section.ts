@@ -8,7 +8,8 @@ export interface Section {
     tests: Object[],    //table of references to tests (theoretical, practical, sample test etc.) - object interface to be prepared
     referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
-    materials?: string //materials reference
+    materials?: string, //materials reference
+    course: mongoose.Types.ObjectId
 }
 
 const SectionSchema = new mongoose.Schema({
@@ -44,6 +45,10 @@ const SectionSchema = new mongoose.Schema({
     },
     materials:{
         type: String
+    },
+    course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
     }
 })
 

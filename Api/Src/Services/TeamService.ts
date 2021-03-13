@@ -12,6 +12,10 @@ class TeamService {
         return this.teamRepository.getAll();
     };
 
+    async getTeamsByCourseId(id: mongoose.Types.ObjectId){
+        return this.teamRepository.getTeamsByCourseId(id);
+    }
+
     async findTeamById(id: mongoose.Types.ObjectId) {
         return this.teamRepository.getById(id);
     };
