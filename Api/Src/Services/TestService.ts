@@ -11,7 +11,7 @@ class TestService {
     async addTest(sectionId: mongoose.Types.ObjectId, test: Test) {
         const updateQuery = {
             $push: {
-                test: test
+                tests: test
             }
         }
         return await this.sectionRepository.updateById(sectionId, updateQuery);
@@ -32,7 +32,7 @@ class TestService {
     async deleteTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId) {
         const updateQuery = {
             $pull: {
-                test: { 
+                tests: { 
                     _id: testId
                 }
             }

@@ -31,10 +31,10 @@ class TestSectionTestsRepository implements SectionRepository {
     async updateById(id: mongoose.Types.ObjectId, testQuery: object){
         const sectionIndex = this.section.findIndex(section => section._id === id);
         if (testQuery["$push"]) {
-            this.section[sectionIndex].test.push(testQuery["$push"].test);
+            this.section[sectionIndex].tests.push(testQuery["$push"].tests);
         } else if (testQuery["$pull"]) {
             const updatedSection = this.section[sectionIndex];
-            updatedSection.test = updatedSection.test.filter(test => test._id !== testQuery["$pull"].test._id);
+            updatedSection.tests = updatedSection.tests.filter(test => test._id !== testQuery["$pull"].tests._id);
             this.section[sectionIndex] = updatedSection;
         }
         return this.section[sectionIndex];
@@ -50,7 +50,7 @@ class TestSectionTestsRepository implements SectionRepository {
         this.section = this.section.map(section => {
             return {
                 ...section,
-                test: section.test.map(test => {
+                tests: section.tests.map(test => {
                     return test._id === testId ? {...test, ...changes} : test;    
                 })
             }
@@ -68,7 +68,7 @@ describe("Test Section Service", () => {
         name: "Typescript", 
         startDate: new Date(),
         endDate: new Date(),
-        test: [{
+        tests: [{
             _id: mongoose.Types.ObjectId(),
             testType: TestType.theoretical,
             testDate: new Date(),
@@ -94,16 +94,16 @@ describe("Test Section Service", () => {
         await sectionService.createSection(section as any);
         await testService.addTest(section._id, simpleTest);
         const fetchedSection = await sectionService.getSectionById(section._id);
-        expect(fetchedSection.test[1]).toEqual(simpleTest);
+        expect(fetchedSection.tests[1]).toEqual(simpleTest);
     });
 
     it("deletes test", async () => {
         await sectionService.createSection(section as any);
         const fetchedSection = await sectionService.getSectionById(section._id);
-        const beforeDeleteLength = fetchedSection.test.length;
-        const testId = fetchedSection.test[0]._id;
+        const beforeDeleteLength = fetchedSection.tests.length;
+        const testId = fetchedSection.tests[0]._id;
         await testService.deleteTest(section._id, testId);
-        expect(fetchedSection.test).toHaveLength(beforeDeleteLength - 1);
+        expect(fetchedSection.tests).toHaveLength(beforeDeleteLength - 1);
     });
 
     it("updates test", async () => {
@@ -115,11 +115,11 @@ describe("Test Section Service", () => {
 
         await sectionService.createSection(section as any);
         const fetchedSection = await sectionService.getSectionById(section._id);
-        await testService.updateTest(section._id, fetchedSection.test[0]._id, newTest);
+        await testService.updateTest(section._id, fetchedSection.tests[0]._id, newTest);
         const fetchedSectionAfterUpdate = await sectionService.getSectionById(section._id);
-        expect(fetchedSectionAfterUpdate.test[0].testType).toEqual(newTest.testType);
-        expect(fetchedSectionAfterUpdate.test[0].testUrl).toEqual(newTest.testUrl);
-        expect(fetchedSectionAfterUpdate.test[0].testDescription).toEqual(newTest.testDescription);
+        expect(fetchedSectionAfterUpdate.tests[0].testType).toEqual(newTest.testType);
+        expect(fetchedSectionAfterUpdate.tests[0].testUrl).toEqual(newTest.testUrl);
+        expect(fetchedSectionAfterUpdate.tests[0].testDescription).toEqual(newTest.testDescription);
     });
 
 });

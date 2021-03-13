@@ -5,7 +5,7 @@ export interface Section {
     name: string,
     startDate: Date,
     endDate: Date,
-    test: Test[],
+    tests: Test[],
     referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
     materials?: string //materials reference
@@ -57,7 +57,7 @@ const SectionSchema = new mongoose.Schema({
         type: Date,
         validate: [endDateValidator, 'End date must be after the start date!']
     },
-    test: {
+    tests: {
         type: [TestSchema],
     },
     referenceProjectId: {
