@@ -136,7 +136,7 @@ appContainer.declare("ProjectController", (c) => new ProjectController(c.Project
 appContainer.declare("GradeSheetController", (c) => new GradeSheetController(c.GradeSheetService));
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
-appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
+appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
 appContainer.declare("TestController", (c) => new TestController(c.TestService, c.SectionService));
 
