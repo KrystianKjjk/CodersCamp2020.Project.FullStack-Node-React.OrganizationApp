@@ -5,7 +5,9 @@ import {Section} from './Section'
 export interface Course {
     name: string,
     sections: Section[],
-    description?:string
+    description?:string,
+    startDate: Date,
+    endDate: Date
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -16,6 +18,14 @@ const CourseSchema = new mongoose.Schema({
     },
     description: {
         type: String
+    },
+    startDate:{
+        type: Date,
+        required: true
+    },
+    endDate:{
+        type: Date,
+        required: true
     }
   }, {timestamps: true});
 

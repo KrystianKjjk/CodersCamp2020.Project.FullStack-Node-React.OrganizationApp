@@ -15,6 +15,8 @@ const teamsRoutes = (controller: TeamController) => {
         
         router.route("/teams/:id/mentor").post(controller.addMentorToTeam);
         router.route("/teams/:id/mentor/").delete(controller.deleteMentorFromTeam);
+        
+        router.route("/courses/:id/teams").get(controller.getTeamsByCourseId);
         return router;
     }
 

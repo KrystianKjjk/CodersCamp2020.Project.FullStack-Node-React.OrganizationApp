@@ -10,6 +10,10 @@ export default class TeamRepository extends Repository {
         return this.model.findOne(id).populate('users').populate('mentor');
     };
 
+    async getTeamsByCourseId(id: mongoose.Types.ObjectId) {
+        return this.model.find({course: id}).populate('users').populate('mentor');
+    }
+
     async create(obj: object) {
         return this.model.create(obj);
     };

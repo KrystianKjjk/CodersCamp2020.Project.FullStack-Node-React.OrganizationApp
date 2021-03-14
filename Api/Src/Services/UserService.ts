@@ -1,4 +1,4 @@
-import UserRepository from '../Repositories/User';
+import UserRepository from '../Repositories/UserRepository';
 import { UserModel as User } from '../Models/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -21,6 +21,10 @@ export default class UserService {
 
     async findUserById(id: mongoose.Types.ObjectId) {
         return this.repository.getById(id);
+    }
+
+    async getUserInfoById(id: mongoose.Types.ObjectId) {
+        return this.repository.getUserInfoById(id);
     }
 
     async getUsers(): Promise<(User & mongoose.Document<User>)[]> {
