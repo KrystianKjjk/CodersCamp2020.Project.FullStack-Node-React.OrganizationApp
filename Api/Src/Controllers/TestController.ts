@@ -23,15 +23,15 @@ export default class TestController {
     updateTest = async (req: Request, res: Response) => {
         const sectionId = new mongoose.Types.ObjectId(req.params.sectionId);
         const testId = new mongoose.Types.ObjectId(req.params.testId);
-        const test = req.body;
+        const testChanges = req.body;
         const section = await this.sectionService.getSectionById(sectionId);
         if (!section) { 
             return res.status(404).json({message: 'Section not found'}); 
         } 
-        if (!section.tests.includes(test => testId === test._id)) {
+        if (!section.tests.find(test =>  testId.equals(test._id))) {
             return res.status(404).json({message: 'Test not found'});
         }
-        await this.testService.updateTest(sectionId, testId, test);
+        await this.testService.updateTest(sectionId, testId, testChanges);
         res.status(200).json({message: 'Test was updated'});
     }
 
@@ -42,7 +42,7 @@ export default class TestController {
         if (!section) { 
             return res.status(404).json({message: 'Section not found'}); 
         } 
-        if (!section.tests.includes(test => testId === test._id)) {
+        if (!section.tests.find(test => testId.equals(test._id))) {
             return res.status(404).json({message: 'Test not found'});
         }
         await this.testService.deleteTest(sectionId, testId);
