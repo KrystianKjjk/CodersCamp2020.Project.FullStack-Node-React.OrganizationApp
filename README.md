@@ -36,6 +36,17 @@ The project repository is split into two parts:
     - submitting a project
 
 ## Backend service description
+### How to run the backend
+1. You can clone the repository, install the dependencies with ```npm install``` and run the app with ```npm run start:dev```
+2. Alternatively just use the production version of the application available at ```https://coders-camp-organization-app.herokuapp.com/```
+
+For both options be aware that you have to 
+1. Create your own account using ```/api/register``` endpoint
+2. Log in using ```/api/login``` endpoint
+3. Then you will be able to access the user endpoints - the endpoints available for Admins/Mentors can be tested after requesting the appropriate access from the app development team
+
+### Endpoint documentation
+All endpoints with sample requests are described in ```swagger.yml``` file - you can check the documentation by copying the content to e.g. ```https://editor.swagger.io/```
 ### Backend functionalities
 ##### User management
 Each user has an appropriate role assigned (Admin, Mentor, User) and can only use the endpoints that are approved for his level of permissions
