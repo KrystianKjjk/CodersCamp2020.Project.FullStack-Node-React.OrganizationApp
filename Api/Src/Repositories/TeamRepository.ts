@@ -11,7 +11,7 @@ export default class TeamRepository extends Repository {
         return this.model.findOne(id).populate('users').populate('mentor');
     };
 
-    async getByMentorId(id: mongoose.Types.ObjectId): Promise<(Team & mongoose.Document<Team>)> {
+    async getByMentorId(id: mongoose.Types.ObjectId): Promise<Team> {
         return this.model.findOne({mentor: id}).populate('users').populate('mentor');
     };
 

@@ -3,6 +3,7 @@
 import * as mongoose from 'mongoose';
 
 export interface TeamProject {
+    _id: mongoose.Types.ObjectId,
     teamId: mongoose.Types.ObjectId,
     parentProjectIds: mongoose.Types.ObjectId,
     projectName: string,

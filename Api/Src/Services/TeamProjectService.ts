@@ -40,7 +40,7 @@ export default class TeamProjectService {
     if(!team) return null;
     teamProject.teamId = team._id;
     await teamProject.validate();
-    await this.teamProjectRepository.create(teamProject);
+    await this.createTeamProject(teamProject);
     return teamProject;
   };
   
@@ -53,7 +53,7 @@ export default class TeamProjectService {
     if(!team) return null;
     teamProject.teamId = team._id;
     await teamProject.validate();
-    const updateQuery = _.omit(teamProject['_doc'], '_id') as TeamProject;
+    const updateQuery = _.omit(teamProject['_doc'], '_id') as object;
     return this.teamProjectRepository.updateForTeam(id, team._id, updateQuery);
   };
 
@@ -64,7 +64,7 @@ export default class TeamProjectService {
   deleteTeamProjectByIdForMentor = async (id: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) => {
     const team = await this.teamRepository.getByMentorId(mentorId);
     if(!team) return null;
-    return this.teamProjectRepository.deleteByIdForTeam(id, team.id);
+    return this.teamProjectRepository.deleteByIdForTeam(id, team._id);
   }
 
 }

@@ -7,7 +7,7 @@ export default class TeamProjectRepository extends Repository {
         return this.model.find({teamId});
     }
 
-    async updateForTeam(id: mongoose.Types.ObjectId, teamId: mongoose.Types.ObjectId, teamProject: TeamProject) {
+    async updateForTeam(id: mongoose.Types.ObjectId, teamId: mongoose.Types.ObjectId, teamProject: object) {
       return this.model.updateOne({_id: id, teamId}, teamProject);
     }
 
