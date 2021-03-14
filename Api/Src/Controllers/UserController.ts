@@ -3,10 +3,16 @@ import UserService from '../Services/UserService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 
+interface MailingService{
+    sendMail: Function
+}
+
 export default class UserController {
     userService: UserService;
-    constructor(userService: UserService) {
-        this.userService = userService;
+    mailingService: MailingService;
+    constructor(userService: UserService, mailingService: MailingService) {
+        this.userService = userService;        
+        this.mailingService = mailingService;
     }
 
     getUser = async (req: Request, res: Response) => {
@@ -41,6 +47,19 @@ export default class UserController {
             await user.validate();
             await this.userService.createUser(user);
             res.status(201).json({message: 'Register succeed'});
+
+            //Mailing the user
+            this.mailingService.sendMail({
+                from: 'coderscamp@fastmail.com',
+                to: user.email,
+                subject: 'Welcome to CodersCamp',
+                template: 'welcomeEmail',
+                context:{
+                    userName: user.name,
+                    email: user.email,
+                    appLink: process.env.PAGE_URL || "https://coderscamp.edu.pl/"
+                }
+            });
         } catch(err) {
             if(err.name === 'ValidationError')
                 return res.status(400).json({message: err.message})
@@ -54,5 +73,4 @@ export default class UserController {
         if(!user) return res.status(404).json({message: 'User not found'});
         res.status(200).json(user);
     }
-
 }
