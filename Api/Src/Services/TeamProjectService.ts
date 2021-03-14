@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { TeamProject } from "../Models/TeamProject";
 import TeamProjectRepository from "../Repositories/TeamProjectRepository";
 import TeamRepository from "../Repositories/TeamRepository";
+import * as _ from 'lodash';
 
 export default class TeamProjectService {
   private teamProjectRepository: TeamProjectRepository;
@@ -18,6 +19,7 @@ export default class TeamProjectService {
 
   getTeamProjectsByMentorId = async(mentorId: mongoose.Types.ObjectId):Promise<(TeamProject & mongoose.Document<TeamProject>)[]> => {
     const team = await this.teamRepository.getByMentorId(mentorId);
+    if(!team) return null;
     return this.getTeamProjectsByTeamId(team._id);
   }
 
@@ -32,23 +34,37 @@ export default class TeamProjectService {
   createTeamProject = async (teamProject: TeamProject & mongoose.Document<TeamProject>) => {
     return this.teamProjectRepository.create(teamProject);
   };
+
+  createTeamProjectForMentor = async (mentorId: mongoose.Types.ObjectId, teamProject: TeamProject & mongoose.Document<TeamProject>) => {
+    const team = await this.teamRepository.getByMentorId(mentorId);
+    if(!team) return null;
+    teamProject.teamId = team._id;
+    await teamProject.validate();
+    await this.teamProjectRepository.create(teamProject);
+    return teamProject;
+  };
   
   updateTeamProject = async (id: mongoose.Types.ObjectId, teamProject: TeamProject & mongoose.Document<TeamProject>) => {
     return this.teamProjectRepository.updateById(id, teamProject);
   };
 
-  updateTeamProjectByMentorId = async (id: mongoose.Types.ObjectId, teamProject: TeamProject & mongoose.Document<TeamProject>) => {
-    const team = await this.teamRepository.getByMentorId(id);
-    return this.updateTeamProject(team._id, teamProject);
+  updateTeamProjectByMentorId = async (id: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, teamProject: TeamProject & mongoose.Document<TeamProject>) => {
+    const team = await this.teamRepository.getByMentorId(mentorId);
+    if(!team) return null;
+    teamProject.teamId = team._id;
+    await teamProject.validate();
+    const updateQuery = _.omit(teamProject['_doc'], '_id') as TeamProject;
+    return this.teamProjectRepository.updateForTeam(id, team._id, updateQuery);
   };
 
   deleteTeamProject = async (teamProjectId: mongoose.Types.ObjectId) => {
     return this.teamProjectRepository.deleteById(teamProjectId);
   }
 
-  deleteTeamProjectByMentorId = async (mentorId: mongoose.Types.ObjectId) => {
+  deleteTeamProjectByIdForMentor = async (id: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) => {
     const team = await this.teamRepository.getByMentorId(mentorId);
-    return this.teamProjectRepository.deleteById(team.id);
+    if(!team) return null;
+    return this.teamProjectRepository.deleteByIdForTeam(id, team.id);
   }
 
 }

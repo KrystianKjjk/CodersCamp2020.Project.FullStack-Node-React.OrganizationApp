@@ -26,6 +26,7 @@ export default class TeamProjectController {
   ) => {
     const id = new mongoose.Types.ObjectId(req.params.id);
     const teamProjects = await this.service.getTeamProjectsByTeamId(id);
+    if(!teamProjects) return res.status(404).json({ message: "Team not found" });
     return res.status(200).json(teamProjects);
   };
 
@@ -34,8 +35,9 @@ export default class TeamProjectController {
     res: express.Response,
     next?: express.NextFunction
   ) => {
-    const id = new mongoose.Types.ObjectId(req.params.id);
-    const teamProjects = await this.service.getTeamProjectsByTeamId(id);
+    const id = new mongoose.Types.ObjectId(req.params.mentorId);
+    const teamProjects = await this.service.getTeamProjectsByMentorId(id);
+    if(!teamProjects) return res.status(404).json({ message: "Team not found" });
     return res.status(200).json(teamProjects);
   };
 
@@ -75,6 +77,26 @@ export default class TeamProjectController {
     }
   };
 
+  createTeamProjectForMentor = async (
+    req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction
+  ) => {
+    try {
+      const teamProject = new TeamProjectSchema(req.body);
+      const mentorId = new mongoose.Types.ObjectId(req.params.id);
+      const result = await this.service.createTeamProjectForMentor(mentorId, teamProject);
+      if(!result) return res.status(404).json({ message: "Team not found" });
+      return res.status(201).json(teamProject);
+    } catch (error) {
+      const errorMessage = { message: error.message };
+      if (error.name === "ValidationError") {
+        return res.status(400).json(errorMessage);
+      }
+      return res.status(500).json(errorMessage);
+    }
+  };
+
   updateTeamProject = async (
     req: express.Request,
     res: express.Response,
@@ -86,6 +108,30 @@ export default class TeamProjectController {
       teamProject._id = id;
       await teamProject.validate();
       const updatedTeamProject = await this.service.updateTeamProject(id, teamProject);
+      if (!updatedTeamProject) {
+        return res.status(404).json({ message: "Team project not found" });
+      }
+      const fetchedTeamProject = await this.service.getTeamProjectById(id);
+      return res.status(201).json(fetchedTeamProject);
+    } catch (error) {
+      const errorMessage = { message: error.message };
+      if (error.name === "ValidationError") {
+        return res.status(400).json(errorMessage);
+      }
+      return res.status(500).json(errorMessage);
+    }
+  };
+
+  updateTeamProjectForMentor = async (
+    req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction
+  ) => {
+    try {
+      const id = new mongoose.Types.ObjectId(req.params.id);
+      const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
+      const teamProject = new TeamProjectSchema(req.body);
+      const updatedTeamProject = await this.service.updateTeamProjectByMentorId(id, mentorId, teamProject);
       if (!updatedTeamProject) {
         return res.status(404).json({ message: "Team project not found" });
       }
@@ -116,4 +162,23 @@ export default class TeamProjectController {
       return res.status(500).json({ message: error.message });
     }
   };
+
+  deleteTeamProjectForMentor = async (
+    req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction
+  ) => {
+    try {
+      const id = new mongoose.Types.ObjectId(req.params.id);
+      const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
+      const teamProject = await this.service.deleteTeamProjectByIdForMentor(id, mentorId);
+      if (!teamProject) {
+        return res.status(404).json({ message: "Team project not found" });
+      }
+      return res.status(200).end();
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
+
 }
