@@ -2,7 +2,7 @@ import * as express from "express";
 
 import GradeController from "../Controllers/GradeController";
 import {UserType} from "../Models/User";
-import {HasRole} from "../Middlewares/HasRole";
+import { HasRole } from "../Middlewares/HasRole";
 import AuthGradeController from "../Controllers/GradeAuthController";
 
 export default (gradeController: GradeController, authController: AuthGradeController) => (router: express.Router) => {

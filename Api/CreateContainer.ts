@@ -67,7 +67,6 @@ import TeamRepository from './Src/Repositories/TeamRepository';
 import gradeRoutes from "./Src/Routes/GradeRoutes";
 import GradeController from "./Src/Controllers/GradeController";
 import GradeService from "./Src/Services/GradeService";
-import GradeRepository from "./Src/Repositories/GradeRepository";
 import GradeModel from "./Src/Models/Grade";
 
 import AuthGradeController from "./Src/Controllers/GradeAuthController";
@@ -113,7 +112,6 @@ appContainer.declare("GradeSheetRepository", (c) => new GradeSheetRepository(c.G
 appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section));
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
-appContainer.declare("GradeRepository", (c) => new GradeRepository(c.Grade));
 
 
 // Services
@@ -127,7 +125,7 @@ appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSh
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
-appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository, c.UserService));
+appContainer.declare("GradeService", (c) => new GradeService(c.UserService));
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository));
 
 

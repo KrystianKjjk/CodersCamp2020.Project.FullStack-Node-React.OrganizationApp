@@ -1,8 +1,6 @@
 import * as express from 'express';
-import * as mongoose from "mongoose";
 
 import GradeService from "../Services/GradeService";
-import GradeSchema from "../Models/Grade";
 
 export default class GradeController {
 

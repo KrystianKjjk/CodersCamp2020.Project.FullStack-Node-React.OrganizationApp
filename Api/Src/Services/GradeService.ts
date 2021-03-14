@@ -4,13 +4,12 @@ import GradeSchema, { GradeType } from "../Models/Grade";
 import UserService from "./UserService";
 import * as express from "express";
 import {UserModel} from "../Models/User";
-import GradeRepository from "../Repositories/GradeRepository";
 
 type IUser = UserModel & mongoose.Document;
 
 export default class GradeService {
 
-    constructor(private repository: GradeRepository, private userService: UserService) {}
+    constructor(private userService: UserService) {}
 
     createGrade = async (req: express.Request) => {
         const grade = new GradeSchema(req.body);

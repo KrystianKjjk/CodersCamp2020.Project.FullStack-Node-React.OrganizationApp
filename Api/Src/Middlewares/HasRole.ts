@@ -7,7 +7,6 @@ export const HasRole = (roles: UserType[]) => (req: express.Request, res: expres
     if(!token) return res.status(401).json({message: 'UNAUTHORIZED'});
     try {
         const payload = jwt.decode(token);
-        console.log(payload);
         return roles.includes(payload.type) ? next() : res.status(403).json({message: 'FORBIDDEN'});
     }
     catch {

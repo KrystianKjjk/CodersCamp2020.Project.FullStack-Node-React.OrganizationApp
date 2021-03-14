@@ -1,13 +1,14 @@
 import * as express from 'express';
+import * as mongoose from "mongoose";
 
 import { UserType} from "../Models/User";
 import TeamService from "../Services/TeamService";
 import AuthService from "../Services/AuthService";
-import * as mongoose from "mongoose";
 import {Team} from "../Models/Team";
 import UserService from "../Services/UserService";
 
 type ITeam = Team & mongoose.Document;
+
 export default class AuthGradeController {
 
     constructor(private teamService: TeamService, private authService: AuthService, private userService: UserService) {}
@@ -22,7 +23,7 @@ export default class AuthGradeController {
             const mentorID = new mongoose.Types.ObjectId(_id);
             const theSameTeam = await this.teamService.checkUserByMentorId(mentorID, userID);
 
-            return theSameTeam?.length !== 0 ? next() : res.status(403).json({message: 'FORBIDDEN'});
+            return theSameTeam?.length ? next() : res.status(403).json({message: 'FORBIDDEN'});
         }
         else next();
     }
