@@ -4,15 +4,22 @@ import * as mongoose from "mongoose";
 import MaterialRepository from "../Repositories/MaterialRepository";
 import MaterialSchema from "../Models/Material";
 import GradeSchema from "../Models/Grade";
+import SectionService from "./SectionService";
+import {Section} from "../Models/Section";
 
 
 export default class MaterialService {
 
-    constructor(private repository: MaterialRepository) {}
+    constructor(private repository: MaterialRepository, private sectionService: SectionService) {}
 
     createMaterial = async ( req: express.Request ) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
         const material = new MaterialSchema(req.body);
         await material.validate();
+
+        let section: Section = await this.sectionService.getSectionById(id);
+        section.materials.push(material._id);
+
         return this.repository.create(material);
     }
 

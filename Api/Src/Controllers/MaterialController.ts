@@ -6,7 +6,8 @@ export default class MaterialController {
 
     constructor(private materialService: MaterialService) {}
 
-    createMaterial = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
+    createAndAssignMaterial = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
+        console.log('in');
             const material = await this.materialService.createMaterial(req);
             return res.status(201).json(material);
     }
