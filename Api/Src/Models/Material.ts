@@ -43,4 +43,4 @@ export const MaterialSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model<IMaterial & mongoose.Document>('Material', MaterialSchema);
+export default mongoose.model<TMaterial>('Material', MaterialSchema);
