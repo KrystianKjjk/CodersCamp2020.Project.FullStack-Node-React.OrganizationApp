@@ -9,6 +9,7 @@ export interface Section {
     referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
     materials?: mongoose.Types.ObjectId[] //materials reference
+    course: mongoose.Types.ObjectId
 }
 
 const SectionSchema = new mongoose.Schema({
@@ -43,8 +44,13 @@ const SectionSchema = new mongoose.Schema({
         minLength: 16
     },
     materials: [{
-        type: mongoose.Types.ObjectId
-    }]
+         type: mongoose.Types.ObjectId
+    }],
+    course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+    }
+
 })
 
 function endDateValidator(value) {

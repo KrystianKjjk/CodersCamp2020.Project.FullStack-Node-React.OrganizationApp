@@ -3,9 +3,9 @@
 import * as mongoose from 'mongoose';
 
 export interface TeamProject {
-    _id: mongoose.ObjectId,
-    teamId: mongoose.ObjectId,
-    parentProjectIds: mongoose.ObjectId,
+    _id: mongoose.Types.ObjectId,
+    teamId: mongoose.Types.ObjectId,
+    parentProjectIds: mongoose.Types.ObjectId,
     projectName: string,
     projectUrl: string,
     description?: string

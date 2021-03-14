@@ -20,6 +20,12 @@ export default class TeamsController {
         res.status(200).json(team);
     };
 
+    getTeamsByCourseId = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const teams = await this.service.getTeamsByCourseId(id);
+        res.status(200).json(teams);
+    };
+
     createTeam = async (req: Request, res: Response) => {
         const teamData = req.body;
         const newTeam = await this.service.createTeam(teamData);

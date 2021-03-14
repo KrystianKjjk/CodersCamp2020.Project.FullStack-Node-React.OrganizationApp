@@ -23,6 +23,10 @@ export default class UserService {
         return this.repository.getById(id);
     }
 
+    async getUserInfoById(id: mongoose.Types.ObjectId) {
+        return this.repository.getUserInfoById(id);
+    }
+
     async getUsers(): Promise<(User & mongoose.Document<User>)[]> {
         return this.repository.getAll();
     }

@@ -9,6 +9,10 @@ export default class TeamProjectService {
     this.teamProjectRepository = teamProjectRepository;
   }
 
+  getTeamProjectsByTeamId = async(teamId: mongoose.Types.ObjectId):Promise<(TeamProject & mongoose.Document<TeamProject>)[]> => {
+    return this.teamProjectRepository.findByTeamId(teamId);
+  }
+
   getTeamProjects = async (): Promise<(TeamProject & mongoose.Document<TeamProject>)[]> => {
     return this.teamProjectRepository.getAll();
   };
