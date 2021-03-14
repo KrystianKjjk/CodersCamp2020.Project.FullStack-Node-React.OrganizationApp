@@ -20,12 +20,11 @@ class TestService {
     async updateTest(sectionId: mongoose.Types.ObjectId, testId: mongoose.Types.ObjectId, test: object) {
         const updateQueryFields = {};
         Object.keys(test).forEach(key => {
-            updateQueryFields[`test.$.${key}`] = test[key]
+            updateQueryFields[`tests.$.${key}`] = test[key]
         });
     
-        const filterQuery = {'test._id': testId};
+        const filterQuery = {'tests._id': testId};
         const updateQuery = {$set: updateQueryFields}
-        
         return await this.sectionRepository.updateByQuery(filterQuery, updateQuery);
     } 
 
