@@ -13,6 +13,10 @@ export default class SectionService {
     return this.sectionRepository.getAll();
   };
 
+  getSectionsByCourseId = async (courseId: mongoose.Types.ObjectId): Promise<(Section & mongoose.Document<Section>)[]> => {
+    return this.sectionRepository.getSectionsByCourseId(courseId);
+  };
+
   getSectionById = async (sectionId: mongoose.Types.ObjectId) => {
     return this.sectionRepository.getById(sectionId);
   };

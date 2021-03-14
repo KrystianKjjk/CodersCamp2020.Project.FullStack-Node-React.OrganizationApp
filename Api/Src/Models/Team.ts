@@ -4,7 +4,7 @@ export interface Team {
     _id: mongoose.Types.ObjectId,
     mentor: mongoose.Types.ObjectId;
     users: mongoose.Types.ObjectId[];
-    projects: mongoose.Types.ObjectId[];
+    course: mongoose.Types.ObjectId
 };
 
 const TeamSchema = new mongoose.Schema({
@@ -16,11 +16,10 @@ const TeamSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
-    projects: [{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Project',
-    }],
-
+    course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+    }
   }, {timestamps: true});
 
   export default mongoose.model<Team & mongoose.Document>('Team', TeamSchema);

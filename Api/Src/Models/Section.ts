@@ -1,15 +1,49 @@
 import * as mongoose from 'mongoose';
 
 export interface Section {
+    _id: mongoose.Types.ObjectId,
     name: string,
     startDate: Date,
     endDate: Date,
-    testDate?: Date,    //optional as it might not be known from the very start
-    testLink?: string,
-    testDescription?: string,
-    description?: string
-    materials?: string //materials reference
+    tests: Test[],
+    referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
+    description?: string,
+    materials?: string, //materials reference
+    course: mongoose.Types.ObjectId
 }
+
+export enum TestType {
+    sample,
+    theoretical,
+    practical,
+};
+
+export interface Test {
+    _id: mongoose.Types.ObjectId,
+    testType: TestType,
+    testDate: Date,
+    testUrl: string,
+    testDescription?: string,
+}
+
+const TestSchema = new mongoose.Schema({
+    testType: {
+        type: TestType,
+        required: true,
+    },
+    testDate: {
+        type: Date,
+        validate: [testDateValidator, 'Test date must be between start and end dates!']
+    },
+    testUrl: {
+        type: String,
+    },
+    testDescription: {
+        type: String,
+    }
+}, {timestamps: true});
+
+export const Test = mongoose.model<Test & mongoose.Document>('Test', TestSchema);
 
 const SectionSchema = new mongoose.Schema({
     name: {
@@ -24,15 +58,12 @@ const SectionSchema = new mongoose.Schema({
         type: Date,
         validate: [endDateValidator, 'End date must be after the start date!']
     },
-    testDate: {
-        type: Date,
-        validate: [testDateValidator, 'Test date must be between start and end dates!']
+    tests: {
+        type: [TestSchema],
     },
-    testLink: {
+    referenceProjectId: {
         type: String,
-    },
-    testDescription: {
-        type: String,
+        ref: 'Project'
     },
     description:{
         type: String,
@@ -40,8 +71,12 @@ const SectionSchema = new mongoose.Schema({
     },
     materials:{
         type: String
+    },
+    course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
     }
-})
+});
 
 function endDateValidator(value) {
     return this.startDate < value;

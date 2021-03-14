@@ -5,7 +5,7 @@ import TeamService from "../Services/TeamService";
 import AuthService from "../Services/AuthService";
 import * as mongoose from "mongoose";
 import {Team} from "../Models/Team";
-import UserService from "../Services/User";
+import UserService from "../Services/UserService";
 
 type ITeam = Team & mongoose.Document;
 export default class AuthGradeController {

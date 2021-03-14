@@ -1,7 +1,7 @@
 import {UserModel} from "../Models/User";
 import { UserType} from "../Models/User";
 import * as mongoose from 'mongoose';
-import UserRepository from "../Repositories/User";
+import UserRepository from "../Repositories/UserRepository";
 import * as bcrypt from "bcrypt";
 import * as express from "express";
 const jwt = require('jsonwebtoken');

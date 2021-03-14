@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 
 import GradeSchema, { GradeType } from "../Models/Grade";
-import UserService from "./User";
+import UserService from "./UserService";
 import * as express from "express";
 import {UserModel} from "../Models/User";
 import GradeRepository from "../Repositories/GradeRepository";

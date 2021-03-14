@@ -1,11 +1,17 @@
 import { Repository } from './Repository';
-import * as mongoose from "mongoose";
+import { UserModel } from '../Models/User';
+import * as mongoose from 'mongoose';
 import {GradeType} from "../Models/Grade";
 
 export default class UserRepository extends Repository {
     async getByEmail(email: string) {
         return this.model.findOne({ email });
     }
+    
+    async getUserInfoById(id: mongoose.Types.ObjectId): Promise<mongoose.Document<UserModel> & UserModel | null> {
+        return this.model.findOne({_id: id}, {_id: 0, password: 0});
+    }
+
     async deleteGradeById(id: mongoose.Types.ObjectId) {
         const query: object = {
             $pull: {
@@ -31,4 +37,5 @@ export default class UserRepository extends Repository {
     async getByGradeId(gradeId: mongoose.Types.ObjectId) {
         return this.model.findOne({"grades._id": gradeId});
     };
-}
+
+};

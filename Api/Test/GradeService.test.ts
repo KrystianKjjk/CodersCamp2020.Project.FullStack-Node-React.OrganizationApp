@@ -19,7 +19,7 @@ class Repository extends GradeRepository {
     }
 
     async getById(id: Types.ObjectId){
-        return this.grades.find(course => course._id === id);
+        return this.grades.find(grade => grade._id === id);
     }
 
     async create(grade: GradeType){
