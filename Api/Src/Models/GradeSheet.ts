@@ -28,7 +28,7 @@ export interface GradeSheet {
 const GradeSheetSchema = new mongoose.Schema({
     projectID: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Project',
+        ref: 'TeamProject',
         required: true
     },
     mentorID: {
