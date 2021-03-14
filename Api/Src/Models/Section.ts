@@ -12,6 +12,8 @@ export interface Section {
     course: mongoose.Types.ObjectId
 }
 
+export type TSection = Section & mongoose.Document;
+
 const SectionSchema = new mongoose.Schema({
     name: {
         type: String,

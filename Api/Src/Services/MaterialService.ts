@@ -5,7 +5,7 @@ import MaterialRepository from "../Repositories/MaterialRepository";
 import MaterialSchema from "../Models/Material";
 import GradeSchema from "../Models/Grade";
 import SectionService from "./SectionService";
-import {Section} from "../Models/Section";
+import {Section, TSection} from "../Models/Section";
 
 
 export default class MaterialService {
@@ -17,8 +17,9 @@ export default class MaterialService {
         const material = new MaterialSchema(req.body);
         await material.validate();
 
-        let section: Section = await this.sectionService.getSectionById(id);
+        let section: TSection = await this.sectionService.getSectionById(id);
         section.materials.push(material._id);
+        await this.sectionService.updateSection(id, section);
 
         return this.repository.create(material);
     }
