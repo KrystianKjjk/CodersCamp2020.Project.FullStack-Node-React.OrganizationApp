@@ -41,7 +41,7 @@ class TestSectionTestsRepository implements SectionRepository {
     };
 
     async updateByQuery(query: object, obj: object) {
-        const testId = query['test._id'];
+        const testId = query['tests._id'];
         const changes = {};
         Object.keys(obj['$set']).forEach(key => {
             const fieldName = key.split(".$.")[1];

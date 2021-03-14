@@ -34,7 +34,12 @@ export default class TestController {
         const sectionId = new mongoose.Types.ObjectId(req.params.sectionId);
         const testId = new mongoose.Types.ObjectId(req.params.testId);
         const section = await this.sectionService.getSectionById(sectionId);
-        if (!section) res.status(404).json({message: 'Section not found'});
+        if (!section) { 
+            return res.status(404).json({message: 'Section not found'}); 
+        } 
+        if (!section.tests.includes(test => testId === test._id)) {
+            return res.status(404).json({message: 'Test not found'});
+        }
         await this.testService.deleteTest(sectionId, testId);
         res.status(200).json({message: 'Test was deleted'});
     }
