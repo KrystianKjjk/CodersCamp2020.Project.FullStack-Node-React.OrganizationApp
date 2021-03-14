@@ -1,9 +1,9 @@
 import * as mongoose from "mongoose";
 import TeamRepository from "../Src/Repositories/TeamRepository";
 import TeamService from "../Src/Services/TeamService";
-import { Team } from "../Src/Models/Team";
+import TeamModel, { Team } from "../Src/Models/Team";
 
-class TestTeamsRepository implements TeamRepository {
+class TestTeamsRepository extends TeamRepository {
   private teams: Array<Team> = [];
   model: any;
 
@@ -97,7 +97,7 @@ describe("Teams Service", () => {
   };
 
   beforeEach(() => {
-    service = new TeamService(new TestTeamsRepository());
+    service = new TeamService(new TestTeamsRepository(TeamModel));
   });
 
   it("persists team model", async () => {
