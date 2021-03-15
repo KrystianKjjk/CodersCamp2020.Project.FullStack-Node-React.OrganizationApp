@@ -3,7 +3,6 @@ import * as mongoose from "mongoose";
 
 import MaterialRepository from "../Repositories/MaterialRepository";
 import MaterialSchema from "../Models/Material";
-import GradeSchema from "../Models/Grade";
 import SectionService from "./SectionService";
 import { TSection } from "../Models/Section";
 
@@ -18,6 +17,7 @@ export default class MaterialService {
         await material.validate();
 
         let section: TSection = await this.sectionService.getSectionById(id);
+        if (!section) throw Error("Section not found");
         section.materials.push(material._id);
         await this.sectionService.updateSection(id, section);
         await this.repository.create(material);
@@ -36,11 +36,11 @@ export default class MaterialService {
 
     updateMaterial = async ( req: express.Request ) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        const material = new GradeSchema(req.body);
+        const material = new MaterialSchema(req.body);
         material._id = id;
         await material.validate();
-        await this.repository.updateById(id, material);
-        return material;
+        const result = await this.repository.updateById(id, material);
+        return result;
     }
 
     deleteMaterial = async ( req: express.Request ) => {
@@ -48,6 +48,7 @@ export default class MaterialService {
         const idSection = new mongoose.Types.ObjectId(req.params.sectionID);
 
         let section: TSection = await this.sectionService.getSectionById(idSection);
+        if (!section) throw Error("Section not found");
         section.materials.forEach( (material, index) => {
             if( material.equals(idMaterial)) {
                 section.materials.splice(index, 1);
