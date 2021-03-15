@@ -2,32 +2,42 @@ import { validateReviewers, validateGrades, validateParticipants } from '../Mode
 import GradeSheetController from '../Controllers/GradeSheetController';
 import idValidation, { idsValidation } from '../Middlewares/IdValidation';
 import { propValid } from '../Middlewares/Validate';
+import { HasRole, HasId } from '../Middlewares/HasRole';
 import * as express from 'express';
+import { UserType } from '../Models/User';
 
-
+const isAdmin = HasRole([UserType.Admin]);
 export default function gradeSheetRoutes(c: GradeSheetController) {
     return (router: express.Router) => {
-        router.get('/grade/sheets/:id', idValidation, c.getGradeSheet);
-        router.get('/grade/sheets', c.getGradeSheets);
-        router.get('/grade/sheets/:id/reviewers/:mentorId/grades', idsValidation(), c.getReviewerGrades);
-        router.get('/participants/:id/grade/sheets', idValidation, c.getParticipantGradeSheets);
-        router.get('/mentors/:id/grade/sheets', idValidation, c.getMentorGradeSheets);
-        router.get('/reviewers/:id/grade/sheets', idValidation, c.getReviewerGradeSheets);
-        router.post('/grade/sheets', c.createGradeSheet);
-        router.post('/grade/sheets/:id/add/reviewer/:mentorId', idsValidation(), c.addMentorReviewer);
-        router.post('/grade/sheets/:id/add/participant/:participantId', idsValidation(), c.addParticipant);
-        router.put('/grade/sheets/:id/reviewers', propValid(validateReviewers, 'reviewers'), idValidation, c.setMentorReviewers);
-        router.patch('/grade/sheets/:id/mentor/grades', propValid(validateGrades, 'grades'), idValidation, c.setMentorGrades);
-        router.patch('/grade/sheets/:id/reviewers/:mentorId/grades', propValid(validateGrades, 'grades'), idsValidation(), c.setMentorReviewerGrades);
-        router.patch('/grade/sheets/:id/participants', propValid(validateParticipants, 'participants'), idValidation, c.updateParticipants);
-        router.put('/grade/sheets/:id/participants', propValid(validateParticipants, 'participants'), idValidation, c.setParticipants);
-        router.delete('/grade/sheets/:id/participants/:participantId', idsValidation(), c.removeParticipant);
-        router.delete('/grade/sheets/:id', idValidation, c.deleteGradeSheet);
-        router.patch('/grade/sheets/:id/add/reviewer/:mentorId', c.addMentorReviewer);
-        router.patch('/grade/sheets/:id/reviewers', c.setMentorReviewers);
-        router.patch('/grade/sheets/:id/mentor/grades', c.setMentorGrades);
-        router.patch('/grade/sheets/:id/reviewers/:mentorId/grades', c.setMentorReviewerGrades);
-        router.delete('/grade/sheets/:id', c.deleteGradeSheet);
+        // Admin routes
+        router.get('/grade/sheets/:id', isAdmin, idValidation, c.getGradeSheet);
+        router.get('/grade/sheets', isAdmin, c.getGradeSheets);
+        router.get('/participants/:id/grade/sheets', isAdmin, idValidation, c.getParticipantGradeSheets);
+        router.get('/mentors/:id/grade/sheets', isAdmin, idValidation, c.getMentorGradeSheets);
+        router.get('/reviewers/:id/grade/sheets', isAdmin, idValidation, c.getReviewerGradeSheets);
+        router.post('/grade/sheets', isAdmin, c.createGradeSheet);
+        router.post('/grade/sheets/:id/add/reviewer/:mentorId', isAdmin, idsValidation(), c.addMentorReviewer);
+        router.put('/grade/sheets/:id/reviewers', isAdmin, propValid(validateReviewers, 'reviewers'), idValidation, c.setMentorReviewers);
+        router.post('/grade/sheets/:id/add/participant/:participantId', isAdmin, idsValidation(), c.addParticipant);
+        router.patch('/grade/sheets/:id/participants', isAdmin, propValid(validateParticipants, 'participants'), idValidation, c.updateParticipants);
+        router.put('/grade/sheets/:id/participants', isAdmin, propValid(validateParticipants, 'participants'), idValidation, c.setParticipants);
+        router.patch('/grade/sheets/:id/mentor/grades', isAdmin, propValid(validateGrades, 'grades'), idValidation, c.setMentorGrades);
+        router.patch('/grade/sheets/:id/reviewers/:mentorId/grades', isAdmin, propValid(validateGrades, 'grades'), idsValidation(), c.setMentorReviewerGrades);
+        router.delete('/grade/sheets/:id/participants/:participantId', isAdmin, idsValidation(), c.removeParticipant);
+        router.delete('/grade/sheets/:id', isAdmin, idValidation, c.deleteGradeSheet);
+        
+        // Participant route
+        router.get('/participants/me/:id/grade/sheets', HasId('id'), idValidation, c.getParticipantGradeSheets);
+
+        // Mentor routes
+        router.get('/mentors/me/:id/grade/sheets', HasId('id'), idValidation, c.getMentorGradeSheets);
+        router.patch('/mentor/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), propValid(validateGrades, 'grades'), idsValidation(), c.setMentorGrades);
+
+        // Mentor reviewer routes
+        router.get('/reviewers/me/:id/grade/sheets', HasId('id'), idValidation, c.getReviewerGradeSheets);
+        router.get('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), idsValidation(), c.getReviewerGrades);
+        router.patch('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), propValid(validateGrades, 'grades'), idsValidation(), c.setMentorReviewerGrades);
+        
         return router;
     }
 }
