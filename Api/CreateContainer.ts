@@ -70,6 +70,12 @@ import GradeService from "./Src/Services/GradeService";
 import GradeRepository from "./Src/Repositories/GradeRepository";
 import GradeModel from "./Src/Models/Grade";
 
+import materialRoutes from "./Src/Routes/MaterialRoutes";
+import MaterialController from "./Src/Controllers/MaterialController";
+import MaterialService from "./Src/Services/MaterialService";
+import MaterialRepository from "./Src/Repositories/MaterialRepository";
+import MaterialModel from "./Src/Models/Material"
+
 
 const appContainer = new Container();
 
@@ -100,7 +106,9 @@ appContainer.declare("Section", (c) => SectionModel);
 appContainer.declare("Team", (c) => Team);
 appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
 appContainer.declare("Grade", (c) => GradeModel);
+appContainer.declare("Material", (c) => MaterialModel);
 appContainer.declare("Test", (c) => Test);
+
 
 // Repositories
 appContainer.declare('UserRepository', (c) => new UserRepository(c.UserModel));
@@ -112,6 +120,7 @@ appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
 appContainer.declare("GradeRepository", (c) => new GradeRepository(c.Grade));
+appContainer.declare("MaterialRepository", (c) => new MaterialRepository(c.Material));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
@@ -125,7 +134,9 @@ appContainer.declare("SectionService", (c) => new SectionService(c.SectionReposi
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
 appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository));
+appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService));
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository));
+
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService));
@@ -138,6 +149,7 @@ appContainer.declare("SectionController", (c) => new SectionController(c.Section
 appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
 appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
+appContainer.declare("MaterialController", (c) => new MaterialController(c.MaterialService));
 appContainer.declare("TestController", (c) => new TestController(c.TestService, c.SectionService));
 
 appContainer.declare("Routes", (c) => [
@@ -150,6 +162,9 @@ appContainer.declare("Routes", (c) => [
   authRoutes(c.AuthController),
   teamProjectRoutes(c.TeamProjectController),
   teamsRoutes(c.TeamController),
+  authRoutes(c.AuthController),
+  gradeRoutes(c.GradeController),
+  materialRoutes(c.MaterialController),
   gradeRoutes(c.GradeController)
 ]);
 
