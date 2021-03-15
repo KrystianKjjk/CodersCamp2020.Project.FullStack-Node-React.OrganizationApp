@@ -72,9 +72,10 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
-    async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}) {
+    async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}, mentorId: mongoose.Types.ObjectId | null) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
-        if(sheet === null) return null;
+        if( sheet === null) return null;
+        if( mentorId && !(sheet.mentorID.equals(mentorId)) ) return 'FORBIDDEN';
         Object.assign(sheet.mentorGrades, grades);
         sheet.markModified('mentorGrades');
         return await this.repository.save(sheet);
