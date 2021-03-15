@@ -43,12 +43,14 @@ import AuthService from "./Src/Services/AuthService";
 import AuthController from "./Src/Controllers/AuthController";
 import authRoutes from "./Src/Routes/AuthRoutes";
 
-
-import SectionModel from './Src/Models/Section';
+import SectionModel, {Test} from './Src/Models/Section';
 import SectionRepository from './Src/Repositories/SectionRepository';
 import SectionService from './Src/Services/SectionService';
 import SectionController from './Src/Controllers/SectionController';
 import sectionRoutes from './Src/Routes/SectionRoutes';
+
+import TestService from './Src/Services/TestService';
+import TestController from './Src/Controllers/TestController';
 
 import TeamProjectModel from './Src/Models/TeamProject';
 import TeamProjectRepository from './Src/Repositories/TeamProjectRepository';
@@ -62,12 +64,17 @@ import TeamService from './Src/Services/TeamService';
 import Team from './Src/Models/Team';
 import TeamRepository from './Src/Repositories/TeamRepository';
 
-
 import gradeRoutes from "./Src/Routes/GradeRoutes";
 import GradeController from "./Src/Controllers/GradeController";
 import GradeService from "./Src/Services/GradeService";
 import GradeRepository from "./Src/Repositories/GradeRepository";
 import GradeModel from "./Src/Models/Grade";
+
+import materialRoutes from "./Src/Routes/MaterialRoutes";
+import MaterialController from "./Src/Controllers/MaterialController";
+import MaterialService from "./Src/Services/MaterialService";
+import MaterialRepository from "./Src/Repositories/MaterialRepository";
+import MaterialModel from "./Src/Models/Material"
 
 
 const appContainer = new Container();
@@ -99,6 +106,8 @@ appContainer.declare("Section", (c) => SectionModel);
 appContainer.declare("Team", (c) => Team);
 appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
 appContainer.declare("Grade", (c) => GradeModel);
+appContainer.declare("Material", (c) => MaterialModel);
+appContainer.declare("Test", (c) => Test);
 
 
 // Repositories
@@ -111,25 +120,26 @@ appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
 appContainer.declare("GradeRepository", (c) => new GradeRepository(c.Grade));
-
+appContainer.declare("MaterialRepository", (c) => new MaterialRepository(c.Material));
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("PasswordService", (c) => new PasswordService(c.UserRepository, c.PasswordResetTokenRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
-appContainer.declare("TeamProjectService", (c)=>new TeamProjectService(c.TeamProjectRepository));
+appContainer.declare("TeamProjectService", (c)=>new TeamProjectService(c.TeamProjectRepository, c.TeamRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository));
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
 appContainer.declare("GradeService", (c) => new GradeService(c.GradeRepository));
-
+appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService));
+appContainer.declare("TestService", (c) => new TestService(c.SectionRepository));
 
 
 // Controllers
-appContainer.declare("UserController", (c) => new UserController(c.UserService));
+appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService));
 appContainer.declare("PasswordController", (c) => new PasswordController(c.MailingService, c.PasswordService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("TeamProjectController",(c)=> new TeamProjectController(c.TeamProjectService));
@@ -137,21 +147,24 @@ appContainer.declare("ProjectController", (c) => new ProjectController(c.Project
 appContainer.declare("GradeSheetController", (c) => new GradeSheetController(c.GradeSheetService));
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
-appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
+appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
-
+appContainer.declare("MaterialController", (c) => new MaterialController(c.MaterialService));
+appContainer.declare("TestController", (c) => new TestController(c.TestService, c.SectionService));
 
 appContainer.declare("Routes", (c) => [
   userRoutes(c.UserController),
   PasswordRoutes(c.PasswordController),
   courseRoutes(c.CourseController),
   projectRoutes(c.ProjectController),
+  sectionRoutes(c.SectionController, c.TestController),
   gradeSheetRoutes(c.GradeSheetController),
   authRoutes(c.AuthController),
-  sectionRoutes(c.SectionController),
   teamProjectRoutes(c.TeamProjectController),
   teamsRoutes(c.TeamController),
   authRoutes(c.AuthController),
+  gradeRoutes(c.GradeController),
+  materialRoutes(c.MaterialController),
   gradeRoutes(c.GradeController)
 ]);
 

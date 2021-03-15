@@ -1,5 +1,6 @@
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
+import { Team } from '../Models/Team';
 
 export default class TeamRepository extends Repository {
     async getAll() {
@@ -8,6 +9,10 @@ export default class TeamRepository extends Repository {
 
     async getById(id: mongoose.Types.ObjectId) {
         return this.model.findOne(id).populate('users').populate('mentor');
+    };
+
+    async getByMentorId(id: mongoose.Types.ObjectId): Promise<Team> {
+        return this.model.findOne({mentor: id}).populate('users').populate('mentor');
     };
 
     async getTeamsByCourseId(id: mongoose.Types.ObjectId) {

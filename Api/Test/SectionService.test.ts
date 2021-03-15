@@ -33,6 +33,11 @@ class TestSectionRepository extends SectionRepository {
 
         return sectionAfterUpdate;
     };
+
+    async updateByQuery(query: object, obj: object) {
+        return; // we don't need implementation for it 
+    };
+    
     async getSectionsByCourseId(course: mongoose.Types.ObjectId){
         const sections = this.sections.filter((section) => course.equals(section.course));
         return sections;
