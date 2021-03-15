@@ -11,11 +11,26 @@ tags:
   description: Operations about project
 - name: section
   description: Operations about section
+- name: authorization
+  description: Registration and Log in
+- name: team
+  description: Operations about team
+- name: grade
+  description: Operations about grade
+- name: gradesheet
+  description: Operations about gradesheet
+- name: material
+  description: Operations about material
+- name: team project
+  description: Operations about team project
+
+  
 paths:
-  /users/login:
+
+  /login:
     post:
-      tags: 
-        - user
+      tags:
+        - authorization
       summary: Log in user
       consumes: 
         - application/json
@@ -31,19 +46,22 @@ paths:
             properties:
               email:
                 type: string
-                example: john@gmail.com
               password:
                 type: string
-                example: examplePassword
       responses:
-        200:
-          description: Successfully logged in
+        200: 
+          description: Logged in correctly
+          headers: 
+            'x-auth-token':
+              type: string
         401:
-          description: Log in failed
-  /users/register:
+          description: Invalid email or password
+        500: 
+          description: Internal server error
+  /register:
     post:
       tags:
-        - user
+        - authorization
       summary: Register user
       consumes: 
         - application/json
@@ -71,9 +89,9 @@ paths:
         200: 
           description: Register succeed
         400:
-          description: ValidationError
+          description: Email has already been taken
         500: 
-          description: Registration failure
+          description: Internal server error
   /users:
     get:
       tags:
@@ -81,13 +99,6 @@ paths:
       summary: Fetch users
       produces:
         - application/json
-      parameters:
-        - name: courseId
-          in: query
-          type: number
-        - name: mentorId
-          in: query
-          type: number
       responses:
         200:
           description: Success
@@ -105,7 +116,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200: 
@@ -125,7 +136,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
         - name: body
           in: body
@@ -146,11 +157,30 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200:
           description: User deleted
+        404:
+          description: User not found
+  /users/me/{id}:
+    get:
+      tags:
+        - user
+      summary: Get user info by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200: 
+          description: Success
+          schema:
+            $ref: '#/definitions/User'
         404:
           description: User not found
   /users/requestpasswordreset:
@@ -169,7 +199,7 @@ paths:
             required:
               - id
             properties:
-              id:
+              _id:
                 type: string
                 example: 60392978e2219023e463c5e1
       responses:
@@ -284,7 +314,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200:
@@ -304,7 +334,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
         - name: body
           in: body
@@ -327,7 +357,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200:
@@ -379,7 +409,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200:
@@ -399,7 +429,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
         - name: body
           in: body
@@ -422,7 +452,7 @@ paths:
       parameters:
         - name: id
           in: path
-          type: number
+          type: string
           required: true
       responses:
         200:
@@ -483,7 +513,7 @@ paths:
             $ref: '#/definitions/Section'
         404:
           description: Section not found
-    patch:
+    put:
       tags:
         - section
       summary: Update section
@@ -502,7 +532,7 @@ paths:
           schema:
             $ref: '#/definitions/Section'
       responses:
-        200:
+        201:
           description: Success
           schema:
             $ref: '#/definitions/Section'
@@ -524,6 +554,885 @@ paths:
           description: Section was deleted
         404:
           description: Section not found
+  /courses/{courseId}/sections:
+    get:
+      tags:
+        - section
+      summary: Fetch sections by course id
+      produces:
+        - application/json
+      parameters:
+        - name: courseId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Section'
+  /sections/{id}/test:
+    post:
+      tags:
+        - section
+      summary: Add test to section
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Section'
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Section'
+        404:
+          description: Section not found
+  /sections/{id}/test/{testId}:
+    patch:
+      tags:
+        - section
+      summary: Update test in section
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: testId
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Section'
+      responses:
+        200:
+          description: Test was updated
+          schema:
+            $ref: '#/definitions/Section'
+        404:
+          description: Section or test not found
+    delete:
+      tags:
+        - section
+      summary: Delete test from section
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: testId
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Test was deleted
+        404:
+          description: Section or test not found
+  /teams:
+    post:
+      tags:
+        - team
+      summary: Create team
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - team
+      summary: Fetch all teams
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+  /teams/{id}:
+    get:
+      tags:
+        - team
+      summary: Fetch team by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Team'
+        404:
+          description: Team not found
+    patch:
+      tags:
+        - team
+      summary: Update team
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Team'
+        404:
+          description: Team not found
+        400:
+          description: Provided data not correct
+    delete:
+      tags:
+        - team
+      summary: Delete team
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Team was deleted
+        404:
+          description: Team not found
+  /teams/{id}/users/{userId}:  
+    delete:
+      tags:
+        - team
+      summary: Delete user from team
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: userId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: User was deleted
+        404:
+          description: Team not found
+  /teams/{id}/users:
+    post:
+      tags:
+        - team
+      summary: Add user to team
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: User added to team
+          schema:
+            $ref: '#/definitions/Team'
+        404:
+          description: Team not found
+  /teams/{id}/mentor:
+    post:
+      tags:
+        - team
+      summary: Add mentor to team
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Mentor added to team
+          schema:
+            $ref: '#/definitions/Team'
+        404:
+          description: Team not found
+    delete:
+      tags:
+        - team
+      summary: Delete mentor from team
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Mentor was deleted
+        404:
+          description: Team not found
+  /courses/{id}/teams:
+    get:
+      tags:
+        - team
+      summary: Fetch teams by course id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Team'
+  /grades:
+    post:
+      tags:
+        - grade
+      summary: Create grade
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Grade'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Grade'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - grade
+      summary: Fetch all grades
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Grade'
+  /grades/{id}:
+    get:
+      tags:
+        - grade
+      summary: Fetch grade by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Grade'
+        404:
+          description: Grade not found
+    patch:
+      tags:
+        - grade
+      summary: Update grade
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Grade'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Grade'
+        404:
+          description: Grade not found
+    delete:
+      tags:
+        - grade
+      summary: Delete grade
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+        404:
+          description: Grade not found
+  /grade/sheets:
+    post:
+      tags:
+        - gradesheet
+      summary: Create gradesheet
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GradeSheet'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - gradesheet
+      summary: Fetch all gradesheets
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GradeSheet'
+  /grade/sheets/{id}:
+    get:
+      tags:
+        - gradesheet
+      summary: Fetch gradesheet by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet not found
+    delete:
+      tags:
+        - gradesheet
+      summary: Delete gradesheet
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Grade sheet deleted
+        404:
+          description: Grade sheet not found
+  /grade/sheets/{id}/reviewers/{mentorId}/grades:
+    get:
+      tags:
+        - gradesheet
+      summary: get reviewer grades
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: mentorId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet not found
+    patch:
+      tags:
+        - gradesheet
+      summary: Set mentor reviewer grade
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: mentorId
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GradeSheet'
+      responses:
+        201:
+          description: Mentor reviewer grade set
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet or mentor not found
+  /grade/sheets/{id}/add/reviewer/{mentorId}:
+    patch:
+      tags:
+        - gradesheet
+      summary: Add mentor reviewer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: mentorId
+          in: path
+          type: string
+          required: true
+      responses:
+        201:
+          description: Mentor reviewer added
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet not found
+  /grade/sheets/{id}/reviewers:
+    patch:
+      tags:
+        - gradesheet
+      summary: Set mentor reviewers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GradeSheet'
+      responses:
+        201:
+          description: Mentor reviewer added
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet not found
+  /grade/sheets/{id}/mentor/grades:
+    patch:
+      tags:
+        - gradesheet
+      summary: Set mentor grade
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GradeSheet'
+      responses:
+        201:
+          description: Mentor grade set
+          schema:
+            $ref: '#/definitions/GradeSheet'
+        404:
+          description: Grade sheet not found
+  /teams/projects:
+    post:
+      tags:
+        - teamProject
+      summary: Create team project
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamProject'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        400:
+          description: Provided data not correct or incomplete
+    get:
+      tags:
+        - teamProject
+      summary: Fetch all team projects
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TeamProject'
+  /teams/projects/{id}:
+    get:
+      tags:
+        - teamProject
+      summary: Fetch team project by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        404:
+          description: Team project not found
+        400:
+          description: Provided data not correct or incomplete
+    put:
+      tags:
+        - teamProject
+      summary: Update team project
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamProject'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        404:
+          description: Team project not found
+    delete:
+      tags:
+        - teamProject
+      summary: Delete team project
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+        404:
+          description: Team project not found
+  /teams/{id}/projects:
+    get:
+      tags:
+        - teamProject
+      summary: Fetch team project by team id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+  /mentors/me/{id}/projects:
+     get:
+      tags:
+        - teamProject
+      summary: Fetch team project by mentor id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        404:
+          description: Team project not found
+     post:
+      tags:
+        - teamProject
+      summary: Create team project for mentor
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamProject'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        400:
+          description: Provided data not correct or incomplete
+  /mentors/me/{mentorId}/projects/{id}:
+    put:
+      tags:
+        - teamProject
+      summary: Update team project
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: mentorId
+          in: path
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamProject'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/TeamProject'
+        404:
+          description: Team project not found
+    delete:
+      tags:
+        - teamProject
+      summary: Delete team project
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: mentorId
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Success
+        404:
+          description: Team project not found
+  /materials:
+    get:
+      tags:
+        - material
+      summary: Fetch materials
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Material'
+  /materials/{id}:
+    get:
+      tags:
+        - material
+      summary: Fetch material by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Material'
+        404:
+          description: Material not found
+    patch:
+      tags:
+        - material
+      summary: Update material
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Material'
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Material'
+  /materials/{id}/section/{sectionId}:
+    delete:
+      tags:
+        - material
+      summary: Delete material
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: sectionId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Material was deleted
+  /materials/section/{id}:
+    post:
+      tags:
+        - material
+      summary: Create materials
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Material'
+      responses:
+        201:
+          description: Success
+          schema:
+            $ref: '#/definitions/Material'
 definitions:
   User:
     type: object
@@ -533,10 +1442,7 @@ definitions:
         example: john@gmail.com
       password:
         type: string
-        example: examplePassword
-      username:
-        type: string
-        example: Johny
+        example: examplePassword123
       name:
         type: string
         example: John
@@ -551,22 +1457,14 @@ definitions:
         type: number
         default: 0
         example: 0
-      grades:
-        type: array
-        items:
-          $ref: '#/definitions/Grade'
   Grade:
     type: object
     properties:
-      id: 
-        type: number
-        example: 1
+      _id: 
+        type: string
+        example: 60392978e2219023e463c5e1
       sectionId: 
-        type: number
-        example: 2
-      projectId: 
-        type: number
-        example: 3
+        $ref: '#/definitions/Section'
       testPoints: 
         type: number
         example: 90
@@ -582,79 +1480,203 @@ definitions:
       projectPoints: 
         type: number
         example: 100
-      projectMaxPoints: 
-        type: number
-        example: 100
-      rolePoints:
-        type: number
-        example: 20
-      roleMaxPoints:
-        type: number
-        example: 100
-      additionalPoints:
-        type: number
-        example: 30
-      additionalMaxPoints:
-        type: number
-        example: 100
   Course:
     type: object
     properties:
       _id:
         type: string
-        example: '4'
+        example: 60392978e2219023e463c5e1
       name:
         type: string
-        example: 'CodersCamp 2021'
+        example: CodersCamp 2021
       description:
         type: string
-        example: 'Some description...'
-      sections:
-        type: array
-        items:
-          $ref: '#/definitions/Section'
+        example: Some description...
+      startDate:
+        type: string
+        pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+        example: "2019-01-17"
+      endDate:
+        type: string
+        pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+        example: "2019-05-17"
   Section:
     type: object
     properties:
-      id: 
-        type: number
-        example: 5
+      _id: 
+        type: string
+        example: 60392978e2219023e463c5e1
       name: 
         type: string
         example: TypeScript
       startDate:
         type: string
-        example: 01-02-2021
+        pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+        example: "2019-01-17"
       endDate:
         type: string
-        example: 21-02-2021
-      testDate:
-        type: string
-        example: 21-02-2021
+        pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+        example: "2019-05-17"
+      tests:
+        $ref: '#/definitions/Test'
+      referenceProjectId:
+        $ref: '#/definitions/Project'
       description:
         type: string
-        example: this is your section blablabla
+        example: 'this is your section blablabla'
       materials:
-        type: string
-        example: reference id of materials
+        type: array
+        items:
+          type: string
+          example: 60392978e2219023e463c5e1
+      course:
+        $ref: '#/definitions/Course'
   Project:
     type: object
     properties:
       _id:
-        type: number
-        example: 5
+        type: string
+        example: 60392978e2219023e463c5e1
       sectionId:
         type: number
-        example: 4
+        example: 6
       projectName:
         type: string
-        example: FitNotFat
+        example: StarWars
       projectUrl:
         type: string
-        example: 'github.com/FitNotFat'
+        example: 'github.com/StarWars'
       description:
         type: string
         example: 'Some description...'
+  Team:
+    type: object
+    properties:
+      _id:
+        type: string
+        example: 604338da5aba215e80fa8e1c
+      mentor:
+        $ref: '#/definitions/User'
+      users:
+        type:  array
+        items:
+            $ref: '#/definitions/User'
+      course: 
+        $ref: '#/definitions/Course'
+  TeamProject:
+    type:  object
+    properties:
+      _id:
+        type: string
+        example: 604338da5aba215e80fa8e1a
+      teamId:
+        $ref: '#/definitions/Team'
+      parentProjectId:
+        $ref: '#/definitions/Project'
+      projectName:
+        type: string
+        example: "FitNotFat"
+      projectUrl:
+        type: string
+        example: "https://CodersCamp2020.Project.TypeScript.FitNotFat/"
+      description:
+        type: string
+        example: "FitNotFat is application to..."
+  GradeSheet:
+    type:  object
+    properties:
+      _id:
+        type: string
+        example: '604338da5aba215e80fa8e1a'
+      projectID:
+        $ref: '#/definitions/TeamProject'
+      mentorID:
+        $ref: '#/definitions/User'
+      participants:
+        type:  array
+        items:
+          $ref: '#/definitions/_participant'
+      reviewers:
+        type: array
+        items: 
+          $ref: '#/definitions/User'
+      mentorGrades:
+        type: object
+        default: {}
+      mentorReviewerGrades:
+        type: array
+        items:
+          $ref: '#/definitions/_mentorReviewerGrade'
+  Material:
+    type:  object
+    properties:
+      title:
+        type: string
+        example: 'JavaScript materials'
+      description:
+        type: string
+        example: 'JavaScript is language of...'
+      content_list: 
+        type: string
+        example: '1. Introduction to JS 2. Arrays 3. Objects...'
+      basicFreeMaterials:
+        type: array
+        items: {}
+      basicPaidMaterials:
+        type: array
+        items: {}
+      extendingMaterials:
+        type: array
+        items: {}
+      extraMaterials:
+        type: array
+        items: {}
+      practiseMaterials:
+        type: array
+        items: {}
+      quizLink:
+        type: array
+        items: {}
+      extraInformation:
+        type: string
+        example: 'Extra info...'
+  Test:
+    type: object
+    properties:
+      testType:
+        type: string 
+      testDate:
+        type: string
+      testUrl:
+        type: string
+      testDescription:
+        type: string
+  _participant:
+    type: object
+    properties:
+      participantID:
+        $ref: '#/definitions/User' 
+      engagement:
+        type: number
+        default: 0
+        example: 50
+      role:
+        type: string
+        default: ''
+        example: 'Product Owner'
+      rolePoints:
+        type: number
+        default: 0
+        example: 100
+  _mentorReviewerGrade:
+    type: object
+    properties:
+      mentorID:
+        type: string
+      grades:
+        type: object
+        default: {}
+    
 # Added by API Auto Mocking Plugin
 # Added by API Auto Mocking Plugin
 # Added by API Auto Mocking Plugin
