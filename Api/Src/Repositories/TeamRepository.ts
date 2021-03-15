@@ -1,5 +1,6 @@
 import { Repository } from './Repository';
 import * as mongoose from 'mongoose';
+import { Team } from '../Models/Team';
 
 export default class TeamRepository extends Repository {
     async getAll() {
@@ -8,6 +9,10 @@ export default class TeamRepository extends Repository {
 
     async getById(id: mongoose.Types.ObjectId) {
         return this.model.findOne(id).populate('users').populate('mentor');
+    };
+
+    async getByMentorId(id: mongoose.Types.ObjectId): Promise<Team> {
+        return this.model.findOne({mentor: id}).populate('users').populate('mentor');
     };
 
     async getTeamsByCourseId(id: mongoose.Types.ObjectId) {
@@ -53,7 +58,7 @@ export default class TeamRepository extends Repository {
         return await this.updateById(teamId, updateQuery);
     }
 
-    async getByMentorId(mentorID: mongoose.Types.ObjectId, userID: mongoose.Types.ObjectId) {
+    async getByMentorIdAndUserId(mentorID: mongoose.Types.ObjectId, userID: mongoose.Types.ObjectId) {
         return this.model.findOne({mentor: mentorID}).find({ users: userID });
     };
     async getTeamByMentorId(mentorID: mongoose.Types.ObjectId) {

@@ -69,7 +69,15 @@ import GradeController from "./Src/Controllers/GradeController";
 import GradeService from "./Src/Services/GradeService";
 import GradeModel from "./Src/Models/Grade";
 
+
 import AuthGradeController from "./Src/Controllers/GradeAuthController";
+
+import materialRoutes from "./Src/Routes/MaterialRoutes";
+import MaterialController from "./Src/Controllers/MaterialController";
+import MaterialService from "./Src/Services/MaterialService";
+import MaterialRepository from "./Src/Repositories/MaterialRepository";
+import MaterialModel from "./Src/Models/Material"
+
 
 const appContainer = new Container();
 
@@ -100,6 +108,7 @@ appContainer.declare("Section", (c) => SectionModel);
 appContainer.declare("Team", (c) => Team);
 appContainer.declare('PasswordResetTokenModel', (c) => PasswordResetTokenModel);
 appContainer.declare("Grade", (c) => GradeModel);
+appContainer.declare("Material", (c) => MaterialModel);
 appContainer.declare("Test", (c) => Test);
 
 
@@ -112,6 +121,7 @@ appContainer.declare("GradeSheetRepository", (c) => new GradeSheetRepository(c.G
 appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section));
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
+appContainer.declare("MaterialRepository", (c) => new MaterialRepository(c.Material));
 
 
 // Services
@@ -119,13 +129,14 @@ appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository));
 appContainer.declare("PasswordService", (c) => new PasswordService(c.UserRepository, c.PasswordResetTokenRepository));
 appContainer.declare("CourseService", (c)=>new CourseService(c.CourseRepository));
-appContainer.declare("TeamProjectService", (c)=>new TeamProjectService(c.TeamProjectRepository));
+appContainer.declare("TeamProjectService", (c)=>new TeamProjectService(c.TeamProjectRepository, c.TeamRepository));
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository));
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository));
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
 appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
 appContainer.declare("GradeService", (c) => new GradeService(c.UserService));
+appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService));
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository));
 
 
@@ -138,8 +149,9 @@ appContainer.declare("ProjectController", (c) => new ProjectController(c.Project
 appContainer.declare("GradeSheetController", (c) => new GradeSheetController(c.GradeSheetService));
 appContainer.declare("SectionController", (c) => new SectionController(c.SectionService));
 appContainer.declare("TeamController", (c) => new TeamController(c.TeamService));
-appContainer.declare("AuthController", (c) => new AuthController(c.AuthService));
+appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService));
 appContainer.declare("GradeController", (c) => new GradeController(c.GradeService));
+appContainer.declare("MaterialController", (c) => new MaterialController(c.MaterialService));
 appContainer.declare("TestController", (c) => new TestController(c.TestService, c.SectionService));
 appContainer.declare("AuthGradeController", (c) => new AuthGradeController(c.TeamService, c.AuthService, c.UserService));
 
@@ -154,7 +166,8 @@ appContainer.declare("Routes", (c) => [
   authRoutes(c.AuthController),
   teamProjectRoutes(c.TeamProjectController),
   teamsRoutes(c.TeamController),
-  gradeRoutes(c.GradeController, c.AuthGradeController)
+  gradeRoutes(c.GradeController, c.AuthGradeController),
+  materialRoutes(c.MaterialController)
 ]);
 
 // Create router
