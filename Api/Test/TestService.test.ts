@@ -7,7 +7,7 @@ import TestService from '../Src/Services/TestService';
 
 type SectionDBModel = Section & {_id: mongoose.Types.ObjectId};
 
-class TestSectionTestsRepository implements SectionRepository {
+class TestSectionTestsRepository extends SectionRepository {
     private section: Array<Section> = [];
     model: any;
 
@@ -83,7 +83,7 @@ describe("Test Section Service", () => {
     };
 
     beforeEach(() => {
-        const testRepo = new TestSectionTestsRepository();
+        const testRepo = new TestSectionTestsRepository(SectionSchema);
         testService = new TestService(testRepo);
         sectionService = new SectionService(testRepo);
     })

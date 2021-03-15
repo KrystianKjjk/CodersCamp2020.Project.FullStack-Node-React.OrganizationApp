@@ -1,4 +1,4 @@
-import GradeSheetModel from '../Models/GradeSheet';
+import GradeSheetModel, { Participant } from '../Models/GradeSheet';
 import GradeSheetService from '../Services/GradeSheetService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
@@ -29,6 +29,24 @@ export default class GradeSheetController {
         res.status(200).json(sheet.grades);
     }
 
+    getParticipantGradeSheets = async (req: Request, res: Response) => {
+        const userId = new mongoose.Types.ObjectId(req.params.id);
+        const sheets = await this.gradeSheetService.getParticipantGradeSheets(userId);
+        res.status(200).json(sheets);
+    }
+
+    getMentorGradeSheets = async (req: Request, res: Response) => {
+        const userId = new mongoose.Types.ObjectId(req.params.id);
+        const sheets = await this.gradeSheetService.getMentorGradeSheets(userId);
+        res.status(200).json(sheets);
+    }
+
+    getReviewerGradeSheets = async (req: Request, res: Response) => {
+        const userId = new mongoose.Types.ObjectId(req.params.id);
+        const sheets = await this.gradeSheetService.getReviewerGradeSheets(userId);
+        res.status(200).json(sheets);
+    }
+
     addMentorReviewer = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
@@ -39,33 +57,62 @@ export default class GradeSheetController {
 
     setMentorReviewers = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
-        if ( !(req.body.mentorIds instanceof Array) )
-            return res.status(400).json({
-                message: "MentorIds should be an array of strings"
-            })
-        const mentorIds = req.body.mentorIds.map((id: string) => new mongoose.Types.ObjectId(id));
+        const mentorIds = req.body.reviewers.map((id: string) => new mongoose.Types.ObjectId(id));
         const sheet = await this.gradeSheetService.setMentorReviewers(id, mentorIds);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Mentor reviewers set'});
     }
 
-    setMentorGrade = async (req: Request, res: Response) => {
+    setMentorGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const gradeName: string = req.body.gradeName;
-        const grade: number = req.body.grade;
-        const sheet = await this.gradeSheetService.setMentorGrade(id, gradeName, grade);
+        const grades: {[gradeName: string]: number} = req.body.grades;
+        const sheet = await this.gradeSheetService.setMentorGrades(id, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Mentor grade set'});
     }
 
-    setMentorReviewerGrade = async (req: Request, res: Response) => {
+    setMentorReviewerGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
-        const gradeName: string = req.body.gradeName;
-        const grade: number = req.body.grade;
-        const sheet = await this.gradeSheetService.setMentorReviewerGrade(id, mentorId, gradeName, grade);
+        const grades: {[gradeName: string]: number} = req.body.grades;
+        const sheet = await this.gradeSheetService.setMentorReviewerGrades(id, mentorId, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
         res.status(200).json({message: 'Mentor reviewer grade set'});
+    }
+
+    addParticipant = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const participantId = new mongoose.Types.ObjectId(req.params.participantId);
+        const sheet = await this.gradeSheetService.addParticipant(id, participantId);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        res.status(200).json({message: 'Participant added'});
+    }
+
+    updateParticipants = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const participants: Participant[] = req.body.participants
+            .map((part: Participant) => ({...part, participantID: new mongoose.Types.ObjectId(part.participantID)}));
+        const sheet = await this.gradeSheetService.updateParticipants(id, participants);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        res.status(200).json({message: 'Participants updated'});
+    }
+
+    setParticipants = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const participants: Participant[] = req.body.participants
+            .map((part: Participant) => ({...part, participantID: new mongoose.Types.ObjectId(part.participantID)}));
+        const sheet = await this.gradeSheetService.setParticipants(id, participants);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        res.status(200).json({message: 'Participants set'});
+    }
+
+    removeParticipant = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const participantId = new mongoose.Types.ObjectId(req.params.participantId);
+        const sheet = await this.gradeSheetService.removeParticipant(id, participantId);
+        if(!sheet) return res.status(404).json({message: 'Grade sheet or participant not found'});
+        res.status(200).json({message: 'Grade sheet participant deleted'});
     }
 
     deleteGradeSheet = async (req: Request, res: Response) => {

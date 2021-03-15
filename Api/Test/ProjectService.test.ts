@@ -6,7 +6,7 @@ import { Project } from '../Src/Models/Project';
 
 type ProjectDBModel = Project & {_id: mongoose.Types.ObjectId};
 
-class TestProjectRepository implements ProjectRepository {
+class TestProjectRepository extends ProjectRepository {
     private projects: Array<ProjectDBModel> = [];
     model: any;
 
@@ -39,7 +39,7 @@ describe("Project Service", () => {
     let service: ProjectService;
 
     beforeEach(() => {
-        service = new ProjectService(new TestProjectRepository());
+        service = new ProjectService(new TestProjectRepository(ProjectSchema));
     })
 
     it("persists project model", async () => {

@@ -69,7 +69,6 @@ import GradeController from "./Src/Controllers/GradeController";
 import GradeService from "./Src/Services/GradeService";
 import GradeModel from "./Src/Models/Grade";
 
-
 import AuthGradeController from "./Src/Controllers/GradeAuthController";
 
 import materialRoutes from "./Src/Routes/MaterialRoutes";
@@ -122,7 +121,6 @@ appContainer.declare("SectionRepository", (c) => new SectionRepository(c.Section
 appContainer.declare("TeamRepository", (c) => new TeamRepository(c.Team));
 appContainer.declare('PasswordResetTokenRepository', (c) => new Repository(c.PasswordResetTokenModel));
 appContainer.declare("MaterialRepository", (c) => new MaterialRepository(c.Material));
-
 
 // Services
 appContainer.declare("MailingService", (c) => new MailingService(nodemailer));
