@@ -57,7 +57,10 @@ describe('Test UserService ', () => {
                 email: `user${i}@app.com`,
                 name: `UserName${i}`,
                 surname: `UserSurname${i}`,
-                password: `Pass${i}`
+                password: `Pass${i}`,
+                type: 0,
+                status: 0,
+                grades: []
             } as UserModel);
         }
         users = await service.getUsers();

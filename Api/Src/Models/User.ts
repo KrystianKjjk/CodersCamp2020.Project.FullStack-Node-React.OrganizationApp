@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {Grade} from './Grade';
+import {Grade, GradeSchema, GradeType} from './Grade';
 import * as Joi from "joi";
 const passwordComplexity = require("joi-password-complexity");
 
@@ -17,7 +17,6 @@ export enum UserStatus {
 };
 
 export interface UserModel {
-    username: string,
     name: string,
     surname: string,
     email: string,
@@ -55,6 +54,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    grades: [{
+        type: Object,
+        required: false
+    }]
 }, {timestamps: true});
 
 export function validateUserRegistration(user) {

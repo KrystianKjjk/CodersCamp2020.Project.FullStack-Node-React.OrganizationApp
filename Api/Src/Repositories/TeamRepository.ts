@@ -57,4 +57,11 @@ export default class TeamRepository extends Repository {
 
         return await this.updateById(teamId, updateQuery);
     }
+
+    async getByMentorIdAndUserId(mentorID: mongoose.Types.ObjectId, userID: mongoose.Types.ObjectId) {
+        return this.model.findOne({mentor: mentorID}).find({ users: userID });
+    };
+    async getTeamByMentorId(mentorID: mongoose.Types.ObjectId) {
+        return this.model.findOne({mentor: mentorID});
+    };
 };

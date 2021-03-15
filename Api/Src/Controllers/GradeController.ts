@@ -1,8 +1,6 @@
 import * as express from 'express';
-import * as mongoose from "mongoose";
 
 import GradeService from "../Services/GradeService";
-import GradeSchema from "../Models/Grade";
 
 export default class GradeController {
 
@@ -10,9 +8,7 @@ export default class GradeController {
 
     createGrade = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
         try {
-            const grade = new GradeSchema(req.body);
-            await grade.validate();
-            await this.service.createGrade(grade);
+            const grade = await this.service.createGrade(req);
             return res.status(201).json(grade);
         }
         catch (err) {
@@ -23,22 +19,12 @@ export default class GradeController {
         }
     }
 
-    getAllGrades = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
-        try {
-            const grades = await this.service.getGrades();
-            return res.status(200).json(grades);
-        }
-        catch (err) {
-            return res.status(500).json({ message: err.message });
-        }
-    }
 
-    getGrade = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
+    getGrades = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
         try {
-            const id = new mongoose.Types.ObjectId(req.params.id);
-            const grade = await this.service.findGrade(id);
-            return grade ?
-                res.status(200).json(grade)
+            const grades = await this.service.findGrades(req);
+            return grades ?
+                res.status(200).json(grades)
                 : res.status(404).json({ message: "Grade not found" });
         }
         catch (err) {
@@ -48,13 +34,9 @@ export default class GradeController {
 
     updateGrade = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
         try {
-            const id = new mongoose.Types.ObjectId(req.params.id);
-            const grade = new GradeSchema(req.body);
-            grade._id = id;
-            await grade.validate();
-            const updatedGrade = await this.service.updateGrade(id, grade);
-            return updatedGrade ?
-                res.status(201).json(updatedGrade)
+            const result = await this.service.updateGrade(req);
+            return result.nModified ?
+                res.status(201).json(result)
                 : res.status(404).json({ message: "Grade not found" });
         } catch (err) {
             const msg = { message: err.message };
@@ -66,8 +48,7 @@ export default class GradeController {
 
     deleteGrade = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
        try {
-           const id = new mongoose.Types.ObjectId(req.params.id);
-           const grade = await this.service.deleteGrade(id);
+           const grade = await this.service.deleteGrade(req);
            return grade ?
                res.status(200).json(grade)
                : res.status(404).json({ message: "Grade not found" });

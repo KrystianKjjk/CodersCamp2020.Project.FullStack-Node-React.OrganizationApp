@@ -3,12 +3,14 @@ import { UserType} from "../Models/User";
 import * as mongoose from 'mongoose';
 import UserRepository from "../Repositories/UserRepository";
 import * as bcrypt from "bcrypt";
+import * as express from "express";
 const jwt = require('jsonwebtoken');
 
 type User = UserModel & mongoose.Document;
 
 export default class AuthService {
     private saltRounds: number = 10;
+    private tokenName: string = 'x-auth-token';
 
     constructor(private repository: UserRepository, private jwtPrivateKey: string, private jwtTokenExpiresIn) { }
 
@@ -33,6 +35,15 @@ export default class AuthService {
 
     saveUser = async (user: User) => {
        return await this.repository.create(user);
+    }
+
+    getTokenDataReq = (req: express.Request) => {
+        const token = this.getToken(req);
+        return token ? this.getTokenData(token) : null;
+    }
+
+    getToken = (req: express.Request) => {
+        return req.header(this.tokenName);
     }
 
     getTokenData = (token: string) => {

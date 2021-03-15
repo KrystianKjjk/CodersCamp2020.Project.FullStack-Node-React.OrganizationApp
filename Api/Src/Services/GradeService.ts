@@ -1,26 +1,48 @@
 import * as mongoose from "mongoose";
 
-import GradeRepository from "../Repositories/GradeRepository";
-import { GradeType } from "../Models/Grade";
+import GradeSchema, { GradeType } from "../Models/Grade";
+import UserService from "./UserService";
+import * as express from "express";
+import {UserModel} from "../Models/User";
+
+type IUser = UserModel & mongoose.Document;
 
 export default class GradeService {
 
-    constructor(private repository: GradeRepository) {}
+    constructor(private userService: UserService) {}
 
-    createGrade = async (grade: GradeType) => {
-        return this.repository.create(grade);
+    createGrade = async (req: express.Request) => {
+        const grade = new GradeSchema(req.body);
+        await grade.validate();
+
+        const userId = new mongoose.Types.ObjectId(req.params.userID);
+        let user: IUser = await this.userService.findUserById(userId);
+        if(!user) throw new Error("User doesn't exists");
+
+        user.password = undefined;
+        user.grades.push(grade);
+
+        await this.userService.updateUser(user._id, user);
+        return grade;
     }
-    getGrades = async () => {
-        return this.repository.getAll();
+
+    findGrades = async (req: express.Request) => {
+        const id = new mongoose.Types.ObjectId(req.params.userID);
+        const user = await this.userService.findUserById(id);
+        if(!user) throw new Error("User doesn't exists");
+        return user.grades;
     }
-    findGrade = async (id: mongoose.Types.ObjectId) => {
-        return this.repository.getById(id);
-    }
-    updateGrade = async (id: mongoose.Types.ObjectId, grade: GradeType) => {
-        return this.repository.updateById(id, grade);
+    updateGrade = async (req: express.Request) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const grade = new GradeSchema(req.body);
+        grade._id = id;
+        await grade.validate();
+        return this.userService.updateGradeById(id, grade);
     };
-    deleteGrade = async (id: mongoose.Types.ObjectId) => {
-        return this.repository.deleteById(id);
+
+    deleteGrade = async (req: express.Request) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        return this.userService.deleteGradeById(id);
     }
 }
 

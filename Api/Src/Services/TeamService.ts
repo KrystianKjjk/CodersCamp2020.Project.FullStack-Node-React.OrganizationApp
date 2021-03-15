@@ -20,6 +20,15 @@ class TeamService {
         return this.teamRepository.getById(id);
     };
 
+    async checkUserByMentorId(mentorID: mongoose.Types.ObjectId, userID: mongoose.Types.ObjectId) {
+        return this.teamRepository.getByMentorIdAndUserId(mentorID, userID);
+    };
+
+    async getTeamByMentorId(mentorID: mongoose.Types.ObjectId) {
+        return this.teamRepository.getTeamByMentorId(mentorID);
+    };
+
+
     async createTeam(team: Omit<Team, "_id">) {
         return this.teamRepository.create(team);
     }
