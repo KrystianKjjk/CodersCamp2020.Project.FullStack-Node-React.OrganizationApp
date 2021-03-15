@@ -3,7 +3,6 @@
 ***The app built to help fellow CodersCampers learn happily :)***
 
 ## Table of contents
-- [Coders Camp Organization App](#coders-camp-organization-app)
   * [About the project](#about-the-project)
   * [Team behind the project](#team-behind-the-project)
   * [Project structure](#project-structure)
@@ -21,6 +20,8 @@
 ## About the project
 This application is a fully standalone solution for handling the needs of Coders Camp organisers, participants and mentors.
 The goal of this project was to build the backend service with all the necessary mechanisms to store the Coders Camp-related information and provide the corresponding frontend application allowing the users to manage their course progress, grades, learning materials etc.
+
+Project was developed during [CodersCamp Course](https://coderscamp.edu.pl/) in Feb/Mar 2020.
 
 ## Team behind the project
 - Krystian Kijak (Mentor)
@@ -51,10 +52,15 @@ The project repository is split into two parts:
     - access to the learning materials
     - submitting a project
 
+## Frontend application description
+To be delivered in approximately one month :)
+
 ## Backend service description
 ### How to run the backend
 1. You can clone the repository, install the dependencies with ```npm install``` and run the app with ```npm run start:dev```
-2. Alternatively just use the production version of the application available at ```https://coders-camp-organization-app.herokuapp.com/```
+You need to remember there are several environmental variables that are not stored in the repository for safety - please reach out to the development team to get them for testing.
+Alternatively you can provide a link to MongoDB Atlas database and provide a FastMail email credentials in ```.env``` file.
+2. You can also just use the production version of the application available at ```https://coders-camp-organization-app.herokuapp.com/```
 
 For both options be aware that you have to 
 1. Create your own account using ```/api/register``` endpoint
@@ -63,9 +69,12 @@ For both options be aware that you have to
 
 ### Endpoint documentation
 All endpoints with sample requests are described in ```swagger.yml``` file - you can check the documentation by copying the content to e.g. ```https://editor.swagger.io/```
+
 ### Backend functionalities
-##### User management
+Application is meeting the functional requirements defined at the beginning of the project and stored in separate file ```REQUIREMENTS.md```. Below some of the interesting features are described.
+##### User management/Authorization
 Each user has an appropriate role assigned (Admin, Mentor, User) and can only use the endpoints that are approved for his level of permissions
+Users are being authorized using the token sent in each request header that has to match the token from the response sent after login.
 ##### Password management
 Password is being hashed during the registration and is safely stored in the database in hashed form.
 ##### Password reset
