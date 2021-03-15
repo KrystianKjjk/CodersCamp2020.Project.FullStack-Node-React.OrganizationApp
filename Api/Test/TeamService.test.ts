@@ -3,9 +3,12 @@ import TeamRepository from "../Src/Repositories/TeamRepository";
 import TeamService from "../Src/Services/TeamService";
 import TeamModel, { Team } from "../Src/Models/Team";
 
-class TestTeamsRepository extends TeamRepository {
+export class TestTeamsRepository extends TeamRepository {
   private teams: Array<Team> = [];
-  model: any;
+
+  constructor() {
+    super(TeamModel);
+  }
 
   async getAll() {
     return this.teams;
@@ -20,6 +23,11 @@ class TestTeamsRepository extends TeamRepository {
     return teams;
   }
 
+  async getByMentorId(mentorId: mongoose.Types.ObjectId) {
+    const team = this.teams.find((team) => mentorId.equals(team.mentor));
+    return team;
+  }
+  
   async create(team: Team) {
     this.teams = [...this.teams, team];
   }
@@ -97,7 +105,7 @@ describe("Teams Service", () => {
   };
 
   beforeEach(() => {
-    service = new TeamService(new TestTeamsRepository(TeamModel));
+    service = new TeamService(new TestTeamsRepository());
   });
 
   it("persists team model", async () => {

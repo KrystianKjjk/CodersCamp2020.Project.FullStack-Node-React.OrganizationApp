@@ -3,6 +3,7 @@ import { TeamProject } from "../Src/Models/TeamProject";
 import TeamProjectSchema from "../Src/Models/TeamProject";
 import TeamProjectRepository from "../Src/Repositories/TeamProjectRepository";
 import TeamProjectService from "../Src/Services/TeamProjectService";
+import { TestTeamsRepository } from './TeamService.test';
 
 class TestTeamProjectRepository extends TeamProjectRepository {
   private projects: TeamProject[] = [];
@@ -31,6 +32,17 @@ class TestTeamProjectRepository extends TeamProjectRepository {
       this.projects.splice(projectIndex, 1);
     }
   }
+
+  async deleteByIdForTeam(id: mongoose.Types.ObjectId, teamId: mongoose.Types.ObjectId) {
+    const projectIndex = this.projects.findIndex(
+      (project) => project._id === id && project.teamId === teamId
+    );
+    if (projectIndex > -1) {
+      return this.projects.splice(projectIndex, 1);
+    }
+    return null;
+  }
+
   async updateById(
     id: mongoose.Types.ObjectId,
     project: TeamProject & mongoose.Document<TeamProject>
@@ -52,10 +64,19 @@ class TestTeamProjectRepository extends TeamProjectRepository {
 
 describe("TeamProjectService", () => {
   let service: TeamProjectService;
-
+  let teamId = mongoose.Types.ObjectId();
+  let mentorId = mongoose.Types.ObjectId();
   beforeEach(() => {
+    const team1 = {
+      _id: teamId,
+      mentor: mentorId,
+      users: [mongoose.Types.ObjectId()],
+      course: mongoose.Types.ObjectId(),
+    };
     const teamProjectRepository = new TestTeamProjectRepository();
-    service = new TeamProjectService(teamProjectRepository);
+    const teamRepository = new TestTeamsRepository();
+    teamRepository.create(team1);
+    service = new TeamProjectService(teamProjectRepository, teamRepository);
   });
 
   test("should create team project and fetch it", async () => {
@@ -76,8 +97,8 @@ describe("TeamProjectService", () => {
 
   test("should fetch all team projects", async () => {
     const teamProject1 = new TeamProjectSchema({
-      teamId: "1",
-      parentProjectId: "2",
+      teamId: teamId,
+      parentProjectIds: new mongoose.Types.ObjectId(),
       projectName: "FitNotFat",
       projectUrl: "fitnotfat.url",
       description: "description",
@@ -90,24 +111,24 @@ describe("TeamProjectService", () => {
       description: "description",
     });
 
-    await service.createTeamProject(teamProject1);
+    await service.createTeamProjectForMentor(mentorId, teamProject1);
     await service.createTeamProject(teamProject2);
 
-    const fetchedTeamProjects = await service.getTeamProjects();
-    expect(fetchedTeamProjects.length).toBe(2);
+    const fetchedTeamProjects = await service.getTeamProjectsByMentorId(mentorId);
+    expect(fetchedTeamProjects.length).toBe(1);
   });
 
   test("should delete teamProject", async () => {
     const teamProject = new TeamProjectSchema({
-      teamId: "1",
-      parentProjectId: "2",
+      teamId: teamId,
+      parentProjectIds: new mongoose.Types.ObjectId(),
       projectName: "FitNotFat",
       projectUrl: "fitnotfat.url",
       description: "description",
     });
 
     await service.createTeamProject(teamProject);
-    await service.deleteTeamProject(teamProject._id);
+    await service.deleteTeamProjectByIdForMentor(teamProject._id, mentorId);
 
     const fetchedTeamProjects = await service.getTeamProjects();
     expect(fetchedTeamProjects.length).toBe(0);
