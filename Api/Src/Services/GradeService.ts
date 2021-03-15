@@ -29,6 +29,7 @@ export default class GradeService {
     findGrades = async (req: express.Request) => {
         const id = new mongoose.Types.ObjectId(req.params.userID);
         const user = await this.userService.findUserById(id);
+        if(!user) throw new Error("User doesn't exists");
         return user.grades;
     }
     updateGrade = async (req: express.Request) => {

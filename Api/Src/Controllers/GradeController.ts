@@ -35,7 +35,7 @@ export default class GradeController {
     updateGrade = async ( req: express.Request, res: express.Response, next?: express.NextFunction) => {
         try {
             const result = await this.service.updateGrade(req);
-            return result ?
+            return result.nModified ?
                 res.status(201).json(result)
                 : res.status(404).json({ message: "Grade not found" });
         } catch (err) {
