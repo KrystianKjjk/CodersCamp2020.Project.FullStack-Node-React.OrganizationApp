@@ -3,19 +3,20 @@
 ***The app built to help fellow CodersCampers learn happily :)***
 
 ## Table of contents
-  * [About the project](#about-the-project)
-  * [Team behind the project](#team-behind-the-project)
-  * [Project structure](#project-structure)
-  * [Application functionalities](#application-functionalities)
-  * [Backend service description](#backend-service-description)
-    + [How to run the backend](#how-to-run-the-backend)
-    + [Endpoint documentation](#endpoint-documentation)
-    + [Backend functionalities](#backend-functionalities)
-        * [User management](#user-management)
-        * [Password management](#password-management)
-        * [Password reset](#password-reset)
-    + [Used technologies](#used-technologies)
-    + [Api folder content](#api-folder-content)
+- [About the project](#about-the-project)
+- [Team behind the project](#team-behind-the-project)
+- [Project structure](#project-structure)
+- [Application functionalities](#application-functionalities)
+- [Frontend application description](#frontend-application-description)
+- [Backend service description](#backend-service-description)
+  * [How to run the backend](#how-to-run-the-backend)
+  * [Endpoint documentation](#endpoint-documentation)
+  * [Backend functionalities](#backend-functionalities)
+      - [User management/Authorization](#user-management-authorization)
+      - [Password management](#password-management)
+      - [Password reset](#password-reset)
+  * [Used technologies](#used-technologies)
+  * [Api folder content](#api-folder-content)
 
 ## About the project
 This application is a fully standalone solution for handling the needs of Coders Camp organisers, participants and mentors.
