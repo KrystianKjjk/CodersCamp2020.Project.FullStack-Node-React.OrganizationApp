@@ -10,8 +10,7 @@
     "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
     "start": "ts-node ./Api/index.ts",
     "start:dev": "npx nodemon ./Api/index.ts",
-    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts",
-    "build": "parcel build ./Api/index.ts --public-url ./ --target node --bundle-node-modules --cache-dir ./Api/.cache -d ./Api/dist"
+    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts"    
   },
   "repository": {
     "type": "git",
@@ -83,6 +82,7 @@
     "joi": "^17.4.0",
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongoose": "5.11.15",
     "nodemailer": "^6.4.18",
     "nodemailer-express-handlebars": "^4.0.0",
