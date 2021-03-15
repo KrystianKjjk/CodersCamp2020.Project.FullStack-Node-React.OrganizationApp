@@ -7,7 +7,7 @@ export default (validator) => ( req: express.Request, res: express.Response, nex
     }
 
 export const propValid = (validator, prop: string) => ( req: express.Request, res: express.Response, next: express.NextFunction ) => {
-        if (req.body[prop] === undefined) return res.status(400).json( {error: `${prop} prop is not defined in request body`} );
+        if (req.body[prop] === undefined) return res.status(400).json( {error: `Property ${prop} is not defined in request body`} );
         const result = validator(req.body[prop]);
         return !result.error ? next() : res.status(400).json( {error: result.error} );
     }
