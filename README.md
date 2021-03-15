@@ -2,6 +2,22 @@
 # Coders Camp Organization App
 ***The app built to help fellow CodersCampers learn happily :)***
 
+## Table of contents
+- [Coders Camp Organization App](#coders-camp-organization-app)
+  * [About the project](#about-the-project)
+  * [Team behind the project](#team-behind-the-project)
+  * [Project structure](#project-structure)
+  * [Application functionalities](#application-functionalities)
+  * [Backend service description](#backend-service-description)
+    + [How to run the backend](#how-to-run-the-backend)
+    + [Endpoint documentation](#endpoint-documentation)
+    + [Backend functionalities](#backend-functionalities)
+        * [User management](#user-management)
+        * [Password management](#password-management)
+        * [Password reset](#password-reset)
+    + [Used technologies](#used-technologies)
+    + [Api folder content](#api-folder-content)
+
 ## About the project
 This application is a fully standalone solution for handling the needs of Coders Camp organisers, participants and mentors.
 The goal of this project was to build the backend service with all the necessary mechanisms to store the Coders Camp-related information and provide the corresponding frontend application allowing the users to manage their course progress, grades, learning materials etc.
