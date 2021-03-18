@@ -2,15 +2,15 @@
   "name": "coderscamp2020.project.fullstack-node-react.organizationapp",
   "version": "1.0.0",
   "description": "Organization Application - CodersCamp 2021 Node.js project",
-  "main": "./Api/index.ts",
+  "main": "./api/index.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
-    "start": "ts-node ./Api/index.ts",
-    "start:dev": "npx nodemon ./Api/index.ts",
-    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts"    
+    "format": "prettier --write \"api/Src/**/*.js\" \"api/Src/**/*.ts\" \"api/Test/**/*.js\" \"api/Test/**/*.ts\"",
+    "start": "ts-node ./api/index.ts",
+    "start:dev": "npx nodemon ./api/index.ts",
+    "start:mail": "npx nodemon ./api/UnitImplementations/MailingServiceTest.ts"    
   },
   "repository": {
     "type": "git",
@@ -63,7 +63,7 @@
     "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
     "coverageDirectory": "../Coverage",
     "collectCoverageFrom": [
-      "./Api/Src/Services/**"
+      "./api/Src/Services/**"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
