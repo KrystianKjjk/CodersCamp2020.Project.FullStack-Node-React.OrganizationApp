@@ -43,7 +43,7 @@ jobs:
   deploy-frontend-on-github-pages:
     name: "Deploy app to GitHub Pages from main branch source code"
     if: github.ref == 'refs/heads/master'
-    needs: build
+    needs: build-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
