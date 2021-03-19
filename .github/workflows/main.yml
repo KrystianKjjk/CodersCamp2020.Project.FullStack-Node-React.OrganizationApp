@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-backend:
-    name: "Build CodersCamp Organization App backend"
+    name: "Build CodersCamp Organization App Backend"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
   build-frontend:
-    name: "Build CodersCamp Organization App frontend"
+    name: "Build CodersCamp Organization App Frontend"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
         name: Upload build as artifact
         if: always()
         with:
-          name: organization-app-dist
+          name: frontend-dist
           path: ./frontend/build
   deploy-frontend-on-github-pages:
     name: "Deploy app to GitHub Pages from main branch source code"
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: organization-app-dist
+          name: frontend-dist
           path: ./frontend/build
       - name: Deploy app as GitHub Pages
         uses: peaceiris/actions-gh-pages@v3.7.0-6
