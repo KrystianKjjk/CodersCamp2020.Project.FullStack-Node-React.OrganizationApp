@@ -11,29 +11,35 @@ module.exports = plop => {
             // Prompt to display on command line
             message: 'What is your component name?'
         },
+        {
+          // Which allows your plop file to be placed in the correct location
+          type: "input",
+          name: "destinationpath",
+          message: "What is destination path?"
+      },
       ],
         actions: [
         {
           // Add a new file
           type: 'add',
           // Path for the new file
-          path: './{{pascalCase name}}/{{pascalCase name}}.tsx',
+          path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.tsx',
           // Handlebars template used to generate content of new file
           templateFile: 'src/plop-templates/Component/Component.hbs',
         },
         {
             type: 'add',
-            path: './{{pascalCase name}}/{{pascalCase name}}.test.ts',
+            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.test.ts',
             templateFile: 'src/plop-templates/Component/Component.test.hbs',
         },
         {
             type: 'add',
-            path: './{{pascalCase name}}/index.ts',
+            path: '{{destinationpath}}/{{pascalCase name}}/index.ts',
             templateFile: 'src/plop-templates/Component/index.hbs',
         },
         {
             type: 'add',
-            path: './{{pascalCase name}}/{{pascalCase name}}.css',
+            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.css',
             templateFile: 'src/plop-templates/Component/Component.css.hbs',
         },
     ],
