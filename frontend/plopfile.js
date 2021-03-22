@@ -4,18 +4,19 @@ module.exports = plop => {
         // User input prompts provided as arguments to the template
         prompts: [
         {
-            // Raw text input
-            type: 'input',
+          // Raw text input
+          type: 'input',
             // Variable name for this input
-            name: 'name',
+          name: 'name',
             // Prompt to display on command line
-            message: 'What is your component name?'
+          message: 'What is your component name?'
         },
         {
           // Which allows your plop file to be placed in the correct location
           type: "input",
           name: "destinationpath",
-          message: "What is destination path?"
+          message: "What is destination path?",
+          default: "src/components"
       },
       ],
         actions: [
@@ -39,8 +40,8 @@ module.exports = plop => {
         },
         {
             type: 'add',
-            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.css',
-            templateFile: 'src/plop-templates/Component/Component.css.hbs',
+            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.module.css',
+            templateFile: 'src/plop-templates/Component/Component.module.css.hbs',
         },
     ],
   });
