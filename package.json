@@ -2,15 +2,15 @@
   "name": "coderscamp2020.project.fullstack-node-react.organizationapp",
   "version": "1.0.0",
   "description": "Organization Application - CodersCamp 2021 Node.js project",
-  "main": "./Api/index.ts",
+  "main": "./api/index.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "format": "prettier --write \"Api/Src/**/*.js\" \"Api/Src/**/*.ts\" \"Api/Test/**/*.js\" \"Api/Test/**/*.ts\"",
-    "start": "ts-node ./Api/index.ts",
-    "start:dev": "npx nodemon ./Api/index.ts",
-    "start:mail": "npx nodemon ./Api/UnitImplementations/MailingServiceTest.ts"    
+    "format": "prettier --write \"api/Src/**/*.js\" \"api/Src/**/*.ts\" \"api/Test/**/*.js\" \"api/Test/**/*.ts\"",
+    "start": "ts-node ./api/index.ts",
+    "start:dev": "npx nodemon ./api/index.ts",
+    "start:mail": "npx nodemon ./api/UnitImplementations/MailingServiceTest.ts"
   },
   "repository": {
     "type": "git",
@@ -41,18 +41,17 @@
     "@testing-library/dom": "^7.29.4",
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.11",
-    "@types/jest": "^26.0.20",
+    "@types/jest": "^26.0.21",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.31",
     "@types/nodemailer": "^6.4.0",
-    "jest": "^26.0.0",
-    "jest-transform-stub": "^2.0.0",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "parcel": "^1.12.4",
     "prettier": "^2.2.1",
     "sass": "^1.32.5",
-    "ts-jest": "^26.4.4"
+    "ts-jest": "^26.5.4"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -63,7 +62,7 @@
     "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
     "coverageDirectory": "../Coverage",
     "collectCoverageFrom": [
-      "./Api/Src/Services/**"
+      "./api/Src/Services/**"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
