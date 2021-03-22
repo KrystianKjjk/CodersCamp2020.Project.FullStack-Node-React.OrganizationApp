@@ -1,8 +1,8 @@
 module.exports = plop => {
-    plop.setGenerator('component', {
-        description: 'Create a component',
-        // User input prompts provided as arguments to the template
-        prompts: [
+  plop.setGenerator('component', {
+    description: 'Create a component',
+    // User input prompts provided as arguments to the template
+      prompts: [
         {
           // Raw text input
           type: 'input',
@@ -17,9 +17,9 @@ module.exports = plop => {
           name: "destinationpath",
           message: "What is destination path?",
           default: "src/components"
-      },
+        },
       ],
-        actions: [
+      actions: [
         {
           // Add a new file
           type: 'add',
@@ -47,7 +47,12 @@ module.exports = plop => {
           type: 'add',
           path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}Slice.ts',
           templateFile: 'src/plop-templates/Component/ComponentSlice.hbs',
-      },
-    ],
+        },
+        {
+          type: 'add',
+          path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.stories.tsx',
+          templateFile: 'src/plop-templates/Component/Component.stories.hbs',
+        },
+      ],
   });
 };
