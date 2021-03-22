@@ -1,0 +1,25 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppThunk, RootState } from '../../app/store';
+
+interface {{pascalCase name}}State {
+  
+}
+
+const initialState: {{pascalCase name}}State = {
+  
+};
+
+export const {{camelCase name}}Slice = createSlice({
+  name: '{{camelCase name}}',
+  initialState,
+  reducers: {
+
+  },
+});
+
+export const { } = {{camelCase name}}Slice.actions;
+
+// if you want, add selectors here, change the one below, remember to register reducer in store.ts
+// export const select{{pascalCase name}} = (state: RootState) => state.{{camelCase name}}.value;
+
+export default {{camelCase name}}Slice.reducer;
