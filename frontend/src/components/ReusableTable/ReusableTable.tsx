@@ -2,21 +2,30 @@ import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import styles from './ReusableTable.module.css';
 
-export interface ReusableTableProps<RowType=any> {
+interface Column {
+  field: string;
+  headerName?: string;
+  width?: number;
+  type?: string;
+}
+
+export interface ReusableTableProps {
   name: string;
-  getEndpoint: string;
-  xAuthToken: string;
-  rows?: RowType[];
-  columns?: {field: string; headerName: string; width: number; type?: string;}[];
+  getEndpoint?: string;
+  xAuthToken?: string;
 }
 
 const ReusableTable: React.FC< ReusableTableProps > = props => {
+  const columns: Column[] = [{field: 'id', width: 100}, {field: 'name', width: 100}];
+  const rows = [{id: 1, name: 'Name1'}, {id: 2, name: 'Name2'}];
   return (
-    <div aria-label={'Table - ' + props.name}>
+    <div className={styles.container} aria-label={'Table - ' + props.name}>
       ReusableTable
       <DataGrid
-        rows={props.rows}
-        columns={props.columns}
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        checkboxSelection
       />
     </div>
   );
