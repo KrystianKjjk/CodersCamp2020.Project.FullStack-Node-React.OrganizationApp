@@ -9,7 +9,7 @@ export default {
 
 const Template: Story<ReusableTableProps> = (args) => <ReusableTable {...args} />;
 
-export const FirstInput = Template.bind({});
-FirstInput.args = {
-  label: 'Write something: ',
+export const SampleReusableTable = Template.bind({});
+SampleReusableTable.args = {
+  name: 'My Table',
 };
