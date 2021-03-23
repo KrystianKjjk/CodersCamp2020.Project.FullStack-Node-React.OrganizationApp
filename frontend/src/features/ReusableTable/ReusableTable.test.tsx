@@ -5,12 +5,16 @@ import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import ReusableTable from './ReusableTable';
 
+const tableName = 'Users';
+
 describe('ReusableTable', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <ReusableTable />
+            <ReusableTable name={tableName}/>
          </Provider>
       );
+      const table = screen.getByLabelText(`Table - ${tableName}`);
+      expect(table).toMatchSnapshot();
    });
 });
