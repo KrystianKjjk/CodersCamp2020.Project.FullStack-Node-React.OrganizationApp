@@ -3,7 +3,147 @@
 exports[`ReusableTable renders without error 1`] = `
 <div
   aria-label="Table - Users"
+  class="container"
 >
-  ReusableTable
+  Users
+  <div
+    aria-colcount="0"
+    aria-label="grid"
+    aria-multiselectable="false"
+    aria-rowcount="2"
+    class="MuiDataGrid-root MuiDataGrid-root"
+    role="grid"
+    tabindex="0"
+  >
+    <div />
+    <div
+      class="MuiDataGrid-main"
+    >
+      <div
+        class="MuiDataGrid-columnsContainer"
+        style="min-height: 56px; max-height: 56px; line-height: 56px;"
+      >
+        <div
+          aria-rowindex="1"
+          class="MuiDataGrid-colCellWrapper "
+          role="row"
+          style="transform: translate3d(-0px, 0, 0);"
+        />
+      </div>
+      <div
+        style="overflow: visible; height: 0px; width: 0px;"
+      >
+        <div
+          style="width: 0px; height: 0px;"
+        >
+          <div
+            class="MuiDataGrid-window"
+            style="top: 56px; overflow-y: auto;"
+          >
+            <div
+              class="MuiDataGrid-dataContainer data-container"
+            >
+              <div
+                class="MuiDataGrid-viewport"
+                style="min-width: 0; max-width: 0; min-height: 0; max-height: 0;"
+              >
+                <div
+                  class="rendering-zone"
+                  style="max-height: 0; width: 0px; pointer-events: none; transform: translate3d(-0px, -0px, 0);"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="Mui-resizeTriggers"
+      >
+        <div
+          class="expand-trigger"
+        >
+          <div
+            style="width: 1px; height: 1px;"
+          />
+        </div>
+        <div
+          class="contract-trigger"
+        />
+      </div>
+    </div>
+    <div>
+      <div
+        class="MuiDataGrid-footer"
+      >
+        <div />
+        <div
+          class="MuiTablePagination-root"
+        >
+          <div
+            class="MuiToolbar-root MuiToolbar-regular MuiTablePagination-toolbar MuiToolbar-gutters"
+          >
+            <div
+              class="MuiTablePagination-spacer"
+            />
+            <p
+              class="MuiTypography-root MuiTablePagination-caption makeStyles-caption-2 MuiTypography-body2 MuiTypography-colorInherit"
+            >
+              1-2 of 2
+            </p>
+            <div
+              class="MuiTablePagination-actions"
+            >
+              <button
+                aria-label="Previous page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit Mui-disabled Mui-disabled"
+                disabled=""
+                tabindex="-1"
+                title="Previous page"
+                type="button"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
+                    />
+                  </svg>
+                </span>
+              </button>
+              <button
+                aria-label="Next page"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit Mui-disabled Mui-disabled"
+                disabled=""
+                tabindex="-1"
+                title="Next page"
+                type="button"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;

@@ -12,4 +12,5 @@ const Template: Story<ReusableTableProps> = (args) => <ReusableTable {...args} /
 export const SampleReusableTable = Template.bind({});
 SampleReusableTable.args = {
   name: 'My Table',
+  columns: [{field: 'id', width: 100}, {field: 'name', width: 100}],
 };

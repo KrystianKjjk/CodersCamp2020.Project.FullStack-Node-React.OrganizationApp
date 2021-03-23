@@ -17,4 +17,11 @@ describe('ReusableTable', () => {
       const table = screen.getByLabelText(`Table - ${tableName}`);
       expect(table).toMatchSnapshot();
    });
+
+   it('test table initialization', () => {
+      const state = store.getState();
+      expect(state.tables[tableName]).toEqual({
+         rows: [],
+       });
+   })
 });

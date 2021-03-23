@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import styles from './ReusableTable.module.css';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { 
+  initTable,
+  selectTables
+} from './ReusableTableSlice';
 
 interface Column {
   field: string;
@@ -11,16 +16,23 @@ interface Column {
 
 export interface ReusableTableProps {
   name: string;
+  columns?: Column[];
   getEndpoint?: string;
   xAuthToken?: string;
 }
 
-const ReusableTable: React.FC< ReusableTableProps > = props => {
-  const columns: Column[] = [{field: 'id', width: 100}, {field: 'name', width: 100}];
+const ReusableTable: React.FC< ReusableTableProps > = ({name, columns = []}) => {
   const rows = [{id: 1, name: 'Name1'}, {id: 2, name: 'Name2'}];
+  const tables = useAppSelector(selectTables);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(initTable({ name }));
+  }, []);
+
   return (
-    <div className={styles.container} aria-label={'Table - ' + props.name}>
-      ReusableTable
+    <div className={styles.container} aria-label={'Table - ' + name}>
+      {name}
       <DataGrid
         rows={rows}
         columns={columns}
