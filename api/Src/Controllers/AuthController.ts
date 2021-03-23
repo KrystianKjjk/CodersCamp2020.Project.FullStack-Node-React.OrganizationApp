@@ -50,7 +50,7 @@ export default class AuthController {
             const result = await this.service.checkPassword(req.body.password, user);
             if (!result) return res.status(401).json({message: 'Invalid email or password.'});
             const token = this.service.generateToken(user);
-            res.header('x-auth-token', token).status(200).json({message: 'Logged in correctly.'});
+            res.header('x-auth-token', token).status(200).json({_id: user._id, type: user.type});
         } catch {
             return res.status(500).json({message: 'Internal server error.'});
         }
