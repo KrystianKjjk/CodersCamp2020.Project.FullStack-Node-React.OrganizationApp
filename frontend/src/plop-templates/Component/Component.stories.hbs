@@ -9,7 +9,7 @@ export default {
 
 const Template: Story<{{pascalCase name}}Props> = (args) => <{{pascalCase name}} {...args} />;
 
-export const FirstInput = Template.bind({});
-FirstInput.args = {
-  label: 'Write something: ',
+export const Sample{{pascalCase name}} = Template.bind({});
+Sample{{pascalCase name}}.args = {
+  name: '{{pascalCase name}}',
 };

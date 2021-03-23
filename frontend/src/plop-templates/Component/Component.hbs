@@ -2,13 +2,13 @@ import React from 'react';
 import styles from './{{pascalCase name}}.module.css';
 
 export interface {{pascalCase name}}Props {
-
+  name: string;
 }
 
 const {{pascalCase name}}: React.FC< {{pascalCase name}}Props > = props => {
   return (
     <div>
-      {{pascalCase name}}
+      {props.name}
     </div>
   );
 };
