@@ -4,6 +4,8 @@ import ReusableTable , { ReusableTableProps } from './ReusableTable';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
 
+import getTodos from '../../api/getTodos';
+
 export default {
   title: 'ReusableTable component',
   component: ReusableTable,
@@ -18,5 +20,6 @@ const Template: Story<ReusableTableProps> = (args) => (
 export const SampleReusableTable = Template.bind({});
 SampleReusableTable.args = {
   name: 'My Table',
-  columns: [{field: 'id', width: 100}, {field: 'name', width: 100}],
+  columns: [{field: 'id', width: 100}, {field: 'title', width: 400}],
+  getData: getTodos,
 };

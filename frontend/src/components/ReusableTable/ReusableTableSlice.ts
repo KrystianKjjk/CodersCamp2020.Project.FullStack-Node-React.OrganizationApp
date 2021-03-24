@@ -3,6 +3,7 @@ import { AppThunk, RootState } from '../../app/store';
 
 interface ReusableTableState {
   [name: string]: {
+    loading: 'pending' | 'idle';
     rows: any[];
   }
 }
@@ -17,19 +18,30 @@ export const reusableTableSlice = createSlice({
   reducers: {
     initTable: (state, { payload }) => {
       state[payload.name] = {
+        loading: 'pending',
         rows: [],
+      };
+    },
+    dataLoading(state, { payload }) {
+      state[payload.name].loading = 'pending';
+    },
+    dataReceived(state, { payload }) {
+      if (state[payload.name].loading === 'pending') {
+        state[payload.name].rows = payload.data;
+        state[payload.name].loading = 'idle';
       }
     },
   },
 });
 
-export const { initTable } = reusableTableSlice.actions;
+export const { initTable, dataLoading, dataReceived } = reusableTableSlice.actions;
 
-// export const incrementAsync = (amount: number): AppThunk => dispatch => {
-//   setTimeout(() => {
-//     dispatch(incrementByAmount(amount));
-//   }, 1000);
-// };
+export const fetchData = (name: string, getData: () => Promise<any[]>): AppThunk => async dispatch => {
+  dispatch(dataLoading({ name }));
+  const data = await getData();
+  dispatch(dataReceived({ name, data }));
+  console.log(data);
+};
 
 // if you want, add selectors here, change the one below, remember to register reducer in store.ts
 export const selectTables = (state: RootState) => state.tables;
