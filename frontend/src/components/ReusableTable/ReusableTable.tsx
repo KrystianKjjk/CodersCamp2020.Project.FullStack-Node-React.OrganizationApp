@@ -13,29 +13,26 @@ interface Column {
   headerName?: string;
   width?: number;
   type?: string;
+  valueGetter?: (params: {getValue: (fieldName: string) => any}) => any;
 }
 
 export interface ReusableTableProps {
   name: string;
   getData?: () => Promise<any[]>;
   columns?: Column[];
-  getEndpoint?: string;
-  xAuthToken?: string;
 }
 
 const ReusableTable: React.FC< ReusableTableProps > = ({
         name, 
         columns = [], 
         getData = () => Promise.resolve([]) }) => {
-  // const rows = [{id: 1, name: 'Name1'}, {id: 2, name: 'Name2'}];
+  
   const tables = useAppSelector(selectTables);
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(initTable({ name }));
     dispatch(fetchData(name, getData));
   }, []);
-
   return (
     <>
       { (tables[name] && tables[name].loading === 'idle') ? 

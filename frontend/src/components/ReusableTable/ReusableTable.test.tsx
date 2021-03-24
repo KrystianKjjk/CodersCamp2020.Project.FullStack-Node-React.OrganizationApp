@@ -1,10 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import ReusableTable from './ReusableTable';
+
 
 const tableName = 'Users';
 const users = [{id: 1, name: 'user1'}, {id: 2, name: 'user2'}];
@@ -28,12 +27,9 @@ describe('ReusableTable', () => {
             <ReusableTable name={tableName} getData={getData} columns={columns}/>
          </Provider>
       );
-
       const table = await screen.findByLabelText(`Table - ${tableName}`);
       const state = store.getState();
       expect(table).toBeInTheDocument();
-      expect(table).toMatchSnapshot();
-
       expect(getData).toBeCalledTimes(1);
       expect(state.tables[tableName].rows).toEqual(users);
    });

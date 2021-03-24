@@ -8,9 +8,7 @@ interface ReusableTableState {
   }
 }
 
-const initialState: ReusableTableState = {
-  
-};
+const initialState: ReusableTableState = { };
 
 export const reusableTableSlice = createSlice({
   name: 'reusableTable',
@@ -25,10 +23,11 @@ export const reusableTableSlice = createSlice({
     dataLoading(state, action: PayloadAction<{name: string}>) {
       state[action.payload.name].loading = 'pending';
     },
-    dataReceived(state, { payload }) {
-      if (state[payload.name].loading === 'pending') {
-        state[payload.name].rows = payload.data;
-        state[payload.name].loading = 'idle';
+    dataReceived(state, action: PayloadAction<{name: string, data: any[]}>) {
+      const { name, data } = action.payload;
+      if (state[name].loading === 'pending') {
+        state[name].rows = data;
+        state[name].loading = 'idle';
       }
     },
   },
