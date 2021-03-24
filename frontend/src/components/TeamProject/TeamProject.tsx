@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from './TeamProject.module.css';
+import styles from './TeamProject.module.css'
+import Button from '@material-ui/core/Button';
 
 export interface TeamProjectProps {
   _id: string,
@@ -11,15 +12,20 @@ export interface TeamProjectProps {
 }
 
 const TeamProject: React.FC< TeamProjectProps > = props => {
+  
+
+
   return (
-    <div className="team-project">
+    <div className={styles.teamProjectContainer}>
       <div className="team-project-header">
         <span>HEADER</span>
-        <button>delete</button>
-        <button>edit</button>
+        <Button className={styles.button}>Edit</Button>
+        <Button className="button">Delete</Button>
       </div>
+
+      <div className={styles.teamDetailsContainer}>
       <div className="attribute-names-container">
-        <div>Name:</div>
+        <div >Name:</div>
         <div>Reference project:</div>
         <div>Team mentor:</div>
         <div>Section name:</div>
@@ -34,6 +40,8 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <div>{props.projectUrl}</div>
         <div>{props.description}</div>
       </div>
+      </div>
+      
 
     </div>
   );

@@ -1,0 +1,16 @@
+.teamProjectContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.teamDetailsContainer{
+    display: flex;
+}
+
+.button {
+    background-color:red;
+}
+
+.kotlet{
+    display:none;
+}
