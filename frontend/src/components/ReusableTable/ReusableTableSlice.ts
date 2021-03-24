@@ -39,7 +39,6 @@ export const fetchData = (name: string, getData: () => Promise<any[]>): AppThunk
   dispatch(dataLoading({ name }));
   const data = await getData();
   dispatch(dataReceived({ name, data }));
-  console.log(data);
 };
 
 // if you want, add selectors here, change the one below, remember to register reducer in store.ts
