@@ -1,16 +1,51 @@
 .teamProjectContainer {
     display: flex;
     flex-direction: column;
+    border: 1px solid #E5E5E5;
 }
 
-.teamDetailsContainer{
+.teamProjectHeader {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    border: 1px solid #E5E5E5;
+    padding: 10px;
 }
 
-.button {
-    background-color:red;
+.teamProjectHeaderName {
+    width: 100%;
+    margin-left: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 5px 0;
 }
 
-.kotlet{
-    display:none;
+.buttonDelete {
+    background-color: #FF384A;
+    margin: 0 10px;
+    width: 100px;
+    color: white;
+}
+
+.buttonEdit {
+    background-color: #2196F3;
+    margin: 0 10px;
+    width: 100px;
+    color: white;
+}
+
+.teamProjectDetailsContainer{
+    display: flex;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.attributeNamesContainer {
+    width: 25%;
+    font-weight: bold;
+}
+
+.attributeValuesContainer {
+    width: 75%;
+
 }
