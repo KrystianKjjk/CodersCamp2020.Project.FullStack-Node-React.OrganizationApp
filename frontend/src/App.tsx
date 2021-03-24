@@ -1,14 +1,12 @@
 import React from 'react';
 import Counter from './components/counter/Counter';
 import './App.css';
-import Menu from './components/Menu';
-import Header from './components/Header';
+import MainView from './components/MainView';
 
 function App() {
   return (
     <div className="App">
-      <Header/>
-      <Menu/>
+      <MainView/>
       {/* <header className="App-header">
         <Counter />
         <p>

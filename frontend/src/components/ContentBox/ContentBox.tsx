@@ -7,9 +7,7 @@ export interface ContentBoxProps {
 
 const ContentBox: React.FC< ContentBoxProps > = props => {
   return (
-    <div>
-      ContentBox
-    </div>
+      <div className={styles.content}>Content</div>
   );
 };
 

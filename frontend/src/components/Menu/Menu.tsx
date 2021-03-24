@@ -9,45 +9,41 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
-
+import PeopleIcon from "@material-ui/icons/People";
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
   return (
     <Router>
       <div className={styles.menu}>
-        <ul>
-          <li>
-            <Link to="/users">
-              <i></i><span>Users</span>
-            </Link>
-          </li>
-          
-          <Link to="/courses">
-            <li>Courses</li>
-          </Link>
-          <Link to="/sections">
-            <li>Sections</li>
-          </Link>
-          <Link to="/gradesheets">
-            <li>Grade sheets</li>
-          </Link>
-          <Link to="/projects">
-            <li>Projects</li>
-          </Link>
-          <Link to="/teamprojects">
-            <li>Team projects</li>
-          </Link>
-          <Link to="/teams">
-            <li>Teams</li>
-          </Link>
-          <Link to="/myprofile">
-            <li>My profile</li>
-          </Link>
-          <Link to="/">
-            <li>Home page</li>
-          </Link>
-        </ul>
+        <Link to="/users">
+          <PeopleIcon></PeopleIcon>
+          <span>Users</span>
+        </Link>
+        <Link to="/courses">
+          <span>Courses</span>
+        </Link>
+        <Link to="/sections">
+          <span>Sections</span>
+        </Link>
+        <Link to="/gradesheets">
+          <span>Grade sheets</span>
+        </Link>
+        <Link to="/projects">
+          <span>Projects</span>
+        </Link>
+        <Link to="/teamprojects">
+          <span>Team projects</span>
+        </Link>
+        <Link to="/teams">
+          <span>Teams</span>
+        </Link>
+        <Link to="/myprofile">
+          <span>My profile</span>
+        </Link>
+        <Link to="/">
+          <span>Home page</span>
+        </Link>
       </div>
     </Router>
   );

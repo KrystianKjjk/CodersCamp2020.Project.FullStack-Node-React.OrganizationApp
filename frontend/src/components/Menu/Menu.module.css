@@ -1,25 +1,14 @@
 .menu{
-    width: 20vw;
-    height: 100vh;
+    width: 20%;
+    height: 100%;
     margin: 0 0;
     text-align: left;
-    border: 1px solid #E5E5E5;
+    border-right: 1px solid #666666;
     background-color: #292929;
-}
-
-.menu li{
-    list-style: none;
-    padding-bottom: 10px;
-    color: white;
 }
 
 .menu a {
     text-decoration: none;
+    color: #ffffff;
+    display: block;
 }
-
-
-
-
-/* .li{
-    text-decoration: none;
-} */
