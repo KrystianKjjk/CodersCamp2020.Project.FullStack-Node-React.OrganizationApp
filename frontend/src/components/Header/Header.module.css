@@ -1,0 +1,16 @@
+.header {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #292929;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo{
+    margin-left: 10px;
+}
+
+.logout{
+    margin-right: 10px;
+}
