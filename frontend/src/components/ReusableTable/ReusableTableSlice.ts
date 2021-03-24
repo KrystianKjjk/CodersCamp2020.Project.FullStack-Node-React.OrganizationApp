@@ -22,8 +22,8 @@ export const reusableTableSlice = createSlice({
         rows: [],
       };
     },
-    dataLoading(state, { payload }) {
-      state[payload.name].loading = 'pending';
+    dataLoading(state, action: PayloadAction<{name: string}>) {
+      state[action.payload.name].loading = 'pending';
     },
     dataReceived(state, { payload }) {
       if (state[payload.name].loading === 'pending') {
