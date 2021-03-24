@@ -2,10 +2,11 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import StyledTextField from '../StyledTextField'
 
 export interface ResetPasswordProps {
 
@@ -26,28 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
   submit: {
     margin: theme.spacing(3, 0, 2),
-  },
-
-  body: {
-    backgroundColor: '#292929',
-  },
-
-  cssLabel: {
-    color : '#FFF !important'
-  },
-
-  cssFocused: { },
-
-  notchedOutline: {
-    borderWidth: '1px',
-    borderColor: '#696969'
-  },
-
-  outlinedInput: {
-    '&$cssFocused $notchedOutline': {
-      border: '1px solid #FFF'
-    },
-  },
+  }
 }));
 
 export default function ResetPassword() {
@@ -61,29 +41,13 @@ export default function ResetPassword() {
         Reset Password
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
+          <StyledTextField
             margin="normal"
-            required
-            fullWidth
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
             autoFocus
-            InputLabelProps={{
-              classes: {
-                root: classes.cssLabel,
-                focused: classes.cssLabel
-              },
-            }}
-            InputProps={{
-              classes: {
-                root: classes.outlinedInput,
-                focused: classes.cssFocused,
-                notchedOutline: classes.notchedOutline
-              },
-            }}
           />
          
           <Button
