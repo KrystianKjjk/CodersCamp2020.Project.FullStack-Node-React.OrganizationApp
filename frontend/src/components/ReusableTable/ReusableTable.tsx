@@ -13,7 +13,10 @@ interface Column {
   headerName?: string;
   width?: number;
   type?: string;
+  description?: string;
+  sortable?: boolean;
   valueGetter?: (params: {getValue: (fieldName: string) => any}) => any;
+  sortComparator?: (v1: any, v2: any, cellParams1: any, cellParams2: any) => any;
 }
 
 export interface ReusableTableProps {
