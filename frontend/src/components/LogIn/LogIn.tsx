@@ -1,7 +1,7 @@
 import React from 'react';
+
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import StyledTextField from '../StyledTextField'
 
 export interface LogInProps {
 
@@ -31,26 +33,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 
-  body: {
-    backgroundColor: '#292929',
-  },
-
-  cssLabel: {
-    color : '#FFF !important'
-  },
-
-  cssFocused: { },
-
-  notchedOutline: {
-    borderWidth: '1px',
-    borderColor: '#696969'
-  },
-
-  outlinedInput: {
-    '&$cssFocused $notchedOutline': {
-      border: '1px solid #FFF'
-    },
-  },
 }));
 
 const GreenCheckbox = withStyles({
@@ -74,53 +56,21 @@ export default function SignIn() {
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
+          <StyledTextField
             margin="normal"
-            required
-            fullWidth
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
             autoFocus
-            InputLabelProps={{
-              classes: {
-                root: classes.cssLabel,
-                focused: classes.cssLabel
-              },
-            }}
-            InputProps={{
-              classes: {
-                root: classes.outlinedInput,
-                focused: classes.cssFocused,
-                notchedOutline: classes.notchedOutline
-              },
-            }}
           />
-          <TextField
-            variant="outlined"
+          <StyledTextField
             margin="normal"
-            required
-            fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
-            InputLabelProps={{
-              classes: {
-                root: classes.cssLabel,
-                focused: classes.cssLabel
-              },
-            }}
-            InputProps={{
-              classes: {
-                root: classes.outlinedInput,
-                focused: classes.cssFocused,
-                notchedOutline: classes.notchedOutline
-              },
-            }}
           />
           <FormControlLabel
             control={<GreenCheckbox value="remember" color="primary" />}
