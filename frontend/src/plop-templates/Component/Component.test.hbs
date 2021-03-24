@@ -1,8 +1,16 @@
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { store } from '../../app/store';
 import {{pascalCase name}} from './{{pascalCase name}}';
 
 describe('{{pascalCase name}}', () => {
    it('renders without error', () => {
-
+      render(
+         <Provider store={store}>
+            <{{pascalCase name}} />
+         </Provider>
+      );
    });
 });
