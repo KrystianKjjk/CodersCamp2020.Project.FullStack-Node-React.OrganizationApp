@@ -4,6 +4,9 @@ export default createMuiTheme({
     palette: {
         background: {
             default: '#292929',
+        },
+        text: {
+            primary: '#FFF',
         }
     },
 });
