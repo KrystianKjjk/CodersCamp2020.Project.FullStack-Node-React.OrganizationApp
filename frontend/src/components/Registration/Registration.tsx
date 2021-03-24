@@ -2,16 +2,17 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import StyledTextField from '../StyledTextField'
+
 
 export interface RegistrationProps {
-
+  
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -27,24 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-  },
-
-  cssLabel: {
-    color : '#FFF !important'
-  },
-
-  cssFocused: { },
-
-  notchedOutline: {
-    borderWidth: '1px',
-    borderColor: '#696969'
-  },
-
-  outlinedInput: {
-    '&$cssFocused $notchedOutline': {
-      border: '1px solid #FFF'
-    },
-  },
+  }
 }));
 
 export default function SignUp() {
@@ -61,80 +45,32 @@ export default function SignUp() {
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <StyledTextField
+                autoFocus
                 autoComplete="fname"
                 name="firstName"
-                variant="outlined"
-                required
-                fullWidth
                 id="firstName"
                 label="First Name"
-                autoFocus
-                InputLabelProps={{
-                  classes: {
-                    root: classes.cssLabel,
-                    focused: classes.cssLabel
-                  },
-                }}
-                InputProps={{
-                  classes: {
-                    root: classes.outlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline
-                  },
-                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
+              <StyledTextField
                 id="lastName"
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
-                InputLabelProps={{
-                  classes: {
-                    root: classes.cssLabel,
-                    focused: classes.cssLabel
-                  },
-                }}
-                InputProps={{
-                  classes: {
-                    root: classes.outlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline
-                  },
-                }}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
+              <StyledTextField
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                InputLabelProps={{
-                  classes: {
-                    root: classes.cssLabel,
-                    focused: classes.cssLabel
-                  },
-                }}
-                InputProps={{
-                  classes: {
-                    root: classes.outlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline
-                  },
-                }}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <StyledTextField
                 variant="outlined"
                 required
                 fullWidth
@@ -143,44 +79,15 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                InputLabelProps={{
-                  classes: {
-                    root: classes.cssLabel,
-                    focused: classes.cssLabel
-                  },
-                }}
-                InputProps={{
-                  classes: {
-                    root: classes.outlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline
-                  },
-                }}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
+              <StyledTextField
                 name="passwordconfirm"
                 label="Confirm Password"
                 type="passwordconfirm"
                 id="passwordconfirm"
                 autoComplete="current-password"
-                InputLabelProps={{
-                  classes: {
-                    root: classes.cssLabel,
-                    focused: classes.cssLabel
-                  },
-                }}
-                InputProps={{
-                  classes: {
-                    root: classes.outlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline
-                  },
-                }}
               />
             </Grid>
           </Grid>
