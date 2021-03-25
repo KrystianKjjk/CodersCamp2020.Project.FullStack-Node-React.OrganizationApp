@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+body {
+  background: #292929;
+}
+
+.button {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  margin: 0 0.5rem;
+  padding: 0.7rem 1.5rem;
+  color: #fff;
+  border: none;
+  border-radius: 0.3rem;
+  /*
+  &__statusRed {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: 0.5rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }
+  &__statusBlue {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: 0.5rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }*/
+}
+.button__red {
+  background: #ff384a;
+}
+.button__blue {
+  background: #1a90ff;
+}
+.button__statusGreen {
+  background: #1c1c1c;
+  border: rgba(26, 144, 255, 0.75) 1px solid;
+  color: #1a90ff;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  margin: 0 0.5rem;
+}
+
+.container {
+  background: #1c1c1c;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header span {
+  font-weight: 500;
+}
+.container__body {
+  display: flex;
+}
+
+.list {
+  list-style: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+  text-align: left;
+  margin: 2rem 5rem 2rem 0;
+}
+.list__values {
+  font-weight: 300;
+}
+.list li {
+  margin: 1.3rem 0;
+}
+.list li input {
+  padding: 0.7rem 1rem;
+  width: 15rem;
+  background: #1c1c1c;
+  color: #fff;
+  border: rgba(255, 255, 255, 0.87) 1px solid;
+  border-radius: 0.4rem;
+}
+.list li input:focus {
+  outline: none;
+  border: #fff 1px solid;
+}
+
+.gradeContainer {
+  background: #1c1c1c;
+  width: 31%;
+  margin: 1rem auto;
+  padding-bottom: 1rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.gradeContainer__header {
+  padding: 1rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+  text-align: center;
+}
+.gradeContainer__header span {
+  font-weight: 500;
+}
+.gradeContainer__body {
+  display: flex;
+}
+
+/*# sourceMappingURL=ManageUser.module.css.map */

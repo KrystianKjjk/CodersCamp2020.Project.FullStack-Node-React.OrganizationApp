@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
+
+$color-primary: #292929;
+$color-secondary: #1c1c1c;
+$color-secondary-light: #fff;
+$color-ternary-light: #1a90ff;
+$color-ternary-warning: #ff384a;
+$color-ternary-main: #666666;
+$color-status-green: #3cc13b;
+
+body {
+  background: $color-primary;
+}
+.button {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  margin: 0 .5rem;
+  padding: .7rem 1.5rem;
+  color: $color-secondary-light;
+  border: none;
+  border-radius: .3rem;
+
+  &__red {
+    background: $color-ternary-warning;
+  }
+
+  &__blue {
+    background: $color-ternary-light;
+  }
+  &__statusGreen {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: 0.5rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }/*
+  &__statusRed {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: 0.5rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }
+  &__statusBlue {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: 0.5rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }*/
+
+}
+.container {
+  background: $color-secondary;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px $color-ternary-main solid;
+  border-radius: .3rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: inherit;
+    color: rgba(255,255,255, 0.87);
+    font-size: 1.4rem;
+    border: 1px #666666 solid;
+    border-radius: .3rem;
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  &__body {
+    display: flex;
+  }
+}
+
+.list {
+  list-style: none;
+  color: rgba($color-secondary-light, 0.8);
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+  text-align: left;
+  margin: 2rem 5rem 2rem 0;
+
+  &__values {
+    font-weight: 300;
+  }
+
+  li {
+    margin: 1.3rem 0;
+
+    input {
+      padding: .7rem 1rem;
+      width: 15rem;
+      background: $color-secondary;
+      color: $color-secondary-light;
+      border: rgba($color-secondary-light, 0.87) 1px solid;
+      border-radius: .4rem;
+
+      &:focus {
+        outline: none;
+        border: $color-secondary-light 1px solid;
+      }
+    }
+  }
+
+}
+
+.gradeContainer {
+  background: $color-secondary;
+  width: 31%;
+  margin: 1rem auto;
+  padding-bottom: 1rem;
+  border: 1px $color-ternary-main solid;
+  border-radius: .3rem;
+
+  &__header {
+    padding: 1rem;
+    background: inherit;
+    color: rgba(255,255,255, 0.87);
+    font-size: 1.4rem;
+    border: 1px $color-ternary-main solid;
+    border-radius: .3rem;
+    text-align: center;
+    span {
+      font-weight: 500;
+    }
+  }
+  &__body {
+    display: flex;
+  }
+}
