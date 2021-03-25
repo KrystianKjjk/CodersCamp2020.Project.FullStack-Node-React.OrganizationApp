@@ -2,11 +2,14 @@ import React from 'react';
 import Counter from './components/counter/Counter';
 import './App.css';
 import MainView from './components/MainView';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App">\
+    <Router>
       <MainView/>
+      </Router>
       {/* <header className="App-header">
         <Counter />
         <p>
