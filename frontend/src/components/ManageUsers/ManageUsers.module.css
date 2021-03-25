@@ -1,0 +1,11 @@
+.container {
+    max-width: 800px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.checkbox {
+    text-transform: capitalize;
+}
+.checkboxContainer {
+    display: flex;
+    justify-content: space-between;
+}
