@@ -22,4 +22,5 @@ SampleReusableTable.args = {
   name: 'My Table',
   columns: [{field: 'id', width: 100}, {field: 'title', width: 400}],
   getData: getTodos,
+  onRowClick: (params, e) => console.log(params.row),
 };
