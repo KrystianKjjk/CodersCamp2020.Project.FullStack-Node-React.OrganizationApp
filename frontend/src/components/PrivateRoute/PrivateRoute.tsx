@@ -15,6 +15,6 @@ const PrivateRoute: React.FC< PrivateRouteProps > = (props) => {
           <Route {...props} />
       </div>
   );
-};
+};  
 
 export default PrivateRoute;

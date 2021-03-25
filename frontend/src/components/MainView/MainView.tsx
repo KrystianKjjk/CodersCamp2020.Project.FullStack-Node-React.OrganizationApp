@@ -1,41 +1,47 @@
 import React from "react";
 import styles from "./MainView.module.css";
 import Header from "../../components/Header";
-import {Switch, Route} from 'react-router-dom'
-import PrivateRoute from '../PrivateRoute';
+import { Switch, Route } from "react-router-dom";
+import PrivateRoute from "../PrivateRoute";
 export interface MainViewProps {}
 
 const MainView: React.FC<MainViewProps> = (props) => {
   return (
     <div className={styles.mainContainer}>
-      <Header/>
-        <Switch>
+      <Header />
+      <Switch>
         <PrivateRoute path="/users">
-            <Users />
-          </PrivateRoute>
-          <Route path="/courses">
-            <Courses/>
-          </Route>
-          <PrivateRoute path="/sections">
-            <Sections/>
-          </PrivateRoute>
-          <Route path="/gradesheets">
-            <Gradesheets/>
-          </Route>
-          <Route path="/projects">
-            <Projects/>
-          </Route>
-          <Route path="/teamprojects">
-            <TeamProjects/>
-          </Route>
-          <Route path="/teams">
-            <Teams/>
-          </Route>
-          <Route path="/myprofile">
-            <MyProfile/>
-          </Route>
-          <Route path="/">...</Route>
-        </Switch>
+          <Users />
+        </PrivateRoute>
+        <PrivateRoute path="/courses">
+          <Courses />
+        </PrivateRoute>
+        <PrivateRoute path="/sections">
+          <Sections />
+        </PrivateRoute>
+        <PrivateRoute path="/gradesheets">
+          <Gradesheets />
+        </PrivateRoute>
+        <PrivateRoute path="/projects">
+          <Projects />
+        </PrivateRoute>
+        <PrivateRoute path="/teamprojects">
+          <TeamProjects />
+        </PrivateRoute>
+        <PrivateRoute path="/teams">
+          <Teams />
+        </PrivateRoute>
+        <PrivateRoute path="/myprofile">
+          <MyProfile />
+        </PrivateRoute>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/registration">
+          <Registration />
+        </Route>
+        <PrivateRoute path="/">...</PrivateRoute>
+      </Switch>
     </div>
   );
 };
@@ -46,23 +52,29 @@ function Users() {
 function Courses() {
   return <h2>Courses</h2>;
 }
-function Sections(){
+function Sections() {
   return <h2>Sections</h2>;
 }
-function Gradesheets(){
+function Gradesheets() {
   return <h2>Gradesheets</h2>;
 }
-function Projects(){
+function Projects() {
   return <h2>Projects</h2>;
 }
-function TeamProjects(){
+function TeamProjects() {
   return <h2>Team projects</h2>;
 }
-function Teams(){
+function Teams() {
   return <h2>Teams</h2>;
 }
-function MyProfile(){
+function MyProfile() {
   return <h2>My profile</h2>;
+}
+function Login() {
+  return <h2>Log in</h2>;
+}
+function Registration() {
+  return <h2>Registration</h2>;
 }
 
 export default MainView;
