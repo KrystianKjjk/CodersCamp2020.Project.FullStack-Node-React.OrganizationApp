@@ -14,6 +14,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import SettingsIcon from '@material-ui/icons/Settings';
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
@@ -36,15 +37,19 @@ const Menu: React.FC<MenuProps> = (props) => {
           <span>Grade sheets</span>
         </Link>
         <Link to="/projects">
+          <EmojiObjectsIcon></EmojiObjectsIcon>
           <span>Projects</span>
         </Link>
         <Link to="/teamprojects">
+          <EmojiObjectsIcon></EmojiObjectsIcon>
           <span>Team projects</span>
         </Link>
         <Link to="/teams">
+        <PeopleIcon></PeopleIcon>
           <span>Teams</span>
         </Link>
         <Link to="/myprofile">
+          <SettingsIcon></SettingsIcon>
           <span>My profile</span>
         </Link>
         <Link to="/">
