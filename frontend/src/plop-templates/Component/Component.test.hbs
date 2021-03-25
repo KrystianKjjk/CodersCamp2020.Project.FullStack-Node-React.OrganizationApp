@@ -9,7 +9,7 @@ describe('{{pascalCase name}}', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <{{pascalCase name}} />
+            <{{pascalCase name}} name='{{pascalCase name}}'/>
          </Provider>
       );
    });
