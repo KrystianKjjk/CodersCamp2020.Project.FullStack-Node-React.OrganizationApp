@@ -1,18 +1,20 @@
 import React from 'react';
 
-import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
+import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import useStyles from './StyledTextField.style'
 
-export interface StyledTextFieldProps extends Partial<BaseTextFieldProps> {
+export interface StyledTextFieldOwnProps {
   variant?: "filled" | "outlined" | "standard", 
 }
+
+export type StyledTextFieldProps = TextFieldProps & StyledTextFieldOwnProps;
 
 const StyledTextField: React.FC< StyledTextFieldProps > = props => {
   const classes = useStyles();
 
   return (
     <TextField
-      variant={'outlined' as any}
+      variant={"outlined" as any}
       required
       fullWidth
       InputLabelProps={{

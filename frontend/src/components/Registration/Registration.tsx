@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import StyledTextField from '../StyledTextField'
+import StyledTextField from '../StyledTextField';
+import BaseService from '../../app/baseService';
 
 
 export interface RegistrationProps {
@@ -34,6 +35,19 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setConfirmPassword] = useState('');
+
+  const handleSignUpClick = () => {
+    const service = new BaseService;
+    service.post('register', {name, surname, email, password, passwordConfirm})
+    .catch(e => console.log(e)); 
+  };
+
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -45,17 +59,19 @@ export default function SignUp() {
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <StyledTextField
+              <StyledTextField 
+                value={name}
+                onChange={e => setName(e.target.value)}
                 autoFocus
                 autoComplete="fname"
                 name="firstName"
-                id="firstName"
                 label="First Name"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <StyledTextField
-                id="lastName"
+                value={surname}
+                onChange={e => setSurname(e.target.value)}
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
@@ -63,7 +79,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <StyledTextField
-                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 label="Email Address"
                 name="email"
                 autoComplete="email"
@@ -71,31 +88,28 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <StyledTextField
-                variant="outlined"
-                required
-                fullWidth
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 name="password"
                 label="Password"
                 type="password"
-                id="password"
-                autoComplete="current-password"
               />
             </Grid>
             <Grid item xs={12}>
               <StyledTextField
+                value={passwordConfirm}
+                onChange={e => setConfirmPassword(e.target.value)}
                 name="passwordconfirm"
                 label="Confirm Password"
-                type="passwordconfirm"
-                id="passwordconfirm"
-                autoComplete="current-password"
+                type="password"
               />
             </Grid>
           </Grid>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            onClick={handleSignUpClick}
             className={classes.submit}
           >
             Sign Up
