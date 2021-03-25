@@ -1,6 +1,7 @@
 import React, { ReactEventHandler, useEffect } from 'react';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
+import AddButton from '../AddButton';
 
 interface CheckboxProps {
   name: string;
@@ -45,7 +46,9 @@ const ManageUsers: React.FC< ManageUsersProps > = props => {
   }, [state]);
   return (
     <div className={styles.container}>
-      <h3>Sorting options</h3>
+      <h2 className={styles.mainHeader}>Manage Users</h2>
+      <span className={styles.addButton}><AddButton text='Add'/></span>
+      <h3 className={styles.checkboxesHeader}>Sorting options</h3>
       <div className={styles.checkboxContainer}>
         <span>
           <PrimaryCheckBox 

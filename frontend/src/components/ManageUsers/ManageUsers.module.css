@@ -1,11 +1,25 @@
 .container {
     max-width: 800px;
     font-family: Arial, Helvetica, sans-serif;
+    display: grid;
+    grid-template-areas:    "mainHeader addBtn"
+                            "header header"
+                            "checkboxes checkboxes";
 }
 .checkbox {
     text-transform: capitalize;
 }
+.addButton {
+    grid-area: addBtn;
+}
+.mainHeader {
+    grid-area: mainHeader;
+}
+.checkboxesHeader {
+    grid-area: header;
+}
 .checkboxContainer {
+    grid-area: checkboxes;
     display: flex;
     justify-content: space-between;
 }
