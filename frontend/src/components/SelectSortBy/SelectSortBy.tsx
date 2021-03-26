@@ -17,12 +17,13 @@ const SelectSortBy: React.FC< SelectSortByProps > = ({ onChange, options, initia
     onChange(value);
   }, [value]);
   return (
-    <FormControl>
+    <FormControl variant="outlined">
         <InputLabel>Sort by</InputLabel>
         <Select
           className={styles.select}
           onChange={handleChange}
           value={value}
+          label="Sort by"
         >
           {options.map(option => (<MenuItem className={styles.select} key={option} value={option}>{option}</MenuItem>))}
         </Select>
