@@ -1,12 +1,11 @@
 import React from "react";
 import styles from "./MainView.module.css";
-import Header from "../../components/Header";
+import Header from "../Header";
 import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
-import HomePage from "../HomePage/HomePage";
-export interface MainViewProps {}
+import HomePage from "../HomePage";
 
-const MainView: React.FC<MainViewProps> = (props) => {
+const MainView: React.FC = () => {
   return (
     <div className={styles.mainContainer}>
       <Header />
