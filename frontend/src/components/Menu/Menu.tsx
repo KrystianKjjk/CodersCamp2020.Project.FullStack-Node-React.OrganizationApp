@@ -29,8 +29,9 @@ const Menu: React.FC<MenuProps> = (props) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
-        width: "19%",
+        width: "23%",
         maxWidth: 360,
+        minWidth: 180,
         backgroundColor: theme.palette.background.default,
         borderRight: "1px solid #666",
         color: "#fff",

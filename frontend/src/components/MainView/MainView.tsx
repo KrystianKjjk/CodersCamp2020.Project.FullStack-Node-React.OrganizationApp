@@ -3,6 +3,7 @@ import styles from "./MainView.module.css";
 import Header from "../../components/Header";
 import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
+import HomePage from "../HomePage/HomePage";
 export interface MainViewProps {}
 
 const MainView: React.FC<MainViewProps> = (props) => {
@@ -40,7 +41,7 @@ const MainView: React.FC<MainViewProps> = (props) => {
         <Route path="/registration">
           <Registration />
         </Route>
-        <PrivateRoute path="/">...</PrivateRoute>
+        <PrivateRoute path="/"><HomePage/></PrivateRoute>
       </Switch>
     </div>
   );
@@ -56,7 +57,7 @@ function Sections() {
   return <h2>Sections</h2>;
 }
 function Gradesheets() {
-  return <h2>Gradesheets</h2>;
+  return <h2>Grade sheets</h2>;
 }
 function Projects() {
   return <h2>Projects</h2>;
