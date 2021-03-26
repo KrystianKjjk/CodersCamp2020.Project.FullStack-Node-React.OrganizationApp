@@ -32,6 +32,7 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
         endAdornment={
           <InputAdornment position="end">
             <IconButton
+              aria-label='arrow button'
               onClick={handleSubmit}
               edge="end"
             >
