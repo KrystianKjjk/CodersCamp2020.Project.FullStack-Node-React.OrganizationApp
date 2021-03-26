@@ -2,11 +2,7 @@ import React from 'react';
 import styles from './Header.module.css'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
-export interface HeaderProps {
-
-}
-
-const Header: React.FC< HeaderProps > = props => {
+const Header: React.FC= () => {
   return (
     <div className={styles.header}>
         <div className={styles.logo}><span>.</span>Coders<span>Camp</span></div>
