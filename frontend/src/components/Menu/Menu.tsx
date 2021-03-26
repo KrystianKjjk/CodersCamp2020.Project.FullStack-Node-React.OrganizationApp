@@ -1,14 +1,12 @@
 import React from "react";
-import styles from "./Menu.module.css";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  NavLink,
-  useRouteMatch,
-  useParams,
+  Link
 } from "react-router-dom";
+import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import PeopleIcon from "@material-ui/icons/People";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AppsIcon from "@material-ui/icons/Apps";
@@ -17,11 +15,6 @@ import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem, { ListItemProps } from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 
 export interface MenuProps {}
 
@@ -57,10 +50,6 @@ const Menu: React.FC<MenuProps> = (props) => {
     })
   );
 
-  // function ListItemLink(props: ListItemProps<"a", { button?: true }>) {
-  //   return <ListItem button component="a" {...props} />;
-  // }
-
   interface ListItemLinkProps {
     path: string;
     icon: React.ReactNode;
@@ -80,7 +69,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   return (
     <div className={classes.root}>
-      <List component="nav" aria-label="main mailbox folders">
+      <List component="nav">
         <div className={classes.userDiv}>
           <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }}></AccountCircleIcon>
           <p style={{fontWeight:500}}>Name Surname</p>
@@ -118,46 +107,6 @@ const Menu: React.FC<MenuProps> = (props) => {
       </List>
     </div>
   );
-  // }
 };
 
 export default Menu;
-
-// return (
-//     <div className={styles.menu}>
-//       <Link to="/users">
-//         <PeopleIcon></PeopleIcon>
-//         <span>Users</span>
-//       </Link>
-//       <Link to="/courses">
-//         <NotificationsIcon></NotificationsIcon>
-//         <span>Courses</span>
-//       </Link>
-//       <Link to="/sections">
-//         <AppsIcon></AppsIcon>
-//         <span>Sections</span>
-//       </Link>
-//       <Link to="/gradesheets">
-//         <AssignmentIcon></AssignmentIcon>
-//         <span>Grade sheets</span>
-//       </Link>
-//       <Link to="/projects">
-//         <EmojiObjectsIcon></EmojiObjectsIcon>
-//         <span>Projects</span>
-//       </Link>
-//       <Link to="/teamprojects">
-//         <EmojiObjectsIcon></EmojiObjectsIcon>
-//         <span>Team projects</span>
-//       </Link>
-//       <Link to="/teams">
-//       <PeopleIcon></PeopleIcon>
-//         <span>Teams</span>
-//       </Link>
-//       <Link to="/myprofile">
-//         <SettingsIcon></SettingsIcon>
-//         <span>My profile</span>
-//       </Link>
-//       <Link to="/">
-//         <span>Home page</span>
-//       </Link>
-//     </div>
