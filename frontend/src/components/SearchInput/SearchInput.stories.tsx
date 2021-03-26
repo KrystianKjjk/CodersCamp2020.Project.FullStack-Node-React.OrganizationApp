@@ -17,5 +17,6 @@ const Template: Story<SearchInputProps> = (args) => (
 
 export const SampleSearchInput = Template.bind({});
 SampleSearchInput.args = {
-  name: 'SearchInput',
+  onSubmit: (value: string) => console.log(value),
+  placeholder: 'Search'
 };

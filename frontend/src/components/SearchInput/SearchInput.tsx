@@ -1,15 +1,46 @@
-import React from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styles from './SearchInput.module.css';
+import { InputAdornment, IconButton, FormControl, OutlinedInput } from '@material-ui/core';
+import { ArrowForwardOutlined, SearchRounded } from '@material-ui/icons';
+
 
 export interface SearchInputProps {
-  name: string;
+  onSubmit: (value: string) => void;
+  placeholder: string;
 }
 
-const SearchInput: React.FC< SearchInputProps > = props => {
+const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) => {
+  const [value, setValue] = useState('');
+  const inputRef = createRef<HTMLInputElement>();
+  const handleSubmit: React.MouseEventHandler = () => {
+    setValue(inputRef.current.value);
+  };
+  const onKeyPress: React.KeyboardEventHandler = (e) => {
+    if(e.key === 'Enter')
+      setValue(inputRef.current.value);
+  }
+  useEffect(() => {
+    onSubmit(value);
+  }, [value]);
   return (
-    <div>
-      {props.name}
-    </div>
+    <FormControl variant="outlined">
+      <OutlinedInput
+        inputRef={inputRef}
+        placeholder={placeholder}
+        onKeyPress={onKeyPress}
+        startAdornment={<InputAdornment position="start"><SearchRounded /></InputAdornment>}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              onClick={handleSubmit}
+              edge="end"
+            >
+              <ArrowForwardOutlined />
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+    </FormControl>
   );
 };
 
