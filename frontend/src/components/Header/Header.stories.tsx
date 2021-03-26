@@ -9,7 +9,4 @@ export default {
 
 const Template: Story = (args) => <Header {...args} />;
 
-export const FirstInput = Template.bind({});
-FirstInput.args = {
-  label: 'Write something: ',
-};
+export const BasicHeader = Template.bind({});
