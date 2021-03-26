@@ -15,15 +15,13 @@ import AppsIcon from "@material-ui/icons/Apps";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import SettingsIcon from "@material-ui/icons/Settings";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem, { ListItemProps } from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import InboxIcon from "@material-ui/icons/Inbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
 
 export interface MenuProps {}
 
@@ -39,23 +37,22 @@ const Menu: React.FC<MenuProps> = (props) => {
         "& .MuiListItem-root": {
           "&:hover": {
             color: "#1A90FF",
-            backgroundColor: "#1C1C1C"
+            backgroundColor: "#1C1C1C",
           },
         },
         "& .MuiListItemIcon-root": {
           color: "inherit",
-        }
+        },
       },
-      icon: {
-        color: "inherit"
-        // color: theme.palette.text.primary,
-        // "&:hover": {
-        //   color: "#1A90FF",
-        // },
+      span: {
+        paddingLeft: "13px",
+        float: "left",
+        color: "#9E9E9E",
+        fontSize: "14px",
       },
-//       listItem: {
-// color:"#fff"
-//       }
+      userDiv:{
+        borderBottom: "1px solid #666666"
+      }
     })
   );
 
@@ -68,7 +65,6 @@ const Menu: React.FC<MenuProps> = (props) => {
     icon: React.ReactNode;
     text: string;
   }
-  
 
   const classes = useStyles();
 
@@ -84,44 +80,38 @@ const Menu: React.FC<MenuProps> = (props) => {
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
-        <ListItemLink
-          path="/users"
-          icon={<PeopleIcon className={classes.icon} />}
-          text="Users"
-        />
+        <div className={classes.userDiv}>
+          <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }}></AccountCircleIcon>
+          <p style={{fontWeight:500}}>Name Surname</p>
+          <p >Admin</p>
+        </div>
+        <ListItemLink path="/users" icon={<PeopleIcon />} text="Users" />
         <ListItemLink
           path="/courses"
-          icon={<NotificationsIcon className={classes.icon} />}
+          icon={<NotificationsIcon />}
           text="Courses"
         />
-        <ListItemLink
-          path="/sections"
-          icon={<AppsIcon className={classes.icon} />}
-          text="Sections"
-        />
+        <ListItemLink path="/sections" icon={<AppsIcon />} text="Sections" />
         <ListItemLink
           path="/gradesheets"
-          icon={<AssignmentIcon className={classes.icon} />}
-          text="Gradesheets"
+          icon={<AssignmentIcon />}
+          text="Grade sheets"
         />
         <ListItemLink
           path="/projects"
-          icon={<EmojiObjectsIcon className={classes.icon} />}
+          icon={<EmojiObjectsIcon />}
           text="Projects"
         />
         <ListItemLink
           path="/teamprojects"
-          icon={<EmojiObjectsIcon className={classes.icon} />}
+          icon={<EmojiObjectsIcon />}
           text="Team projects"
         />
-        <ListItemLink
-          path="/teams"
-          icon={<PeopleIcon className={classes.icon} />}
-          text="Teams"
-        />
+        <ListItemLink path="/teams" icon={<PeopleIcon />} text="Teams" />
+        <span className={classes.span}>Settings</span>
         <ListItemLink
           path="/myprofile"
-          icon={<SettingsIcon className={classes.icon} />}
+          icon={<SettingsIcon />}
           text="My profile"
         />
       </List>
