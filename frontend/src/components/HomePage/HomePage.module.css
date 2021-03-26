@@ -1,13 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
 .container{
     width:100%;
     text-align: left;
+    font-family: 'Montserrat', sans-serif;
 }
-/* .container>div{
-    padding-left: 3%;
-    padding-right: 3%;
 
-} */
 .header{
     border: 1px solid #666666;
     padding: 1.5%;
@@ -20,7 +17,7 @@
 .description{
     border: 1px solid #666666;
     background-color: #1C1C1C;
-    font-family: 'Montserrat', sans-serif;
+   
     
 }
 .description div:first-child{
