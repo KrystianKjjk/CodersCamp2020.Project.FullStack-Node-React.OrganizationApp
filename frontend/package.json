@@ -31,6 +31,13 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "./src/components/**",
+      "!./src/components/**/*.stories.tsx",
+      "!./src/components/**/index.ts"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
