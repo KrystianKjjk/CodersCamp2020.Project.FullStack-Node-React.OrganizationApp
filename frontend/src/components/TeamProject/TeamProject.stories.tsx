@@ -11,7 +11,7 @@ const Template: Story<TeamProjectProps> = (args) => <TeamProject {...args} />;
 
 export const TeamProjectStory = Template.bind({});
 TeamProjectStory.args = {
-  // _id: "123123",
+  _id: "123123",
   // teamId: "123123",
   // parentProjectIds: "!23123",
   // projectName: "FitNotFat",
