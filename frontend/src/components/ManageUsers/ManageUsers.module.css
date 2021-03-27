@@ -1,19 +1,29 @@
-.container {
+.manageContainer {
     max-width: 800px;
     font-family: Arial, Helvetica, sans-serif;
     display: grid;
-    grid-template-areas:    "mainHeader addBtn"
-                            "header header"
-                            "checkboxes checkboxes";
+    grid-template-areas:    "mainHeader sortBy addBtn"
+                            "header header header"
+                            "checkboxes checkboxes checkboxes";
+    border: gray 2px solid;
+    padding: 1rem;
 }
 .checkbox {
     text-transform: capitalize;
 }
 .addButton {
     grid-area: addBtn;
+    justify-self: end;
+    align-self: center;
+}
+.selectSortBy {
+    grid-area: sortBy;
+    justify-self: center;
+    align-self: center;
 }
 .mainHeader {
     grid-area: mainHeader;
+    align-self: center;
 }
 .checkboxesHeader {
     grid-area: header;
