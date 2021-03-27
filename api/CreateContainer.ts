@@ -2,6 +2,7 @@ import Container from './Container';
 import MailingService from './Src/Services/MailingService'
 import App from './App';
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
@@ -93,7 +94,10 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 
 // Middlewares
 const middlewares = [
-    bodyParser.json()
+    bodyParser.json(),
+    cors({
+      exposedHeaders: 'x-auth-token',
+    }),
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
