@@ -5,32 +5,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 import StyledTextField from '../StyledTextField';
 import BaseService from '../../app/baseService';
-
+import useStyles from './Registration.style';
 
 export interface RegistrationProps {
   
 };
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  }
-}));
 
 export default function SignUp() {
   const classes = useStyles();
@@ -39,14 +23,19 @@ export default function SignUp() {
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formError, setFormError] = useState('');
 
   const handleSignUpClick = () => {
     const service = new BaseService;
-    service.post('register', {name, surname, email, password, passwordConfirm})
-    .catch(e => console.log(e)); 
+    service.post('register', {name, surname, email, password, confirmPassword})
+      .then(response => {
+        setFormError('');
+      })
+      .catch(error => setFormError(error?.response?.data?.message));
   };
 
+  const areAllFieldsFilled = name && surname && email && password && confirmPassword;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -97,7 +86,7 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <StyledTextField
-                value={passwordConfirm}
+                value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 name="passwordconfirm"
                 label="Confirm Password"
@@ -105,18 +94,23 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
+          {formError && <FormHelperText error>{'Error: ' + formError}</FormHelperText>}
           <Button
             fullWidth
             variant="contained"
             color="primary"
             onClick={handleSignUpClick}
             className={classes.submit}
+            disabled={!areAllFieldsFilled}
+            classes={{
+              disabled:classes.buttonDisabled
+            }}
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" color="inherit">
+              <Link href="/login" variant="body2" color="inherit">
                 Already have an account? Sign in
               </Link>
             </Grid>
