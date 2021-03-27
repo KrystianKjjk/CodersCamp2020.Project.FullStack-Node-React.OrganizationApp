@@ -8,9 +8,10 @@
     justify-content: flex-start;
     align-items: baseline;
     padding: 1rem;
+    margin-bottom: 3rem;
 }
 .mainHeader > * {
-    margin: auto 8rem auto 1rem;
+    margin: auto 8rem auto 0rem;
 }
 .manageContainer {
     max-width: 800px;
