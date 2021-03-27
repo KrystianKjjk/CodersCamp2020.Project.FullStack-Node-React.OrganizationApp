@@ -8,9 +8,10 @@ import ManageUsers from './ManageUsers';
 describe('ManageUsers', () => {
    it('renders without error', () => {
       const getUsers = jest.fn( () => Promise.resolve([]) );
+      const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageUsers getUsers={getUsers}/>
+            <ManageUsers onClickAdd={onClickAdd} getUsers={getUsers}/>
          </Provider>
       );
    });

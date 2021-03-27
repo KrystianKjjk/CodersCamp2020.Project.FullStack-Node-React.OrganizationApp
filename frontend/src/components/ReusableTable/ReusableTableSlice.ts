@@ -36,14 +36,18 @@ export const reusableTableSlice = createSlice({
     filterData(state, action: PayloadAction<{ table: string, column: string, values: string[] }>) {
       const { table, column, values } = action.payload;
       if (values.length)
-        state[table].displayedRows = state[table].rows.filter(row => values.includes(row[column]));
+        state[table].displayedRows = state[table].rows.filter( row => values.includes(`${row[column]}`) );
       else
         state[table].displayedRows = [ ...state[table].rows ]
     },
-    sortData(state, action: PayloadAction<{ table: string, column: string }>) {
-      const { table, column } = action.payload;
-      if (column)
-        state[table].displayedRows.sort( (a, b) => a[column].localeCompare(b[column]) );
+    sortData(state, action: PayloadAction<{ table: string, column: string, type?: string }>) {
+      const { table, column, type } = action.payload;
+      if (column) {
+        if (type && type === 'number')
+          state[table].displayedRows.sort( (a, b) => a - b );
+        else
+          state[table].displayedRows.sort( (a, b) => `${a[column]}`.localeCompare(`${b[column]}`) );
+      }
     },
   },
 });

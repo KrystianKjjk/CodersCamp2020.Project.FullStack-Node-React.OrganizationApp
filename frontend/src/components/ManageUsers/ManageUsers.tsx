@@ -34,9 +34,10 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
 
 export interface ManageUsersProps {
   getUsers: () => Promise<any[]>;
+  onClickAdd: () => void;
 }
 
-const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
+const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => {
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
     Active: false,
@@ -103,7 +104,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
       </div>
       <div className={styles.manageContainer}>
         <h2 className={styles.manageHeader}>Manage Users</h2>
-        <span className={styles.addButton}>
+        <span onClick={onClickAdd} className={styles.addButton}>
           <AddButton text='Add'/>
         </span>
         <span className={styles.selectSortBy}>

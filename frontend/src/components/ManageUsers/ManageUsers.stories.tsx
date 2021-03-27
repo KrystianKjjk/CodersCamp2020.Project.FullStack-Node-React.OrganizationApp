@@ -24,6 +24,7 @@ const getUsers = () => {
 export const SampleManageUsers = Template.bind({});
 SampleManageUsers.args = {
   getUsers: getUsers,
+  onClickAdd: () => console.log('ADD user clicked')
 };
 
 const getFakeUsers = () => {
@@ -38,4 +39,5 @@ const getFakeUsers = () => {
 export const SampleManageFakeUsers = Template.bind({});
 SampleManageFakeUsers.args = {
   getUsers: getFakeUsers,
+  onClickAdd: () => console.log('ADD user clicked')
 };
