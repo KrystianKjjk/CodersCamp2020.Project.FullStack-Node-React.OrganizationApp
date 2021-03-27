@@ -6,6 +6,7 @@ import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 
+
 interface CheckboxProps {
   name: string;
   checked: boolean;
@@ -28,10 +29,10 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
 );
 
 export interface ManageUsersProps {
-  
+  getUsers: () => Promise<any[]>;
 }
 
-const ManageUsers: React.FC< ManageUsersProps > = props => {
+const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
   const [state, setState] = React.useState({
     active: false,
     archived: false,
@@ -59,12 +60,6 @@ const ManageUsers: React.FC< ManageUsersProps > = props => {
     {field: 'type', headerName: 'Type', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
   ]
-  const getUsers = () => Promise.resolve([
-    {id: 1, name: 'Name1', surname: 'Surname1', type: 'Admin', status: 'Active'},
-    {id: 2, name: 'Name2', surname: 'Surname2', type: 'Admin', status: 'Active'},
-    {id: 3, name: 'Name3', surname: 'Surname3', type: 'Admin', status: 'Active'},
-    {id: 4, name: 'Name4', surname: 'Surname4', type: 'Admin', status: 'Active'},
-  ]);
   useEffect(() => {
     console.log(state);
   }, [state]);

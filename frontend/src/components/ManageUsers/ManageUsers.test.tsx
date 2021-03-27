@@ -7,9 +7,10 @@ import ManageUsers from './ManageUsers';
 
 describe('ManageUsers', () => {
    it('renders without error', () => {
+      const getUsers = jest.fn( () => Promise.resolve([]) );
       render(
          <Provider store={store}>
-            <ManageUsers name='ManageUsers'/>
+            <ManageUsers getUsers={getUsers}/>
          </Provider>
       );
    });
