@@ -3,7 +3,6 @@ export default async function getUsers(authToken: string): Promise<any[]> {
         method: 'GET',
         headers: {
             'x-auth-token': authToken,
-            'Access-Control-Allow-Origin': '*',
         }
     });
     const json = await response.json();
