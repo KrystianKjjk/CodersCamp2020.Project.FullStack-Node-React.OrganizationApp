@@ -80,6 +80,12 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
   useEffect(() => {
     dispatch(sortData({table: 'Users', column: sortBy }));
   }, [sortBy]);
+  useEffect(() => {
+    if ( search.match(/[0-9a-f]{16}/) )
+      dispatch(filterData({table: 'Users', column: 'id', values: [search] }));
+    else
+      dispatch(filterData({table: 'Users', column: 'surname', values: [search] }));
+  }, [search]);
 
   const sortByOptions = ['name', 'surname', 'type', 'status'];
   const columns = [
