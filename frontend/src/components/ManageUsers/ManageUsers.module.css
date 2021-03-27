@@ -1,6 +1,19 @@
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+.mainHeader {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    padding: 1rem;
+}
+.mainHeader > * {
+    margin: auto 8rem auto 1rem;
+}
 .manageContainer {
     max-width: 800px;
-    font-family: Arial, Helvetica, sans-serif;
     display: grid;
     grid-template-areas:    "mainHeader sortBy addBtn"
                             "header header header"
@@ -21,7 +34,7 @@
     justify-self: center;
     align-self: center;
 }
-.mainHeader {
+.manageHeader {
     grid-area: mainHeader;
     align-self: center;
 }
