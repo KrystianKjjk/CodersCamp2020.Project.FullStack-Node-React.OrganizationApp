@@ -33,17 +33,22 @@ export const reusableTableSlice = createSlice({
         state[name].loading = 'idle';
       }
     },
-    dataFilter(state, action: PayloadAction<{ table: string, column: string, values: string[] }>) {
+    filterData(state, action: PayloadAction<{ table: string, column: string, values: string[] }>) {
       const { table, column, values } = action.payload;
-      if (values.length)  
+      if (values.length)
         state[table].displayedRows = state[table].rows.filter(row => values.includes(row[column]));
       else
         state[table].displayedRows = [ ...state[table].rows ]
     },
+    sortData(state, action: PayloadAction<{ table: string, column: string }>) {
+      const { table, column } = action.payload;
+      if (column)
+        state[table].displayedRows.sort( (a, b) => a[column].localeCompare(b[column]) );
+    },
   },
 });
 
-export const { initTable, dataLoading, dataReceived, dataFilter } = reusableTableSlice.actions;
+export const { initTable, dataLoading, dataReceived, filterData, sortData } = reusableTableSlice.actions;
 
 export const fetchData = (name: string, getData: () => Promise<any[]>): AppThunk => async dispatch => {
   dispatch(dataLoading({ name }));

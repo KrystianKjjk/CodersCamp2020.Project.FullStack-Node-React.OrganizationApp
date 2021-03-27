@@ -5,7 +5,7 @@ import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { dataFilter } from '../ReusableTable/ReusableTableSlice';
+import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { values } from 'lodash';
@@ -69,16 +69,19 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
     const values = Object.entries(statusFilters)
       .filter(([, value]) => value)
       .map(([key, value]) => key);
-    dispatch(dataFilter({table: 'Users', column: 'status', values }));
+    dispatch(filterData({table: 'Users', column: 'status', values }));
   }, [statusFilters]);
   useEffect(() => {
     const values = Object.entries(typeFilters)
       .filter(([, value]) => value)
       .map(([key, value]) => key);
-    dispatch(dataFilter({table: 'Users', column: 'type', values }));
+    dispatch(filterData({table: 'Users', column: 'type', values }));
   }, [typeFilters]);
+  useEffect(() => {
+    dispatch(sortData({table: 'Users', column: sortBy }));
+  }, [sortBy]);
 
-  const sortByOptions = ['Name', 'Surname', 'Type', 'Status'];
+  const sortByOptions = ['name', 'surname', 'type', 'status'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 150, sortable: true},
     {field: 'surname', headerName: 'Surname', width: 150, sortable: true},
