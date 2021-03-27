@@ -5,6 +5,7 @@ interface ReusableTableState {
   [name: string]: {
     loading: 'pending' | 'idle';
     rows: any[];
+    displayedRows: any[];
   }
 }
 
@@ -18,6 +19,7 @@ export const reusableTableSlice = createSlice({
       state[payload.name] = {
         loading: 'pending',
         rows: [],
+        displayedRows: [],
       };
     },
     dataLoading(state, action: PayloadAction<{name: string}>) {
@@ -26,14 +28,22 @@ export const reusableTableSlice = createSlice({
     dataReceived(state, action: PayloadAction<{name: string, data: any[]}>) {
       const { name, data } = action.payload;
       if (state[name].loading === 'pending') {
-        state[name].rows = data;
+        state[name].rows = [...data];
+        state[name].displayedRows = [...data];
         state[name].loading = 'idle';
       }
+    },
+    dataFilter(state, action: PayloadAction<{ table: string, column: string, values: string[] }>) {
+      const { table, column, values } = action.payload;
+      if (values.length)  
+        state[table].displayedRows = state[table].rows.filter(row => values.includes(row[column]));
+      else
+        state[table].displayedRows = [ ...state[table].rows ]
     },
   },
 });
 
-export const { initTable, dataLoading, dataReceived } = reusableTableSlice.actions;
+export const { initTable, dataLoading, dataReceived, dataFilter } = reusableTableSlice.actions;
 
 export const fetchData = (name: string, getData: () => Promise<any[]>): AppThunk => async dispatch => {
   dispatch(dataLoading({ name }));

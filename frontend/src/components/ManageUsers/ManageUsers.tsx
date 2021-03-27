@@ -1,10 +1,14 @@
-import React, { ReactEventHandler, useEffect } from 'react';
+import React, { ReactEventHandler, useEffect, useState } from 'react';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
+import { dataFilter } from '../ReusableTable/ReusableTableSlice';
+import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../app/hooks';
+import { values } from 'lodash';
 
 
 interface CheckboxProps {
@@ -33,26 +37,47 @@ export interface ManageUsersProps {
 }
 
 const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
-  const [state, setState] = React.useState({
-    active: false,
-    archived: false,
-    resigned: false,
-    candidate: false,
-    participant: false,
-    mentor: false,
-    admin: false,
-    sortBy: '',
-    search: '',
+  const dispatch = useAppDispatch();
+  const [statusFilters, setStatusFilters] = useState({
+    Active: false,
+    Archived: false,
+    Resigned: false,
   });
-  const changeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+  const [typeFilters, setTypeFilters] = useState({
+    Candidate: false,
+    Participant: false,
+    Mentor: false,
+    Admin: false,
+  });
+  const [sortBy, setSortBy] = useState('');
+  const [search, setSearch] = useState('');
+
+  const changeStatusFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusFilters({ ...statusFilters, [event.target.name]: event.target.checked });
+  };
+  const changeTypeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTypeFilters({ ...typeFilters, [event.target.name]: event.target.checked });
   };
   const changeSortBy = (value: string) => {
-    setState({ ...state, sortBy: value });
+    setSortBy(value);
   };
   const changeSearch = (value: string) => {
-    setState({ ...state, search: value })
+    setSearch(value);
   }
+  
+  useEffect(() => {
+    const values = Object.entries(statusFilters)
+      .filter(([, value]) => value)
+      .map(([key, value]) => key);
+    dispatch(dataFilter({table: 'Users', column: 'status', values }));
+  }, [statusFilters]);
+  useEffect(() => {
+    const values = Object.entries(typeFilters)
+      .filter(([, value]) => value)
+      .map(([key, value]) => key);
+    dispatch(dataFilter({table: 'Users', column: 'type', values }));
+  }, [typeFilters]);
+
   const sortByOptions = ['Name', 'Surname', 'Type', 'Status'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 150, sortable: true},
@@ -60,9 +85,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
     {field: 'type', headerName: 'Type', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
   ]
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  
   return (
     <div className={styles.container}>
       <div className={styles.mainHeader}>
@@ -81,41 +104,41 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
         <div className={styles.checkboxContainer}>
           <span>
             <PrimaryCheckBox 
-              name='active'
-              checked={state.active}
-              onChange={changeFilter}
+              name='Active'
+              checked={statusFilters.Active}
+              onChange={changeStatusFilter}
             />
             <PrimaryCheckBox 
-              name='archived'
-              checked={state.archived}
-              onChange={changeFilter}
+              name='Archived'
+              checked={statusFilters.Archived}
+              onChange={changeStatusFilter}
             />
             <PrimaryCheckBox 
-              name='resigned'
-              checked={state.resigned}
-              onChange={changeFilter}
+              name='Resigned'
+              checked={statusFilters.Resigned}
+              onChange={changeStatusFilter}
             />
           </span>
           <span>
             <PrimaryCheckBox 
-              name='candidate'
-              checked={state.candidate}
-              onChange={changeFilter}
+              name='Candidate'
+              checked={typeFilters.Candidate}
+              onChange={changeTypeFilter}
             />
             <PrimaryCheckBox 
-              name='participant'
-              checked={state.participant}
-              onChange={changeFilter}
+              name='Participant'
+              checked={typeFilters.Participant}
+              onChange={changeTypeFilter}
             />
             <PrimaryCheckBox 
-              name='mentor'
-              checked={state.mentor}
-              onChange={changeFilter}
+              name='Mentor'
+              checked={typeFilters.Mentor}
+              onChange={changeTypeFilter}
             />
             <PrimaryCheckBox 
-              name='admin'
-              checked={state.admin}
-              onChange={changeFilter}
+              name='Admin'
+              checked={typeFilters.Admin}
+              onChange={changeTypeFilter}
             />
           </span>
         </div>
