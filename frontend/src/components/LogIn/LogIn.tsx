@@ -11,6 +11,8 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import StyledTextField from '../StyledTextField'
 import useStyles from './LogIn.style';
 import BaseService from '../../app/baseService';
+import { setLoggedInUserId } from './LogInSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 export interface LogInProps {
 
@@ -18,6 +20,7 @@ export interface LogInProps {
 
 export default function SignIn() {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,6 +33,7 @@ export default function SignIn() {
         setFormError('');
         const token: any = response?.headers?.['x-auth-token'];
         localStorage.setItem('token', token);
+        dispatch(setLoggedInUserId(response?.data?._id || ''));
       })
       .catch(error => setFormError(error?.response?.data?.message));
   };
