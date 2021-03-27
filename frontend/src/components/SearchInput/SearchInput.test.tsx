@@ -7,7 +7,7 @@ import { store } from '../../app/store';
 import SearchInput from './SearchInput';
 
 describe('SearchInput', () => {
-   it('should call onSubmit', async () => {
+   it('should call onSubmit after submit when input value is changed', async () => {
       const onSubmit = jest.fn<string, any>();
       render(
          <Provider store={store}>
