@@ -25,3 +25,17 @@ export const SampleManageUsers = Template.bind({});
 SampleManageUsers.args = {
   getUsers: getUsers,
 };
+
+const getFakeUsers = () => {
+  return Promise.resolve([
+    {id: 1, name: 'Naame', surname: 'Suurname', type: 'Mentor', status: 'Active'},
+    {id: 2, name: 'Naaame', surname: 'Suuuurname', type: 'Participant', status: 'Archived'},
+    {id: 3, name: 'Naaaame', surname: 'Suuurname', type: 'Participant', status: 'Resigned'},
+    {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', type: 'Admin', status: 'Active'},
+    {id: 5, name: 'CName', surname: 'CSurname', type: 'Candidate', status: 'Active'},
+  ])
+}
+export const SampleManageFakeUsers = Template.bind({});
+SampleManageFakeUsers.args = {
+  getUsers: getFakeUsers,
+};
