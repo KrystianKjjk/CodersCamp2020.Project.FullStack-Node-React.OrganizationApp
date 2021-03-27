@@ -13,10 +13,11 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
   const [value, setValue] = useState('');
   const inputRef = createRef<HTMLInputElement>();
   const handleSubmit: React.MouseEventHandler = () => {
-    setValue(inputRef.current.value);
+    if(inputRef.current)
+      setValue(inputRef.current.value);
   };
   const onKeyPress: React.KeyboardEventHandler = (e) => {
-    if(e.key === 'Enter')
+    if(e.key === 'Enter' && inputRef.current)
       setValue(inputRef.current.value);
   }
   useEffect(() => {
