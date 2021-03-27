@@ -4,6 +4,7 @@ import styles from './ManageUsers.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
+import Table from '../ReusableTable';
 
 interface CheckboxProps {
   name: string;
@@ -49,9 +50,21 @@ const ManageUsers: React.FC< ManageUsersProps > = props => {
     setState({ ...state, sortBy: value });
   };
   const changeSearch = (value: string) => {
-    setState({ ...state, search: value})
+    setState({ ...state, search: value })
   }
   const sortByOptions = ['Name', 'Surname', 'Type', 'Status'];
+  const columns = [
+    {field: 'name', headerName: 'Name', width: 150, sortable: true},
+    {field: 'surname', headerName: 'Surname', width: 150, sortable: true},
+    {field: 'type', headerName: 'Type', width: 150, sortable: true},
+    {field: 'status', headerName: 'Status', width: 150, sortable: true},
+  ]
+  const getUsers = () => Promise.resolve([
+    {id: 1, name: 'Name1', surname: 'Surname1', type: 'Admin', status: 'Active'},
+    {id: 2, name: 'Name2', surname: 'Surname2', type: 'Admin', status: 'Active'},
+    {id: 3, name: 'Name3', surname: 'Surname3', type: 'Admin', status: 'Active'},
+    {id: 4, name: 'Name4', surname: 'Surname4', type: 'Admin', status: 'Active'},
+  ]);
   useEffect(() => {
     console.log(state);
   }, [state]);
@@ -112,6 +125,7 @@ const ManageUsers: React.FC< ManageUsersProps > = props => {
           </span>
         </div>
       </div>
+      <Table name='Users' columns={columns} getData={getUsers}/>
     </div>
   );
 };
