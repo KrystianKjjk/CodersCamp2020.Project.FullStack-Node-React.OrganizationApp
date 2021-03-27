@@ -32,6 +32,7 @@ import GradeSheetController from './Src/Controllers/GradeSheetController';
 import gradeSheetRoutes from './Src/Routes/GradeSheetRoutes';
 
 import ErrorMiddleware from './Src/Middlewares/Error';
+import CorsMiddleware from './Src/Middlewares/CORS';
 
 import PasswordResetTokenModel from './Src/Models/PasswordResetToken';
 import PasswordService from './Src/Services/PasswordService';
@@ -93,7 +94,8 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 
 // Middlewares
 const middlewares = [
-    bodyParser.json()
+    bodyParser.json(),
+    CorsMiddleware
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
