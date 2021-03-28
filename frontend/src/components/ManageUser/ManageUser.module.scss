@@ -10,6 +10,16 @@ $color-ternary-main: #666666;
 $color-status-green: #3cc13b;
 $color-status-red: #F03738;
 
+* {
+  margin: 0;
+}
+
+p {
+  width: 15rem;
+  padding: .7rem 1rem .7rem 0;
+  display: inline-block;
+}
+
 body {
   background: $color-primary;
   box-sizing: border-box;
@@ -33,18 +43,24 @@ body {
   max-width: 30rem;
   color: rgba($color-secondary-light, 0.8);
   font-family: Montserrat, sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.1rem;
   text-align: left;
   margin: 1.5rem 5rem 2rem 2rem;
+  border: magenta 1px solid;
 
   &__row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 
+    &__key {
+      flex: 2;
+    }
     &__value {
       margin: .3rem 0;
+      font-weight: 300;
+      flex: 3;
 
       input, select {
         padding: .7rem 1rem;
@@ -59,6 +75,22 @@ body {
           border: $color-secondary-light 1px solid;
         }
       }
+      &__grades {
+        border: magenta 1px solid;
+        text-align: right;
+        input {
+          padding: .7rem 1rem;
+          width: 2rem;
+          margin: .5rem;
+        }
+        p {
+          color: rgba($color-secondary-light, 0.8);
+          font-family: Montserrat, sans-serif;
+          font-weight: 500;
+          font-size: 1.1rem;
+        }
+      }
+
       select {
         width: 17.1rem;
       }
@@ -162,11 +194,15 @@ body {
 
 .status_radio_button {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   font-family: Roboto, sans-serif;
   font-weight: 500;
   letter-spacing: 1.25px;
   font-size: .7rem;
+
+  div:first-child label {
+    margin-left: 0;
+  }
 
   input[type="radio"] {
     opacity: 0;
@@ -175,6 +211,7 @@ body {
   }
 
   &__blue {
+    display: inline-block;
     background: $color-secondary;
     border: rgba($color-ternary-light, 0.75) 1px solid;
     color: $color-ternary-light;
@@ -184,6 +221,7 @@ body {
   }
 
   &__red {
+    display: inline-block;
     background: $color-secondary;
     border: rgba($color-status-red, 0.75) 1px solid;
     color: $color-status-red;
@@ -193,6 +231,7 @@ body {
   }
 
   &__green {
+    display: inline-block;
     background: $color-secondary;
     border: rgba($color-status-green, 0.75) 1px solid;
     color: $color-status-green;
