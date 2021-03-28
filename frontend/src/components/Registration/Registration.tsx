@@ -26,14 +26,15 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
 
-  const handleSignUpClick = () => {
+  const handleSignUpClick = async () => {
     const service = new BaseService;
-    service.post('register', {name, surname, email, password, confirmPassword})
-      .then(response => {
-        setFormError('');
-      })
-      .catch(error => setFormError(error?.response?.data?.message));
-  };
+    try {
+      const response = await service.post('register', {name, surname, email, password, confirmPassword})
+      setFormError('');
+    }
+    catch (error) {setFormError(error?.response?.data?.message)};
+
+  }; 
 
   const areAllFieldsFilled = name && surname && email && password && confirmPassword;
 
@@ -55,6 +56,7 @@ export default function SignUp() {
                 autoComplete="fname"
                 name="firstName"
                 label="First Name"
+                data-testid="r-fname"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -64,6 +66,7 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                data-testid="r-lname"
               />
             </Grid>
             <Grid item xs={12}>
@@ -73,6 +76,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                data-testid="r-email"
               />
             </Grid>
             <Grid item xs={12}>
@@ -82,6 +86,7 @@ export default function SignUp() {
                 name="password"
                 label="Password"
                 type="password"
+                data-testid="r-password"
               />
             </Grid>
             <Grid item xs={12}>
@@ -91,6 +96,7 @@ export default function SignUp() {
                 name="passwordconfirm"
                 label="Confirm Password"
                 type="password"
+                data-testid="r-cpassword"
               />
             </Grid>
           </Grid>
@@ -105,6 +111,7 @@ export default function SignUp() {
             classes={{
               disabled:classes.buttonDisabled
             }}
+            data-testid="r-button"
           >
             Sign Up
           </Button>

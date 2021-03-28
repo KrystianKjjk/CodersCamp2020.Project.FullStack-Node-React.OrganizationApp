@@ -26,16 +26,16 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
 
-  const handleSignInClick = () => {
+  const handleSignInClick = async () => {
     const service = new BaseService;
-    service.post('login', { email, password})
-      .then(response => {
-        setFormError('');
-        const token: any = response?.headers?.['x-auth-token'];
-        localStorage.setItem('token', token);
-        dispatch(setLoggedInUserId(response?.data?._id || ''));
-      })
-      .catch(error => setFormError(error?.response?.data?.message));
+    try {
+      const response = await service.post('login', { email, password})
+      setFormError('');
+      const token: any = response?.headers?.['x-auth-token'];
+      localStorage.setItem('token', token);
+      dispatch(setLoggedInUserId(response?.data?._id || ''));
+    }
+    catch (error) {setFormError(error?.response?.data?.message)};
   };
 
   
@@ -56,6 +56,7 @@ export default function SignIn() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             autoFocus
+            data-testid='li-email'
           />
           <StyledTextField
             margin="normal"
@@ -65,6 +66,7 @@ export default function SignIn() {
             autoComplete="current-password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            data-testid='li-password'
           />
           {formError && <FormHelperText error>{'Error: ' + formError}</FormHelperText>}
           <Button
@@ -74,6 +76,7 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
             onClick={handleSignInClick}
+            data-testid='li-button'
           >
             Sign In
           </Button>
