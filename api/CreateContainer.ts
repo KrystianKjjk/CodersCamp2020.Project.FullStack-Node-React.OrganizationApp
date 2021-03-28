@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import 'express-async-errors';
+import cors from 'cors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -32,7 +33,6 @@ import GradeSheetController from './Src/Controllers/GradeSheetController';
 import gradeSheetRoutes from './Src/Routes/GradeSheetRoutes';
 
 import ErrorMiddleware from './Src/Middlewares/Error';
-import CorsMiddleware from './Src/Middlewares/CORS';
 
 import PasswordResetTokenModel from './Src/Models/PasswordResetToken';
 import PasswordService from './Src/Services/PasswordService';
@@ -95,7 +95,10 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 // Middlewares
 const middlewares = [
     bodyParser.json(),
-    CorsMiddleware
+    cors({
+      origin: '*',
+      exposedHeaders: 'x-auth-token',
+    })
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
