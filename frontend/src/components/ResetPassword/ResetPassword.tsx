@@ -48,6 +48,7 @@ export default function ResetPassword() {
             name="email"
             autoComplete="email"
             autoFocus
+            data-testid="rp-email"
           />
          
           <Button
@@ -56,6 +57,7 @@ export default function ResetPassword() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            data-testid="rp-button"
           >
             Send
           </Button>
