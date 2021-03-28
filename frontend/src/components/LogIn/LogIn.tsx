@@ -38,8 +38,6 @@ export default function SignIn() {
     catch (error) {setFormError(error?.response?.data?.message)};
   };
 
-  
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
