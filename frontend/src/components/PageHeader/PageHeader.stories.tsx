@@ -11,4 +11,4 @@ export default {
 const Template: Story<PageHeaderProps> = (args) => <PageHeader {...args} />;
 
 export const Header = Template.bind({});
-Header.args = {name:"Example header"};
+Header.args = {name:"Example header !"};
