@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './TeamProject.module.css'
 import Button from '@material-ui/core/Button';
 import { selectTeamProjects, 
@@ -7,11 +7,8 @@ import { selectTeamProjects,
   deleteProjectById, 
   switchEditMode, 
   switchDeleteMode,
-  setProjectValue } from './TeamProjectSlice'
+  TeamProjectState } from './TeamProjectSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { BooleanArraySupportOption } from 'prettier';
-import { BooleanLiteral } from 'typescript';
-import { AnyAction } from 'redux';
 
 export interface TeamProjectProps {
   _id: string //id projektu wybranego w tabeli
@@ -26,11 +23,20 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
   const { projectEditMode, projectDeleteMode, loading, hasErrors, project }  = useAppSelector(selectTeamProjects);  
   let selectedTeamProject = project;
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();  
+  const [projectName, setProjectName] = useState(project.projectName);
+  const [projectUrl, setProjectUrl] = useState(project.projectUrl);
+  const [projectDescription, setProjectDescription] = useState(project.description);
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
-  }, [dispatch]);
+  }, [dispatch]);  
+
+  useEffect(() => {
+    setProjectName(project.projectName);
+    setProjectUrl(project.projectUrl);
+    setProjectDescription(project.description);
+  }, [projectEditMode]);   
 
   const DeleteModal = (props: deleteModalProps) => {
     const projectDeleteMode = props.projectDeleteMode;
@@ -43,18 +49,27 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         </div>)      
     }
     return null
+  }  
+
+  const handleSave = () => {
+    const newProjectData = {
+      projectName: projectName,
+      projectUrl: projectUrl,
+      description: projectDescription
+    }
+    dispatch(saveProjectById(newProjectData, props._id));
   }
-//@ts-ignore
-  const handleChange = (e) => {
-    dispatch(setProjectValue(e.target))
+
+  const handleChange = (setState: Function, e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement> ) => {
+    setState(e.target.value);
   }
 
   return (
     projectEditMode ?   
-    (<form className={styles.teamProjectContainer} onSubmit={handleChange}>
+    (<div className={styles.teamProjectContainer}>
       <div className={styles.teamProjectHeader}>
         <span className={styles.teamProjectHeaderName}>Manage team project</span>
-        <Button id={styles.buttonEdit} onClick={() => dispatch(saveProjectById(selectedTeamProject))}>Save</Button>
+        <Button id={styles.buttonEdit} onClick={() => handleSave()}>Save</Button>
       </div>
 
       <div className={styles.teamProjectDetailsContainer}>
@@ -68,10 +83,9 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
       </div>
       <div className={styles.attributeValuesContainer}>
         <input
-          type='projectName' 
           className={styles.input} 
           defaultValue={selectedTeamProject!.projectName}
-          onChange={handleChange}
+          onChange={(e) => handleChange(setProjectName, e)}
           ></input>
         <div>{selectedTeamProject!.parentProjectIds}</div>
         <div>{selectedTeamProject!.teamId}</div>
@@ -79,14 +93,16 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <input 
           className={styles.input} 
           defaultValue={selectedTeamProject!.projectUrl}
+          onChange={(e) => handleChange(setProjectUrl, e)}
           ></input>
         <textarea 
           className={styles.input} 
           defaultValue={selectedTeamProject!.description}
+          onChange={(e) => handleChange(setProjectDescription, e)}
           ></textarea>
       </div>
       </div>
-    </form>)
+    </div>)
     :
     (<div className={styles.teamProjectContainer}>
       <div className={styles.teamProjectHeader}>

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk, Dispatch } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 
-interface TeamProjectState {
+export interface TeamProjectState {
   _id: string,
   teamId: string,
   parentProjectIds: string,
@@ -24,12 +24,12 @@ const initialState: initialstate = {
   loading: false,
   hasErrors: false,
   project: {
-    _id: "123123",
-    teamId: "123123",
-    parentProjectIds: "!23123",
-    projectName: "FitNotFat",
-    projectUrl: "fitnotfat.com",
-    description: "Aplikacja dostarcza użytkownikowi informacje ile kalorii dziennie powinien spożywać, aby osiągnąć określony cel: utrzymać obecną wagę, schudnąć lub zwiększyć masę ciała."
+    _id: "",
+    teamId: "",
+    parentProjectIds: "",
+    projectName: "",
+    projectUrl: "",
+    description: ""
   }
 };
 
@@ -45,6 +45,10 @@ export const teamProjectSlice = createSlice({
       state.loading = false;
       state.hasErrors = false;
     },
+    projectDeleteSuccess: (state) => {
+      state.loading = false;
+      state.hasErrors = false;
+    },
     projectOperationFailure: state => {
       state.loading = true;
       state.hasErrors = true;
@@ -54,22 +58,18 @@ export const teamProjectSlice = createSlice({
     },
     switchDeleteMode: state => {
       state.projectDeleteMode = !state.projectDeleteMode;
-    },
-    setProjectValue: (state, action) => {
     }
   }
 });
 
-
-// target.attributes[0].nodeValue
-
 export const { 
   projectOperation, 
   projectOperationSuccess, 
+  projectDeleteSuccess,
   projectOperationFailure, 
   switchEditMode, 
-  switchDeleteMode,
-  setProjectValue } = teamProjectSlice.actions;
+  switchDeleteMode 
+} = teamProjectSlice.actions;
 
 // if you want, add selectors here, change the one below, remember to register reducer in store.ts
 export const selectTeamProjects = (state: RootState) => state.teamProjects;
@@ -88,7 +88,7 @@ export function getProjectById(id: string) {
               'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
             }
           });
-      const data = await response.json;
+      const data = await response.json();
       dispatch(projectOperationSuccess(data));
       dispatch(switchEditMode);
     } catch (error) {
@@ -97,19 +97,20 @@ export function getProjectById(id: string) {
   }
 }
 
-export function saveProjectById(project: TeamProjectState) {
+export function saveProjectById(project: Object, id :string) {
   return async (dispatch: Dispatch) => {
-    dispatch(projectOperation())
+    dispatch(projectOperation());
     try {
-      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects`,
+      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
           {
             method: 'PATCH',
             headers: {   
+              'Content-Type': 'application/json',
               'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
             },
             body: JSON.stringify(project)
           });
-      const data = await response.json;
+      const data = await response.json();
       dispatch(projectOperationSuccess(data));
     } catch (error) {
       dispatch(projectOperationFailure());
@@ -122,15 +123,14 @@ export function deleteProjectById(id: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
+      await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
           {
             method: 'DELETE',
             headers: {   
               'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
             }
           });
-      const data = await response.json;
-      dispatch(projectOperationSuccess(data));
+      dispatch(projectDeleteSuccess());
     } catch (error) {
       dispatch(projectOperationFailure());
     }
