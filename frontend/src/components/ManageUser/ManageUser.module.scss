@@ -8,53 +8,51 @@ $color-ternary-light: #1a90ff;
 $color-ternary-warning: #ff384a;
 $color-ternary-main: #666666;
 $color-status-green: #3cc13b;
+$color-status-red: #F03738;
 
 body {
   background: $color-primary;
+  box-sizing: border-box;
 }
-.button {
-  font-family: Roboto, sans-serif;
+
+.manageUserForm {
+  max-width: 30rem;
+  color: rgba($color-secondary-light, 0.8);
+  font-family: Montserrat, sans-serif;
   font-weight: 500;
-  letter-spacing: 1.25px;
-  margin: 0 .5rem;
-  padding: .7rem 1.5rem;
-  color: $color-secondary-light;
-  border: none;
-  border-radius: .3rem;
+  font-size: 1.1rem;
+  text-align: left;
+  margin: 1.5rem 5rem 2rem 2rem;
 
-  &__red {
-    background: $color-ternary-warning;
-  }
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  &__blue {
-    background: $color-ternary-light;
+    &__value {
+      margin: .3rem 0;
+
+      input, select {
+        padding: .7rem 1rem;
+        width: 15rem;
+        background: $color-secondary;
+        color: $color-secondary-light;
+        border: rgba($color-secondary-light, 0.87) 1px solid;
+        border-radius: .4rem;
+
+        &:focus {
+          outline: none;
+          border: $color-secondary-light 1px solid;
+        }
+      }
+      select {
+        width: 17.1rem;
+      }
+    }
   }
-  &__statusGreen {
-    background: $color-secondary;
-    border: rgba($color-ternary-light, 0.75) 1px solid;
-    color: $color-ternary-light;
-    padding: 0.5rem;
-    border-radius: .2rem;
-    margin: 0 .5rem;
-  }/*
-  &__statusRed {
-    background: $color-secondary;
-    border: rgba($color-ternary-light, 0.75) 1px solid;
-    color: $color-ternary-light;
-    padding: 0.5rem;
-    border-radius: .2rem;
-    margin: 0 .5rem;
-  }
-  &__statusBlue {
-    background: $color-secondary;
-    border: rgba($color-ternary-light, 0.75) 1px solid;
-    color: $color-ternary-light;
-    padding: 0.5rem;
-    border-radius: .2rem;
-    margin: 0 .5rem;
-  }*/
 
 }
+
 .container {
   background: $color-secondary;
   width: 90%;
@@ -96,9 +94,9 @@ body {
   }
 
   li {
-    margin: 1.3rem 0;
+    margin: .7rem 0;
 
-    input {
+    input, select {
       padding: .7rem 1rem;
       width: 15rem;
       background: $color-secondary;
@@ -111,8 +109,16 @@ body {
         border: $color-secondary-light 1px solid;
       }
     }
+    select {
+      width: 17rem;
+    }
   }
 
+  &__keys {
+    li {
+      margin: 1.5rem;
+    }
+  }
 }
 
 .gradeContainer {
@@ -137,5 +143,74 @@ body {
   }
   &__body {
     display: flex;
+  }
+}
+
+.status_radio_button {
+  display: flex;
+  justify-content: flex-end;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  font-size: .7rem;
+
+  input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+  }
+
+  &__blue {
+    background: $color-secondary;
+    border: rgba($color-ternary-light, 0.75) 1px solid;
+    color: $color-ternary-light;
+    padding: .5rem 1.1rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }
+
+  &__red {
+    background: $color-secondary;
+    border: rgba($color-status-red, 0.75) 1px solid;
+    color: $color-status-red;
+    padding: .5rem .7rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }
+
+  &__green {
+    background: $color-secondary;
+    border: rgba($color-status-green, 0.75) 1px solid;
+    color: $color-status-green;
+    padding: .5rem .7rem;
+    border-radius: .2rem;
+    margin: 0 .5rem;
+  }
+
+  input[type="radio"]:checked + label {
+    display: inline-block;
+    border: rgba($color-secondary-light, 0.75) 1px solid;
+    color: $color-secondary-light;
+    border-radius: .2rem;
+  }
+
+}
+
+.button {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  margin: 0 .5rem;
+  padding: .7rem 1.5rem;
+  color: $color-secondary-light;
+  border: none;
+  border-radius: .3rem;
+
+  &__red {
+    background: $color-ternary-warning;
+  }
+
+  &__blue {
+    background: $color-ternary-light;
   }
 }
