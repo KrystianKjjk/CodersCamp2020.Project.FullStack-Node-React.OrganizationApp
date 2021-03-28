@@ -30,7 +30,7 @@ module.exports = plop => {
         },
         {
             type: 'add',
-            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.test.ts',
+            path: '{{destinationpath}}/{{pascalCase name}}/{{pascalCase name}}.test.tsx',
             templateFile: 'src/plop-templates/Component/Component.test.hbs',
         },
         {

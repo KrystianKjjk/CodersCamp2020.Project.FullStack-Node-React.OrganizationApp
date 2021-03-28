@@ -2,11 +2,11 @@ import Container from './Container';
 import MailingService from './Src/Services/MailingService'
 import App from './App';
 import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
 import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import 'express-async-errors';
+import cors from 'cors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -78,7 +78,6 @@ import MaterialService from "./Src/Services/MaterialService";
 import MaterialRepository from "./Src/Repositories/MaterialRepository";
 import MaterialModel from "./Src/Models/Material"
 
-
 const appContainer = new Container();
 
 // JWT .ENV
@@ -96,8 +95,9 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 const middlewares = [
     bodyParser.json(),
     cors({
+      origin: '*',
       exposedHeaders: 'x-auth-token',
-    }),
+    })
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 
