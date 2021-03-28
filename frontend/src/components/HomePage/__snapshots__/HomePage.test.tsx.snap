@@ -1,44 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HomePage renders without error 1`] = `
-<div>
-  <div
-    class="container"
-  >
-    <div
-      class="header"
-    >
-      Hello Name !
-    </div>
-    <div
-      class="description"
-    >
-      <div>
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge"
-          focusable="false"
-          style="padding-right: 20px;"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
-          />
-        </svg>
-        <h2>
-           Next event
-        </h2>
-      </div>
-      <div>
-        <h2>
-          Java Script Section Test - 22.01.2021
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`HomePage should render home page 1`] = `
 <div>
   <div
@@ -47,7 +8,7 @@ exports[`HomePage should render home page 1`] = `
     <div
       class="header"
     >
-      Hello Name !
+      Hello name!
     </div>
     <div
       class="description"
