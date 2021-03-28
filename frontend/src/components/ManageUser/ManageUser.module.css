@@ -5,6 +5,20 @@ body {
   box-sizing: border-box;
 }
 
+.error {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #ff384a;
+}
+
+.loading {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #1a90ff;
+}
+
 .manageUserForm {
   max-width: 30rem;
   color: rgba(255, 255, 255, 0.8);
