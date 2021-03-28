@@ -1,5 +1,4 @@
 import React from 'react';
-import Counter from './components/counter/Counter';
 import './App.css';
 import Registration from './components/Registration'
 

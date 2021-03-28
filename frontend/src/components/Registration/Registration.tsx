@@ -27,9 +27,9 @@ export default function SignUp() {
   const [formError, setFormError] = useState('');
 
   const handleSignUpClick = async () => {
-    const service = new BaseService;
+    const service = new BaseService();
     try {
-      const response = await service.post('register', {name, surname, email, password, confirmPassword})
+      await service.post('register', {name, surname, email, password, confirmPassword})
       setFormError('');
     }
     catch (error) {setFormError(error?.response?.data?.message)};
