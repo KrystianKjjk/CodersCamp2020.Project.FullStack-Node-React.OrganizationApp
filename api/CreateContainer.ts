@@ -6,7 +6,7 @@ import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import 'express-async-errors';
-import cors from 'cors';
+import * as cors from 'cors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
