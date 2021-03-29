@@ -42,7 +42,7 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
     const projectDeleteMode = props.projectDeleteMode;
     if (projectDeleteMode) {
       return  (
-        <div className = {styles.deleteModal}>
+        <div className = {styles.deleteModal} onClick={() => dispatch(switchDeleteMode())}>
           Do you really want to delete this project?
           <br/><br/>
           <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id))}>Delete</Button>  
@@ -126,7 +126,7 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <div>{selectedTeamProject!.teamId}</div>
         <div>{selectedTeamProject!.parentProjectIds}</div>
         <div>{selectedTeamProject!.projectUrl}</div>
-        <div>{selectedTeamProject!.description}</div>
+        <div className={styles.description}>{selectedTeamProject!.description}</div>
       </div>      
       </div>  
       <DeleteModal projectDeleteMode={projectDeleteMode} _id={selectedTeamProject._id}/>

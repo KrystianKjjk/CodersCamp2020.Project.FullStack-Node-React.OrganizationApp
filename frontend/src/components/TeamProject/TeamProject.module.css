@@ -2,17 +2,19 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #666666;
     text-align: left;
     width: 100%;
     height: 100%;
+    background-color: #292929;
+    color: white;
 }
 
 .teamProjectHeader {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #666666;
     padding: 10px;
 }
 
@@ -27,14 +29,14 @@
 #buttonDelete {
     background-color: #FF384A;
     margin: 0 10px;
-    width: 100px;
+    width: 100px;    
     color: white;
 }
 
 #buttonEdit {
     background-color: #2196F3;
     margin: 0 10px;
-    width: 100px;
+    width: 100px;    
     color: white;
 }
 
@@ -51,8 +53,20 @@
 
 .attributeValuesContainer {
     width: 75%;
-    display: flex;
-    flex-direction: column;
+}
+
+.attributeValuesContainer>div, .attributeNamesContainer>div, .attributeValuesContainer>input {
+    height: 25px;
+}
+
+.description{
+    display: inline-block;
+}
+
+.input {
+    width: 80%;
+    box-sizing: border-box;
+    margin: 0
 }
 
 .deleteModal {
@@ -65,7 +79,6 @@
     height: 100%;
     background-color: rgba(0,0,0,0.9);
     text-align: center;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
