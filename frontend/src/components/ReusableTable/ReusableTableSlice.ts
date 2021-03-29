@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 
+type Filter = {column: string, values: string[]};
+
 interface ReusableTableState {
   [name: string]: {
     loading: 'pending' | 'idle';
@@ -33,12 +35,13 @@ export const reusableTableSlice = createSlice({
         state[name].loading = 'idle';
       }
     },
-    filterData(state, action: PayloadAction<{ table: string, column: string, values: string[] }>) {
-      const { table, column, values } = action.payload;
-      if (values.length)
-        state[table].displayedRows = state[table].rows.filter( row => values.includes(`${row[column]}`) );
-      else
-        state[table].displayedRows = [ ...state[table].rows ]
+    filterData(state, action: PayloadAction<{ table: string, filters: Filter[] }>) {
+      const { table, filters } = action.payload;
+      state[table].displayedRows = [ ...state[table].rows ];
+      filters.forEach(({column, values}) => {
+        if (values.length)
+          state[table].displayedRows = state[table].displayedRows.filter( row => values.includes(`${row[column]}`) );
+      })
     },
     sortData(state, action: PayloadAction<{ table: string, column: string, type?: string }>) {
       const { table, column, type } = action.payload;

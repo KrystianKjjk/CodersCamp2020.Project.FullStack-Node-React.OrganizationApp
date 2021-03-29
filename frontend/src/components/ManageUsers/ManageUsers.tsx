@@ -6,9 +6,7 @@ import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
-import { useDispatch } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
-import { values } from 'lodash';
 
 
 interface CheckboxProps {
@@ -67,25 +65,27 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => 
   }
   
   useEffect(() => {
-    const values = Object.entries(statusFilters)
+    const typeValues = Object.entries(typeFilters)
       .filter(([, value]) => value)
       .map(([key, value]) => key);
-    dispatch(filterData({table: 'Users', column: 'status', values }));
-  }, [statusFilters]);
-  useEffect(() => {
-    const values = Object.entries(typeFilters)
+    const statusValues = Object.entries(statusFilters)
       .filter(([, value]) => value)
       .map(([key, value]) => key);
-    dispatch(filterData({table: 'Users', column: 'type', values }));
-  }, [typeFilters]);
+    const filters = [
+      {column: 'type', values: typeValues},
+      {column: 'status', values: statusValues}
+    ];
+    dispatch(filterData({table: 'Users', filters }));
+  }, [typeFilters, statusFilters]);
   useEffect(() => {
     dispatch(sortData({table: 'Users', column: sortBy }));
   }, [sortBy]);
   useEffect(() => {
-    if ( search.match(/[0-9a-f]{16}/) )
-      dispatch(filterData({table: 'Users', column: 'id', values: [search] }));
-    else
-      dispatch(filterData({table: 'Users', column: 'surname', values: [search] }));
+    const f = {
+      column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'surname',
+      values: [ search ],
+    }
+    dispatch(filterData({table: 'Users', filters: [ f ]}));
   }, [search]);
 
   const sortByOptions = ['name', 'surname', 'type', 'status'];
@@ -97,14 +97,14 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => 
   ]
   
   return (
-    <div className={styles.container}>
+    <div className={styles.container} aria-label='Manage Users'>
       <div className={styles.mainHeader}>
         <h2>Users</h2>
         <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
       </div>
       <div className={styles.manageContainer}>
         <h2 className={styles.manageHeader}>Manage Users</h2>
-        <span onClick={onClickAdd} className={styles.addButton}>
+        <span onClick={onClickAdd} className={styles.addButton} aria-label='Add user'>
           <AddButton text='Add'/>
         </span>
         <span className={styles.selectSortBy}>
