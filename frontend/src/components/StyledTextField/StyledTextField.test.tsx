@@ -12,14 +12,11 @@ describe('StyledTextField', () => {
          render(
             <Provider store={store}>
                <StyledTextField 
-                  label="First Name"
                   onChange={inputMock}
                   defaultValue={'Jan'}
                />)
             </Provider>
          );
-         const textField = await screen.findByText('First Name');
-         expect(textField).toBeInTheDocument();
    
          const input = await screen.getByDisplayValue('Jan') as HTMLInputElement;
 

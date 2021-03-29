@@ -9,19 +9,19 @@ import BaseService from '../../app/baseService';
 jest.mock('../../app/baseService', () => jest.fn());
 
 describe('Registration', () => {
-   it('renders without error', async () => {
+   it('renders without error', () => {
       render(
          <Provider store={store}>
             <Registration />)
          </Provider>
       );
 
-      const fnameInput = await screen.getByTestId('r-fname');
-      const lnameInput = await screen.getByTestId('r-lname');
-      const emailinput = await screen.getByTestId('r-email');
-      const passwordInput = await screen.getByTestId('r-password');
-      const cpasswordInput = await screen.getByTestId('r-cpassword');
-      const button = await screen.getByTestId('r-button');
+      const fnameInput = screen.getByTestId('r-fname');
+      const lnameInput = screen.getByTestId('r-lname');
+      const emailinput = screen.getByTestId('r-email');
+      const passwordInput = screen.getByTestId('r-password');
+      const cpasswordInput = screen.getByTestId('r-cpassword');
+      const button = screen.getByTestId('r-button');
 
       expect(fnameInput).toHaveTextContent('First Name');
       expect(lnameInput).toHaveTextContent('Last Name');
@@ -38,23 +38,23 @@ describe('Registration', () => {
          </Provider>
       );
 
-      const inputFirstNameDiv = await screen.getByTestId('r-fname')
+      const inputFirstNameDiv = screen.getByTestId('r-fname')
       const inputFirstNameElement = inputFirstNameDiv.querySelector('input');
       fireEvent.change(inputFirstNameElement, { target: { value: 'Jan' } });
 
-      const inputLastNameDiv = await screen.getByTestId('r-lname')
+      const inputLastNameDiv = screen.getByTestId('r-lname')
       const inputLastNameElement = inputLastNameDiv.querySelector('input');
       fireEvent.change(inputLastNameElement, { target: { value: 'Nowak' } });
       
-      const inputEmailDiv = await screen.getByTestId('r-email')
+      const inputEmailDiv = screen.getByTestId('r-email')
       const inputEmailElement = inputEmailDiv.querySelector('input');
       fireEvent.change(inputEmailElement, { target: { value: 'testowy@o2.pl' } });
 
-      const inputPasswordDiv = await screen.getByTestId('r-password')
+      const inputPasswordDiv = screen.getByTestId('r-password')
       const inputPasswordElement = inputPasswordDiv.querySelector('input');
       fireEvent.change(inputPasswordElement, { target: { value: 'Aaaa1234!' } });
       
-      const inputPasswordConfirmDiv = await screen.getByTestId('r-cpassword')
+      const inputPasswordConfirmDiv = screen.getByTestId('r-cpassword')
       const inputPasswordConfirmElement = inputPasswordConfirmDiv.querySelector('input');
       fireEvent.change(inputPasswordConfirmElement, { target: { value: 'Aaaa1234!' } });
 

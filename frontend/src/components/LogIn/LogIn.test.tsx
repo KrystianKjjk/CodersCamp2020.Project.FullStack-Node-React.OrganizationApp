@@ -9,16 +9,16 @@ import BaseService from '../../app/baseService';
 jest.mock('../../app/baseService', () => jest.fn());
 
 describe('LogIn', () => {
-   it('renders without error', async () => {
+   it('renders without error', () => {
       render(
          <Provider store={store}>
             <LogIn />)
          </Provider>
       );
 
-      const emailinput = await screen.getByTestId('li-email');
-      const passwordInput = await screen.getByTestId('li-password');
-      const button = await screen.getByTestId('li-button');
+      const emailinput = screen.getByTestId('li-email');
+      const passwordInput = screen.getByTestId('li-password');
+      const button = screen.getByTestId('li-button');
 
       expect(emailinput).toHaveTextContent('Email Address');
       expect(passwordInput).toHaveTextContent('Password');
@@ -32,11 +32,11 @@ describe('LogIn', () => {
          </Provider>
       );
 
-      const inputEmailDiv = await screen.getByTestId('li-email')
+      const inputEmailDiv = screen.getByTestId('li-email');
       const inputEmailElement = inputEmailDiv.querySelector('input');
       fireEvent.change(inputEmailElement, { target: { value: 'testowy@o2.pl' } });
 
-      const inputPasswordDiv = await screen.getByTestId('li-password')
+      const inputPasswordDiv = screen.getByTestId('li-password');
       const inputPasswordElement = inputPasswordDiv.querySelector('input');
       fireEvent.change(inputPasswordElement, { target: { value: 'Aaaa1234!' } });
       

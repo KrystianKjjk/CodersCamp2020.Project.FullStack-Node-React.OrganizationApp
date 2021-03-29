@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import {
+  Button, 
+  CssBaseline,
+  Link,
+  Grid,
+  Typography,
+  Container,
+  FormHelperText
+} from '@material-ui/core';
 
 import StyledTextField from '../StyledTextField'
 import useStyles from './LogIn.style';
@@ -27,7 +29,7 @@ export default function SignIn() {
   const [formError, setFormError] = useState('');
 
   const handleSignInClick = async () => {
-    const service = new BaseService;
+    const service = new BaseService();
     try {
       const response = await service.post('login', { email, password})
       setFormError('');
