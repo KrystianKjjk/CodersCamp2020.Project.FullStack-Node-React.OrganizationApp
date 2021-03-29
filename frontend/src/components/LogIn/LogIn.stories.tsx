@@ -1,13 +1,20 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
-import LogIn , { LogInProps } from './LogIn';
+import LogIn from './LogIn';
+import { Provider } from 'react-redux';
+import { store } from '../../app/store';
+import { StyledTextFieldProps } from '../StyledTextField/StyledTextField';
 
 export default {
   title: 'LogIn component',
   component: LogIn,
 } as Meta;
 
-const Template: Story<LogInProps> = (args) => <LogIn {...args} />;
+const Template: Story<StyledTextFieldProps> = (args) => (
+  <Provider store={store}>
+    <LogIn {...args} />
+  </Provider>
+);
 
 export const FirstInput = Template.bind({});
 FirstInput.args = {
