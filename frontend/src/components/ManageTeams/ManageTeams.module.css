@@ -1,0 +1,38 @@
+.container {
+    margin: auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.mainHeader {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    padding: 1rem;
+    margin-bottom: 3rem;
+}
+.mainHeader > * {
+    margin: auto 8rem auto 0rem;
+}
+.manageContainer {
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-areas:    "mainHeader sortBy addBtn";
+    border: gray 2px solid;
+    padding: 1rem;
+}
+.addButton {
+    grid-area: addBtn;
+    justify-self: end;
+    align-self: center;
+}
+.selectSortBy {
+    grid-area: sortBy;
+    justify-self: center;
+    align-self: center;
+}
+.manageHeader {
+    grid-area: mainHeader;
+    align-self: center;
+}
