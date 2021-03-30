@@ -27,7 +27,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
   }
   
   useEffect(() => {
-    dispatch(sortData({table: 'Users', column: sortBy }));
+    dispatch(sortData({table: 'Teams', column: sortBy }));
   }, [sortBy]);
   useEffect(() => {
     const f = {
