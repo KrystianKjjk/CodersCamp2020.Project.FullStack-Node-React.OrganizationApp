@@ -1,5 +1,34 @@
-import baseService from "../app/baseService";
 import {IGrade} from "../models/user.model";
+import BaseService from "../app/baseService";
+
+export default class GradeService {
+
+    endpoint: string = '';
+    httpConfig = {};
+
+    constructor(private baseEndpoint: string, private httpService: BaseService) {
+        this.endpoint = `${baseEndpoint}/grades`
+        this.httpConfig = {
+            headers: { 'x-auth-token': localStorage.getItem('token') }
+        }
+    };
+
+    async getGrades(userID: string) {
+        return this.httpService.get(`${this.endpoint}/${userID}`,this.httpConfig);
+    }
+    async createGrade(userID: string, grade: IGrade) {
+        return this.httpService.post(`${this.endpoint}/${userID}`, grade, this.httpConfig);
+    }
+    async updateGrade(gradeID: string, grade: IGrade) {
+        return this.httpService.patch(`${this.endpoint}/${gradeID}`, grade, this.httpConfig);
+    }
+    async deleteGrade(gradeID: string) {
+        return this.httpService.delete(`${this.endpoint}/${gradeID}`,this.httpConfig);
+    }
+}
+
+
+
 
 /*
 
