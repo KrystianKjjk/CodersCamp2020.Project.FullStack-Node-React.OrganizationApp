@@ -1,34 +1,40 @@
 import React, {useEffect, useState} from 'react';
+import { useHistory } from "react-router-dom";
+
+import UserService from "../../api/users.service";
+import BaseService from "../../app/baseService";
+import {IRole, IStatus, IUser} from "../../models/user.model";
 
 import styles from './ManageUser.module.css';
-import {IGrade, IRole, IStatus, IUser} from "../../models/user.model";
 
 export interface ManageUserProps {
 
 }
 
 const ManageUser: React.FC< ManageUserProps > = (props: any) => {
-    // @ts-ignore
+
+    //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU3ZTAyMGRhODU2ZTAwMTU4NDViZWEiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTcxNjgsImV4cCI6MTYxNjc5ODM2OH0.UnY8L7gVH-e3vXr86hxozWcBqOudSUPr9yKlN0RaMyo';
+
+    const baseAPIUrl = `https://coders-camp-organization-app.herokuapp.com/api/`;
+
+    const userService = new UserService(baseAPIUrl, new BaseService());
+    const history = useHistory();
+
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [isEdited, setIsEdited] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [user, setUser] = useState< IUser | undefined>(undefined);
-
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU3ZTAyMGRhODU2ZTAwMTU4NDViZWEiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTcxNjgsImV4cCI6MTYxNjc5ODM2OH0.UnY8L7gVH-e3vXr86hxozWcBqOudSUPr9yKlN0RaMyo';
 
     let userID = props.match.params.userID;
 
-    const userEndpoint = `https://coders-camp-organization-app.herokuapp.com/api/users/${userID}`;
-    const gradeEndpoint = 'https://coders-camp-organization-app.herokuapp.com/api/grades/';
+    useEffect(() => {
+        getUser();
+    }, []);
+
 
     function toggleEdit(){
-        setIsEdited(!isEdited);
+        setIsEdit(!isEdit);
     }
-
-
-     useEffect(() => {
-         getUser();
-    }, []);
 
     function handleInputChange(event: any) {
         const target = event.target;
@@ -41,7 +47,49 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
         })
     }
 
+    function getUser() {
+        userService.getUser(userID)
+            .then(res => {
+                if(res.status === 200)
+                {
+                    setIsLoaded(true);
+                    setUser(
+                        {
+                        name: res.data.name,
+                        surname: res.data.surname,
+                        type: res.data.type,
+                        status: res.data.status,
+                        email: res.data.email,
+                        })
+                } else {
+                    throw Error("Not 2xx response");
+                }
+            }).catch( err => {
+                setIsLoaded(true);
+                setError(err);
+        })
+    }
+    function updateUser() {
+        userService.updateUser(userID, user as IUser)
+            .then(res => {
+                if(res.status === 200 ) toggleEdit();
+            })
+            .catch(err => {
+                setError(err);
+            })
+    }
 
+    function deleteUser() {
+        userService.deleteUser(userID)
+            .then(res => {
+                if(res.status === 200) {
+                    history.push('/users');
+                }
+            })
+            .catch( err => {
+                setError(err);
+            })
+    }
 
     if (error) {
         return <div className={styles.error}>Error</div>;
@@ -50,6 +98,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     } else {
         return (
             <div>
+
                 <div className={styles.container}>
                     <div className={styles.container__header}>
                         <span>Manage user</span>
@@ -58,7 +107,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 className={`${styles.button__red} ${styles.button}`}
                                 onClick={deleteUser}
                             > DELETE </button>
-                            {isEdited ? (
+                            {isEdit ? (
                                 <button
                                     className={`${styles.button__blue} ${styles.button}`}
                                     onClick={updateUser}
@@ -73,12 +122,15 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                     </div>
 
                     <form className={styles.manageUserForm}>
+
                         <div className={styles.manageUserForm__row}>
+
                             <div className={styles.manageUserForm__row__key}>
                                 <label htmlFor="status">Status</label>
                             </div>
+
                             <div className={`${styles.manageUserForm__row__value} ${styles.status_radio_button}`}>
-                                {(isEdited || user?.status == IStatus.Active) && (
+                                {(isEdit || user?.status == IStatus.Active) && (
                                     <div>
                                         <input type="radio"
                                                id="Active"
@@ -89,9 +141,9 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                         />
                                         <label className={`${styles.status_radio_button__blue}`} htmlFor="Active">Active</label>
                                     </div>
-                                )
-                                  }
-                                {(isEdited || user?.status == IStatus.Resigned) && (
+                                )}
+
+                                {(isEdit || user?.status == IStatus.Resigned) && (
                                         <div>
                                         <input type="radio"
                                                id="Resigned"
@@ -103,7 +155,8 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                         <label className={`${styles.status_radio_button__red}`} htmlFor="Resigned">Resigned</label>
                                         </div>
                                         )}
-                                {(isEdited || user?.status == IStatus.Archived) && (
+
+                                {(isEdit || user?.status == IStatus.Archived) && (
                                     <div>
                                             <input type="radio"
                                                    id="Archived"
@@ -120,12 +173,12 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
 
                         <div className={styles.manageUserForm__row}>
                             <div className={styles.manageUserForm__row__key}>
-                                <label htmlFor="fname">First Name</label>
+                                <label htmlFor="name">First Name</label>
                             </div>
                             <div className={styles.manageUserForm__row__value}>
-                                {isEdited ? (
+                                {isEdit ? (
                                     <input type="text"
-                                    id="fname"
+                                    id="name"
                                     name="name"
                                     placeholder={user?.name}
                                     onChange={handleInputChange}/>
@@ -137,12 +190,12 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
 
                         <div className={styles.manageUserForm__row}>
                             <div className={styles.manageUserForm__row__key}>
-                                <label htmlFor="lname">Last Name</label>
+                                <label htmlFor="surnname">Last Name</label>
                             </div>
                             <div className={styles.manageUserForm__row__value}>
-                                {isEdited ? (
+                                {isEdit ? (
                                     <input type="text"
-                                           id="lname"
+                                           id="surnname"
                                            name="surname"
                                            placeholder={user?.surname}
                                            onChange={handleInputChange}
@@ -158,7 +211,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 <label htmlFor="email">Email</label>
                             </div>
                             <div className={styles.manageUserForm__row__value}>
-                                {isEdited ? (
+                                {isEdit ? (
                                     <input type="text"
                                            id="email"
                                            name="email"
@@ -176,7 +229,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 <label htmlFor="type">Type</label>
                             </div>
                             <div className={styles.manageUserForm__row__value}>
-                                {isEdited ? (
+                                {isEdit ? (
                                     <select name="type"
                                             value={user?.type}
                                             onChange={handleInputChange}
@@ -194,10 +247,8 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                     </form>
                 </div>
             </div>
-
         );
-    };
+    }
 }
-
 
 export default ManageUser;

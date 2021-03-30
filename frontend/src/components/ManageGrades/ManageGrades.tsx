@@ -8,6 +8,8 @@ export interface ManageGradesProps {
 
 const ManageGrades: React.FC< ManageGradesProps > = props => {
 
+    const gradeEndpoint = 'https://coders-camp-organization-app.herokuapp.com/api/grades/';
+
     const [grades, setGrades] = useState<IGrade[] | undefined>(undefined);
     const [gradeEdit, setGradeEdit] = useState<Array<boolean>>([]);
 
@@ -22,10 +24,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     function saveGrade(index: number) {
         if('_id' in grades![index]) {
-            updateGrade(grades![index]);
+         //   updateGrade(grades![index]);
         }
         else {
-            postGrade(grades![index]);
+         //   postGrade(grades![index]);
         }
         toggleGradeEdit(index);
     }
@@ -157,7 +159,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
                         <button
                             className={`${styles.button__red} ${styles.button}`}
-                            onClick={() => deleteGrade(grade._id)}
+                        //    onClick={() => deleteGrade(grade._id)}
                         >DELETE</button>
                         {gradeEdit[index] ?
                             (

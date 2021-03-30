@@ -1,84 +1,25 @@
+import BaseService from "../app/baseService";
 import {IUser} from "../models/user.model";
 
+export default class UserService {
 
-function updateUser() {
-    fetch(userEndpoint,
-        {
-            method: "PATCH",
-            headers: {
-                'x-auth-token': token,
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(user),
-        })
-        .then(result => {
-            if(result.ok){
-                alert("updated");
-                toggleEdit();
-            }
-            else {
-                alert("something went wrong");
-            }
-        })
-        .catch(error => {
-            setIsLoaded(true);
-            setError(error);
-        });
-}
+    endpoint: string = '';
+    httpConfig = {};
 
-function deleteUser() {
-    fetch(userEndpoint,
-        {
-            method: "DELETE",
-            headers: {
-                'x-auth-token': token
-            },
-        })
-        .then(result => {
-            if(result.ok){
-                alert("deleted");
-            }
-            else {
-                alert("something went wrong");
-            }
-        })
-        .catch(error => {
-            setIsLoaded(true);
-            setError(error);
-        });
-}
+    constructor(private baseEndpoint: string, private httpService: BaseService) {
+        this.endpoint = `${baseEndpoint}/users`
+        this.httpConfig = {
+            headers: { 'x-auth-token': localStorage.getItem('token') }
+        }
+    };
 
-function getUser() {
-    fetch(userEndpoint,
-        {
-            method: "GET",
-            headers: {
-                'x-auth-token': token
-            },
-        })
-        .then(result => {
-            if(result.ok){
-                return result.json();
-            }
-            else {
-                throw Error("Not 2xx response");
-            }
-        })
-        .then(result => {
-            setIsLoaded(true);
-
-            const tmpUser: Omit<IUser, "_id"> = {
-                name: result.name,
-                surname: result.surname,
-                type: result.type,
-                status: result.status,
-                email: result.email,
-            }
-            setUser(tmpUser);
-            setGrades(result.grades)
-        })
-        .catch(error => {
-            setIsLoaded(true);
-            setError(error);
-        });
+    async getUser(userID: string) {
+        return this.httpService.get(`${this.endpoint}/${userID}`,this.httpConfig);
+    }
+    async deleteUser(userID: string) {
+        return this.httpService.delete(`${this.endpoint}/${userID}`,this.httpConfig);
+    }
+    async updateUser(userID: string, user: IUser) {
+        return this.httpService.patch(`${this.endpoint}/${userID}`, user, this.httpConfig);
+    }
 }
