@@ -34,7 +34,14 @@ export default function SignIn() {
       const response = await service.post('login', { email, password})
       setFormError('');
       const token: any = response?.headers?.['x-auth-token'];
+      const userId: any = response?.data?.['_id'];
+      const userType: any = response?.data?.['type'];
+
       localStorage.setItem('token', token);
+      localStorage.setItem('id', userId);
+      localStorage.setItem('type', userType);
+      
+      console.log(response);
       dispatch(setLoggedInUserId(response?.data?._id || ''));
     }
     catch (error) {setFormError(error?.response?.data?.message)};
