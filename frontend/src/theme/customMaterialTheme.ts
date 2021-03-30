@@ -7,3 +7,11 @@ export default createMuiTheme({
         }
     },
 });
+
+export const addBtnTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#2196F3",
+        }
+    }
+});
