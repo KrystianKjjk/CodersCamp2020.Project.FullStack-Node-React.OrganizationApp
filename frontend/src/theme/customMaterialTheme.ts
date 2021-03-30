@@ -9,8 +9,10 @@ export default createMuiTheme({
     },
 });
 
-export const greenTheme = createMuiTheme({
+export const addBtnTheme = createMuiTheme({
     palette: {
-        primary: green,
+        primary: {
+            main: "#2196F3",
+        }
     }
 });
