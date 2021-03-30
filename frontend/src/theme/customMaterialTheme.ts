@@ -5,8 +5,9 @@ export default createMuiTheme({
         background: {
             default: '#292929',
         },
-        text: {
-            primary: '#FFF',
+        text:{
+            primary: "#fff"
         }
+
     },
 });

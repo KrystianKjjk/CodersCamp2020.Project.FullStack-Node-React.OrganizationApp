@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
-import LogIn from './components/LogIn';
-import Registration from './components/Registration'
+import MainView from './components/MainView';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <LogIn />
+    <Router>
+      <MainView/>
+    </Router>
     </div>
   );
 }
