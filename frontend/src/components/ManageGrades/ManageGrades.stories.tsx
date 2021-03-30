@@ -11,5 +11,5 @@ const Template: Story<ManageGradesProps> = (args) => <ManageGrades {...args} />;
 
 export const FirstInput = Template.bind({});
 FirstInput.args = {
-  label: 'Write something: ',
+  userID: '606394ba9352600015194e65',
 };

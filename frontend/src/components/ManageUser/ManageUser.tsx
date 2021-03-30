@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import UserService from "../../api/users.service";
 import BaseService from "../../app/baseService";
 import {IRole, IStatus, IUser} from "../../models/user.model";
+import ManageGrades from "../ManageGrades";
 
 import styles from './ManageUser.module.css';
 
@@ -62,7 +63,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                         email: res.data.email,
                         })
                 } else {
-                    throw Error("Not 2xx response");
+                    throw Error;
                 }
             }).catch( err => {
                 setIsLoaded(true);
@@ -246,6 +247,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                         </div>
                     </form>
                 </div>
+                <ManageGrades userID={userID}/>
             </div>
         );
     }
