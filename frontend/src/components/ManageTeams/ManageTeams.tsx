@@ -37,30 +37,35 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
     dispatch(filterData({table: 'Teams', filters: [ f ]}));
   }, [search]);
 
-  const sortByOptions = ['name', 'surname', 'type', 'status'];
+  const sortByOptions = ['name', 'surname', 'courseName'];
   const columns = [
     {field: 'surname', headerName: 'Mentor surname', width: 150, sortable: true},
     {field: 'name', headerName: 'Mentor name', width: 150, sortable: true},
-    {field: 'courseName', headerName: 'Course name', width: 150, sortable: true},
+    {field: 'courseName', headerName: 'Course name', width: 250, sortable: true},
   ]
   
   return (
-    <div className={styles.container} aria-label='Manage Teams'>
+    <div className={styles.manageTeams} aria-label='Manage Teams'>
       <div className={styles.mainHeader}>
         <h2>Teams</h2>
-        <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
+        <span className={styles.searchInput}>
+          <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
+        </span>        
       </div>
-      <div className={styles.manageContainer}>
-        <h2 className={styles.manageHeader}>Manage Teams</h2>
-        <span onClick={onClickAdd} className={styles.addButton} aria-label='Add team'>
-          <AddButton text='Add'/>
-        </span>
-        <span className={styles.selectSortBy}>
-          <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
-        </span>
-        <h3 className={styles.checkboxesHeader}>Sorting options</h3>
+      <div className={styles.container}>
+        <div className={styles.manageContainer}>
+          <h2 className={styles.manageHeader}>Manage Teams</h2>
+          <span onClick={onClickAdd} className={styles.addButton} aria-label='Add team'>
+            <AddButton text='Add'/>
+          </span>
+          <span className={styles.selectSortBy}>
+            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
+          </span>
+        </div>
+        <div className={styles.table}>
+          <Table name='Teams' columns={columns} getData={getTeams}/>
+        </div>
       </div>
-      <Table name='Teams' columns={columns} getData={getTeams}/>
     </div>
   );
 };

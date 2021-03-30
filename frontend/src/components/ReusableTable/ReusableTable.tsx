@@ -45,7 +45,6 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         ( !tables[tableName] || tables[tableName].loading !== 'idle' ) ? (<p>Loading...</p>) :
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
-            {name}
             <DataGrid
               rows={tables[tableName].rows}
               columns={columns}
