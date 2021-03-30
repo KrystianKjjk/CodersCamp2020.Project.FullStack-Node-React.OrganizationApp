@@ -1,4 +1,3 @@
-import { green } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 export default createMuiTheme({
@@ -9,8 +8,10 @@ export default createMuiTheme({
     },
 });
 
-export const greenTheme = createMuiTheme({
+export const addBtnTheme = createMuiTheme({
     palette: {
-        primary: green,
+        primary: {
+            main: "#2196F3",
+        }
     }
 });

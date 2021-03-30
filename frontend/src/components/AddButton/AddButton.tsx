@@ -1,7 +1,7 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import { greenTheme } from '../../theme/customMaterialTheme';
+import { addBtnTheme } from '../../theme/customMaterialTheme';
 import { ThemeProvider } from '@material-ui/styles';
 
 export interface AddButtonProps {
@@ -10,7 +10,7 @@ export interface AddButtonProps {
 
 const AddButton: React.FC< AddButtonProps > = ({ text }) => {
   return (
-    <ThemeProvider theme={greenTheme}>
+    <ThemeProvider theme={addBtnTheme}>
       <Button variant="contained" color="primary">
         <AddIcon /> <span>{text}</span>
       </Button>
