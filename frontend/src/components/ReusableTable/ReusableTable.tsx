@@ -46,7 +46,7 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
             <DataGrid
-              rows={tables[tableName].rows}
+              rows={tables[tableName].displayedRows}
               columns={columns}
               pageSize={5}
               autoHeight

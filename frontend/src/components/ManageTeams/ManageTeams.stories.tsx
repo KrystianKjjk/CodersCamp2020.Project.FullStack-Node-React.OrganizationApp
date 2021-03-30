@@ -17,10 +17,10 @@ const Template: Story<ManageTeamsProps> = (args) => (
 
 const teamsDatabase = [
   {id: 1, name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
-  {id: 2, name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 1. edition'},
-  {id: 3, name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 1. edition'},
-  {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 1. edition'},
-  {id: 5, name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 1. edition'},
+  {id: 2, name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 2. edition'},
+  {id: 3, name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 3. edition'},
+  {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 4. edition'},
+  {id: 5, name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 5. edition'},
 ]
 const getFakeTeams = () => {
   return Promise.resolve(teamsDatabase);

@@ -39,7 +39,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
 
   const sortByOptions = ['name', 'surname', 'courseName'];
   const columns = [
-    {field: 'surname', headerName: 'Mentor surname', width: 150, sortable: true},
+    {field: 'surname', headerName: 'Mentor surname', width: 200, sortable: true},
     {field: 'name', headerName: 'Mentor name', width: 150, sortable: true},
     {field: 'courseName', headerName: 'Course name', width: 250, sortable: true},
   ]

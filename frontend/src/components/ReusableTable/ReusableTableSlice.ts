@@ -38,6 +38,7 @@ export const reusableTableSlice = createSlice({
     filterData(state, action: PayloadAction<{ table: string, filters: Filter[] }>) {
       const { table, filters } = action.payload;
       state[table].displayedRows = [ ...state[table].rows ];
+      if (filters[0].values[0] === '') return;
       filters.forEach(({column, values}) => {
         if (values.length)
           state[table].displayedRows = state[table].displayedRows.filter( row => values.includes(`${row[column]}`) );
