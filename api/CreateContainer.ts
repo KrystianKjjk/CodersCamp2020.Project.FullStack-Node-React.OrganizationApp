@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import 'express-async-errors';
+import * as cors from 'cors';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -93,7 +94,11 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 
 // Middlewares
 const middlewares = [
-    bodyParser.json()
+    bodyParser.json(),
+    cors({
+      origin: '*',
+      exposedHeaders: 'x-auth-token',
+    })
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 

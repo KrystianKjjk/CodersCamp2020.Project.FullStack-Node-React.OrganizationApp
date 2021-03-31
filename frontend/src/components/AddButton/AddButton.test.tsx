@@ -1,15 +1,15 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { getByText, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
-import {{pascalCase name}} from './{{pascalCase name}}';
+import AddButton from './AddButton';
 
-describe('{{pascalCase name}}', () => {
+describe('AddButton', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <{{pascalCase name}} name='{{pascalCase name}}'/>
+            <AddButton text='Add'/>
          </Provider>
       );
    });
