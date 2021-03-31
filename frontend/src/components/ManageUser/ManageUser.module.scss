@@ -10,97 +10,21 @@ $color-ternary-main: #666666;
 $color-status-green: #3cc13b;
 $color-status-red: #F03738;
 
-* {
-  margin: 0;
-}
-
-p {
-  width: 15rem;
-  padding: .7rem 1rem .7rem 0;
-  display: inline-block;
-}
-
-body {
-  background: $color-primary;
-  box-sizing: border-box;
-}
-
 .error {
   font-family: Montserrat, sans-serif;
   font-size: 3rem;
   font-weight: 400;
+  margin: 17rem auto;
   color: $color-ternary-warning;
 }
 
 .loading {
-  font-family: Montserrat, sans-serif;
-  font-size: 3rem;
-  font-weight: 400;
-  color: $color-ternary-light;
-}
-
-.manageUserForm {
-  max-width: 30rem;
-  color: rgba($color-secondary-light, 0.8);
-  font-family: Montserrat, sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-align: left;
-  margin: 1.5rem 5rem 2rem 2rem;
-
-  &__row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
-    &__key {
-      flex: 2;
-    }
-    &__value {
-      margin: .3rem 0;
-      font-weight: 300;
-      flex: 3;
-
-      input, select {
-        padding: .7rem 1rem;
-        width: 15rem;
-        background: $color-secondary;
-        color: $color-secondary-light;
-        border: rgba($color-secondary-light, 0.87) 1px solid;
-        border-radius: .4rem;
-
-        &:focus {
-          outline: none;
-          border: $color-secondary-light 1px solid;
-        }
-      }
-      &__grades {
-        text-align: right;
-        input {
-          padding: .7rem 1rem;
-          width: 2rem;
-          margin: .5rem;
-        }
-        p {
-          color: rgba($color-secondary-light, 0.8);
-          font-family: Montserrat, sans-serif;
-          font-weight: 500;
-          font-size: 1.1rem;
-        }
-      }
-
-      select {
-        width: 17.1rem;
-      }
-    }
-  }
-
+  margin: 15rem auto;
 }
 
 .container {
   background: $color-secondary;
-  width: 90%;
-  margin: 0 auto;
+  margin: 1rem 0;
   border: 1px $color-ternary-main solid;
   border-radius: .3rem;
 
@@ -116,6 +40,11 @@ body {
 
     span {
       font-weight: 500;
+      align-self: center;
+    }
+
+    &__button {
+      display: flex;
     }
   }
 
@@ -124,82 +53,81 @@ body {
   }
 }
 
-.list {
-  list-style: none;
+.manageUserForm {
+  max-width: 40rem;
   color: rgba($color-secondary-light, 0.8);
   font-family: Montserrat, sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.1rem;
   text-align: left;
-  margin: 2rem 5rem 2rem 0;
+  margin: 1.5rem 5rem 2rem 2rem;
 
-  &__values {
-    font-weight: 300;
-  }
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
-  li {
-    margin: .7rem 0;
+    &__key {
+      flex: 2;
+      height: 3rem;
+      display: flex;
 
-    input, select {
-      padding: .7rem 1rem;
-      width: 15rem;
-      background: $color-secondary;
-      color: $color-secondary-light;
-      border: rgba($color-secondary-light, 0.87) 1px solid;
-      border-radius: .4rem;
-
-      &:focus {
-        outline: none;
-        border: $color-secondary-light 1px solid;
+      label {
+        align-self: center;
       }
     }
-    select {
-      width: 17rem;
+
+    &__value {
+      margin: .3rem 0;
+      height: 3rem;
+      font-weight: 300;
+      flex: 3;
+      display: flex;
+
+      p {
+        margin-left: 1rem;
+        align-self: center;
+      }
+
+      input, select {
+        padding: .7rem 1rem;
+        width: 15rem;
+        background: $color-secondary;
+        color: $color-secondary-light;
+        border: rgba($color-secondary-light, 0.87) 1px solid;
+        border-radius: .4rem;
+
+        &:focus {
+          outline: none;
+          border: $color-secondary-light 1px solid;
+        }
+      }
+
+      select {
+        width: 17.1rem;
+      }
     }
   }
 
-  &__keys {
-    li {
-      margin: 1.5rem;
-    }
-  }
-}
-
-.gradeContainer {
-  background: $color-secondary;
-  width: 31%;
-  margin: 1rem auto;
-  padding-bottom: 1rem;
-  border: 1px $color-ternary-main solid;
-  border-radius: .3rem;
-
-  &__header {
-    padding: 1rem;
-    background: inherit;
-    color: rgba(255,255,255, 0.87);
-    font-size: 1.4rem;
-    border: 1px $color-ternary-main solid;
-    border-radius: .3rem;
-    text-align: center;
-    span {
-      font-weight: 500;
-    }
-  }
-  &__body {
-    display: flex;
-  }
 }
 
 .status_radio_button {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   font-family: Roboto, sans-serif;
   font-weight: 500;
   letter-spacing: 1.25px;
   font-size: .7rem;
 
   div:first-child label {
-    margin-left: 0;
+    margin-left: 1rem;
+  }
+
+  &__edit {
+    div:first-child label {
+      margin-left: 0;
+    }
   }
 
   input[type="radio"] {
@@ -243,25 +171,5 @@ body {
     border: rgba($color-secondary-light, 0.75) 1px solid;
     color: $color-secondary-light;
     border-radius: .2rem;
-  }
-
-}
-
-.button {
-  font-family: Roboto, sans-serif;
-  font-weight: 500;
-  letter-spacing: 1.25px;
-  margin: 0 .5rem;
-  padding: .7rem 1.5rem;
-  color: $color-secondary-light;
-  border: none;
-  border-radius: .3rem;
-
-  &__red {
-    background: $color-ternary-warning;
-  }
-
-  &__blue {
-    background: $color-ternary-light;
   }
 }

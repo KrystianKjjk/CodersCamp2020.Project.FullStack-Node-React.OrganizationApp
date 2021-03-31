@@ -1,90 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
-* {
-  margin: 0;
-}
-
-p {
-  width: 15rem;
-  padding: 0.7rem 1rem 0.7rem 0;
-  display: inline-block;
-}
-
-body {
-  background: #292929;
-  box-sizing: border-box;
-}
-
 .error {
   font-family: Montserrat, sans-serif;
   font-size: 3rem;
   font-weight: 400;
+  margin: 17rem auto;
   color: #ff384a;
 }
 
 .loading {
-  font-family: Montserrat, sans-serif;
-  font-size: 3rem;
-  font-weight: 400;
-  color: #1a90ff;
-}
-
-.manageUserForm {
-  max-width: 30rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-family: Montserrat, sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-align: left;
-  margin: 1.5rem 5rem 2rem 2rem;
-}
-.manageUserForm__row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.manageUserForm__row__key {
-  flex: 2;
-}
-.manageUserForm__row__value {
-  margin: 0.3rem 0;
-  font-weight: 300;
-  flex: 3;
-}
-.manageUserForm__row__value input, .manageUserForm__row__value select {
-  padding: 0.7rem 1rem;
-  width: 15rem;
-  background: #1c1c1c;
-  color: #fff;
-  border: rgba(255, 255, 255, 0.87) 1px solid;
-  border-radius: 0.4rem;
-}
-.manageUserForm__row__value input:focus, .manageUserForm__row__value select:focus {
-  outline: none;
-  border: #fff 1px solid;
-}
-.manageUserForm__row__value__grades {
-  text-align: right;
-}
-.manageUserForm__row__value__grades input {
-  padding: 0.7rem 1rem;
-  width: 2rem;
-  margin: 0.5rem;
-}
-.manageUserForm__row__value__grades p {
-  color: rgba(255, 255, 255, 0.8);
-  font-family: Montserrat, sans-serif;
-  font-weight: 500;
-  font-size: 1.1rem;
-}
-.manageUserForm__row__value select {
-  width: 17.1rem;
+  margin: 15rem auto;
 }
 
 .container {
   background: #1c1c1c;
-  width: 90%;
-  margin: 0 auto;
+  margin: 1rem 0;
   border: 1px #666666 solid;
   border-radius: 0.3rem;
 }
@@ -100,27 +30,49 @@ body {
 }
 .container__header span {
   font-weight: 500;
+  align-self: center;
+}
+.container__header__button {
+  display: flex;
 }
 .container__body {
   display: flex;
 }
 
-.list {
-  list-style: none;
+.manageUserForm {
+  max-width: 40rem;
   color: rgba(255, 255, 255, 0.8);
   font-family: Montserrat, sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.1rem;
   text-align: left;
-  margin: 2rem 5rem 2rem 0;
+  margin: 1.5rem 5rem 2rem 2rem;
 }
-.list__values {
+.manageUserForm__row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.manageUserForm__row__key {
+  flex: 2;
+  height: 3rem;
+  display: flex;
+}
+.manageUserForm__row__key label {
+  align-self: center;
+}
+.manageUserForm__row__value {
+  margin: 0.3rem 0;
+  height: 3rem;
   font-weight: 300;
+  flex: 3;
+  display: flex;
 }
-.list li {
-  margin: 0.7rem 0;
+.manageUserForm__row__value p {
+  margin-left: 1rem;
+  align-self: center;
 }
-.list li input, .list li select {
+.manageUserForm__row__value input, .manageUserForm__row__value select {
   padding: 0.7rem 1rem;
   width: 15rem;
   background: #1c1c1c;
@@ -128,50 +80,27 @@ body {
   border: rgba(255, 255, 255, 0.87) 1px solid;
   border-radius: 0.4rem;
 }
-.list li input:focus, .list li select:focus {
+.manageUserForm__row__value input:focus, .manageUserForm__row__value select:focus {
   outline: none;
   border: #fff 1px solid;
 }
-.list li select {
-  width: 17rem;
-}
-.list__keys li {
-  margin: 1.5rem;
-}
-
-.gradeContainer {
-  background: #1c1c1c;
-  width: 31%;
-  margin: 1rem auto;
-  padding-bottom: 1rem;
-  border: 1px #666666 solid;
-  border-radius: 0.3rem;
-}
-.gradeContainer__header {
-  padding: 1rem;
-  background: inherit;
-  color: rgba(255, 255, 255, 0.87);
-  font-size: 1.4rem;
-  border: 1px #666666 solid;
-  border-radius: 0.3rem;
-  text-align: center;
-}
-.gradeContainer__header span {
-  font-weight: 500;
-}
-.gradeContainer__body {
-  display: flex;
+.manageUserForm__row__value select {
+  width: 17.1rem;
 }
 
 .status_radio_button {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   font-family: Roboto, sans-serif;
   font-weight: 500;
   letter-spacing: 1.25px;
   font-size: 0.7rem;
 }
 .status_radio_button div:first-child label {
+  margin-left: 1rem;
+}
+.status_radio_button__edit div:first-child label {
   margin-left: 0;
 }
 .status_radio_button input[type=radio] {
@@ -211,23 +140,6 @@ body {
   border: rgba(255, 255, 255, 0.75) 1px solid;
   color: #fff;
   border-radius: 0.2rem;
-}
-
-.button {
-  font-family: Roboto, sans-serif;
-  font-weight: 500;
-  letter-spacing: 1.25px;
-  margin: 0 0.5rem;
-  padding: 0.7rem 1.5rem;
-  color: #fff;
-  border: none;
-  border-radius: 0.3rem;
-}
-.button__red {
-  background: #ff384a;
-}
-.button__blue {
-  background: #1a90ff;
 }
 
 /*# sourceMappingURL=ManageUser.module.css.map */

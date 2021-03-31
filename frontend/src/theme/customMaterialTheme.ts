@@ -12,10 +12,33 @@ export default createMuiTheme({
     },
 });
 
+export const mainTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#ffffff",
+        },
+        secondary: {
+            main: "#ff384a",
+        }
+
+    },
+});
+
 export const addBtnTheme = createMuiTheme({
     palette: {
         primary: {
             main: "#2196F3",
+        }
+    }
+});
+
+export const UButtonTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#1a90ff",
+        },
+        secondary: {
+            main: "#ff384a",
         }
     }
 });

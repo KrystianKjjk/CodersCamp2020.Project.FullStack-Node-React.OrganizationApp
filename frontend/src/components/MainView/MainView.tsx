@@ -5,6 +5,8 @@ import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 
+import ManageUser from "../ManageUser";
+
 const MainView: React.FC = () => {
   return (
     <div className={styles.mainContainer}>
@@ -47,7 +49,7 @@ const MainView: React.FC = () => {
 };
 
 function Users() {
-  return <h2>Users</h2>;
+  return <ManageUser userID="60645c624d017c0015bb6e8b" />;
 }
 function Courses() {
   return <h2>Courses</h2>;

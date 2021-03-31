@@ -5,10 +5,18 @@ import GradeService from "../../api/grades.service";
 import {IGrade} from "../../models/user.model";
 
 import styles from './ManageGrades.module.scss';
+import UButton from "../UButton";
+import {Box, CircularProgress, Snackbar} from "@material-ui/core";
+import {ThemeProvider} from "@material-ui/styles";
+import MuiAlert from "@material-ui/lab/Alert";
 
 
 export interface ManageGradesProps {
     userID: string
+}
+
+function Alert(props: any) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const ManageGrades: React.FC< ManageGradesProps > = props => {
@@ -20,16 +28,18 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
-    const [gradeEdit, setGradeEdit] = useState<Array<boolean>>([]);
+    const [isEdit, setIsEdit] = useState<Array<boolean>>([]);
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
 
     useEffect(() => {
         getGrades(props.userID);
     },[]);
 
     function toggleEdit(index: number) {
-        let edits = [...gradeEdit];
+        let edits = [...isEdit];
         edits[index] = !edits[index];
-        setGradeEdit(
+        setIsEdit(
             [...edits],
         )
     }
@@ -69,12 +79,21 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     function deleteGrade(index: number) {
         if('_id' in grades![index]) {
-            gradeService.deleteGrade(grades![index]._id);
-            const tmpGrades = grades;
-            tmpGrades.splice(index, 1);
-            setGrades(
-                [...tmpGrades]
-            )
+            gradeService.deleteGrade(grades![index]._id)
+                .then(res => {
+                    if(res.status===200) {
+                        const tmpGrades = grades;
+                        tmpGrades.splice(index, 1);
+                        setGrades(
+                            [...tmpGrades]
+                        )
+                        setOpenSuccess(true);
+                    }
+                    else throw Error;
+                })
+                .catch( err => {
+                    setOpenError(true);
+                })
         }
         else {
             const tmpGrades = grades;
@@ -83,12 +102,20 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 [...tmpGrades]
             )
             toggleEdit(index);
+            setOpenSuccess(true);
         }
     }
 
     function saveGrade(index: number) {
         if('_id' in grades![index]) {
-               gradeService.updateGrade(grades![index]._id, grades![index]);
+               gradeService.updateGrade(grades![index]._id, grades![index])
+                   .then( res => {
+                       if(res.status === 201) setOpenSuccess(true);
+                       else throw Error;
+                   })
+                   .catch(err => {
+                       setOpenError(true);
+                   })
         }
         else {
                gradeService.createGrade(props.userID, grades![index])
@@ -97,11 +124,14 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                            let tmp = [...grades];
                            tmp[index]._id = res.data._id;
                            setGrades([...tmp]);
+                           setOpenSuccess(true);
                        }
+                       else throw Error;
                    })
                    .catch(err => {
                        setIsLoaded(true);
                        setError(err);
+                       setOpenError(true);
                    })
         }
         toggleEdit(index);
@@ -125,40 +155,56 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         toggleEdit(tmpGrades.length - 1);
     }
 
+    const handleClose = (event: any, reason: any) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSuccess(false);
+        setOpenError(false);
+    };
+
     if (error) {
         return <div className={styles.error}>Error</div>;
     } else if (!isLoaded) {
-        return <div className={styles.loading}>Loading...</div>;
+        return <CircularProgress className={styles.loading}/>
     } else {
         return (
-            <div className={styles.container}>
-                <div className={styles.container__header}>
-                    <span>User Grades</span>
-                    <div className={styles.container__header__button}>
-                        <button
-                            className={`${styles.button__blue} ${styles.button}`}
-                            onClick={addGrade}
-                        > ADD </button>
-                    </div>
-                </div>
+            <Box className={styles.container}>
 
-                <div className={styles.container__body}>
+                <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success">
+                        Success!
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={openError} autoHideDuration={3500} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error">
+                        Fail!
+                    </Alert>
+                </Snackbar>
 
+                <Box display="flex" className={styles.container__header}>
+                    <span>Manage Grades</span>
+                        <UButton
+                            text='ADD'
+                            color='primary'
+                            onClick={addGrade} />
+                </Box>
+                <Box display="flex" flexWrap="wrap">
                     {grades?.map((grade, index) => (
 
                         <div className={styles.gradeContainer}>
+
                             <div className={styles.gradeContainer__header}>
                                 <span>Section name</span>
                             </div>
 
-                            <form className={`${styles.manageUserForm}`}>
-                                <div className={styles.manageUserForm__row}>
-                                    <div className={styles.manageUserForm__row__key}>
+                            <form className={`${styles.gradeContainer__body}`}>
+                                <div className={styles.gradeContainer__body__row}>
+                                    <div className={styles.gradeContainer__body__row__key}>
                                         <label htmlFor="test">Test</label>
                                     </div>
-                                    <div
-                                        className={`${styles.manageUserForm__row__value} ${styles.manageUserForm__row__value__grades}`}>
-                                        {gradeEdit[index] ? (
+                                    <div className={`${styles.gradeContainer__body__row__value}`}>
+                                        {isEdit[index] ? (
                                             <div>
                                                 <input type="text"
                                                        id={`${index}`}
@@ -178,13 +224,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                     </div>
                                 </div>
 
-                                <div className={styles.manageUserForm__row}>
-                                    <div className={styles.manageUserForm__row__key}>
+                                <div className={styles.gradeContainer__body__row}>
+                                    <div className={styles.gradeContainer__body__row__key}>
                                         <label htmlFor="test">Task</label>
                                     </div>
                                     <div
-                                        className={`${styles.manageUserForm__row__value} ${styles.manageUserForm__row__value__grades}`}>
-                                        {gradeEdit[index] ? (
+                                        className={`${styles.gradeContainer__body__row__value}`}>
+                                        {isEdit[index] ? (
                                             <div>
                                                 <input type="text"
                                                        id={`${index}`}
@@ -204,48 +250,51 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                     </div>
                                 </div>
 
-                                <div className={styles.manageUserForm__row}>
-                                    <div className={styles.manageUserForm__row__key}>
+                                <div className={styles.gradeContainer__body__row}>
+                                    <div className={styles.gradeContainer__body__row__key}>
                                         <label htmlFor="test">Project</label>
                                     </div>
                                     <div
-                                        className={`${styles.manageUserForm__row__value} ${styles.manageUserForm__row__value__grades}`}>
-                                        {gradeEdit[index] ? (
-                                            <input type="text"
-                                                   id={`${index}`}
-                                                   name="projectPoints"
-                                                   placeholder={grade?.projectPoints?.toString()}
-                                                   onChange={handleInputChangeGrade}/>
-                                        ) : (
-                                            <p>{grade?.projectPoints}pkt</p>
-                                        )}
+                                        className={`${styles.gradeContainer__body__row__value}`}>
+                                        <div>
+                                            {isEdit[index] ? (
+                                                <input type="text"
+                                                       id={`${index}`}
+                                                       name="projectPoints"
+                                                       placeholder={grade?.projectPoints?.toString()}
+                                                       onChange={handleInputChangeGrade}/>
+                                            ) : (
+                                                <p>{grade?.projectPoints}pkt</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
                             </form>
+                            <Box display="flex" justifyContent="center">
+                                <UButton
+                                    text='DELETE'
+                                    color='secondary'
+                                    onClick={() => deleteGrade(index)} />
 
-                            <button
-                                className={`${styles.button__red} ${styles.button}`}
-                                    onClick={() => deleteGrade(+index)}
-                            > DELETE </button>
-
-                            {gradeEdit[index] ?
-                                (
-                                    <button
-                                        className={`${styles.button__blue} ${styles.button}`}
-                                        onClick={() => saveGrade(index)}
-                                    >SAVE</button>
-                                ) : (
-                                    <button
-                                        className={`${styles.button__blue} ${styles.button}`}
-                                        onClick={() => toggleEdit(index)}
-                                    >EDIT</button>
-                                )}
+                                {isEdit[index] ?
+                                    (
+                                        <UButton
+                                            text='SAVE'
+                                            color='primary'
+                                            onClick={() => saveGrade(index)} />
+                                    ) : (
+                                        <UButton
+                                            text='EDIT'
+                                            color='primary'
+                                            onClick={() => toggleEdit(index)} />
+                                    )}
+                            </Box>
                         </div>
 
                     ))}
-                </div>
-            </div>
+                </Box>
+            </Box>
         );
     }
 };
