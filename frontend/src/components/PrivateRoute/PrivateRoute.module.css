@@ -1,0 +1,16 @@
+.container{
+    background-color: #292929;
+    display: flex;
+    width:100%;
+    flex: 1;
+   
+}
+
+.content{
+    /* background-color:#1C1C1C; */
+    width: 80%;
+    max-height:80vh;
+    margin: 2% 5%;
+    overflow: auto;
+    color:#fff;
+}
