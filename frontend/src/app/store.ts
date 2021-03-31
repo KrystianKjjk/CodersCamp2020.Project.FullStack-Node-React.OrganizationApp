@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../components/counter/counterSlice';
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice';
+import teamProjectsReducer from '../components/TeamProjects/TeamProjectsSlice'
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     tables: reusableTableReducer,
+    teamProjects: teamProjectsReducer,
   },
 });
 

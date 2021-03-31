@@ -17,5 +17,5 @@ const Template: Story<TeamProjectsProps> = (args) => (
 
 export const SampleTeamProjects = Template.bind({});
 SampleTeamProjects.args = {
-  name: 'TeamProjects',
+  course: 'TeamProjects',
 };
