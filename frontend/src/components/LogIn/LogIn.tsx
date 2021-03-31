@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
 import {
   Button, 
@@ -7,44 +9,67 @@ import {
   Grid,
   Typography,
   Container,
-  FormHelperText
+  FormHelperText,
+  Snackbar,
 } from '@material-ui/core';
+import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 
 import StyledTextField from '../StyledTextField'
 import useStyles from './LogIn.style';
 import BaseService from '../../app/baseService';
-import { setLoggedInUserId } from './LogInSlice';
-import { useAppDispatch } from '../../app/hooks';
 
 export interface LogInProps {
 
 };
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function SignIn() {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
+
+  const [openError, setOpenError] = useState(false);
+
+  const history = useHistory();
+    const routeChange = () => { 
+      let path = `/home`; 
+      history.push(path);
+  }
+
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenError(false);
+  };
+
+  const setResponseDataToLocalStorage = (response: AxiosResponse ) => {
+    const token = response.headers?.['x-auth-token'];
+    const userId = response.data?.['_id'];
+    const userType = response.data?.['type'];
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('id', userId);
+    localStorage.setItem('type', userType);
+  };
 
   const handleSignInClick = async () => {
     const service = new BaseService();
     try {
       const response = await service.post('login', { email, password})
       setFormError('');
-      const token: any = response?.headers?.['x-auth-token'];
-      const userId: any = response?.data?.['_id'];
-      const userType: any = response?.data?.['type'];
-
-      localStorage.setItem('token', token);
-      localStorage.setItem('id', userId);
-      localStorage.setItem('type', userType);
-      
-      console.log(response);
-      dispatch(setLoggedInUserId(response?.data?._id || ''));
+      setResponseDataToLocalStorage(response);
+      routeChange();
     }
-    catch (error) {setFormError(error?.response?.data?.message)};
+    catch (error) {
+      setFormError(error?.response?.data?.message)
+      setOpenError(true);
+    };
   };
 
   return (
@@ -75,7 +100,6 @@ export default function SignIn() {
             onChange={e => setPassword(e.target.value)}
             data-testid='li-password'
           />
-          {formError && <FormHelperText error>{'Error: ' + formError}</FormHelperText>}
           <Button
             type="button"
             fullWidth
@@ -87,14 +111,19 @@ export default function SignIn() {
           >
             Sign In
           </Button>
+          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+            <Alert onClose={handleCloseError} severity="error">
+              {formError && <FormHelperText className={classes.errorStyle}>{formError}</FormHelperText>}
+            </Alert>
+          </Snackbar>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2" color="inherit">
+              <Link href="/resetpassword" variant="body2" color="inherit">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2" color="inherit">
+              <Link href="/registration" variant="body2" color="inherit">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
