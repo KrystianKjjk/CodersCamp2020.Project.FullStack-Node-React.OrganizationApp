@@ -3,6 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ManageTeams , { ManageTeamsProps } from './ManageTeams';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
+import getTeams from '../../api/getTeams';
 
 export default {
   title: 'ManageTeams component',
@@ -26,8 +27,16 @@ const getFakeTeams = () => {
   return Promise.resolve(teamsDatabase);
 }
 
+export const SampleFakeManageTeams = Template.bind({});
+SampleFakeManageTeams.args = {
+  getTeams: getFakeTeams,
+  onClickAdd: () => console.log('Clicked Add'),
+};
+
+const authToken = '';
+
 export const SampleManageTeams = Template.bind({});
 SampleManageTeams.args = {
-  getTeams: getFakeTeams,
+  getTeams: () => getTeams(authToken),
   onClickAdd: () => console.log('Clicked Add'),
 };
