@@ -1,20 +1,14 @@
 import React from "react";
-import {
-  Link
-} from "react-router-dom";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import { List} from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AppsIcon from "@material-ui/icons/Apps";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import SettingsIcon from "@material-ui/icons/Settings";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ListItemLink from '../ListItemLink';
 
 export interface MenuProps {}
 
@@ -44,36 +38,23 @@ const Menu: React.FC<MenuProps> = (props) => {
         color: "#9E9E9E",
         fontSize: "14px",
       },
-      userDiv:{
+      userDiv: {
         borderBottom: "1px solid #666666"
-      }
+      },
     })
   );
 
-  interface ListItemLinkProps {
-    path: string;
-    icon: React.ReactNode;
-    text: string;
-  }
-
   const classes = useStyles();
-
-  const ListItemLink = ({ path, icon, text }: ListItemLinkProps) => {
-    return (
-      <ListItem button component={Link} to={path}>
-        <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText primary={text} />
-      </ListItem>
-    );
-  };
 
   return (
     <div className={classes.root}>
       <List component="nav">
         <div className={classes.userDiv}>
-          <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }}></AccountCircleIcon>
-          <p style={{fontWeight:500}}>Name Surname</p>
-          <p >Admin</p>
+          <AccountCircleIcon
+            style={{ paddingTop: 20, fontSize: 40 }}
+          ></AccountCircleIcon>
+          <p style={{ fontWeight: 500 }}>Name Surname</p>
+          <p>Admin</p>
         </div>
         <ListItemLink path="/users" icon={<PeopleIcon />} text="Users" />
         <ListItemLink
