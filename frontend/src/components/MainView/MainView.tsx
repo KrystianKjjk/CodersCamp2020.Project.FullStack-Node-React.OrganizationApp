@@ -80,11 +80,5 @@ function Teams() {
 function MyProfile() {
   return <h2>My profile</h2>;
 }
-function Login() {
-  return <h2>Log in</h2>;
-}
-function Registration() {
-  return <h2>Registration</h2>;
-}
 
 export default MainView;
