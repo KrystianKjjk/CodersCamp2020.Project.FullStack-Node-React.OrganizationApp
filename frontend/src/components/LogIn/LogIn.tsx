@@ -10,7 +10,7 @@ import {
   Typography,
   Container,
   FormHelperText,
-  Snackbar,
+  Snackbar
 } from '@material-ui/core';
 import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 
@@ -67,7 +67,7 @@ export default function SignIn() {
       routeChange();
     }
     catch (error) {
-      setFormError(error?.response?.data?.message)
+      setFormError(error?.response?.data?.message);
       setOpenError(true);
     };
   };
@@ -111,7 +111,7 @@ export default function SignIn() {
           >
             Sign In
           </Button>
-          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError} data-testid='li-snack'>
             <Alert onClose={handleCloseError} severity="error">
               {formError && <FormHelperText className={classes.errorStyle}>{formError}</FormHelperText>}
             </Alert>

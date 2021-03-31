@@ -46,13 +46,13 @@ export default function SignUp() {
   const handleSignUpClick = async () => {
     const service = new BaseService();
     try {
-      await service.post('register', {name, surname, email, password, confirmPassword})
       setFormError('');
+      await service.post('register', {name, surname, email, password, confirmPassword})
       setOpen(true);
     }
     catch (error) {
-      setFormError(error?.response?.data?.message)
       setOpenError(true);
+      setFormError(error?.response?.data?.message)
     };
   }; 
 
@@ -134,13 +134,13 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpen)}>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpen)} data-testid="r-snack-success">
             <Alert onClose={handleCloseSnackbar(setOpen)} severity="success">
               Registration completed. You can log in now.
             </Alert>
           </Snackbar>
 
-          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpenError)}>
+          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpenError)} data-testid="r-snack-error">
             <Alert onClose={handleCloseSnackbar(setOpenError)} severity="error">
               {formError && <FormHelperText className={classes.errorStyle}>{formError}</FormHelperText>}
             </Alert>
