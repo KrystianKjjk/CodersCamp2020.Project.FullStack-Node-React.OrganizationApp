@@ -7,9 +7,10 @@ import {
   Grid,
   Typography,
   Container,
-  FormHelperText
+  FormHelperText,
+  Snackbar
 } from '@material-ui/core';
-
+import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 import StyledTextField from '../StyledTextField';
 import BaseService from '../../app/baseService';
 import useStyles from './Registration.style';
@@ -17,6 +18,10 @@ import useStyles from './Registration.style';
 export interface RegistrationProps {
   
 };
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function SignUp() {
   const classes = useStyles();
@@ -28,14 +33,27 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
 
+  const [open, setOpen] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  
+  const handleCloseSnackbar = (setStateFunction: (newValue: boolean) => void) => (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setStateFunction(false);
+  };
+  
   const handleSignUpClick = async () => {
     const service = new BaseService();
     try {
       await service.post('register', {name, surname, email, password, confirmPassword})
       setFormError('');
+      setOpen(true);
     }
-    catch (error) {setFormError(error?.response?.data?.message)};
-
+    catch (error) {
+      setFormError(error?.response?.data?.message)
+      setOpenError(true);
+    };
   }; 
 
   const areAllFieldsFilled = name && surname && email && password && confirmPassword;
@@ -57,7 +75,7 @@ export default function SignUp() {
                 autoFocus
                 autoComplete="fname"
                 name="firstName"
-                label="First Name"
+                label="Name"
                 data-testid="r-fname"
               />
             </Grid>
@@ -65,7 +83,7 @@ export default function SignUp() {
               <StyledTextField
                 value={surname}
                 onChange={e => setSurname(e.target.value)}
-                label="Last Name"
+                label="Surname"
                 name="lastName"
                 autoComplete="lname"
                 data-testid="r-lname"
@@ -102,7 +120,6 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
-          {formError && <FormHelperText error>{'Error: ' + formError}</FormHelperText>}
           <Button
             fullWidth
             variant="contained"
@@ -117,9 +134,20 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpen)}>
+            <Alert onClose={handleCloseSnackbar(setOpen)} severity="success">
+              Registration completed. You can log in now.
+            </Alert>
+          </Snackbar>
+
+          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseSnackbar(setOpenError)}>
+            <Alert onClose={handleCloseSnackbar(setOpenError)} severity="error">
+              {formError && <FormHelperText className={classes.errorStyle}>{formError}</FormHelperText>}
+            </Alert>
+          </Snackbar>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2" color="inherit">
+              <Link href="/" variant="body2" color="inherit">
                 Already have an account? Sign in
               </Link>
             </Grid>

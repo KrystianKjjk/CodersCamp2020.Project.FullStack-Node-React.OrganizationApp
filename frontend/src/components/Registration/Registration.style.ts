@@ -16,6 +16,10 @@ export default makeStyles((theme) => ({
     },
     buttonDisabled: {
         backgroundColor: '#4c4c4c !important',
+    },
+
+    errorStyle: {
+        color: '#fff !important',
     }
 
 }));
