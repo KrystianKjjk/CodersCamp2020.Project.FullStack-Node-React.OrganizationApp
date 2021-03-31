@@ -7,10 +7,10 @@ import HomePage from "../HomePage";
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
+import { getUserFromLocalStorage } from "../../app/utils";
 
 const MainView: React.FC = () => {
-  const checkUserType = localStorage.getItem('type')  
-
+  
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -49,7 +49,7 @@ const MainView: React.FC = () => {
           <HomePage/>
         </PrivateRoute>
         <Route exact path="/">
-          {checkUserType ? <Redirect to="/home" /> : <LogIn />}
+          {getUserFromLocalStorage().userType ? <Redirect to="/home" /> : <LogIn />}
         </Route>
       </Switch>
     </div>
