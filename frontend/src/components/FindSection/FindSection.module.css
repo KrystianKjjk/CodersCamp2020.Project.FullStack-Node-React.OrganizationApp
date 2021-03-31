@@ -1,3 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+* {
+  margin: 0;
+}
 
+p {
+  width: 15rem;
+  padding: 0.7rem 1rem 0.7rem 0;
+  display: inline-block;
+}
+
+body {
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.error {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #ff384a;
+}
+
+.loading {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #1a90ff;
+}
+
+.container {
+  background: #1c1c1c;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header span {
+  font-weight: 500;
+}
+.container__body {
+  display: flex;
+}
 
 /*# sourceMappingURL=FindSection.module.css.map */

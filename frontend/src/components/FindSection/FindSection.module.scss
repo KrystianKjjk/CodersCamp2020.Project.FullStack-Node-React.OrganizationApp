@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
+
+$color-primary: #292929;
+$color-secondary: #1c1c1c;
+$color-secondary-light: #fff;
+$color-ternary-light: #1a90ff;
+$color-ternary-warning: #ff384a;
+$color-ternary-main: #666666;
+$color-status-green: #3cc13b;
+$color-status-red: #F03738;
+
+* {
+  margin: 0;
+}
+
+p {
+  width: 15rem;
+  padding: .7rem 1rem .7rem 0;
+  display: inline-block;
+}
+
+body {
+  background: $color-primary;
+  box-sizing: border-box;
+}
+
+.error {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: $color-ternary-warning;
+}
+
+.loading {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: $color-ternary-light;
+}
+
+
+.container {
+  background: $color-secondary;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px $color-ternary-main solid;
+  border-radius: .3rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: inherit;
+    color: rgba(255,255,255, 0.87);
+    font-size: 1.4rem;
+    border: 1px #666666 solid;
+    border-radius: .3rem;
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  &__body {
+    display: flex;
+  }
+}
