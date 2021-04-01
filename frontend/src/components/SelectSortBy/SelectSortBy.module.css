@@ -1,4 +1,9 @@
 .select {
     min-width: 200px;
     text-transform: capitalize;
+    color: white;
+    background-color: gray;
+}
+.label {
+    color: white !important;
 }
