@@ -45,13 +45,12 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         ( !tables[tableName] || tables[tableName].loading !== 'idle' ) ? (<p>Loading...</p>) :
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
-            {name}
             <DataGrid
-              rows={tables[tableName].rows}
+              className={styles.table}
+              rows={tables[tableName].displayedRows}
               columns={columns}
               pageSize={5}
               autoHeight
-              checkboxSelection
               disableSelectionOnClick={true}
               onRowClick={onRowClick}
             />
