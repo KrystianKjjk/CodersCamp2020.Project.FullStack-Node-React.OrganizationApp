@@ -24,7 +24,7 @@ interface Course {
     name: string;
 }
 
-export default async function getTeams(authToken: string): Promise<any[]> {
+export default async function getTeamMembers(authToken: string): Promise<any[]> {
     const config = {
         headers: {
             'x-auth-token': authToken,

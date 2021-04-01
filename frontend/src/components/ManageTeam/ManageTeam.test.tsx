@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
-import ManageTeams from './ManageTeams';
+import ManageTeam from './ManageTeam';
 import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
 
 const teamsDatabase = [
@@ -17,13 +17,13 @@ const getFakeTeams = () => {
    return Promise.resolve(teamsDatabase);
 }
 
-describe('ManageTeams', () => {
+describe('ManageTeam', () => {
    it('renders without error', async () => {
       const getTeams = jest.fn( getFakeTeams );
       const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
+            <ManageTeam onClickAdd={onClickAdd} getTeamMembers={getFakeTeams}/>
          </Provider>
       );
       expect(getTeams).toBeCalledTimes(1);
@@ -40,7 +40,7 @@ describe('ManageTeams', () => {
       const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
+            <ManageTeam onClickAdd={onClickAdd} getTeamMembers={getFakeTeams}/>
          </Provider>
       );
 
@@ -58,7 +58,7 @@ describe('ManageTeams', () => {
       const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
+            <ManageTeam onClickAdd={onClickAdd} getTeamMembers={getFakeTeams}/>
          </Provider>
       );
       const tableComp = await screen.findByLabelText('Table - Teams');

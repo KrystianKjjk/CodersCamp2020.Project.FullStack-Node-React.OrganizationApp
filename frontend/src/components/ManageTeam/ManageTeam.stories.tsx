@@ -1,22 +1,22 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
-import ManageTeams , { ManageTeamsProps } from './ManageTeams';
+import ManageTeam , { ManageTeamProps } from './ManageTeam';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import getTeams from '../../api/getTeams';
+import getTeamMembers from '../../api/getTeamMembers';
 import darkTheme from '../../theme/customMaterialTheme';
 import { ThemeProvider } from '@material-ui/styles';
 
 
 export default {
-  title: 'ManageTeams component',
-  component: ManageTeams,
+  title: 'ManageTeam component',
+  component: ManageTeam,
 } as Meta;
 
-const Template: Story<ManageTeamsProps> = (args) => (
+const Template: Story<ManageTeamProps> = (args) => (
   <Provider store={store}>
     <ThemeProvider theme={darkTheme}>
-      <ManageTeams {...args} />  
+      <ManageTeam {...args} />  
     </ThemeProvider>
   </Provider>
 );
@@ -32,16 +32,16 @@ const getFakeTeams = () => {
   return Promise.resolve(teamsDatabase);
 }
 
-export const SampleFakeManageTeams = Template.bind({});
-SampleFakeManageTeams.args = {
+export const SampleFakeManageTeam = Template.bind({});
+SampleFakeManageTeam.args = {
   getTeams: getFakeTeams,
   onClickAdd: () => console.log('Clicked Add'),
 };
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
 
-export const SampleManageTeams = Template.bind({});
-SampleManageTeams.args = {
-  getTeams: () => getTeams(token),
+export const SampleManageTeam = Template.bind({});
+SampleManageTeam.args = {
+  getTeams: () => getTeamMembers(token),
   onClickAdd: () => console.log('Clicked Add'),
 };
