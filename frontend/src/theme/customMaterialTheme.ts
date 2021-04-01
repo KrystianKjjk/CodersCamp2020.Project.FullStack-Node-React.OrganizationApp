@@ -4,6 +4,16 @@ export default createMuiTheme({
     palette: {
         background: {
             default: '#292929',
+            paper: '#1C1C1C',
+        },
+        text: {
+            primary: 'white',
+        },
+        primary: {
+            main: '#fff',
+        },
+        secondary: {
+            main: '#292929'
         }
     },
 });

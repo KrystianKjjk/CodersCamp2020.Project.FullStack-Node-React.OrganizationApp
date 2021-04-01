@@ -6,6 +6,7 @@ import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
+import { Container, CssBaseline, Paper } from '@material-ui/core';
 
 
 export interface ManageTeamsProps {
@@ -45,14 +46,15 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
   ]
   
   return (
-    <div className={styles.manageTeams} aria-label='Manage Teams'>
-      <div className={styles.mainHeader}>
+    <Container className={styles.manageTeams} aria-label='Manage Teams'>
+      <CssBaseline />
+      <Paper className={styles.mainHeader}>
         <h2>Teams</h2>
         <span className={styles.searchInput}>
           <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
-        </span>        
-      </div>
-      <div className={styles.container}>
+        </span>
+      </Paper>
+      <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Teams</h2>
           <span onClick={onClickAdd} className={styles.addButton} aria-label='Add team'>
@@ -65,8 +67,8 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
         <div className={styles.table}>
           <Table name='Teams' columns={columns} getData={getTeams}/>
         </div>
-      </div>
-    </div>
+      </Paper>
+    </Container>
   );
 };
 

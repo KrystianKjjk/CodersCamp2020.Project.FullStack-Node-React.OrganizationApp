@@ -50,7 +50,6 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
               columns={columns}
               pageSize={5}
               autoHeight
-              checkboxSelection
               disableSelectionOnClick={true}
               onRowClick={onRowClick}
             />

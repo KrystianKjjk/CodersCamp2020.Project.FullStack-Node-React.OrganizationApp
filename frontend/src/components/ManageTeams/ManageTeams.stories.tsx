@@ -4,6 +4,9 @@ import ManageTeams , { ManageTeamsProps } from './ManageTeams';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
 import getTeams from '../../api/getTeams';
+import darkTheme from '../../theme/customMaterialTheme';
+import { ThemeProvider } from '@material-ui/styles';
+
 
 export default {
   title: 'ManageTeams component',
@@ -12,7 +15,9 @@ export default {
 
 const Template: Story<ManageTeamsProps> = (args) => (
   <Provider store={store}>
-    <ManageTeams {...args} />
+    <ThemeProvider theme={darkTheme}>
+      <ManageTeams {...args} />  
+    </ThemeProvider>
   </Provider>
 );
 
