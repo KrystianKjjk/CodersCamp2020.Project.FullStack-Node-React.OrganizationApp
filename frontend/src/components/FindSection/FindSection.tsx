@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Backdrop, CircularProgress, createMuiTheme, Fade, makeStyles, Modal, MuiThemeProvider} from "@material-ui/core";
+import {Backdrop, Fade, Modal, MuiThemeProvider} from "@material-ui/core";
 
 import BaseService from "../../app/baseService";
 import SectionsService from "../../api/sections.service";
@@ -20,11 +20,30 @@ const FindSection: React.FC< FindSectionProps > = props => {
     const sectionsService = new SectionsService(baseAPIUrl, new BaseService());
 
     const [open, setOpen] = React.useState(false);
+    const [isUpdate, setIsUpdate] = React.useState(true);
+    const [search, setSearch] = useState('');
     const [sections, setSections] = useState<any>([]);
+    const [filteredSections, setFilteredSections] = useState<any>([]);
 
     useEffect(() => {
         getSections();
     },[]);
+
+    useEffect(() => {
+        const result = sections.filter((section: any) => {
+            return section.name.match(search);
+        })
+        setFilteredSections([...result]);
+        setIsUpdate(false);
+    }, [search]);
+
+    useEffect(() => {
+        setIsUpdate(true);
+    },[filteredSections]);
+
+    function onSearch(name: string) {
+        setSearch(name);
+    }
 
     const handleOpen = () => {
         setOpen(true);
@@ -45,6 +64,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
             .then(res => {
                 if(res.status === 200) {
                     setSections([...res.data]);
+                    setFilteredSections([...res.data]);
                     handleOpen();
                 }
                 else throw Error;
@@ -55,7 +75,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     function getSectionsTable(): Promise<[]> {
 
-        const sectionsTmp = sections.map( (section: any) => (
+        const sectionsTmp = filteredSections.map( (section: any) => (
             {
                 id: section._id,
                 Name: section.name,
@@ -99,17 +119,19 @@ const FindSection: React.FC< FindSectionProps > = props => {
                                 <div className={styles.container__body}>
                                     <div className={styles.container__body__search}>
                                         <SearchInput
-                                            onSubmit={() => {}}
-                                            placeholder='Name'
+                                            onSubmit={onSearch}
+                                            placeholder='Search by name'
                                         />
                                     </div>
                                     <div className={styles.container__body__table}>
-                                            <ReusableTable
+                                        {isUpdate &&
+                                            (<ReusableTable
                                                 name=""
                                                 getData={getSectionsTable}
                                                 columns={columns}
                                                 onRowClick={handleRowClick}
-                                            />
+                                            />)
+                                        }
                                     </div>
                                 </div>
                             </div>
