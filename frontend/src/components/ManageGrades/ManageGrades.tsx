@@ -15,6 +15,11 @@ export interface ManageGradesProps {
     userID: string
 }
 
+export interface ISectionsUtility {
+    _id: string,
+    name?: string
+}
+
 function Alert(props: any) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -31,18 +36,14 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const [isEdit, setIsEdit] = useState<Array<boolean>>([]);
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [openErrorAlert, setOpenErrorAlert] = useState(false);
+
     const [openSectionsModal, setOpenSectionsModal] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
-    const [sections, setSections] = useState<string[]>([]);
-
+    const [sections, setSections] = useState<ISectionsUtility[]>([]);
 
     useEffect(() => {
         getGrades(props.userID);
     },[]);
-
-    useEffect(() => {
-        getSectionNames(grades);
-    },[grades]);
 
     function toggleEdit(index: number) {
         let edits = [...isEdit];
@@ -69,23 +70,22 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         )
     }
 
-    function getSectionNames(grades: any) {
-        let tmpSections: string[] =[];
-
-        grades.forEach( (grade: any, index: number) => {
-                sectionService.getSectionByID(grade.sectionId)
+    function getSectionNames(sections: ISectionsUtility[]) {
+        const tmpSections: ISectionsUtility[] = [...sections];
+        if(sections.length){
+            sections.forEach( (section: ISectionsUtility, index: number) => {
+                sectionService.getSectionByID(section?._id)
                     .then( res => {
                         if(res.status === 200) {
-                            tmpSections[index] = res.data.name;
+                            tmpSections[index] = {_id: res.data._id, name: res.data.name};
                             setSections([...tmpSections]);
                         }
                     })
                     .catch(err => {
-                        tmpSections[index] = 'no section';
-                        setSections([...tmpSections]);
-                    })
-            }
-        )
+                        tmpSections[index] = {_id: section?._id, name: 'no section'};
+                    });
+            });
+        }
     }
 
     function getGrades(userID: string) {
@@ -95,6 +95,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 if(res.status === 200) {
                     setIsLoaded(true);
                     setGrades([...res.data]);
+
+                    let tmpSections: ISectionsUtility[] = res.data.map( (grade: IGrade) => ({_id: grade.sectionId}));
+                    setSections([...tmpSections]);
+                    getSectionNames(tmpSections)
                 }
                 else throw Error;
             })
@@ -198,7 +202,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
             setGrades([...tmpGrades]);
 
             let tmpSections = [...sections];
-            tmpSections[index] = sectionName;
+            tmpSections[index].name = sectionName;
             setSections([...tmpSections]);
         }
     }
@@ -236,10 +240,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                         <div className={styles.gradeContainer}>
 
                             { openSectionsModal && isEdit[index]
-                            && (<FindSection onSectionSelection={handleSectionSelection(index)} />)}
+                            && (<FindSection onSectionSelection={handleSectionSelection(index)}/>)}
 
                                 <div className={styles.gradeContainer__header}>
-                                <span>{sections[index]}</span>
+                                <span>{sections[index]?.name}</span>
                                 {isEdit[index] && (
                                 <UButton
                                     text='CHANGE'

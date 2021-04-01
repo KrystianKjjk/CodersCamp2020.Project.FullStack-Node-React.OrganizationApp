@@ -10,7 +10,7 @@ import styles from './FindSection.module.scss';
 import {mainTheme} from "../../theme/customMaterialTheme";
 
 export interface FindSectionProps {
-    onSectionSelection: any
+    onSectionSelection: any,
 }
 
 const FindSection: React.FC< FindSectionProps > = props => {
@@ -31,7 +31,6 @@ const FindSection: React.FC< FindSectionProps > = props => {
     };
 
     const handleClose = () => {
-        setOpen(false);
     };
 
     function handleRowClick(params: any, e: any) {
