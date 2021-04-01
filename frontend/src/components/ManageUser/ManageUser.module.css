@@ -12,6 +12,14 @@
   margin: 15rem auto;
 }
 
+.breadcrumbs {
+  background-color: #1c1c1c;
+  border: 1px solid #666666;
+  border-radius: 0.2rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
 .container {
   background: #1c1c1c;
   margin: 1rem 0;

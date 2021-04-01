@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Box, CircularProgress, Snackbar} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import SectionsService from "../../api/sections.service";
 
+import SectionsService from "../../api/sections.service";
 import BaseService from "../../app/baseService";
 import GradeService from "../../api/grades.service";
 import {IGrade} from "../../models/user.model";
 import UButton from "../UButton";
 import FindSection from "../FindSection";
 
-import styles from './ManageGrades.module.scss';
+import styles from './ManageGrades.module.css';
 
 export interface ManageGradesProps {
     userID: string
@@ -26,10 +26,8 @@ function Alert(props: any) {
 
 const ManageGrades: React.FC< ManageGradesProps > = props => {
 
-    const baseAPIUrl = `https://coders-camp-organization-app.herokuapp.com/api`;
-
-    const gradeService = new GradeService(baseAPIUrl, new BaseService());
-    const sectionService = new SectionsService(baseAPIUrl, new BaseService());
+    const gradeService = new GradeService(new BaseService());
+    const sectionService = new SectionsService(new BaseService());
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -57,7 +55,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         const target: HTMLInputElement = event.target;
         const index = +target.id;
         const name = target.name;
-        const value = target.value;
+        const value = +target.value;
 
         let tmpGrades: IGrade[] = [ ...grades as IGrade[] ];
         let grade = tmpGrades[index];
@@ -83,6 +81,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                     })
                     .catch(err => {
                         tmpSections[index] = {_id: section?._id, name: 'no section'};
+                        setSections([...tmpSections]);
                     });
             });
         }
@@ -113,10 +112,15 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
             gradeService.deleteGrade(grades![index]._id)
                 .then(res => {
                     if(res.status===200) {
-                        const tmpGrades = grades;
+                        const tmpGrades = [...grades];
                         tmpGrades.splice(index, 1);
                         setGrades(
                             [...tmpGrades]
+                        )
+                        const tmpSections = [...sections];
+                        tmpSections.splice(index, 1);
+                        setSections(
+                            [...tmpSections]
                         )
                         setOpenSuccessAlert(true);
                     }
@@ -132,6 +136,11 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
             setGrades(
                 [...tmpGrades]
             )
+            const tmpSections = [...sections];
+            tmpSections.splice(index, 1);
+            setSections(
+                [...tmpSections]
+            )
             toggleEdit(index);
             setOpenSuccessAlert(true);
         }
@@ -143,6 +152,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                    .then( res => {
                        if(res.status === 201) setOpenSuccessAlert(true);
                        else throw Error;
+
+                       toggleEdit(index);
                    })
                    .catch(err => {
                        setOpenErrorAlert(true);
@@ -156,16 +167,14 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                            tmp[index]._id = res.data._id;
                            setGrades([...tmp]);
                            setOpenSuccessAlert(true);
+                           toggleEdit(index);
                        }
                        else throw Error;
                    })
                    .catch(err => {
-                       setIsLoaded(true);
-                       setError(err);
                        setOpenErrorAlert(true);
                    })
         }
-        toggleEdit(index);
     }
 
     function addGrade(event: any) {
@@ -182,7 +191,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         tmpGrades.push(tmpGrade);
         setGrades(
             [...tmpGrades]
-        )
+        );
         let tmpSections = sections;
         tmpSections.push({_id: 'exampleID'});
         setSections([...tmpSections]);

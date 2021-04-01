@@ -6,7 +6,7 @@ import SectionsService from "../../api/sections.service";
 import ReusableTable from "../ReusableTable";
 import SearchInput from "../SearchInput";
 
-import styles from './FindSection.module.scss';
+import styles from './FindSection.module.css';
 import {mainTheme} from "../../theme/customMaterialTheme";
 
 export interface FindSectionProps {
@@ -15,9 +15,7 @@ export interface FindSectionProps {
 
 const FindSection: React.FC< FindSectionProps > = props => {
 
-    const baseAPIUrl = `https://coders-camp-organization-app.herokuapp.com/api`;
-
-    const sectionsService = new SectionsService(baseAPIUrl, new BaseService());
+    const sectionsService = new SectionsService(new BaseService());
 
     const [open, setOpen] = React.useState(false);
     const [isUpdate, setIsUpdate] = React.useState(true);
@@ -33,8 +31,8 @@ const FindSection: React.FC< FindSectionProps > = props => {
         const result = sections.filter((section: any) => {
             return section.name.match(search);
         })
-        setFilteredSections([...result]);
         setIsUpdate(false);
+        setFilteredSections([...result]);
     }, [search]);
 
     useEffect(() => {

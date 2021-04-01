@@ -22,6 +22,14 @@ $color-status-red: #F03738;
   margin: 15rem auto;
 }
 
+.breadcrumbs {
+  background-color: #1c1c1c;
+  border: 1px solid #666666;
+  border-radius: .2rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
 .container {
   background: $color-secondary;
   margin: 1rem 0;

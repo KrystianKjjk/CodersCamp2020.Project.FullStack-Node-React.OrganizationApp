@@ -3,21 +3,17 @@ import BaseService from "../app/baseService";
 export default class SectionsService {
 
     endpoint: string = '';
-    httpConfig = {};
 
-    constructor(private baseEndpoint: string, private httpService: BaseService) {
-        this.endpoint = `${baseEndpoint}/sections`
-        this.httpConfig = {
-            headers: { 'x-auth-token': localStorage.getItem('token') }
-        }
+    constructor(private httpService: BaseService) {
+        this.endpoint = `sections`
     };
 
     async getSections() {
-        return this.httpService.get(this.endpoint,this.httpConfig);
+        return this.httpService.get(this.endpoint);
     }
 
     async getSectionByID(sectionID: string) {
-        return this.httpService.get(`${this.endpoint}/${sectionID}`,this.httpConfig);
+        return this.httpService.get(`${this.endpoint}/${sectionID}`);
     }
 
 }

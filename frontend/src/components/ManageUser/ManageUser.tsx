@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from "react-router-dom";
-import {Box, Breadcrumbs, CircularProgress, Container, Link, Snackbar, Typography} from "@material-ui/core";
-import {mainTheme, UButtonTheme} from "../../theme/customMaterialTheme";
+import {Box, Breadcrumbs, CircularProgress, Link, Snackbar, Typography} from "@material-ui/core";
+import {mainTheme} from "../../theme/customMaterialTheme";
 import {ThemeProvider} from "@material-ui/styles";
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -13,7 +13,6 @@ import UButton from "../UButton";
 
 import styles from './ManageUser.module.css';
 
-
 export interface ManageUserProps {
     userID: string;
 }
@@ -23,17 +22,16 @@ function Alert(props: any) {
 
 const ManageUser: React.FC< ManageUserProps > = (props: any) => {
 
-    const baseAPIUrl = `https://coders-camp-organization-app.herokuapp.com/api/`;
-
-    const userService = new UserService(baseAPIUrl, new BaseService());
+    const userService = new UserService(new BaseService());
     const history = useHistory();
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [user, setUser] = useState<IUser | undefined>(undefined);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
+
+    const [user, setUser] = useState<IUser | undefined>(undefined);
 
     let userID = props.userID;
 
@@ -49,7 +47,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     function handleInputChange(event: any) {
         const target = event.target;
         const name = target.name;
-        const value = target.value;
+        const value = +target.value;
         // @ts-ignore
         setUser({
             ...user,
@@ -133,14 +131,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                     </Alert>
                 </Snackbar>
 
-                <Breadcrumbs aria-label="breadcrumb" color="primary"
-                             style={{
-                                 backgroundColor: '#1c1c1c',
-                                 border: '1px solid #666666',
-                                 borderRadius: '.2rem',
-                                 padding: '1rem',
-                                 margin: '1rem 0'
-                             }}>
+                <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
                     <Link href="/users" color="primary">USERS </Link>
                     <Typography color="primary">{userID}</Typography>
                 </Breadcrumbs>
