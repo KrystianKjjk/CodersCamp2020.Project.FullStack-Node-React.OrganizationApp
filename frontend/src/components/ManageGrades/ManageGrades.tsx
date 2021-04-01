@@ -41,6 +41,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     useEffect(() => {
         getGrades(props.userID);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     function toggleEdit(index: number) {

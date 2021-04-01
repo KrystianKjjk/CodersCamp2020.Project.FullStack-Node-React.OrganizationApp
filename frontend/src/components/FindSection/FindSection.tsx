@@ -25,6 +25,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     useEffect(() => {
         getSections();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     useEffect(() => {
@@ -33,6 +34,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
         })
         setIsUpdate(false);
         setFilteredSections([...result]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
 
     useEffect(() => {

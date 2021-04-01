@@ -8,8 +8,7 @@ import {
   selectTables
 } from './ReusableTableSlice';
 import {mainTheme} from "../../theme/customMaterialTheme";
-import {ThemeProvider} from "@material-ui/styles";
-import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {MuiThemeProvider} from "@material-ui/core";
 
 interface Column {
   field: string;
@@ -42,6 +41,7 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

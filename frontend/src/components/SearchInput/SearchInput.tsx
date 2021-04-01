@@ -20,6 +20,7 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
   }
   useEffect(() => {
     onSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   return (
     <FormControl variant="outlined">

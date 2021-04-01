@@ -6,7 +6,6 @@ import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 
 import ManageUser from "../ManageUser";
-import FindSection from "../FindSection";
 
 const MainView: React.FC = () => {
   return (

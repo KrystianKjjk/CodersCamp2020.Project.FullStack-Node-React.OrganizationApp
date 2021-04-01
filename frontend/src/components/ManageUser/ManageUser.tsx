@@ -37,6 +37,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
 
     useEffect(() => {
         getUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -171,39 +172,39 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 ${styles.status_radio_button} 
                                 ${isEdit && styles.status_radio_button__edit}
                             `}>
-                                {(isEdit || user?.status == IStatus.Active) && (
+                                {(isEdit || user?.status as IStatus === IStatus.Active) && (
                                     <div>
                                         <input type="radio"
                                                id="Active"
                                                name="status"
                                                value={IStatus.Active}
-                                               checked={user?.status == IStatus.Active}
+                                               checked={user?.status as IStatus === IStatus.Active}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__blue}`} htmlFor="Active">Active</label>
                                     </div>
                                 )}
 
-                                {(isEdit || user?.status == IStatus.Resigned) && (
+                                {(isEdit || user?.status as IStatus === IStatus.Resigned) && (
                                     <div>
                                         <input type="radio"
                                                id="Resigned"
                                                name="status"
                                                value={IStatus.Resigned}
-                                               checked={user?.status == IStatus.Resigned}
+                                               checked={user?.status as IStatus === IStatus.Resigned}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__red}`} htmlFor="Resigned">Resigned</label>
                                     </div>
                                 )}
 
-                                {(isEdit || user?.status == IStatus.Archived) && (
+                                {(isEdit || user?.status as IStatus === IStatus.Archived) && (
                                     <div>
                                         <input type="radio"
                                                id="Archived"
                                                name="status"
                                                value={IStatus.Archived}
-                                               checked={user?.status == IStatus.Archived}
+                                               checked={user?.status as IStatus === IStatus.Archived}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__green}`} htmlFor="Archived">Archived</label>
