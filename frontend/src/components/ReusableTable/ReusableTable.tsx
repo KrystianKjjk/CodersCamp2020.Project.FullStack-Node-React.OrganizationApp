@@ -21,15 +21,15 @@ interface Column {
 
 export interface ReusableTableProps {
   name: string;
-  getData: () => Promise<any[]>;
-  columns: Column[];
+  getData?: () => Promise<any[]>;
+  columns?: Column[];
   onRowClick?: (params: GridRowParams, e: MouseEvent) => void;
 }
 
 const ReusableTable: React.FC< ReusableTableProps > = ({
         name, 
-        columns, 
-        getData,
+        columns = [], 
+        getData = () => Promise.resolve([]),
         onRowClick = (params, e) => {} }) => {
   
   const tables = useAppSelector(selectTables);
@@ -46,11 +46,11 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
             <DataGrid
+              className={styles.table}
               rows={tables[tableName].displayedRows}
               columns={columns}
               pageSize={5}
               autoHeight
-              checkboxSelection
               disableSelectionOnClick={true}
               onRowClick={onRowClick}
             />

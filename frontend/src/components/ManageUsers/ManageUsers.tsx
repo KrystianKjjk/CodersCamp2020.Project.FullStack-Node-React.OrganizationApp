@@ -1,5 +1,5 @@
 import React, { ReactEventHandler, useEffect, useState } from 'react';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { FormControlLabel, Checkbox, Container, Paper, CssBaseline } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
@@ -16,14 +16,14 @@ interface CheckboxProps {
 }
 
 const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) => (
-  <FormControlLabel
+    <FormControlLabel
     className={styles.checkbox}
     control={
       <Checkbox
         name={name}
         checked={checked}
         onChange={onChange}
-        color="primary"
+        style={{color: 'blue'}}
       />
     }
     label={name}
@@ -98,11 +98,12 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => 
   
   return (
     <div className={styles.container} aria-label='Manage Users'>
-      <div className={styles.mainHeader}>
+      <CssBaseline />
+      <Paper className={styles.mainHeader}>
         <h2>Users</h2>
         <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
-      </div>
-      <div className={styles.manageContainer}>
+      </Paper>
+      <Paper className={styles.manageContainer}>
         <h2 className={styles.manageHeader}>Manage Users</h2>
         <span onClick={onClickAdd} className={styles.addButton} aria-label='Add user'>
           <AddButton text='Add'/>
@@ -152,7 +153,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => 
             />
           </span>
         </div>
-      </div>
+      </Paper>
       <Table name='Users' columns={columns} getData={getUsers}/>
     </div>
   );

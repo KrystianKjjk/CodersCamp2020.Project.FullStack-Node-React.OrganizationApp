@@ -11,6 +11,7 @@
     align-items: baseline;
     padding: 1rem;
     margin-bottom: 3rem;
+    border: 1px solid grey;
 }
 .mainHeader > * {
     margin: auto 8rem auto 0rem;
@@ -21,7 +22,7 @@
     grid-template-areas:    "mainHeader sortBy addBtn"
                             "header header header"
                             "checkboxes checkboxes checkboxes";
-    border: gray 2px solid;
+    border: gray 1px solid;
     padding: 1rem;
 }
 .checkbox {

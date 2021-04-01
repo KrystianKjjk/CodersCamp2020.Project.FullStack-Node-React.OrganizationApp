@@ -1,5 +1,8 @@
 .container {
-    max-width: 100%;
+    width: 100%;
     min-width: 300px;
-    min-height: 400px;
+    height: 400px;
+}
+.table {
+    background-color: grey;
 }

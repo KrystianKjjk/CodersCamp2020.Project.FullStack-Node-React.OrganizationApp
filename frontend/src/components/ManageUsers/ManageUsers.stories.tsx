@@ -4,6 +4,8 @@ import ManageUsers , { ManageUsersProps } from './ManageUsers';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
 import getUsersApi from '../../api/getUsers';
+import { ThemeProvider } from '@material-ui/styles';
+import darkTheme from '../../theme/customMaterialTheme';
 
 
 export default {
@@ -13,7 +15,9 @@ export default {
 
 const Template: Story<ManageUsersProps> = (args) => (
   <Provider store={store}>
-    <ManageUsers {...args} />
+    <ThemeProvider theme={darkTheme}>
+      <ManageUsers {...args} />
+    </ThemeProvider>
   </Provider>
 );
 
