@@ -32,7 +32,6 @@ describe('LogIn', () => {
             <LogIn />)
          </Provider>
       );
-  
 
       const inputEmailDiv = screen.getByTestId('li-email');
       const inputEmailElement = inputEmailDiv.querySelector('input');

@@ -10,27 +10,27 @@ jest.mock('../../app/baseService', () => jest.fn());
 
 describe('Registration', () => {
    jest.setTimeout(7000);
-   // it('renders without error', () => {
-   //    render(
-   //       <Provider store={store}>
-   //          <Registration />)
-   //       </Provider>
-   //    );
+   it('renders without error', () => {
+      render(
+         <Provider store={store}>
+            <Registration />)
+         </Provider>
+      );
 
-   //    const fnameInput = screen.getByTestId('r-fname');
-   //    const lnameInput = screen.getByTestId('r-lname');
-   //    const emailinput = screen.getByTestId('r-email');
-   //    const passwordInput = screen.getByTestId('r-password');
-   //    const cpasswordInput = screen.getByTestId('r-cpassword');
-   //    const button = screen.getByTestId('r-button');
+      const fnameInput = screen.getByTestId('r-fname');
+      const lnameInput = screen.getByTestId('r-lname');
+      const emailinput = screen.getByTestId('r-email');
+      const passwordInput = screen.getByTestId('r-password');
+      const cpasswordInput = screen.getByTestId('r-cpassword');
+      const button = screen.getByTestId('r-button');
 
-   //    expect(fnameInput).toHaveTextContent('Name');
-   //    expect(lnameInput).toHaveTextContent('Surname');
-   //    expect(emailinput).toHaveTextContent('Email Address');
-   //    expect(passwordInput).toBeInTheDocument();
-   //    expect(cpasswordInput).toBeInTheDocument();
-   //    expect(button ).toBeInTheDocument();
-   // });
+      expect(fnameInput).toHaveTextContent('Name');
+      expect(lnameInput).toHaveTextContent('Surname');
+      expect(emailinput).toHaveTextContent('Email Address');
+      expect(passwordInput).toBeInTheDocument();
+      expect(cpasswordInput).toBeInTheDocument();
+      expect(button ).toBeInTheDocument();
+   });
 
    it('sends form data to API service', async () => {
       const { getByTestId } = render(
