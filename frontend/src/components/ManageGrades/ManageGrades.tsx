@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, CircularProgress, Snackbar} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
+import SectionsService from "../../api/sections.service";
 
 import BaseService from "../../app/baseService";
 import GradeService from "../../api/grades.service";
@@ -23,20 +24,25 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const baseAPIUrl = `https://coders-camp-organization-app.herokuapp.com/api`;
 
     const gradeService = new GradeService(baseAPIUrl, new BaseService());
+    const sectionService = new SectionsService(baseAPIUrl, new BaseService());
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isEdit, setIsEdit] = useState<Array<boolean>>([]);
-    const [openSuccess, setOpenSuccess] = useState(false);
-    const [openError, setOpenError] = useState(false);
-    const [openSections, setOpenSections] = useState(false);
+    const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+    const [openErrorAlert, setOpenErrorAlert] = useState(false);
+    const [openSectionsModal, setOpenSectionsModal] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
-    const [sectionID, setSectionID] = useState("");
+    const [sections, setSections] = useState<string[]>([]);
 
 
     useEffect(() => {
         getGrades(props.userID);
     },[]);
+
+    useEffect(() => {
+        getSectionNames(grades);
+    },[grades]);
 
     function toggleEdit(index: number) {
         let edits = [...isEdit];
@@ -63,12 +69,31 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         )
     }
 
+    function getSectionNames(grades: any) {
+        let tmpSections: string[] =[];
+
+        grades.forEach( (grade: any, index: number) => {
+                sectionService.getSectionByID(grade.sectionId)
+                    .then( res => {
+                        if(res.status === 200) {
+                            tmpSections[index] = res.data.name;
+                            setSections([...tmpSections]);
+                        }
+                    })
+                    .catch(err => {
+                        tmpSections[index] = 'no section';
+                        setSections([...tmpSections]);
+                    })
+            }
+        )
+    }
+
     function getGrades(userID: string) {
         setIsLoaded(false);
         gradeService.getGrades(userID)
             .then(res => {
-                setIsLoaded(true);
                 if(res.status === 200) {
+                    setIsLoaded(true);
                     setGrades([...res.data]);
                 }
                 else throw Error;
@@ -89,12 +114,12 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                         setGrades(
                             [...tmpGrades]
                         )
-                        setOpenSuccess(true);
+                        setOpenSuccessAlert(true);
                     }
                     else throw Error;
                 })
                 .catch( err => {
-                    setOpenError(true);
+                    setOpenErrorAlert(true);
                 })
         }
         else {
@@ -104,7 +129,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 [...tmpGrades]
             )
             toggleEdit(index);
-            setOpenSuccess(true);
+            setOpenSuccessAlert(true);
         }
     }
 
@@ -112,11 +137,11 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         if('_id' in grades![index]) {
                gradeService.updateGrade(grades![index]._id, grades![index])
                    .then( res => {
-                       if(res.status === 201) setOpenSuccess(true);
+                       if(res.status === 201) setOpenSuccessAlert(true);
                        else throw Error;
                    })
                    .catch(err => {
-                       setOpenError(true);
+                       setOpenErrorAlert(true);
                    })
         }
         else {
@@ -126,14 +151,14 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                            let tmp = [...grades];
                            tmp[index]._id = res.data._id;
                            setGrades([...tmp]);
-                           setOpenSuccess(true);
+                           setOpenSuccessAlert(true);
                        }
                        else throw Error;
                    })
                    .catch(err => {
                        setIsLoaded(true);
                        setError(err);
-                       setOpenError(true);
+                       setOpenErrorAlert(true);
                    })
         }
         toggleEdit(index);
@@ -161,18 +186,19 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         if (reason === 'clickaway') {
             return;
         }
-        setOpenSuccess(false);
-        setOpenError(false);
+        setOpenSuccessAlert(false);
+        setOpenErrorAlert(false);
     };
+    function handleSectionSelection(index: number){
+        return function onSectionSelection(sectionID: any) {
 
-    function getSections(id: number) {
-        setOpenSections(true);
-        let tmpGrades = [...grades];
-        tmpGrades[id].sectionId = sectionID;
-        setGrades([...tmpGrades]);
-        console.log(sectionID);
-        console.log(tmpGrades[id].sectionId)
+            setOpenSectionsModal(false)
+            let tmpGrades = [...grades];
+            tmpGrades[index].sectionId = sectionID;
+            setGrades([...tmpGrades]);
+        }
     }
+
 
     if (error) {
         return <div className={styles.error}>Error</div>;
@@ -181,14 +207,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     } else {
         return (
             <Box className={styles.container}>
-                {openSections && (<FindSection setSectionID={setSectionID}/>)}
 
-                <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
+                <Snackbar open={openSuccessAlert} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
                         Success!
                     </Alert>
                 </Snackbar>
-                <Snackbar open={openError} autoHideDuration={3500} onClose={handleClose}>
+                <Snackbar open={openErrorAlert} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="error">
                         Fail!
                     </Alert>
@@ -206,13 +231,16 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
                         <div className={styles.gradeContainer}>
 
-                            <div className={styles.gradeContainer__header}>
-                                <span>Section name</span>
+                            { openSectionsModal && isEdit[index]
+                            && (<FindSection onSectionSelection={handleSectionSelection(index)} />)}
+
+                                <div className={styles.gradeContainer__header}>
+                                <span>{sections[index]}</span>
                                 {isEdit[index] && (
                                 <UButton
                                     text='CHANGE'
                                     color='primary'
-                                    onClick={() => getSections(index)} />
+                                    onClick={() => setOpenSectionsModal(true)} />
                                     )
                                 }
                             </div>

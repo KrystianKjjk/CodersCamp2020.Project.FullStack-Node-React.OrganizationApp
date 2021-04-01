@@ -10,18 +10,6 @@ $color-ternary-main: #666666;
 $color-status-green: #3cc13b;
 $color-status-red: #F03738;
 
-.error {
-  font-family: Montserrat, sans-serif;
-  font-size: 3rem;
-  font-weight: 400;
-  margin: 5rem auto;
-  color: $color-ternary-warning;
-}
-
-.loading {
-  margin: 5rem auto;
-}
-
 .modal {
   display: flex;
   align-items: center;

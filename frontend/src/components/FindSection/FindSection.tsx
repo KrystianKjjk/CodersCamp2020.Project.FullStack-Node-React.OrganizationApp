@@ -10,7 +10,7 @@ import styles from './FindSection.module.scss';
 import {mainTheme} from "../../theme/customMaterialTheme";
 
 export interface FindSectionProps {
-    setSectionID: any
+    onSectionSelection: any
 }
 
 const FindSection: React.FC< FindSectionProps > = props => {
@@ -19,8 +19,6 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     const sectionsService = new SectionsService(baseAPIUrl, new BaseService());
 
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [sections, setSections] = useState<any>([]);
 
@@ -36,10 +34,15 @@ const FindSection: React.FC< FindSectionProps > = props => {
         setOpen(false);
     };
 
+    function handleRowClick(params: any, e: any) {
+        const sectionID = params.row.id;
+        props.onSectionSelection(sectionID)
+        handleClose();
+    }
+
     function getSections() {
         sectionsService.getSections()
             .then(res => {
-                setIsLoaded(true);
                 if(res.status === 200) {
                     setSections([...res.data]);
                     handleOpen();
@@ -47,8 +50,6 @@ const FindSection: React.FC< FindSectionProps > = props => {
                 else throw Error;
             })
             .catch(err => {
-                setIsLoaded(true);
-                setError(err);
             })
     }
 
@@ -75,12 +76,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
         {field: 'Course Name', width: 250},
     ];
 
-    if (error) {
-        return <div className={styles.error}>Error</div>;
-    } else if (!isLoaded) {
-        return <CircularProgress className={styles.loading}/>
-    } else {
-        return (
+    return (
             <MuiThemeProvider theme={mainTheme}>
                     <Modal
                         aria-labelledby="transition-modal-title"
@@ -112,19 +108,15 @@ const FindSection: React.FC< FindSectionProps > = props => {
                                                 name=""
                                                 getData={getSectionsTable}
                                                 columns={columns}
-                                                onRowClick={(params, e) => {
-                                                    props.setSectionID(params.row.id);
-                                                    handleClose();
-                                                }}
+                                                onRowClick={handleRowClick}
                                             />
-
                                     </div>
                                 </div>
                             </div>
                         </Fade>
                     </Modal>
             </MuiThemeProvider>
-        )}
+        )
 };
 
 export default FindSection;

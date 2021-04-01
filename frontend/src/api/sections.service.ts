@@ -16,4 +16,8 @@ export default class SectionsService {
         return this.httpService.get(this.endpoint,this.httpConfig);
     }
 
+    async getSectionByID(sectionID: string) {
+        return this.httpService.get(`${this.endpoint}/${sectionID}`,this.httpConfig);
+    }
+
 }
