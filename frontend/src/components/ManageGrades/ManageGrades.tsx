@@ -7,9 +7,9 @@ import BaseService from "../../app/baseService";
 import GradeService from "../../api/grades.service";
 import {IGrade} from "../../models/user.model";
 import UButton from "../UButton";
+import FindSection from "../FindSection";
 
 import styles from './ManageGrades.module.scss';
-import FindSection from "../FindSection";
 
 export interface ManageGradesProps {
     userID: string
@@ -186,7 +186,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         let tmpSections = sections;
         tmpSections.push({_id: 'exampleID'});
         setSections([...tmpSections]);
-        
+
         toggleEdit(tmpGrades.length - 1);
     }
 
