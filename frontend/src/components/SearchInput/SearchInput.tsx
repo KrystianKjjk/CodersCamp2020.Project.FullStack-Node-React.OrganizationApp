@@ -1,8 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react';
-import styles from './SearchInput.module.css';
 import { InputAdornment, IconButton, FormControl, OutlinedInput } from '@material-ui/core';
 import { ArrowForwardOutlined, SearchRounded } from '@material-ui/icons';
-
 
 export interface SearchInputProps {
   onSubmit: (value: string) => void;

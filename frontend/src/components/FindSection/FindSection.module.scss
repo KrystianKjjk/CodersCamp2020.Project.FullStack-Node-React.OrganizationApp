@@ -10,42 +10,30 @@ $color-ternary-main: #666666;
 $color-status-green: #3cc13b;
 $color-status-red: #F03738;
 
-* {
-  margin: 0;
-}
-
-p {
-  width: 15rem;
-  padding: .7rem 1rem .7rem 0;
-  display: inline-block;
-}
-
-body {
-  background: $color-primary;
-  box-sizing: border-box;
-}
-
 .error {
   font-family: Montserrat, sans-serif;
   font-size: 3rem;
   font-weight: 400;
+  margin: 5rem auto;
   color: $color-ternary-warning;
 }
 
 .loading {
-  font-family: Montserrat, sans-serif;
-  font-size: 3rem;
-  font-weight: 400;
-  color: $color-ternary-light;
+  margin: 5rem auto;
 }
 
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .container {
-  background: $color-secondary;
-  width: 90%;
+  background: #000;
+  width: 60%;
   margin: 0 auto;
-  border: 1px $color-ternary-main solid;
-  border-radius: .3rem;
+  border: 1px #fff solid;
+  border-radius: .2rem;
 
   &__header {
     display: flex;
@@ -63,6 +51,13 @@ body {
   }
 
   &__body {
-    display: flex;
+    &__search {
+      margin: 3rem;
+      display: flex;
+      justify-content: center;
+    }
+    &__table {
+      margin: 1rem 2rem;
+    }
   }
 }

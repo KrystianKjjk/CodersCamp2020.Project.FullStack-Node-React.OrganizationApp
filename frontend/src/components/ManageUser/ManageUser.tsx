@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from "react-router-dom";
+import {Box, Breadcrumbs, CircularProgress, Container, Link, Snackbar, Typography} from "@material-ui/core";
+import {mainTheme, UButtonTheme} from "../../theme/customMaterialTheme";
+import {ThemeProvider} from "@material-ui/styles";
+import MuiAlert from '@material-ui/lab/Alert';
 
 import UserService from "../../api/users.service";
 import BaseService from "../../app/baseService";
@@ -8,10 +12,7 @@ import ManageGrades from "../ManageGrades";
 import UButton from "../UButton";
 
 import styles from './ManageUser.module.css';
-import {Box, Breadcrumbs, CircularProgress, Container, Link, Snackbar, Typography} from "@material-ui/core";
-import {mainTheme, UButtonTheme} from "../../theme/customMaterialTheme";
-import {ThemeProvider} from "@material-ui/styles";
-import MuiAlert from '@material-ui/lab/Alert';
+
 
 export interface ManageUserProps {
     userID: string;

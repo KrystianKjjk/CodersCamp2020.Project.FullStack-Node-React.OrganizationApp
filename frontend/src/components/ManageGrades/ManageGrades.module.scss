@@ -53,6 +53,9 @@ $color-status-red: #F03738;
   flex-basis: 20rem;
 
   &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
     padding: 1rem;
     background: inherit;
     color: rgba(255,255,255, 0.87);

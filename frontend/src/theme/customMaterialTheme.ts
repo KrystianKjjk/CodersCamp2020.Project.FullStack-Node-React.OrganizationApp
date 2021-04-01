@@ -14,13 +14,16 @@ export default createMuiTheme({
 
 export const mainTheme = createMuiTheme({
     palette: {
+        type: 'dark',
         primary: {
             main: "#ffffff",
         },
         secondary: {
             main: "#ff384a",
-        }
-
+        },
+    },
+    typography: {
+        fontFamily: "Montserrat",
     },
 });
 

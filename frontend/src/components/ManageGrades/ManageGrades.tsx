@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from 'react';
+import {Box, CircularProgress, Snackbar} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import BaseService from "../../app/baseService";
 import GradeService from "../../api/grades.service";
 import {IGrade} from "../../models/user.model";
+import UButton from "../UButton";
 
 import styles from './ManageGrades.module.scss';
-import UButton from "../UButton";
-import {Box, CircularProgress, Snackbar} from "@material-ui/core";
-import {ThemeProvider} from "@material-ui/styles";
-import MuiAlert from "@material-ui/lab/Alert";
-
+import FindSection from "../FindSection";
 
 export interface ManageGradesProps {
     userID: string
@@ -27,10 +26,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [grades, setGrades] = useState<IGrade[]>([]);
     const [isEdit, setIsEdit] = useState<Array<boolean>>([]);
-    const [openSuccess, setOpenSuccess] = React.useState(false);
-    const [openError, setOpenError] = React.useState(false);
+    const [openSuccess, setOpenSuccess] = useState(false);
+    const [openError, setOpenError] = useState(false);
+    const [openSections, setOpenSections] = useState(false);
+    const [grades, setGrades] = useState<IGrade[]>([]);
+    const [sectionID, setSectionID] = useState("");
+
 
     useEffect(() => {
         getGrades(props.userID);
@@ -163,6 +165,15 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         setOpenError(false);
     };
 
+    function getSections(id: number) {
+        setOpenSections(true);
+        let tmpGrades = [...grades];
+        tmpGrades[id].sectionId = sectionID;
+        setGrades([...tmpGrades]);
+        console.log(sectionID);
+        console.log(tmpGrades[id].sectionId)
+    }
+
     if (error) {
         return <div className={styles.error}>Error</div>;
     } else if (!isLoaded) {
@@ -170,6 +181,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     } else {
         return (
             <Box className={styles.container}>
+                {openSections && (<FindSection setSectionID={setSectionID}/>)}
 
                 <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
@@ -196,6 +208,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
                             <div className={styles.gradeContainer__header}>
                                 <span>Section name</span>
+                                {isEdit[index] && (
+                                <UButton
+                                    text='CHANGE'
+                                    color='primary'
+                                    onClick={() => getSections(index)} />
+                                    )
+                                }
                             </div>
 
                             <form className={`${styles.gradeContainer__body}`}>

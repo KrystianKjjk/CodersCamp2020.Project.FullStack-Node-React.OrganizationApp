@@ -41,6 +41,9 @@
   flex-basis: 20rem;
 }
 .gradeContainer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
   padding: 1rem;
   background: inherit;
   color: rgba(255, 255, 255, 0.87);

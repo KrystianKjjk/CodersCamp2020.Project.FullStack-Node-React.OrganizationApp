@@ -11,5 +11,5 @@ const Template: Story<FindSectionProps> = (args) => <FindSection {...args} />;
 
 export const FirstInput = Template.bind({});
 FirstInput.args = {
-  label: 'Write something: ',
+  setSectionID: '',
 };

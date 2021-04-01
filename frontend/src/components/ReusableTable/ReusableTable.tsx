@@ -7,6 +7,9 @@ import {
   fetchData,
   selectTables
 } from './ReusableTableSlice';
+import {mainTheme} from "../../theme/customMaterialTheme";
+import {ThemeProvider} from "@material-ui/styles";
+import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
 interface Column {
   field: string;
@@ -35,6 +38,7 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   const tables = useAppSelector(selectTables);
   const dispatch = useAppDispatch();
   const [tableName] = useState(name);
+
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
@@ -46,15 +50,17 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
             {name}
-            <DataGrid
-              rows={tables[tableName].rows}
-              columns={columns}
-              pageSize={5}
-              autoHeight
-              checkboxSelection
-              disableSelectionOnClick={true}
-              onRowClick={onRowClick}
-            />
+            <MuiThemeProvider theme={mainTheme}>
+                <DataGrid
+                  rows={tables[tableName].rows}
+                  columns={columns}
+                  pageSize={5}
+                  autoHeight
+                  checkboxSelection
+                  disableSelectionOnClick={true}
+                  onRowClick={onRowClick}
+                />
+            </MuiThemeProvider>
           </div>
         ) 
       }
