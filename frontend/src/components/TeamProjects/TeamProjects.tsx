@@ -31,7 +31,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
 
   const columns = [
     { field: 'Name', width: 300 },
-    { field: 'URL', width: 200 },
+    { field: 'Mentor', width: 200 },
     { field: 'Description', width: 500 }
   ];
 
