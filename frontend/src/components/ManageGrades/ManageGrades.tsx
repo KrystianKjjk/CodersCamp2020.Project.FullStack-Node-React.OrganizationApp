@@ -171,7 +171,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     function addGrade(event: any) {
         let tmpGrades = [ ...grades as IGrade[] ];
         let tmpGrade: Omit<IGrade, "_id"> = {
-            sectionId: '604b5ab050dd92462cc4ede2',
+            sectionId: '',
             testPoints: 0,
             testMaxPoints: 0,
             taskPoints: 0,
@@ -183,6 +183,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         setGrades(
             [...tmpGrades]
         )
+        let tmpSections = sections;
+        tmpSections.push({_id: 'exampleID'});
+        setSections([...tmpSections]);
+        
         toggleEdit(tmpGrades.length - 1);
     }
 
