@@ -36,7 +36,8 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     function handleRowClick(params: any, e: any) {
         const sectionID = params.row.id;
-        props.onSectionSelection(sectionID)
+        const sectionName = params.row.Name;
+        props.onSectionSelection(sectionID, sectionName)
         handleClose();
     }
 

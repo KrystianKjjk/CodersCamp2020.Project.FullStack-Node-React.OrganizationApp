@@ -190,12 +190,16 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         setOpenErrorAlert(false);
     };
     function handleSectionSelection(index: number){
-        return function onSectionSelection(sectionID: any) {
+        return function onSectionSelection(sectionID: string, sectionName: string) {
 
             setOpenSectionsModal(false)
             let tmpGrades = [...grades];
             tmpGrades[index].sectionId = sectionID;
             setGrades([...tmpGrades]);
+
+            let tmpSections = [...sections];
+            tmpSections[index] = sectionName;
+            setSections([...tmpSections]);
         }
     }
 
