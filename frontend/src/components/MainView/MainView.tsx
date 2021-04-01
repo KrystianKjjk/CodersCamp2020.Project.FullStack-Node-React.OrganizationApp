@@ -4,6 +4,7 @@ import Header from "../Header";
 import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+import CourseCreate from "../CourseCreate";
 
 const MainView: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const MainView: React.FC = () => {
           <Users />
         </PrivateRoute>
         <PrivateRoute path="/courses">
-          <Courses />
+          <CourseCreate/>
         </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />
