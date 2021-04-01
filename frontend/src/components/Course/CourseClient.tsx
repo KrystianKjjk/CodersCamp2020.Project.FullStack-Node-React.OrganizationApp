@@ -1,0 +1,18 @@
+import { CourseCreateObject } from "./CourseSlice";
+const axios = require("axios");
+
+let config = {
+  headers: {
+    "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTczMDQxNTcsImV4cCI6MTYxNzMwNTM1N30.sqm5n8ucZi-bT4P3bPdAHVakjN1zJEnlT054OAqWxME",
+  }
+}
+
+export const createCourse =  (course: CourseCreateObject) => {
+  // return axios.post('localhost:5000/api/courses', {course}, config);
+  return axios.post('https://coders-camp-organization-app.herokuapp.com/api/courses', course, config);
+};
+
+export const fetchCourse = (courseId: string) => {
+  return axios.get('https://coders-camp-organization-app.herokuapp.com/api/courses/'+courseId, config);
+}
+

@@ -9,9 +9,9 @@ const initialState: CourseCreateState = {
   
 };
 
-const createCourse = 
+// const createCourse = 
 
-export const courseCreateSlice = createSlice({
+const courseCreateSlice = createSlice({
   name: 'courseCreate',
   initialState,
   reducers: {

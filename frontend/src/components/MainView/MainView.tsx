@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 import CourseCreate from "../CourseCreate";
+import Course from '../Course';
 
 const MainView: React.FC = () => {
   return (
@@ -14,8 +15,10 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/users">
           <Users />
         </PrivateRoute>
-        <PrivateRoute path="/courses">
+        <PrivateRoute exact path="/courses">
           <CourseCreate/>
+        </PrivateRoute>
+        <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />

@@ -5,3 +5,4 @@ Dist
 ./Api/Dist
 launch.json
 ./.env
+.env

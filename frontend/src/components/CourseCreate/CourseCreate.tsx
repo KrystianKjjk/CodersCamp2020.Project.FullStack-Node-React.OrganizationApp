@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import styles from "./CourseCreate.module.css";
-// import 'date-fns';
-// import Grid from '@material-ui/core/Grid';
-// import MomentUtils from '@date-io/moment';
-// import {
-//   MuiPickersUtilsProvider,
-//   KeyboardTimePicker,
-//   KeyboardDatePicker,
-// } from '@material-ui/pickers';
+import { createCourse } from "../Course/CourseClient";
+import {
+  CourseCreateObject,
+  Course
+} from "../Course/CourseSlice";
+
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 export interface CourseCreateProps {}
 
 const CourseCreate: React.FC<CourseCreateProps> = (props) => {
-  let [courseName, changeCourseName] = useState("");
-  let [description, changeDescription] = useState("");
-
+  const [courseName, changeCourseName] = useState("");
+  const [description, changeDescription] = useState("");
+  const history = useHistory();
+  
   const handleCourseNameChange = (e: any) => {
     changeCourseName(e.target.value);
   };
@@ -26,9 +25,17 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
     changeDescription(e.target.value);
   };
 
-  const handleSaveButtonClick = () => {
-    const inputsState = { courseName, description };
-    console.log(inputsState);
+  const handleSaveButtonClick = async () => {
+    const course: CourseCreateObject = {
+      name: courseName,
+      description: description,
+      startDate: new Date(2021, 3, 1),
+      endDate: new Date(2021, 3, 4),
+    };
+    createCourse(course).then((response: any) => {
+      const createdCourse: Course = response.data;
+      history.push("courses/" + createdCourse._id);
+    });
   };
 
   return (
