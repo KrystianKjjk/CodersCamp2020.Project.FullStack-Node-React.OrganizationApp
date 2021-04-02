@@ -1,4 +1,5 @@
 import api from './api';
+import { User } from './getUsers';
 
 
 interface Grades {
@@ -40,22 +41,47 @@ export default async function getMentorSheets(mentorId?: string): Promise<GradeS
 }
 
 const sum = (numbers: number[]) => numbers.reduce((acc, x) => acc + x, 0);
-const sumPoints = (grades: Grades) => sum( Object.values(grades) );
+const sumPoints = (grades: Grades) => [sum( Object.values(grades) ), (Object.values(grades).length - 1) * 10];
 
 export function calcProjectGrade(sheet: GradeSheetData) {
     const mentorPoints = sumPoints(sheet.mentorGrades);
-    const reviewersPoints = sheet.mentorReviewerGrades.map( reviewer => sumPoints(reviewer.grades) );
-    return ( mentorPoints + sum(reviewersPoints) ) / (reviewersPoints.length + 1);
+    let [points, maxPoints] = mentorPoints;
+    sheet.mentorReviewerGrades.map(reviewer => {
+        const [revPooints, revMaxPoints] = sumPoints(reviewer.grades);
+        points += revPooints;
+        maxPoints += revMaxPoints;
+    });
+    return [points, maxPoints];
 }
 
+const MAX_ROLE_POINTS = 10;
 export function calcUserProjectGrade(sheet: GradeSheetData, userId: string) {
-    const projectPoints = calcProjectGrade(sheet);
+    const [projectPoints, maxPoints] = calcProjectGrade(sheet);
     const user = sheet.participants.find(user => user.participantID === userId);
     if (!user) return null;
-    return projectPoints * user.engagement / 100 + user.rolePoints;
+    const points = projectPoints * user.engagement / 100 + user.rolePoints;
+    const max = maxPoints + MAX_ROLE_POINTS;
+    return [points, max];
 }
 
-// export function calcUserGrade(sheet: GradeSheetData, user: User) {
-//     const projectPoints = calcUserProjectGrade(sheet, user._id);
-    
-// }
+export function calcUserTasksGrade(user: User) {
+    let [points, maxPoints] = [0, 0];
+    user.grades.forEach(grade => {
+        if(grade.taskPoints && grade.taskMaxPoints){
+            points += grade.taskPoints;
+            maxPoints += grade.taskMaxPoints;
+        }
+    });
+    return [points, maxPoints];
+}
+
+export function calcUserTestsGrade(user: User) {
+    let [points, maxPoints] = [0, 0];
+    user.grades.forEach(grade => {
+        if(grade.testPoints && grade.testMaxPoints){
+            points += grade.testPoints;
+            maxPoints += grade.testMaxPoints;
+        }
+    });
+    return [points, maxPoints];
+}
