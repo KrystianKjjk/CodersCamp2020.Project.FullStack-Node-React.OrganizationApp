@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styles from './TeamProjects.module.css';
 import ReusableTable from '../ReusableTable/index'
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import getTeamProjects from '../../api/getTeamProjects'
-import { Button } from '@material-ui/core';
+import { useAppDispatch } from '../../app/hooks';
+import { getTeamProjects } from '../../api/getTeamProjects'
 
 
 export interface TeamProjectsProps {
   course: string;
+  getFunction: () => Promise<any[]>;
 }
 
 enum HeaderText {
@@ -15,24 +15,18 @@ enum HeaderText {
   EDIT = `EDIT TEAM PROJECT`
 }
 
-
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
 
   const [detailedView, setDetailedView] = useState(false);
-  const [selectedProjectData, setSelectedProjectData] = useState({});
+  const [selectedProjectId, setSelectedProjectId] = useState({});
 
-  const dispatch = useAppDispatch();
-
-  const getProjects = () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w';
-    // window.localStorage.getItem('token')''
-    return getTeamProjects(token);
-  }
+  
 
   const columns = [
     { field: 'Name', width: 300 },
     { field: 'Mentor', width: 200 },
-    { field: 'Description', width: 500 }
+    { field: 'ReferenceProject', width: 200 },
+    { field: 'Section', width: 200 },
   ];
 
   const Header = (detailedView: boolean): HeaderText => {
@@ -41,29 +35,28 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
 
   const Table = () => {
     return (
-      <div className={styles.table}>
-        <Button className={styles.editButton}>Edit</Button>
+      <div className={styles.table}>        
         <ReusableTable
           name="Manage Team Projects"
-          getData={getProjects}
+          getData={props.getFunction}
           columns={columns}
           onRowClick={(params, e) => {
               setDetailedView(true);
-              setSelectedProjectData(params.row);
+              setSelectedProjectId(params.row.id);
           }}
-
         />
-      </div>
+      </div>      
     )
   }
+
   //@ts-ignore
   const MainView = (props) => {
-    return props.detailedView ? <div onClick={() => setDetailedView(false)}>Placeholder for edit mode</div> : <Table/>
+    return props.detailedView ? <div onClick={() => setDetailedView(false)}>{props.children(selectedProjectId)}</div> : <Table/>
   }
 
   return (
     <div>
-      <div className={styles.header}>
+      <div className={styles.header} aria-label='TeamProjectsHeader'>
         <h2>{Header(detailedView)}</h2>
       </div>
 
