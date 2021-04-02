@@ -10,7 +10,6 @@ import UButton from "../UButton";
 import FindSection from "../FindSection";
 
 import styles from './ManageGrades.module.css';
-import {ThemeProvider} from "@material-ui/styles";
 
 export interface ManageGradesProps {
     userID: string
@@ -36,7 +35,6 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [openErrorAlert, setOpenErrorAlert] = useState(false);
     const [openWarningAlert, setOpenWarningAlert] = React.useState(false);
-
 
     const [openSectionsModal, setOpenSectionsModal] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
@@ -175,7 +173,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                        else throw Error;
                    })
                    .catch(err => {
-                       if(err.response.data.message.match('sectionId')) setOpenWarningAlert(true);
+                       if(err?.response?.data?.message.match('sectionId')) setOpenWarningAlert(true);
                        else setOpenErrorAlert(true);
                    })
         }
@@ -267,14 +265,19 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                             && (<FindSection onSectionSelection={handleSectionSelection(index)}/>)}
 
                                 <div className={styles.gradeContainer__header}>
-                                <span>{sections[index]?.name}</span>
-                                {isEdit[index] && (
+                                <span>{sections[index]?.name ?? 'Section Name'}</span>
+                                { isEdit[index] && grades[index]?.sectionId === '' && (
+                                <UButton
+                                    text='SELECT'
+                                    color='primary'
+                                    onClick={() => setOpenSectionsModal(true)} />
+                                    ) }
+                                    { isEdit[index] && grades[index]?.sectionId !== '' && (
                                 <UButton
                                     text='CHANGE'
                                     color='primary'
                                     onClick={() => setOpenSectionsModal(true)} />
-                                    )
-                                }
+                            ) }
                             </div>
 
                             <form className={`${styles.gradeContainer__body}`}>
