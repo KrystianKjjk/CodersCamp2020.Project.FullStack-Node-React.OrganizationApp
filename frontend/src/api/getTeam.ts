@@ -1,12 +1,14 @@
 import api from './api';
 import { TeamInfo } from '../components/ManageTeam/ManageTeam';
 import { User as UserData, userStatusDict } from  './getUsers';
+import getTeamProjects from  './getTeamProjects';
 import { User } from '../components/ManageTeam/ManageTeam';
 
 
 interface TeamData {
     _id: string;
     mentor: {
+        _id: string;
         name: string;
         surname: string;
     } | null;
@@ -23,6 +25,8 @@ export default async function getTeam(authToken: string, id: string): Promise<Te
     
     const teamRes = await api.get<TeamData>('/teams/' + id, config);
     const team = teamRes.data;
+    console.log(team);
+    const projects = await getTeamProjects(authToken, id, team.mentor?._id);
     const teamInfo: TeamInfo = {
         id: team._id,
         mentor: {
@@ -30,7 +34,7 @@ export default async function getTeam(authToken: string, id: string): Promise<Te
             surname: team?.mentor?.surname ?? '---',
         },
         users: [],
-        projects: [],
+        projects,
         teamAvgGrade: 100,
         maxPoints: 99,
     }

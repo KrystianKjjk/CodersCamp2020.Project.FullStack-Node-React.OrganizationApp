@@ -21,20 +21,30 @@ const Template: Story<ManageTeamProps> = (args) => (
   </Provider>
 );
 
-const teamsDatabase = [
-  {id: 1, name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
-  {id: 2, name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 2. edition'},
-  {id: 3, name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 3. edition'},
-  {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 4. edition'},
-  {id: 5, name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 5. edition'},
-]
+const teamsDatabase = [{
+  id: '0',
+  mentor: {
+    name: 'Naame',
+    surname: 'Suurname',
+  },
+  users: [{
+    id: '11',
+    name: 'UserName',
+    surname: 'UserSurname',
+    status: 'Active',
+    averageGrade: 11,
+  }],
+  projects: [],
+  teamAvgGrade: 11,
+  maxPoints: 111,
+}];
 const getFakeTeam = (id: string) => {
   return Promise.resolve(teamsDatabase[Number(id)]);
 }
 
 export const SampleFakeManageTeam = Template.bind({});
 SampleFakeManageTeam.args = {
-  teamId: '1',
+  teamId: '0',
   getTeamInfo: getFakeTeam,
   onClickAdd: () => console.log('Clicked Add'),
 };

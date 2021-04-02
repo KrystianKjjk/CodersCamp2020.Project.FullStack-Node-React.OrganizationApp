@@ -18,6 +18,15 @@ export interface User {
     surname: string;
     status: UserStatus;
     type: UserType;
+    grades: {
+        _id: string;
+        sectionId?: string;
+        testPoints?: number;
+        testMaxPoints?: number;
+        taskPoints?: number;
+        taskMaxPoints?: number;
+        projectPoints?: number;
+    }[];
 }
 export const userStatusDict = {
     [UserStatus.Active]: 'Active',

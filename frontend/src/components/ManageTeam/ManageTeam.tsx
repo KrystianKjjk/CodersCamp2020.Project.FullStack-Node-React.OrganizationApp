@@ -51,9 +51,11 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
       .then(team => {
         setTeamInfo(team);
         setTeamMembers(team.users);
-        setLoading('idle');
       });
   }, [teamId]);
+  useEffect(() => {
+    if(teamMembers && teamInfo) setLoading('idle');
+  }, [teamInfo, teamMembers])
   
   const columns = [
     {field: 'surname', headerName: 'Last name', width: 200, sortable: true},
@@ -79,7 +81,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
               </span>
             </div>
             <div className={styles.table}>
-              <Table name='Team' columns={columns} getData={() => Promise.resolve(teamMembers)}/>
+              <Table name='Team' columns={columns} getData={() => Promise.resolve(teamMembers as User[])}/>
             </div>
           </Paper>
         </Container>)
