@@ -26,8 +26,9 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
         },
       },
       nameInput: {
-        width: "50%",
-        // marginBottom: "2%",
+        "&.MuiTextField-root":{
+          width:"50%"
+        },   
       },
       container: {
         textAlign: "left",
