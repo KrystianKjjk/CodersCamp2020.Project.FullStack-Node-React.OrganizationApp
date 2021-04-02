@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import ManageTeam from './ManageTeam';
-import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
+
 
 const teamsDatabase = [{
    id: '0',

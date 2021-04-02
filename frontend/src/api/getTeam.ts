@@ -16,17 +16,11 @@ interface TeamData {
     projects: string[];
 }
 
-export default async function getTeam(authToken: string, id: string): Promise<TeamInfo> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
-    
-    const teamRes = await api.get<TeamData>('/teams/' + id, config);
+export default async function getTeam(id: string): Promise<TeamInfo> {
+    const teamRes = await api.get<TeamData>('/teams/' + id);
     const team = teamRes.data;
     console.log(team);
-    const projects = await getTeamProjects(authToken, id, team.mentor?._id);
+    const projects = await getTeamProjects(id, team.mentor?._id);
     const teamInfo: TeamInfo = {
         id: team._id,
         mentor: {

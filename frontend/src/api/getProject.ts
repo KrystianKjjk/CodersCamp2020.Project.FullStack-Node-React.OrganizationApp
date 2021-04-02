@@ -1,7 +1,5 @@
 import api from './api';
-import { TeamInfo } from '../components/ManageTeam/ManageTeam';
-import { User as UserData, userStatusDict } from  './getUsers';
-import { User } from '../components/ManageTeam/ManageTeam';
+
 
 interface SectionData {
     _id: string;
@@ -28,22 +26,17 @@ interface Project {
     description: string;
 };
 
-export default async function getTeamProjects(authToken: string, id: string): Promise<Project | null> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
+export default async function getTeamProjects(id: string): Promise<Project | null> {
     let projectRes;
     try {
-        projectRes = await api.get<ProjectData>(`/projects/${id}`, config);
+        projectRes = await api.get<ProjectData>(`/projects/${id}`);
     } catch(err) {
         return null;
     }
     console.log ('============================================================')
     console.log (projectRes.status)
     const project = projectRes.data;
-    const sectionRes = await api.get<SectionData>(`/sections/${project.sectionId}`, config);
+    const sectionRes = await api.get<SectionData>(`/sections/${project.sectionId}`);
     const section = sectionRes.data;
     console.log(projectRes);
     return {

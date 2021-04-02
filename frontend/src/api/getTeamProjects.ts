@@ -25,17 +25,12 @@ interface Project {
     description: string;
 };
 
-export default async function getTeamProjects(authToken: string, id: string, mentorId?: string): Promise<Project[]> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
-    const projectsRes = await api.get<ProjectData[]>(`/teams/${id}/projects`, config);
+export default async function getTeamProjects(id: string, mentorId?: string): Promise<Project[]> {
+    const projectsRes = await api.get<ProjectData[]>(`/teams/${id}/projects`);
     const projectsData = projectsRes.data;
     console.log(projectsRes);
     const projects = await Promise.all( projectsData.map( async project => {
-        const parentProject = await getProject(authToken, project.parentProjectId);
+        const parentProject = await getProject(project.parentProjectId);
         return {
             id: project._id,
             name: project.projectName,
@@ -44,7 +39,7 @@ export default async function getTeamProjects(authToken: string, id: string, men
             url: project.projectUrl,
             description: project.description,
     }} ) );
-    const grades = await getMentorSheets(authToken, mentorId);
+    const grades = await getMentorSheets(mentorId);
     console.log(grades);
     grades?.forEach(sheet => {
         const idx = projects.findIndex(project => project.id === sheet.projectID);

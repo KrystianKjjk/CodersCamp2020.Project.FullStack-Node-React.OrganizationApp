@@ -1,5 +1,4 @@
 import api from './api';
-import { User } from './getUsers';
 
 
 interface Grades {
@@ -28,16 +27,11 @@ interface GradeSheetData {
     }[];
 };
 
-export default async function getMentorSheets(authToken: string, mentorId?: string): Promise<GradeSheetData[] | null> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
+export default async function getMentorSheets(mentorId?: string): Promise<GradeSheetData[] | null> {
     let gradeSheetsRes;
     console.log({mentorId});
     try {
-        gradeSheetsRes = await api.get<GradeSheetData[]>(`/mentors/${mentorId}/grade/sheets`, config);
+        gradeSheetsRes = await api.get<GradeSheetData[]>(`/mentors/${mentorId}/grade/sheets`);
     } catch(err) {
         return null;
     }
