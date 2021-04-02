@@ -20,6 +20,7 @@ export interface User {
   surname: string;
   status: string;
   averageGrade: number;
+  maxGrade: number;
 };
 
 export interface TeamInfo {
