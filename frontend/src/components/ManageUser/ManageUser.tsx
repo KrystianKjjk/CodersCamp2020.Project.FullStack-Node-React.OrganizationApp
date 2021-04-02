@@ -48,7 +48,8 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     function handleInputChange(event: any) {
         const target = event.target;
         const name = target.name;
-        const value = target.value;
+        let value = target.value;
+        if(!isNaN(value)) value = +value;
         // @ts-ignore
         setUser({
             ...user,

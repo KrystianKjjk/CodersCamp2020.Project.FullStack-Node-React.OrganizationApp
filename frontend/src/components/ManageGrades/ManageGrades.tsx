@@ -10,6 +10,7 @@ import UButton from "../UButton";
 import FindSection from "../FindSection";
 
 import styles from './ManageGrades.module.css';
+import {ThemeProvider} from "@material-ui/styles";
 
 export interface ManageGradesProps {
     userID: string
@@ -34,6 +35,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const [isEdit, setIsEdit] = useState<Array<boolean>>([]);
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [openErrorAlert, setOpenErrorAlert] = useState(false);
+    const [openWarningAlert, setOpenWarningAlert] = React.useState(false);
+
 
     const [openSectionsModal, setOpenSectionsModal] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
@@ -153,7 +156,6 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                    .then( res => {
                        if(res.status === 201) setOpenSuccessAlert(true);
                        else throw Error;
-
                        toggleEdit(index);
                    })
                    .catch(err => {
@@ -173,7 +175,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                        else throw Error;
                    })
                    .catch(err => {
-                       setOpenErrorAlert(true);
+                       if(err.response.data.message.match('sectionId')) setOpenWarningAlert(true);
+                       else setOpenErrorAlert(true);
                    })
         }
     }
@@ -206,6 +209,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         }
         setOpenSuccessAlert(false);
         setOpenErrorAlert(false);
+        setOpenWarningAlert(false);
+
     };
     function handleSectionSelection(index: number){
         return function onSectionSelection(sectionID: string, sectionName: string) {
@@ -238,6 +243,11 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 <Snackbar open={openErrorAlert} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="error">
                         Fail!
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={openWarningAlert} autoHideDuration={3500} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="warning">
+                        Section must be selected.
                     </Alert>
                 </Snackbar>
 
