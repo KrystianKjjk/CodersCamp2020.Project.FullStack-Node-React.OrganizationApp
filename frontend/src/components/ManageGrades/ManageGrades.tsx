@@ -53,8 +53,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     }
 
     function handleInputChangeGrade(event: React.ChangeEvent<HTMLInputElement>) {
-        const target: HTMLInputElement = event.target;
-        const index = +target.id;
+        const target = event.target;
+        const index = target.tabIndex;
         const name = target.name;
         const value = +target.value;
 
@@ -276,12 +276,12 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                         {isEdit[index] ? (
                                             <div>
                                                 <input type="text"
-                                                       id={`${index}`}
+                                                       tabIndex={index}
                                                        name="testPoints"
                                                        placeholder={grade?.testPoints?.toString()}
                                                        onChange={handleInputChangeGrade}/>
                                                 <input type="text"
-                                                       id={`${index}`}
+                                                       tabIndex={index}
                                                        name="testMaxPoints"
                                                        placeholder={grade?.testMaxPoints?.toString()}
                                                        onChange={handleInputChangeGrade}/>
@@ -302,12 +302,12 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                         {isEdit[index] ? (
                                             <div>
                                                 <input type="text"
-                                                       id={`${index}`}
+                                                       tabIndex={index}
                                                        name="taskPoints"
                                                        placeholder={grade?.taskPoints?.toString()}
                                                        onChange={handleInputChangeGrade}/>
                                                 <input type="text"
-                                                       id={`${index}`}
+                                                       tabIndex={index}
                                                        name="taskMaxPoints"
                                                        placeholder={grade?.taskMaxPoints?.toString()}
                                                        onChange={handleInputChangeGrade}/>
@@ -328,7 +328,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                         <div>
                                             {isEdit[index] ? (
                                                 <input type="text"
-                                                       id={`${index}`}
+                                                       tabIndex={index}
                                                        name="projectPoints"
                                                        placeholder={grade?.projectPoints?.toString()}
                                                        onChange={handleInputChangeGrade}/>

@@ -4,7 +4,7 @@ export default class CoursesService {
 
     endpoint: string = '';
 
-    constructor(private baseEndpoint: string, private httpService: BaseService) {
+    constructor(private httpService: BaseService) {
         this.endpoint = `courses`
     };
 
