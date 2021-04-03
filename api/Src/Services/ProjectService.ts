@@ -38,7 +38,7 @@ class ProjectService {
             };
         };
 
-        if (projectData.sectionId && typeof projectData.sectionId !== "string") {
+        if (projectData.sectionId && typeof projectData.sectionId !== "number") {
             return null;
         }
 
