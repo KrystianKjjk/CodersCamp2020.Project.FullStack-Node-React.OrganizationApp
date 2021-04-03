@@ -8,6 +8,12 @@
 .container {
     border: gray 1px solid;
 }
+.container > * {
+    border-bottom: gray 1px solid;
+}
+.container > *:last-child {
+    border-bottom: none;
+}
 .mainHeader {
     display: flex;
     justify-content: space-between;
@@ -16,8 +22,13 @@
     margin-bottom: 3rem;
     border: gray 1px solid;
 }
-.searchInput {
-    width: 350px;
+.teamInfo {
+    list-style-type: none;
+}
+.teamInfoRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: left;
 }
 .manageContainer {
     margin-bottom: 3rem;
@@ -26,20 +37,15 @@
     border-bottom: gray 1px solid;
     padding: 1rem;
 }
-.addButton {
-    grid-area: addBtn;
-    justify-self: end;
-    align-self: center;
-}
-.selectSortBy {
-    grid-area: sortBy;
-    justify-self: end;
-    align-self: center;
-}
 .manageHeader {
     grid-area: mainHeader;
     align-self: center;
     padding: 1rem;
+}
+.addButton {
+    grid-area: addBtn;
+    justify-self: end;
+    align-self: center;
 }
 .table {
     padding: 3rem;
