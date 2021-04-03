@@ -3,13 +3,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
-import {{pascalCase name}} from './{{pascalCase name}}';
+import SelectSortBy from './SelectSortBy';
 
-describe('{{pascalCase name}}', () => {
+describe('SelectSortBy', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <{{pascalCase name}} name='{{pascalCase name}}'/>
+            <SelectSortBy onChange={() => 0} options={['opt1', 'opt2']} initialValue='' />
          </Provider>
       );
    });
