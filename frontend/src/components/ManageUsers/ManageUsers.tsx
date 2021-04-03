@@ -103,58 +103,60 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers, onClickAdd }) => 
         <h2>Users</h2>
         <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
       </Paper>
-      <Paper className={styles.manageContainer}>
-        <h2 className={styles.manageHeader}>Manage Users</h2>
-        <span onClick={onClickAdd} className={styles.addButton} aria-label='Add user'>
-          <AddButton text='Add'/>
-        </span>
-        <span className={styles.selectSortBy}>
-          <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
-        </span>
-        <h3 className={styles.checkboxesHeader}>Sorting options</h3>
-        <div className={styles.checkboxContainer}>
-          <span>
-            <PrimaryCheckBox 
-              name='Active'
-              checked={statusFilters.Active}
-              onChange={changeStatusFilter}
-            />
-            <PrimaryCheckBox 
-              name='Archived'
-              checked={statusFilters.Archived}
-              onChange={changeStatusFilter}
-            />
-            <PrimaryCheckBox 
-              name='Resigned'
-              checked={statusFilters.Resigned}
-              onChange={changeStatusFilter}
-            />
+      <Paper className={styles.tableContainer}>
+        <div className={styles.manageContainer}>
+          <h2 className={styles.manageHeader}>Manage Users</h2>
+          <span onClick={onClickAdd} className={styles.addButton} aria-label='Add user'>
+            <AddButton text='Add'/>
           </span>
-          <span>
-            <PrimaryCheckBox 
-              name='Candidate'
-              checked={typeFilters.Candidate}
-              onChange={changeTypeFilter}
-            />
-            <PrimaryCheckBox 
-              name='Participant'
-              checked={typeFilters.Participant}
-              onChange={changeTypeFilter}
-            />
-            <PrimaryCheckBox 
-              name='Mentor'
-              checked={typeFilters.Mentor}
-              onChange={changeTypeFilter}
-            />
-            <PrimaryCheckBox 
-              name='Admin'
-              checked={typeFilters.Admin}
-              onChange={changeTypeFilter}
-            />
+          <span className={styles.selectSortBy}>
+            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
           </span>
+          <h3 className={styles.checkboxesHeader}>Sorting options</h3>
+          <div className={styles.checkboxContainer}>
+            <span>
+              <PrimaryCheckBox 
+                name='Active'
+                checked={statusFilters.Active}
+                onChange={changeStatusFilter}
+              />
+              <PrimaryCheckBox 
+                name='Archived'
+                checked={statusFilters.Archived}
+                onChange={changeStatusFilter}
+              />
+              <PrimaryCheckBox 
+                name='Resigned'
+                checked={statusFilters.Resigned}
+                onChange={changeStatusFilter}
+              />
+            </span>
+            <span>
+              <PrimaryCheckBox 
+                name='Candidate'
+                checked={typeFilters.Candidate}
+                onChange={changeTypeFilter}
+              />
+              <PrimaryCheckBox 
+                name='Participant'
+                checked={typeFilters.Participant}
+                onChange={changeTypeFilter}
+              />
+              <PrimaryCheckBox 
+                name='Mentor'
+                checked={typeFilters.Mentor}
+                onChange={changeTypeFilter}
+              />
+              <PrimaryCheckBox 
+                name='Admin'
+                checked={typeFilters.Admin}
+                onChange={changeTypeFilter}
+              />
+            </span>
+          </div>
         </div>
+        <Table name='Users' columns={columns} getData={getUsers}/>
       </Paper>
-      <Table name='Users' columns={columns} getData={getUsers}/>
     </div>
   );
 };
