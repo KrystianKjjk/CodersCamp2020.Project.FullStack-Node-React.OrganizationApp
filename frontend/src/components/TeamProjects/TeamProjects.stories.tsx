@@ -3,11 +3,36 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import TeamProjects , { TeamProjectsProps } from './TeamProjects';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
+import styles from './TeamProjects.module.css';
 
 export default {
   title: 'TeamProjects component',
   component: TeamProjects,
 } as Meta;
+
+const teamProjects = [{
+  id: 'myTestID',
+  Name: 'Star Wars - child project by one of teams',
+  Mentor: 'Test Mentor',
+  ReferenceProject: 'Star Wars Standard Project',
+  Section: 'Javascript'
+},
+{
+  id: 'myTestID2',
+  Name: 'FitNotFat',
+  Mentor: 'Test Mentor',
+  ReferenceProject: 'Chess',
+  Section: 'Typescript'
+}
+]
+
+function mockGet():Promise<any[]> {return Promise.resolve(teamProjects)};
+
+const TestEdit = (selectedProjectId: Object) => {
+  return(
+    <div>Here you should be editing project with ID {selectedProjectId}</div>
+  )
+}
 
 const Template: Story<TeamProjectsProps> = (args) => (
   <Provider store={store}>
@@ -17,5 +42,7 @@ const Template: Story<TeamProjectsProps> = (args) => (
 
 export const SampleTeamProjects = Template.bind({});
 SampleTeamProjects.args = {
-  course: 'TeamProjects',
+  course: '', 
+  getFunction: mockGet, 
+  editComponent: TestEdit
 };

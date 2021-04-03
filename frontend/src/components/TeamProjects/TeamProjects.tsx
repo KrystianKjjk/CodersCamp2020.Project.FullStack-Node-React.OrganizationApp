@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, ReactElement } from 'react';
 import styles from './TeamProjects.module.css';
 import ReusableTable from '../ReusableTable/index'
-import { useAppDispatch } from '../../app/hooks';
-import { getTeamProjects } from '../../api/getTeamProjects'
 
 
 export interface TeamProjectsProps {
-  course: string;
-  getFunction: () => Promise<any[]>;
+  course: string,
+  getFunction: () => Promise<any[]>,
+  editComponent: Function
+}
+
+interface MainViewProps {
+  detailedView: boolean,
+  editComponent: Function
 }
 
 enum HeaderText {
@@ -18,9 +22,7 @@ enum HeaderText {
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
 
   const [detailedView, setDetailedView] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState({});
-
-  
+  const [selectedProjectId, setSelectedProjectId] = useState({});  
 
   const columns = [
     { field: 'Name', width: 300 },
@@ -49,10 +51,13 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
     )
   }
 
-  //@ts-ignore
-  const MainView = (props) => {
-    return props.detailedView ? <div onClick={() => setDetailedView(false)}>{props.children(selectedProjectId)}</div> : <Table/>
+const MainView = (props: MainViewProps) => {
+    return props.detailedView ? <div onClick={() => setDetailedView(false)}>{props.editComponent()}</div> : <Table/>
   }
+
+const EditView = () => {
+  return props.editComponent(selectedProjectId, setDetailedView)
+}
 
   return (
     <div>
@@ -61,7 +66,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
       </div>
 
       <div className={styles.main}>
-        <MainView detailedView={detailedView}/>
+        <MainView detailedView={detailedView} editComponent={EditView}/>
       </div>
     </div>
   );

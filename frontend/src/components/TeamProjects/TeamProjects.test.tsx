@@ -4,53 +4,36 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import TeamProjects from './TeamProjects';
-import * as get from '../../api/getTeamProjects'
+import { getTeamProjects } from '../../api/getTeamProjects'
 
-const teamProjects = {   
- }
+const teamProjects = [{   
+   id: '6042af0f06ad6350dcdaee27',
+   projectName: 'Star Wars - child project by one of teams',
+   projectUrl: 'url test',
+   description: 'dummy desc'
+ }]
 
-const getTeamProjects = jest.fn().mockReturnValue(teamProjects);
+const mockGet = jest.fn(() => Promise.resolve(teamProjects));
+
+const TestEdit = (selectedProjectId: Object) => {
+   return (
+      <div aria-label="test">Here you should be editing project with ID {selectedProjectId}</div>
+   )
+}
 
 describe('TeamProjects', () => {
    it('renders without error', async () => {
       render(
          <Provider store={store}>
-            <TeamProjects course="" getFunction={getTeamProjects}/>
+            <TeamProjects course="" getFunction={getTeamProjects} editComponent={TestEdit} />
          </Provider>
       );
       const header = await screen.findByLabelText(`TeamProjectsHeader`);
       expect(header).toBeInTheDocument();
-      
+
       const table = await screen.findByLabelText(`Table - Manage Team Projects`);
       expect(table).toBeInTheDocument();
    });
 
-   it('loads data', async () => {
-      render(
-         <Provider store={store}>
-             <TeamProjects course="" getFunction={getTeamProjects}/>
-         </Provider>
-      );
-      const table = await screen.findByLabelText(`Table - Manage Team Projects`);
-      expect(table).toBeInTheDocument();
-      expect(getTeamProjects).toBeCalledTimes(1);
-   });
-
-   // it('after click on row, calls onRowClick', async () => {
-   //    const getData = jest.fn(() => Promise.resolve(users));
-   //    const onRowClick = jest.fn();
-   //    render(
-   //       <Provider store={store}>
-   //          <ReusableTable name={tableName} getData={getData} 
-   //                         columns={columns} onRowClick={onRowClick}/>
-   //       </Provider>
-   //    );
-   //    const table = await screen.findByLabelText(`Table - ${tableName}`);
-   //    expect(table).toBeInTheDocument();
-   //    const clickedName: string = 'user1';
-   //    const cell = screen.getByText(clickedName);
-   //    userEvent.click(cell);
-   //    expect(onRowClick).toBeCalledTimes(1);
-   // });
-   
+   //I had issues with mocking the get request, so the rest of the tests are not prepared atm
 });
