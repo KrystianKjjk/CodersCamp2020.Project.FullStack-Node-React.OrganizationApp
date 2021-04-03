@@ -7,7 +7,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import UserService from "../../api/users.service";
 import BaseService from "../../app/baseService";
-import {IRole, IStatus, IUser} from "../../models/user.model";
+import {Role, Status, IUser} from "../../models/user.model";
 import ManageGrades from "../ManageGrades";
 import UButton from "../UButton";
 
@@ -173,39 +173,39 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 ${styles.status_radio_button} 
                                 ${isEdit && styles.status_radio_button__edit}
                             `}>
-                                {(isEdit || user?.status as IStatus === IStatus.Active) && (
+                                {(isEdit || user?.status as Status === Status.Active) && (
                                     <div>
                                         <input type="radio"
                                                id="Active"
                                                name="status"
-                                               value={IStatus.Active}
-                                               checked={user?.status as IStatus === IStatus.Active}
+                                               value={Status.Active}
+                                               checked={user?.status as Status === Status.Active}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__blue}`} htmlFor="Active">Active</label>
                                     </div>
                                 )}
 
-                                {(isEdit || user?.status as IStatus === IStatus.Resigned) && (
+                                {(isEdit || user?.status as Status === Status.Resigned) && (
                                     <div>
                                         <input type="radio"
                                                id="Resigned"
                                                name="status"
-                                               value={IStatus.Resigned}
-                                               checked={user?.status as IStatus === IStatus.Resigned}
+                                               value={Status.Resigned}
+                                               checked={user?.status as Status === Status.Resigned}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__red}`} htmlFor="Resigned">Resigned</label>
                                     </div>
                                 )}
 
-                                {(isEdit || user?.status as IStatus === IStatus.Archived) && (
+                                {(isEdit || user?.status as Status === Status.Archived) && (
                                     <div>
                                         <input type="radio"
                                                id="Archived"
                                                name="status"
-                                               value={IStatus.Archived}
-                                               checked={user?.status as IStatus === IStatus.Archived}
+                                               value={Status.Archived}
+                                               checked={user?.status as Status === Status.Archived}
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__green}`} htmlFor="Archived">Archived</label>
@@ -277,13 +277,13 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                             value={user?.type}
                                             onChange={handleInputChange}
                                     >
-                                        <option value={IRole.Candidate}>Candidate</option>
-                                        <option value={IRole.Participant}>Participant</option>
-                                        <option value={IRole.Mentor}>Mentor</option>
-                                        <option value={IRole.Admin}>Admin</option>
+                                        <option value={Role.Candidate}>Candidate</option>
+                                        <option value={Role.Participant}>Participant</option>
+                                        <option value={Role.Mentor}>Mentor</option>
+                                        <option value={Role.Admin}>Admin</option>
                                     </select>
                                 ) : (
-                                    <p>{IRole[user?.type!]}</p>
+                                    <p>{Role[user?.type!]}</p>
                                 )}
                             </div>
                         </div>

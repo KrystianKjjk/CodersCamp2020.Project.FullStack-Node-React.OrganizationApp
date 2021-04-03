@@ -1,11 +1,11 @@
-export enum IRole {
+export enum Role {
     Candidate,
     Participant,
     Mentor,
     Admin,
 };
 
-export enum IStatus {
+export enum Status {
     Active,
     Resigned,
     Archived,
@@ -15,8 +15,8 @@ export interface IUser {
     name: string,
     surname: string,
     email: string,
-    type: IRole,
-    status: IStatus,
+    type: Role,
+    status: Status,
 };
 
 export interface IGrade {

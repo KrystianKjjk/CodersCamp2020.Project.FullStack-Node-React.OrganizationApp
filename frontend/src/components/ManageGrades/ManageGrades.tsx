@@ -258,9 +258,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 </Box>
                 <Box display="flex" flexWrap="wrap">
                     {grades?.map((grade, index) => (
-
-                        <div className={styles.gradeContainer}>
-
+                        <div className={styles.gradeContainer} key={index}>
                             { openSectionsModal && isEdit[index]
                             && (<FindSection onSectionSelection={handleSectionSelection(index)}/>)}
 
