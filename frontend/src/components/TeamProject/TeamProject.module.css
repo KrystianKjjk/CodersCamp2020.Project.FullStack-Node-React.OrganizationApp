@@ -63,10 +63,20 @@
     display: inline-block;
 }
 
-.input {
+.input, .textarea {
     width: 80%;
     box-sizing: border-box;
-    margin: 0
+    margin: 0;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.textarea{
+    height: 50px;
 }
 
 .deleteModal {
@@ -84,3 +94,4 @@
     align-items: center;
     flex-direction: column;
 }
+
