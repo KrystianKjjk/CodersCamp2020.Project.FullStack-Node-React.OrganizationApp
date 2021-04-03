@@ -57,12 +57,14 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
 
   const handleSave = () => {
     const newProjectData = {
+      ...project,
       teamId: project.teamId,
       projectName: projectName,
       projectUrl: projectUrl,
       description: projectDescription
     }
     dispatch(saveProjectById(newProjectData, props._id, token));
+    dispatch(getProjectById(props._id, token));
   }
 
   const handleChange = (setState: Function, e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement> ) => {
@@ -92,9 +94,9 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
           defaultValue={selectedTeamProject!.projectName}
           onChange={(e) => handleChange(setProjectName, e)}
           ></input>
-        <div>{selectedTeamProject!.parentProjectId}</div>
-        <div>{selectedTeamProject!.teamId}</div>
-        <div>{selectedTeamProject!.parentProjectId}</div>
+        <div>{selectedTeamProject!.referenceProjectName}</div>
+        <div>{selectedTeamProject!.mentor}</div>
+        <div>{selectedTeamProject!.sectionName}</div>
         <input 
           className={styles.input} 
           defaultValue={selectedTeamProject!.projectUrl}
@@ -114,7 +116,7 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <span className={styles.teamProjectHeaderName}>Manage team project</span>
         <Button id={styles.buttonDelete} onClick={() => dispatch(switchDeleteMode())}>Delete</Button>
         <Button id={styles.buttonEdit} onClick={() => dispatch(switchEditMode())}>Edit</Button>
-        <Button id={styles.buttonEdit} onClick={() => props.changeViewFn()}>Close</Button>
+        <Button id={styles.buttonEdit} onClick={() => props.changeViewFn()}>Back</Button>
       </div>
 
       <div className={styles.teamProjectDetailsContainer}>
@@ -128,9 +130,9 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
       </div>
       <div className={styles.attributeValuesContainer}>
         <div>{selectedTeamProject!.projectName}</div>
-        <div>{selectedTeamProject!.parentProjectId}</div>
+        <div>{selectedTeamProject!.referenceProjectName}</div>
         <div>{selectedTeamProject!.mentor}</div>
-        <div>{selectedTeamProject!.parentProjectId}</div>
+        <div>{selectedTeamProject!.sectionName}</div>
         <div>{selectedTeamProject!.projectUrl}</div>
         <div className={styles.description}>{selectedTeamProject!.description}</div>
       </div>      

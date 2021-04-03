@@ -8,7 +8,9 @@ export interface TeamProjectState {
   projectName: string,
   projectUrl: string,
   description: string,
-  mentor: string
+  mentor: string,
+  referenceProjectName: string,
+  sectionName: string
 }
 
 interface initialstate {
@@ -25,13 +27,15 @@ const initialState: initialstate = {
   loading: false,
   hasErrors: false,
   project: {
-    _id: "",
-    teamId: "",
-    parentProjectId: "",
-    projectName: "",
-    projectUrl: "",
-    description: "",
-    mentor: ""
+    _id: "loading...",
+    teamId: "loading...",
+    parentProjectId: "loading...",
+    projectName: "loading...",
+    projectUrl: "loading...",
+    description: "loading...",
+    mentor: "loading...",
+    referenceProjectName: "loading...",
+    sectionName: "loading..."
   }
 };
 
@@ -104,7 +108,16 @@ export function getProjectById(id: string, token: string) {
         token
         )
       const dataParentProject = await responseParentProject.json();
-      console.log(dataParentProject);
+      data.referenceProjectName = dataParentProject.projectName;
+      
+      //... I don't know if this is meant to be done this way, seems kinda long :D
+      const responseSection = await request(
+        'GET', 
+        `https://coders-camp-organization-app.herokuapp.com/api/sections/${dataParentProject.sectionId}`,
+        token
+        )
+      const dataSection = await responseSection.json();
+      data.sectionName = dataSection.name;
       dispatch(projectOperationSuccess(data));
       dispatch(switchEditMode);
     } catch (error) {
@@ -117,7 +130,7 @@ export function saveProjectById(project: Object, id :string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation());
     try {
-      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
+      await fetch(`https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
           {
             method: 'PUT',
             headers: {   
@@ -126,8 +139,6 @@ export function saveProjectById(project: Object, id :string, token: string) {
             },
             body: JSON.stringify(project)
           });
-      const data = await response.json();
-      dispatch(projectOperationSuccess(data));
     } catch (error) {
       dispatch(projectOperationFailure());
     }    
