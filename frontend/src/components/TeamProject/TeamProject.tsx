@@ -11,7 +11,8 @@ import { selectTeamProjects,
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export interface TeamProjectProps {
-  _id: string //id projektu wybranego w tabeli
+  _id: string, //id projektu wybranego w tabeli
+  changeViewFn: Function
 }
 
 interface deleteModalProps {
@@ -28,8 +29,11 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
   const [projectUrl, setProjectUrl] = useState(project.projectUrl);
   const [projectDescription, setProjectDescription] = useState(project.description);
 
+  // const token = window.localStorage....
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
+
   useEffect(() => {
-    dispatch(getProjectById(props._id));
+    dispatch(getProjectById(props._id, token));
   }, [dispatch]);  
 
   useEffect(() => {
@@ -45,7 +49,7 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <div className = {styles.deleteModal} onClick={() => dispatch(switchDeleteMode())}>
           Do you really want to delete this project?
           <br/><br/>
-          <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id))}>Delete</Button>  
+          <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id, token))}>Delete</Button>  
         </div>)      
     }
     return null
@@ -53,11 +57,12 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
 
   const handleSave = () => {
     const newProjectData = {
+      teamId: project.teamId,
       projectName: projectName,
       projectUrl: projectUrl,
       description: projectDescription
     }
-    dispatch(saveProjectById(newProjectData, props._id));
+    dispatch(saveProjectById(newProjectData, props._id, token));
   }
 
   const handleChange = (setState: Function, e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement> ) => {
@@ -87,9 +92,9 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
           defaultValue={selectedTeamProject!.projectName}
           onChange={(e) => handleChange(setProjectName, e)}
           ></input>
-        <div>{selectedTeamProject!.parentProjectIds}</div>
+        <div>{selectedTeamProject!.parentProjectId}</div>
         <div>{selectedTeamProject!.teamId}</div>
-        <div>{selectedTeamProject!.parentProjectIds}</div>
+        <div>{selectedTeamProject!.parentProjectId}</div>
         <input 
           className={styles.input} 
           defaultValue={selectedTeamProject!.projectUrl}
@@ -109,6 +114,7 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
         <span className={styles.teamProjectHeaderName}>Manage team project</span>
         <Button id={styles.buttonDelete} onClick={() => dispatch(switchDeleteMode())}>Delete</Button>
         <Button id={styles.buttonEdit} onClick={() => dispatch(switchEditMode())}>Edit</Button>
+        <Button id={styles.buttonEdit} onClick={() => props.changeViewFn()}>Close</Button>
       </div>
 
       <div className={styles.teamProjectDetailsContainer}>
@@ -122,9 +128,9 @@ const TeamProject: React.FC< TeamProjectProps > = props => {
       </div>
       <div className={styles.attributeValuesContainer}>
         <div>{selectedTeamProject!.projectName}</div>
-        <div>{selectedTeamProject!.parentProjectIds}</div>
-        <div>{selectedTeamProject!.teamId}</div>
-        <div>{selectedTeamProject!.parentProjectIds}</div>
+        <div>{selectedTeamProject!.parentProjectId}</div>
+        <div>{selectedTeamProject!.mentor}</div>
+        <div>{selectedTeamProject!.parentProjectId}</div>
         <div>{selectedTeamProject!.projectUrl}</div>
         <div className={styles.description}>{selectedTeamProject!.description}</div>
       </div>      

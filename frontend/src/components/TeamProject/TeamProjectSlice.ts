@@ -4,10 +4,11 @@ import { AppThunk, RootState } from '../../app/store';
 export interface TeamProjectState {
   _id: string,
   teamId: string,
-  parentProjectIds: string,
+  parentProjectId: string,
   projectName: string,
   projectUrl: string,
-  description: string
+  description: string,
+  mentor: string
 }
 
 interface initialstate {
@@ -26,10 +27,11 @@ const initialState: initialstate = {
   project: {
     _id: "",
     teamId: "",
-    parentProjectIds: "",
+    parentProjectId: "",
     projectName: "",
     projectUrl: "",
-    description: ""
+    description: "",
+    mentor: ""
   }
 };
 
@@ -77,18 +79,32 @@ export const selectTeamProjects = (state: RootState) => state.teamProjects;
 export default teamProjectSlice.reducer;
 
 
-export function getProjectById(id: string) {
+export function getProjectById(id: string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
-          {
-            method: 'GET',
-            headers: {   
-              'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
-            }
-          });
-      const data = await response.json();
+      const responseProject = await request(
+      'GET', 
+      `https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
+      token
+      )
+      const data = await responseProject.json();
+      
+      const responseTeam = await request(
+        'GET', 
+        `https://coders-camp-organization-app.herokuapp.com/api/teams/${data.teamId}`,
+        token
+        )
+      const dataTeam = await responseTeam.json();
+      data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
+
+      const responseParentProject = await request(
+        'GET', 
+        `https://coders-camp-organization-app.herokuapp.com/api/projects/${data.parentProjectId}`,
+        token
+        )
+      const dataParentProject = await responseParentProject.json();
+      console.log(dataParentProject);
       dispatch(projectOperationSuccess(data));
       dispatch(switchEditMode);
     } catch (error) {
@@ -97,16 +113,16 @@ export function getProjectById(id: string) {
   }
 }
 
-export function saveProjectById(project: Object, id :string) {
+export function saveProjectById(project: Object, id :string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation());
     try {
-      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
+      const response = await fetch(`https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
           {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {   
               'Content-Type': 'application/json',
-              'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
+              'X-Auth-Token': token
             },
             body: JSON.stringify(project)
           });
@@ -119,21 +135,31 @@ export function saveProjectById(project: Object, id :string) {
   }
 }
 
-export function deleteProjectById(id: string) {
+export function deleteProjectById(id: string, token :string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      await fetch(`https://coders-camp-organization-app.herokuapp.com/api/projects/${id}`,
-          {
-            method: 'DELETE',
-            headers: {   
-              'X-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
-            }
-          });
+      await request(
+        'DELETE', 
+        `https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
+        token
+        );
+
       dispatch(projectDeleteSuccess());
     } catch (error) {
       dispatch(projectOperationFailure());
     }
     dispatch(switchDeleteMode());
   }
+}
+
+
+const request = async (type: string, url:string, token: string) => {
+  return await fetch(url,
+          {
+            method: type,
+            headers: {   
+              'X-Auth-Token': token
+             }
+          });
 }
