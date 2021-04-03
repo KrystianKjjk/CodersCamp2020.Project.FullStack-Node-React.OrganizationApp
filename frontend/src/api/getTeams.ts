@@ -24,18 +24,12 @@ interface Course {
     name: string;
 }
 
-export default async function getTeams(authToken: string): Promise<any[]> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
-    //const team = await api.get<Team[]>('/teams', config);
-    const coursesRes = await api.get<Course[]>('/courses', config);
+export default async function getTeams(): Promise<any[]> {
+    const coursesRes = await api.get<Course[]>('/courses');
     const courses = coursesRes.data;
     let allTeams: Team[] = [];
     for (let i in courses) {
-        const teams = await api.get<TeamData[]>('/teams', config);
+        const teams = await api.get<TeamData[]>('/teams');
         const newData = teams.data.map( team => ({
             id: team._id,
             name: team?.mentor?.name ?? '---',
