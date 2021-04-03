@@ -31,13 +31,8 @@ const userTypeDict = {
     [UserType.Admin]: 'Admin',
 }
 
-export default async function getUsers(authToken: string): Promise<any[]> {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
-    const response = await api.get<User[]>('/users', config);
+export default async function getUsers(): Promise<any[]> {
+    const response = await api.get<User[]>('/users');
     return response.data.map( user => ({
         ...user,
         id: user._id,
