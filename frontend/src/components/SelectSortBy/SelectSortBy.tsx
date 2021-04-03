@@ -19,7 +19,7 @@ const SelectSortBy: React.FC< SelectSortByProps > = ({ onChange, options, initia
   return (
     <Container>
       <FormControl variant="outlined">
-        <InputLabel className={styles.label}>Sort by</InputLabel>
+        <InputLabel>Sort by</InputLabel>
         <Select
           className={styles.select}
           onChange={handleChange}
