@@ -47,16 +47,16 @@
 }
 
 .attributeNamesContainer {
-    width: 25%;
+    width: 20%;
     font-weight: bold;
 }
 
 .attributeValuesContainer {
-    width: 75%;
+    width: 80%;
 }
 
 .attributeValuesContainer>div, .attributeNamesContainer>div, .attributeValuesContainer>input {
-    height: 25px;
+    height: 50px;
 }
 
 .description{
