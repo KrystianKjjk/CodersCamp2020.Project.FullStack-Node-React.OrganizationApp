@@ -6,7 +6,7 @@ export const HasRole = (roles: UserType[]) => (req: express.Request, res: expres
     const token: string = req.header('x-auth-token');
     if(!token) return res.status(401).json({message: 'UNAUTHORIZED'});
     try {
-        const payload = jwt.decode(token);
+        const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
         return roles.includes(payload.type) ? next() : res.status(403).json({message: 'FORBIDDEN'});
     }
     catch {
@@ -18,7 +18,7 @@ export const HasId = (idParam: string, reqProp: 'body' | 'params' = 'params') =>
     const token: string = req.header('x-auth-token');
     if(!token) return res.status(401).json({message: 'UNAUTHORIZED'});
     try {
-        const payload = jwt.decode(token);
+        const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
         const id = req[reqProp][idParam];
         return id === payload._id ? next() : res.status(403).json({message: 'FORBIDDEN'});
     }
