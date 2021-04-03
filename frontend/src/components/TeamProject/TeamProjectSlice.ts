@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction, createAsyncThunk, Dispatch } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../../app/store';
+import { createSlice, Dispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 
 export interface TeamProjectState {
   _id: string,

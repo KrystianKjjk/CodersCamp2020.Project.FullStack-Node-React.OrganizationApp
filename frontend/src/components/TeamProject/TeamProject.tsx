@@ -6,8 +6,7 @@ import { selectTeamProjects,
   saveProjectById, 
   deleteProjectById, 
   switchEditMode, 
-  switchDeleteMode,
-  TeamProjectState } from './TeamProjectSlice'
+  switchDeleteMode } from './TeamProjectSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export interface TeamProjectProps {
@@ -21,7 +20,7 @@ interface deleteModalProps {
 }
 
 const TeamProject: React.FC< TeamProjectProps > = props => {
-  const { projectEditMode, projectDeleteMode, loading, hasErrors, project }  = useAppSelector(selectTeamProjects);  
+  const { projectEditMode, projectDeleteMode, project }  = useAppSelector(selectTeamProjects);  
   let selectedTeamProject = project;
 
   const dispatch = useAppDispatch();  
