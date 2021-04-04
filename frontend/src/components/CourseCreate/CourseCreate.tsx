@@ -14,6 +14,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
+  DatePicker,
 } from "@material-ui/pickers";
 
 export interface CourseCreateProps {}
@@ -103,25 +104,30 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
     changeDescription(e.target.value);
   };
 
-  const handleDateChange = (date: Date | null) => {
+  const handleStartDateChange = (date: Date | null) => {
     console.log(date);
     changeStartDate(date);
     // console.log(e.target.value);
   };
+
+  const handleEndDateChange = (date: Date | null) => {
+    console.log(date);
+    changeEndDate(date);
+    // console.log(e.target.value);
+  }
 
   const handleSaveButtonClick = async () => {
     const course: CourseCreateObject = {
       name: courseName,
       description: description,
       startDate: startDate!,
-      endDate: new Date(2021, 3, 4),
+      endDate: endDate!,
     };
-
-    console.log(course);
-    // createCourse(course).then((response: any) => {
-    //   const createdCourse: Course = response.data;
-    //   history.push("courses/" + createdCourse._id);
-    // });
+    
+    createCourse(course).then((response: any) => {
+      const createdCourse: Course = response.data;
+      history.push("courses/" + createdCourse._id);
+    });
   };
 
   return (
@@ -148,7 +154,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
         <div>
           <div className={classes.dateContainer}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <DatePicker
               disableToolbar
               variant="inline"
               format="dd/MM/yyyy"
@@ -157,12 +163,12 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
               label="Start date"
               inputVariant="outlined"
               value={startDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
+              onChange={handleStartDateChange}
+              // KeyboardButtonProps={{
+              //   "aria-label": "change date",
+              // }}
             />
-            <KeyboardDatePicker
+            <DatePicker
               disableToolbar
               variant="inline"
               format="dd/MM/yyyy"
@@ -171,10 +177,10 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
               label="End date"
               inputVariant="outlined"
               value={endDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
+              onChange={handleEndDateChange}
+              // KeyboardButtonProps={{
+              //   "aria-label": "change date",
+              // }}
             />
             </MuiPickersUtilsProvider>
             {/* <TextField

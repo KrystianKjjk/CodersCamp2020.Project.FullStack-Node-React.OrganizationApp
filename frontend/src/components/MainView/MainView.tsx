@@ -6,6 +6,7 @@ import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 import CourseCreate from "../CourseCreate";
 import Course from '../Course';
+import CourseList from '../CourseList';
 
 const MainView: React.FC = () => {
   return (
@@ -16,6 +17,9 @@ const MainView: React.FC = () => {
           <Users />
         </PrivateRoute>
         <PrivateRoute exact path="/courses">
+          <CourseList/>
+        </PrivateRoute>
+        <PrivateRoute exact path="/coursecreate">
           <CourseCreate/>
         </PrivateRoute>
         <PrivateRoute path="/courses/:id" component={Course}>
