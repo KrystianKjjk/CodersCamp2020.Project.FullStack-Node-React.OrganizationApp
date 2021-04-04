@@ -39,3 +39,11 @@ export const fetchCourses = () => {
     config
   );
 };
+
+export const deleteCourse = (courseId: string) => {
+  return axios.delete(
+    "https://coders-camp-organization-app.herokuapp.com/api/courses/" +
+      courseId,
+    config
+  );
+};

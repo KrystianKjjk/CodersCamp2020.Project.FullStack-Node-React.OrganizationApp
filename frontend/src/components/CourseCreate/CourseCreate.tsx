@@ -105,13 +105,11 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
   };
 
   const handleStartDateChange = (date: Date | null) => {
-    console.log(date);
     changeStartDate(date);
     // console.log(e.target.value);
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    console.log(date);
     changeEndDate(date);
     // console.log(e.target.value);
   }
