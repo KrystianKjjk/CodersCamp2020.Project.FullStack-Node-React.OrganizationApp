@@ -3,12 +3,13 @@ import styles from './ReferenceProjects.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRefProjects, selectReferenceProjects} from "./ReferenceProjectsSlice";
 import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
 import UButton from "../UButton";
 import {mainTheme} from "../../theme/customMaterialTheme";
 import {ThemeProvider} from "@material-ui/styles";
 import ReusableTable from "../ReusableTable";
 import SearchInput from "../SearchInput";
+import { useHistory } from "react-router-dom";
+
 
 export interface ReferenceProjectsProps {
 }
@@ -16,7 +17,8 @@ export interface ReferenceProjectsProps {
 const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
 
   const dispatch = useDispatch();
-  const {refProjects, loading, loaded, error} = useSelector(selectReferenceProjects)
+  const {refProjects, loading, loaded, error} = useSelector(selectReferenceProjects);
+  const history = useHistory();
 
   useEffect(() => {
     if(!loaded) dispatch(fetchRefProjects());
@@ -43,8 +45,9 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
     }
 
     function handleSelection(params: any, e: any) {
-        const sectionID = params.row.id;
-        console.log(sectionID);
+        const sectionID: string = params.row.id;
+        const path = `projects/${sectionID}`;
+        history.push(path);
     }
 
 
@@ -61,7 +64,6 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
                   <SearchInput onSubmit={()=>console.log('elo')} placeholder='Search'/>
               </div>
           </Breadcrumbs>
-
           <Box className={styles.container}>
             <Box display="flex" className={styles.container__header}>
               <span>Manage Reference Projects</span>

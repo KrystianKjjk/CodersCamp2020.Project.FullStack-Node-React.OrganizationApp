@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 import ReferenceProjects from "../ReferenceProjects";
+import ManageReferenceProject from "../ManageReferenceProject";
 
 const MainView: React.FC = () => {
   return (
@@ -23,6 +24,8 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
         </PrivateRoute>
+        <PrivateRoute path="/projects/:projectID"
+                      component={ ManageReferenceProject } />
         <PrivateRoute path="/projects">
           <Projects />
         </PrivateRoute>
