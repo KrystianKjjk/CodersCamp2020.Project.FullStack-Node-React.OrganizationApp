@@ -34,10 +34,18 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
     };
     return courseListElement;
   });
+  courses.sort(function (courseListElement1, courseListElement2) {
+    var courseListElementStartDate1 = courseListElement1.startDate.getTime();
+    var courseListElementStartDate2 = courseListElement2.startDate.getTime();
+    return courseListElementStartDate2 - courseListElementStartDate1;
+  });
   dispatch(setCourses(courses));
 };
 
-export const deleteCourseAsync = (courseId: string): AppThunk => async (dispatch) => {
+
+export const deleteCourseAsync = (courseId: string): AppThunk => async (
+  dispatch
+) => {
   deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
 };
 
@@ -64,5 +72,3 @@ export const { setCourses, removeCourse } = courseListSlice.actions;
 
 export default courseListSlice.reducer;
 
-//jak ktos wejdzie na courseList.tsx to zrobic useEffect zeby za pierwszym razem byla dispatchowana akcja pobierz wszystkie kursy
-//pobranie listy w course client

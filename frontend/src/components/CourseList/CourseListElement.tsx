@@ -3,7 +3,7 @@ import { Button, Box } from "@material-ui/core";
 import { CourseListElementModel } from "../CourseList/CourseListSlice";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import {deleteCourseAsync} from "../CourseList/CourseListSlice";
+import { deleteCourseAsync } from "../CourseList/CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
 
 export interface CourseListElementProps {
@@ -18,7 +18,17 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
         width: "25%",
         margin: "2%",
         backgroundColor: "#1C1C1C",
+        "&:hover": {
+          borderColor: "#2196F3",
+          cursor: "pointer",
+          outlineStyle:'solid',
+          outlineColor: "#2196F3",
+        },
       },
+      // "&:hover": {
+      //   backgroundColor: "#737373",
+      // }
+      // },
       name: {
         borderBottom: "1px solid #666666",
         padding: "5% 0",
@@ -40,17 +50,30 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const handleDeleteButtonClick = () => {
-      dispatch(deleteCourseAsync(course._id));
+  const handleDeleteButtonClick = (event:any) => {
+    dispatch(deleteCourseAsync(course._id));
+    event.stopPropagation()
   };
 
-  const handleEditButtonClick = () => {
+  const handleEditButtonClick = (event:any) => {
     history.push("courses/" + course._id);
+    event.stopPropagation()
   };
+
+  const handleCourseClick = () => {
+  };
+
+//posortowac kursy po pobraniu i dodac if ograniczajacy sie tylko do 1 renderowania , jak nie ma active course
+//pierwszy kurs ma miec z automatu outline niebieski, pokazac sie w headerze, ma byc jako active course 
+//po kliknieciu w inny kafelek, ma sie zmieniac jego outline, ma byc w headerze, ma byc jako active, poprzedni active course musi
+//juz nie byc active 
+
 
   return (
-    <div className={classes.box}>
-      <div className={classes.name}>{course.name}</div>
+    <div className={classes.box} onClick={handleCourseClick}>
+      <div className={classes.name}>
+        {course.name}
+      </div>
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>Start date:</div>
