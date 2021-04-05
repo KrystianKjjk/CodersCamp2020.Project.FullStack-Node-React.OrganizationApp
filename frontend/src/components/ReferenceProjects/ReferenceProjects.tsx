@@ -61,7 +61,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
           <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
             <Typography color="primary">PROJECTS</Typography>
               <div className={styles.search}>
-                  <SearchInput onSubmit={()=>console.log('elo')} placeholder='Search'/>
+                  <SearchInput onSubmit={()=>{}} placeholder='Search'/>
               </div>
           </Breadcrumbs>
           <Box className={styles.container}>
