@@ -4,6 +4,7 @@ import Header from "../Header";
 import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+import ReferenceProjects from "../ReferenceProjects";
 
 const MainView: React.FC = () => {
   return (
@@ -59,7 +60,7 @@ function Gradesheets() {
   return <h2>Grade sheets</h2>;
 }
 function Projects() {
-  return <h2>Projects</h2>;
+  return <ReferenceProjects />
 }
 function TeamProjects() {
   return <h2>Team projects</h2>;

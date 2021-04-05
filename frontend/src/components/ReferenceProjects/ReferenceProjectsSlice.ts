@@ -1,25 +1,76 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../../app/store';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-interface ReferenceProjectsState {
-  
-}
+import ReferenceProjectsService from "../../api/referenceProjects.service";
+import BaseService from "../../app/baseService";
+import {RootState} from "../../app/store";
+import SectionService from "../../api/section.service";
 
-const initialState: ReferenceProjectsState = {
-  
+const projectsService = new ReferenceProjectsService(new BaseService());
+const sectionService = new SectionService(new BaseService());
+
+
+const initialState: any = {
+    loading: false,
+    loaded: false,
+    refProjects: [],
+    sections: [],
+    error: ''
 };
 
-export const referenceProjectsSlice = createSlice({
-  name: 'referenceProjects',
-  initialState,
-  reducers: {
+export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', async () => {
+      const response = await projectsService.getProjects();
+      const projects = response.data;
+      const result = await Promise.all( projects.map(
+              async (project: any) => {
+                  try {
+                      const section = await sectionService.getSection(project.sectionId);
+                      return {
+                          ...project,
+                          "Section name": section.data?.name || ''
+                      }
+                  }
+                  catch {
+                      return {
+                          ...project,
+                          "Section name": 'Section does not exists'
+                      }
+                  }
 
-  },
-});
+              }))
+      return result;
+    })
+
+export const referenceProjectsSlice = createSlice({
+        name: 'refProjects',
+        initialState,
+        reducers: {
+
+        },
+
+        extraReducers: {
+            [fetchRefProjects.pending]: (state, action) => {
+                if (!state.loading) state.loading = true;
+            },
+            [fetchRefProjects.fulfilled]: (state, action) => {
+                if(state.loading) {
+                    state.loading = false;
+                    state.loaded = true;
+                    state.refProjects = [...action.payload];
+                }
+            },
+            [fetchRefProjects.rejected]: (state, action) => {
+                if (state.loading) {
+                    state.loading = false;
+                    state.error = action.error
+                }
+            }
+        },
+    }
+
+);
+
+export const selectReferenceProjects = (state: RootState) => state.refProjects;
 
 export const { } = referenceProjectsSlice.actions;
-
-// if you want, add selectors here, change the one below, remember to register reducer in store.ts
-// export const selectReferenceProjects = (state: RootState) => state.referenceProjects.value;
 
 export default referenceProjectsSlice.reducer;

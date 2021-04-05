@@ -17,5 +17,4 @@ const Template: Story<ReferenceProjectsProps> = (args) => (
 
 export const SampleReferenceProjects = Template.bind({});
 SampleReferenceProjects.args = {
-  name: 'ReferenceProjects',
 };
