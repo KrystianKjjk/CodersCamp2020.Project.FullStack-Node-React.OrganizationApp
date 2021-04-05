@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Course.module.css";
 import { RouteComponentProps } from "react-router-dom";
-import { fetchCourseAsync, Course } from "./CourseSlice";
+import { fetchCourseAsync, Course } from "./CourseDetailsSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from "@material-ui/core/Input";
@@ -14,7 +14,7 @@ export interface CourseProps {
 
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const dispatch = useAppDispatch();
-  const { course } = useAppSelector((state) => state.course);
+  const { course } = useAppSelector((state) => state.courseDetails);
   const [courseName, changeCourseName] = useState("");
   const [description, changeDescription] = useState("");
   

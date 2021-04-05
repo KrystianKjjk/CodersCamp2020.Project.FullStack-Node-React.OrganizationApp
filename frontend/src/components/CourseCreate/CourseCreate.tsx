@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createCourse } from "../Course/CourseClient";
-import { CourseCreateObject, Course } from "../Course/CourseSlice";
+import { CourseCreateObject, Course } from "../Course/CourseDetailsSlice";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";

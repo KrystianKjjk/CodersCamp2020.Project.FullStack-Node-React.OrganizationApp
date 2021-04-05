@@ -1,4 +1,4 @@
-import { CourseCreateObject } from "./CourseSlice";
+import { CourseCreateObject } from "./CourseDetailsSlice";
 const axios = require("axios");
 
 export interface CourseListElementDto {

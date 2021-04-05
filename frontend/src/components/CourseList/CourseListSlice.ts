@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
-import { CourseCreateObject } from "../Course/CourseSlice";
+import { CourseCreateObject } from "../Course/CourseDetailsSlice";
 import {
   CourseListElementDto,
   deleteCourse,
