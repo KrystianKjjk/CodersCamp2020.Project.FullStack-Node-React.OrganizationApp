@@ -32,7 +32,7 @@ export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', as
                   catch {
                       return {
                           ...project,
-                          "Section name": 'Section does not exists'
+                          "Section name": 'Section does not exist'
                       }
                   }
 

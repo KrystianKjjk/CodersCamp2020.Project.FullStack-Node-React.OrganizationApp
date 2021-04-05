@@ -17,13 +17,21 @@ function Alert(props: any) {
 
 const ManageReferenceProject = (props: any) => {
   const projectID = props.match.params.projectID;
-  const dispatch = useDispatch();
 
-  let tmp: any;
   const [isEdit, setIsEdit] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [project, setProject] = useState<any>();
 
+  useEffect(()=>{
+    setIsAdding(props.isAdding);
+  },[]);
+
+  useEffect(()=>{
+    if(isAdding) setIsEdit(true);
+  },[isAdding]);
+
+
+  let tmp: any;
   useSelector((state: any) => {
     tmp = state.refProjects.refProjects.find((project: any) => project._id === projectID);
   });
@@ -34,6 +42,23 @@ const ManageReferenceProject = (props: any) => {
 
   function toggleEdit() {
     setIsEdit(!isEdit);
+  }
+
+  function handleInputChange(event: any) {
+    const target = event.target;
+    const name = target.id;
+    let value = target.value;
+    // @ts-ignore
+    setProject({
+      ...project,
+      [name]: value
+    })
+    console.log(project)
+  }
+
+  function handleSave() {
+
+    toggleEdit();
   }
 
   return (
@@ -56,7 +81,7 @@ const ManageReferenceProject = (props: any) => {
                   <UButton
                       text='SAVE'
                       color='primary'
-                      onClick={toggleEdit} />
+                      onClick={handleSave} />
               ) : (
                   <UButton
                       text='EDIT'
@@ -67,32 +92,37 @@ const ManageReferenceProject = (props: any) => {
             </div>
           </Box>
           <form className={`${styles.manageForm} ${styles.container__body}`}>
+
             <EditableField isEdit={isEdit}
                            fieldName={"Name:"}
+                           fieldID={"projectName"}
                            fieldValue={project?.projectName}
                            placeholder={project?.projectName}
-                           onChange={()=>{}}
+                           onChange={handleInputChange}
             />
 
             <EditableField isEdit={isEdit}
                            fieldName={"Section name:"}
+                           fieldID={"sectionName"}
                            fieldValue={project?.["Section name"]}
                            placeholder={project?.["Section name"]}
-                           onChange={()=>{}}
+                           onChange={handleInputChange}
             />
 
             <EditableField isEdit={isEdit}
                            fieldName={"URL:"}
+                           fieldID={"projectUrl"}
                            fieldValue={project?.projectUrl}
                            placeholder={project?.projectUrl}
-                           onChange={()=>{}}
+                           onChange={handleInputChange}
             />
 
             <EditableField isEdit={isEdit}
                            fieldName={"Description:"}
+                           fieldID={"description"}
                            fieldValue={project?.description}
                            placeholder={project?.description}
-                           onChange={()=>{}}
+                           onChange={handleInputChange}
                            textArea={true}
             />
 

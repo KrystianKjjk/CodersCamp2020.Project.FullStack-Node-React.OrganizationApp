@@ -50,6 +50,11 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
         history.push(path);
     }
 
+    function handleAddButton(e: any) {
+        const path = `projects/add`;
+        history.push(path);
+    }
+
 
   if (error) {
     return <div className={styles.error}>Error</div>;
@@ -71,7 +76,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
                 <UButton
                     text='ADD'
                     color='primary'
-                    onClick={()=>console.log('clicked')} />
+                    onClick={handleAddButton} />
               </div>
             </Box>
               <div className={styles.projectsTable}>

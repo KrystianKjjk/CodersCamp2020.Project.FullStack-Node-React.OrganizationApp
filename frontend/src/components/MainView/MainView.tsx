@@ -24,11 +24,16 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
         </PrivateRoute>
-        <PrivateRoute path="/projects/:projectID"
-                      component={ ManageReferenceProject } />
-        <PrivateRoute path="/projects">
+
+        <PrivateRoute exact path="/projects">
           <Projects />
         </PrivateRoute>
+        <PrivateRoute path="/projects/add"
+                      exact
+                      render={({ match }) => <ManageReferenceProject match={match} isAdding={true}/> } />
+        <PrivateRoute path="/projects/:projectID"
+                      render={({ match }) => <ManageReferenceProject match={match} isAdding={false}/> } />
+
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
