@@ -27,7 +27,7 @@
     display: flex;
     align-items: center;
 }
-description div:first-child h2{
+.description div:first-child h2{
     padding-left:2%;
 }
 .description div:last-child{

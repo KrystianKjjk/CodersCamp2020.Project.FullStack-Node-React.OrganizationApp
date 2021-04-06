@@ -23,7 +23,7 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
         name={name}
         checked={checked}
         onChange={onChange}
-        style={{color: 'white'}}
+        style={{color: '#fff'}}
       />
     }
     label={name}
