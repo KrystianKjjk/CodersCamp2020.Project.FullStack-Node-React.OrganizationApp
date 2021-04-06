@@ -1,7 +1,10 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './TeamProjects.module.css';
 import ReusableTable from '../ReusableTable/index'
 import { CssBaseline, Paper } from '@material-ui/core';
+import SearchInput from '../SearchInput';
+import { useAppDispatch } from '../../app/hooks';
+import { filterData } from '../ReusableTable/ReusableTableSlice';
 
 export interface TeamProjectsProps {
   course: string,
@@ -20,9 +23,22 @@ enum HeaderText {
 }
 
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
-
+  const dispatch = useAppDispatch();
   const [detailedView, setDetailedView] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState({});  
+  const [search, setSearch] = useState('');
+
+  const changeSearch = (value: string) => {
+    setSearch(value);
+  }
+
+  useEffect(() => {
+    const f = {
+      column: 'Name',
+      values: [ search ]
+    }
+    dispatch(filterData({table: 'Manage Team Projects', filters: [ f ]}));
+  }, [search]);
 
   const columns = [
     { field: 'Name', width: 250, sortable: true },
@@ -31,9 +47,15 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
     { field: 'Section', width: 250, sortable: true },
   ];
 
-  const Header = (detailedView: boolean): HeaderText => {
-    return detailedView ? HeaderText.EDIT : HeaderText.MAIN
-  }
+  const Header = (detailedView: boolean) => {
+    return detailedView ? HeaderText.EDIT : 
+    (
+    <div className={styles.header}>
+        <h2>{HeaderText.MAIN}</h2>
+        <SearchInput onSubmit={changeSearch} placeholder='Search for project name' />
+    </div>      
+    )
+  } 
 
   const Table = () => {
     return (
@@ -61,13 +83,24 @@ const EditView = () => {
 
   return (
     <CssBaseline>
-      <Paper className={styles.header} aria-label='TeamProjectsHeader'>
-        <h2>{Header(detailedView)}</h2>
+      <Paper aria-label='TeamProjectsHeader'>
+        {Header(detailedView)}
       </Paper>
 
       <Paper className={styles.main}>
-        <MainView detailedView={detailedView} editComponent={EditView}/>
+        <div className={styles.table}>        
+        <ReusableTable
+          name="Manage Team Projects"
+          getData={props.getFunction}
+          columns={columns}
+          onRowClick={(params, e) => {
+              setDetailedView(true);
+              setSelectedProjectId(params.row.id);
+          }}
+        />
+      </div>   
       </Paper>
+
     </CssBaseline>
   );
 };
