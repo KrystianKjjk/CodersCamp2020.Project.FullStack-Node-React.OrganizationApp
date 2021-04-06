@@ -1,5 +1,5 @@
 import React, { ReactEventHandler, useEffect, useState } from 'react';
-import { FormControlLabel, Checkbox, Container, Paper, CssBaseline } from '@material-ui/core';
+import { FormControlLabel, Checkbox, Paper, CssBaseline } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';

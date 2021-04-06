@@ -3,9 +3,9 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ManageUsers , { ManageUsersProps } from './ManageUsers';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import getUsers from '../../api/getUsers';
 import { ThemeProvider } from '@material-ui/styles';
 import darkTheme from '../../theme/customMaterialTheme';
+import UserService from '../../api/User.service';
 
 
 export default {
@@ -23,10 +23,11 @@ const Template: Story<ManageUsersProps> = (args) => (
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
 localStorage.setItem('token', token);
+const api = new UserService();
 
 export const SampleManageUsers = Template.bind({});
 SampleManageUsers.args = {
-  getUsers: getUsers,
+  getUsers: api.getUsers,
   onClickAdd: () => console.log('ADD user clicked')
 };
 
