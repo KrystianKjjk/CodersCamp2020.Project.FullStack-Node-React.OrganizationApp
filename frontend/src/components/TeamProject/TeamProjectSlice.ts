@@ -60,10 +60,10 @@ export const teamProjectSlice = createSlice({
       state.hasErrors = true;
     },
     switchEditMode: state => {
-      state.projectEditMode = !state.projectEditMode;
+      if (!state.loading) state.projectEditMode = !state.projectEditMode;
     },
     switchDeleteMode: state => {
-      state.projectDeleteMode = !state.projectDeleteMode;
+      if (!state.loading) state.projectDeleteMode = !state.projectDeleteMode;
     }
   }
 });
