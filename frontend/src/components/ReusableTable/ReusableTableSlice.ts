@@ -17,6 +17,7 @@ export const reusableTableSlice = createSlice({
   name: 'reusableTable',
   initialState,
   reducers: {
+
     initTable: (state, { payload }) => {
       state[payload.name] = {
         loading: 'pending',
@@ -27,6 +28,7 @@ export const reusableTableSlice = createSlice({
     dataLoading(state, action: PayloadAction<{name: string}>) {
       state[action.payload.name].loading = 'pending';
     },
+    
     dataReceived(state, action: PayloadAction<{name: string, data: any[]}>) {
       const { name, data } = action.payload;
       if (state[name].loading === 'pending') {
@@ -36,6 +38,7 @@ export const reusableTableSlice = createSlice({
       }
       
     },
+    
     filterData(state, action: PayloadAction<{ table: string, filters: Filter[] }>) {
       const { table, filters } = action.payload;
       state[table].displayedRows = [ ...state[table].rows ];
@@ -44,10 +47,11 @@ export const reusableTableSlice = createSlice({
       filters.forEach(({column, values}) => {
         if (values.length)
           state[table].displayedRows = state[table].displayedRows.filter( row => values.includes(`${row[column]}`) );
-
+        
       });
-
+      
     },
+    
     sortData(state, action: PayloadAction<{ table: string, column: string, type?: string }>) {
       const { table, column, type } = action.payload;
       if (column) {
@@ -58,6 +62,7 @@ export const reusableTableSlice = createSlice({
       }
 
     },
+
   },
 });
 

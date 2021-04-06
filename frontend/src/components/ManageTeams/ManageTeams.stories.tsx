@@ -3,7 +3,6 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ManageTeams , { ManageTeamsProps } from './ManageTeams';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import getTeams from '../../api/Teams.service';
 import darkTheme from '../../theme/customMaterialTheme';
 import { ThemeProvider } from '@material-ui/styles';
 import TeamService from '../../api/Teams.service';
