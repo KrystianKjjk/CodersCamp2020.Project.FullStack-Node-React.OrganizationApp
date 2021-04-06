@@ -8,7 +8,7 @@ export default createMuiTheme({
             paper: '#1C1C1C',
         },
         text: {
-            primary: 'white',
+            primary: '#fff',
         },
     },
 });
