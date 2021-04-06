@@ -1,6 +1,7 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import BaseService from '../../app/baseService'
+import axios from 'axios';
 
 export interface TeamProjectState {
   _id: string,
@@ -61,10 +62,10 @@ export const teamProjectSlice = createSlice({
       state.hasErrors = true;
     },
     switchEditMode: state => {
-      if (!state.loading) state.projectEditMode = !state.projectEditMode;
+      if (!state.loading || state.projectEditMode === true) state.projectEditMode = !state.projectEditMode;
     },
     switchDeleteMode: state => {
-      if (!state.loading) state.projectDeleteMode = !state.projectDeleteMode;
+      if (!state.loading || state.projectDeleteMode === true) state.projectDeleteMode = !state.projectDeleteMode;
     }
   }
 });
@@ -89,29 +90,26 @@ export function getProjectById(id: string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      const responseProject = await api.get(`/projects/${id}`);
+      const responseProject = await api.get(`/teams/projects/${id}`);
       const data = await responseProject.data;
-      
+
       const responseTeam = await api.get(`teams/${data.teamId}`)
       const dataTeam = await responseTeam.data;
       data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
 
-      const responseParentProject = await request(
-        'GET', 
-        `https://coders-camp-organization-app.herokuapp.com/api/projects/${data.parentProjectId}`,
-        token
-        )
-      const dataParentProject = await responseParentProject.json();
+      const responseParentProject = await api.get(`/projects/${data.parentProjectId}`);
+      const dataParentProject = await responseParentProject.data;
       data.referenceProjectName = dataParentProject.projectName;
-      
-      //... I don't know if this is meant to be done this way, seems kinda long :D
-      const responseSection = await request(
-        'GET', 
-        `https://coders-camp-organization-app.herokuapp.com/api/sections/${dataParentProject.sectionId}`,
-        token
-        )
-      const dataSection = await responseSection.json();
-      data.sectionName = dataSection.name;
+
+      try {
+        const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
+        const dataSection = await responseSection.data;
+        data.sectionName = dataSection.name;
+      }
+      catch (error){
+        console.log('Section',error.message)
+      }
+
       dispatch(projectOperationSuccess(data));
       dispatch(switchEditMode);
     } catch (error) {
@@ -120,22 +118,21 @@ export function getProjectById(id: string, token: string) {
   }
 }
 
-export function saveProjectById(project: Object, id :string, token: string) {
+export function saveProjectById(project: Object, id: string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation());
+
+    const putConfig = {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    }
+
     try {
-      await fetch(`https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
-          {
-            method: 'PUT',
-            headers: {   
-              'Content-Type': 'application/json',
-              'X-Auth-Token': token
-            },
-            body: JSON.stringify(project)
-          });
+      await api.put(`/teams/projects/${id}`, JSON.stringify(project), putConfig);
     } catch (error) {
       dispatch(projectOperationFailure());
-    }    
+    }
     dispatch(switchEditMode());
   }
 }
@@ -144,11 +141,7 @@ export function deleteProjectById(id: string, token :string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      await request(
-        'DELETE', 
-        `https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
-        token
-        );
+      await axios.delete(`/teams/projects/${id}`);
 
       dispatch(projectDeleteSuccess());
     } catch (error) {
@@ -156,15 +149,4 @@ export function deleteProjectById(id: string, token :string) {
     }
     dispatch(switchDeleteMode());
   }
-}
-
-
-const request = async (type: string, url:string, token: string) => {
-  return await fetch(url,
-          {
-            method: type,
-            headers: {   
-              'X-Auth-Token': token
-             }
-          });
 }
