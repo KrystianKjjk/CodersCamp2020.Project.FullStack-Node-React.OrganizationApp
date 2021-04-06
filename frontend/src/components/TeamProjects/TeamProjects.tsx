@@ -13,8 +13,7 @@ export interface TeamProjectsProps {
 }
 
 interface MainViewProps {
-  detailedView: boolean,
-  editComponent: Function
+  detailedView: boolean
 }
 
 enum HeaderText {
@@ -27,6 +26,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   const [detailedView, setDetailedView] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState({});  
   const [search, setSearch] = useState('');
+  const [tableDisplay, setTableDisplay] = useState('initial');
 
   const changeSearch = (value: string) => {
     setSearch(value);
@@ -48,7 +48,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   ];
 
   const Header = (detailedView: boolean) => {
-    return detailedView ? HeaderText.EDIT : 
+    return detailedView ? <div className={styles.header}><h2>{HeaderText.EDIT}</h2></div> : 
     (
     <div className={styles.header}>
         <h2>{HeaderText.MAIN}</h2>
@@ -57,24 +57,8 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
     )
   } 
 
-  const Table = () => {
-    return (
-      <div className={styles.table}>        
-        <ReusableTable
-          name="Manage Team Projects"
-          getData={props.getFunction}
-          columns={columns}
-          onRowClick={(params, e) => {
-              setDetailedView(true);
-              setSelectedProjectId(params.row.id);
-          }}
-        />
-      </div>      
-    )
-  }
-
 const MainView = (props: MainViewProps) => {
-    return props.detailedView ? <div onClick={() => setDetailedView(false)}>{props.editComponent()}</div> : <Table/>
+    return props.detailedView ? <div onClick={() => setDetailedView(false)}><EditView/></div> : null
   }
 
 const EditView = () => {
@@ -88,7 +72,8 @@ const EditView = () => {
       </Paper>
 
       <Paper className={styles.main}>
-        <div className={styles.table}>        
+        <MainView detailedView={detailedView}/>
+        <div className={styles.table} style={{display : tableDisplay}}>        
         <ReusableTable
           name="Manage Team Projects"
           getData={props.getFunction}
@@ -96,11 +81,11 @@ const EditView = () => {
           onRowClick={(params, e) => {
               setDetailedView(true);
               setSelectedProjectId(params.row.id);
+              setTableDisplay('none');
           }}
         />
       </div>   
       </Paper>
-
     </CssBaseline>
   );
 };
