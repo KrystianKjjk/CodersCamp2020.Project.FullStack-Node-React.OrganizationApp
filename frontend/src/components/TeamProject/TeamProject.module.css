@@ -7,7 +7,7 @@
     width: 100%;
     height: 100%;
     background-color: #292929;
-    color: white;
+    color: #FFFFFF;
 }
 
 .teamProjectHeader {
@@ -30,14 +30,15 @@
     background-color: #FF384A;
     margin: 0 10px;
     width: 100px;    
-    color: white;
+    color: #FFFFFF;
 }
 
 #buttonEdit {
     background-color: #2196F3;
     margin: 0 10px;
     width: 100px;    
-    color: white;
+    color: #FFFFFF;
+
 }
 
 .teamProjectDetailsContainer{
@@ -69,8 +70,8 @@
     margin: 0;
     height: 30px;
     background-color: transparent;
-    color: white;
-    border: 1px solid white;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
     border-radius: 5px;
     font-size: 18px;
 }
@@ -80,7 +81,7 @@
 }
 
 .deleteModal {
-    color: white;
+    color: #FFFFFF;
     position: absolute;
     top: 0;
     left: 0;

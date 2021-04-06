@@ -1,5 +1,6 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import BaseService from '../../app/baseService'
 
 export interface TeamProjectState {
   _id: string,
@@ -82,24 +83,17 @@ export const selectTeamProjects = (state: RootState) => state.teamProjects;
 
 export default teamProjectSlice.reducer;
 
+const api = new BaseService();
 
 export function getProjectById(id: string, token: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
-      const responseProject = await request(
-      'GET', 
-      `https://coders-camp-organization-app.herokuapp.com/api/teams/projects/${id}`,
-      token
-      )
-      const data = await responseProject.json();
+      const responseProject = await api.get(`/projects/${id}`);
+      const data = await responseProject.data;
       
-      const responseTeam = await request(
-        'GET', 
-        `https://coders-camp-organization-app.herokuapp.com/api/teams/${data.teamId}`,
-        token
-        )
-      const dataTeam = await responseTeam.json();
+      const responseTeam = await api.get(`teams/${data.teamId}`)
+      const dataTeam = await responseTeam.data;
       data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
 
       const responseParentProject = await request(
