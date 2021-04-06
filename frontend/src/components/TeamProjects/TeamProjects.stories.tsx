@@ -4,6 +4,8 @@ import TeamProjects , { TeamProjectsProps } from './TeamProjects';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
 import styles from './TeamProjects.module.css';
+import { ThemeProvider } from '@material-ui/styles';
+import darkTheme from '../../theme/customMaterialTheme';
 
 export default {
   title: 'TeamProjects component',
@@ -36,7 +38,9 @@ const TestEdit = (selectedProjectId: Object) => {
 
 const Template: Story<TeamProjectsProps> = (args) => (
   <Provider store={store}>
-    <TeamProjects {...args} />
+     <ThemeProvider theme={darkTheme}>
+        <TeamProjects {...args} />
+     </ThemeProvider>    
   </Provider>
 );
 

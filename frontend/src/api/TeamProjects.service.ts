@@ -1,4 +1,4 @@
-import api from './api';
+import BaseService from '../app/baseService';
 
 interface TeamProject {
     _id: string,
@@ -67,27 +67,14 @@ interface Section {
     course: string
 }
 
-
+const api = new BaseService();
 
 async function getTeamProjects(): Promise<any[]> {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w';
-     // window.localStorage.getItem('token')'' or something like tkhat to replace the token above
-
-    const config = {
-        headers: {
-            'x-auth-token': token,
-        }
-    };
-    const response = await api.get<TeamProject[]>('/teams/projects', config);
-    return await Promise.all(response.data.map(project => getProjectDetailedData(project, token)));
+    const response = await api.get('/teams/projects');
+    return await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
 }
 
-async function getProjectDetailedData(project: TeamProject, authToken: string) {
-    const config = {
-        headers: {
-            'x-auth-token': authToken,
-        }
-    };
+async function getProjectDetailedData(project: TeamProject) {
     const returnProject = {
         ...project,
         id: project._id,
@@ -98,13 +85,13 @@ async function getProjectDetailedData(project: TeamProject, authToken: string) {
     }
 
     if (project.teamId.mentor) {
-        const mentor = await api.get<Mentor>(`/users/${project.teamId.mentor}`, config);
+        const mentor = await api.get(`/users/${project.teamId.mentor}`);
         returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
     }
     if (project.parentProjectId) {
         returnProject.ReferenceProject = project.parentProjectId.projectName;
         try {
-            const section = await api.get<Section>(`/sections/${project.parentProjectId.sectionId}`, config);
+            const section = await api.get(`/sections/${project.parentProjectId.sectionId}`);
             returnProject.Section = section.data.name;
         }
         catch {

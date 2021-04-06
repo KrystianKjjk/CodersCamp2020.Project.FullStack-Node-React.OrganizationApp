@@ -1,7 +1,7 @@
 import React, { useState, ReactElement } from 'react';
 import styles from './TeamProjects.module.css';
 import ReusableTable from '../ReusableTable/index'
-
+import { CssBaseline, Paper } from '@material-ui/core';
 
 export interface TeamProjectsProps {
   course: string,
@@ -25,10 +25,10 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   const [selectedProjectId, setSelectedProjectId] = useState({});  
 
   const columns = [
-    { field: 'Name', width: 300 },
-    { field: 'Mentor', width: 200 },
-    { field: 'ReferenceProject', width: 200 },
-    { field: 'Section', width: 200 },
+    { field: 'Name', width: 250, sortable: true },
+    { field: 'Mentor', width: 250, sortable: true },
+    { field: 'ReferenceProject', width: 250, sortable: true },
+    { field: 'Section', width: 250, sortable: true },
   ];
 
   const Header = (detailedView: boolean): HeaderText => {
@@ -60,16 +60,17 @@ const EditView = () => {
 }
 
   return (
-    <div>
-      <div className={styles.header} aria-label='TeamProjectsHeader'>
+    <CssBaseline>
+      <Paper className={styles.header} aria-label='TeamProjectsHeader'>
         <h2>{Header(detailedView)}</h2>
-      </div>
+      </Paper>
 
-      <div className={styles.main}>
+      <Paper className={styles.main}>
         <MainView detailedView={detailedView} editComponent={EditView}/>
-      </div>
-    </div>
+      </Paper>
+    </CssBaseline>
   );
 };
+
 
 export default TeamProjects;

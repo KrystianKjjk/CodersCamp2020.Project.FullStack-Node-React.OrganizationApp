@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import TeamProjects from './TeamProjects';
-import { getTeamProjects } from '../../api/getTeamProjects'
+import { getTeamProjects } from '../../api/TeamProjects.service'
 
 const teamProjects = [{   
    id: '6042af0f06ad6350dcdaee27',
