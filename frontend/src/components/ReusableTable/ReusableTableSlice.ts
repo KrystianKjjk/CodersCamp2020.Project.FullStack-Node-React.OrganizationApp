@@ -30,20 +30,23 @@ export const reusableTableSlice = createSlice({
     dataReceived(state, action: PayloadAction<{name: string, data: any[]}>) {
       const { name, data } = action.payload;
       if (state[name].loading === 'pending') {
-        console.log(data);
         state[name].rows = [...data];
         state[name].displayedRows = [...data];
         state[name].loading = 'idle';
       }
+      
     },
     filterData(state, action: PayloadAction<{ table: string, filters: Filter[] }>) {
       const { table, filters } = action.payload;
       state[table].displayedRows = [ ...state[table].rows ];
       if (filters[0].values[0] === '') return;
+
       filters.forEach(({column, values}) => {
         if (values.length)
           state[table].displayedRows = state[table].displayedRows.filter( row => values.includes(`${row[column]}`) );
-      })
+
+      });
+
     },
     sortData(state, action: PayloadAction<{ table: string, column: string, type?: string }>) {
       const { table, column, type } = action.payload;
@@ -51,8 +54,9 @@ export const reusableTableSlice = createSlice({
         if (type && type === 'number')
           state[table].displayedRows.sort( (a, b) => a - b );
         else
-          state[table].displayedRows.sort( (a, b) => `${a[column]}`.localeCompare(`${b[column]}`) );
+          state[table].displayedRows.sort( (a, b) => `${a[column]}`.localeCompare(`${b[column]}`) );  
       }
+
     },
   },
 });
