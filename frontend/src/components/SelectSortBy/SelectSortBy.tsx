@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
+import { Container, CssBaseline, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import styles from './SelectSortBy.module.css';
 
 export interface SelectSortByProps {
@@ -17,7 +17,8 @@ const SelectSortBy: React.FC< SelectSortByProps > = ({ onChange, options, initia
     onChange(value);
   }, [value]);
   return (
-    <FormControl variant="outlined">
+    <Container>
+      <FormControl variant="outlined">
         <InputLabel>Sort by</InputLabel>
         <Select
           className={styles.select}
@@ -28,6 +29,7 @@ const SelectSortBy: React.FC< SelectSortByProps > = ({ onChange, options, initia
           {options.map(option => (<MenuItem className={styles.select} key={option} value={option}>{option}</MenuItem>))}
         </Select>
       </FormControl>
+    </Container>
   );
 };
 
