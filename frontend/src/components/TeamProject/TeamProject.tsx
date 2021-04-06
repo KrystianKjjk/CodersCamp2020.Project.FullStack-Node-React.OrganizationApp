@@ -30,11 +30,8 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
   const [projectUrl, setProjectUrl] = useState(project.projectUrl);
   const [projectDescription, setProjectDescription] = useState(project.description);
 
-  // const token = window.localStorage....
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRmYmFlMWEyZTM4ZDAwMTVlZTQxZWQiLCJ0eXBlIjozLCJpYXQiOjE2MTY3OTA3NDksImV4cCI6MTYxNjc5MTk0OX0.cYNseRM97U7IgwXKVQgRwBVd7SQWpeHJ4grgWUqsf6w'
-
   useEffect(() => {
-    dispatch(getProjectById(props._id, token));
+    dispatch(getProjectById(props._id));
   }, [dispatch]);
 
   useEffect(() => {
@@ -50,7 +47,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
         <div className={styles.deleteModal} onClick={() => dispatch(switchDeleteMode())}>
           Do you really want to delete this project?
           <br /><br />
-          <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id, token))}>Delete</Button>
+          <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id))}>Delete</Button>
         </div>)
     }
     return null
@@ -64,8 +61,8 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
       projectUrl: projectUrl,
       description: projectDescription
     }
-    dispatch(saveProjectById(newProjectData, props._id, token));
-    dispatch(getProjectById(props._id, token));
+    dispatch(saveProjectById(newProjectData, props._id));
+    dispatch(getProjectById(props._id));
   }
 
   const handleChange = (setState: Function, e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {

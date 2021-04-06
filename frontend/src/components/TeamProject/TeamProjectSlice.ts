@@ -86,7 +86,7 @@ export default teamProjectSlice.reducer;
 
 const api = new BaseService();
 
-export function getProjectById(id: string, token: string) {
+export function getProjectById(id: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
@@ -118,18 +118,12 @@ export function getProjectById(id: string, token: string) {
   }
 }
 
-export function saveProjectById(project: Object, id: string, token: string) {
+export function saveProjectById(project: Object, id: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation());
 
-    const putConfig = {
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
-    }
-
     try {
-      await api.put(`/teams/projects/${id}`, JSON.stringify(project), putConfig);
+      await api.put(`/teams/projects/${id}`, JSON.stringify(project));
     } catch (error) {
       dispatch(projectOperationFailure());
     }
@@ -137,7 +131,7 @@ export function saveProjectById(project: Object, id: string, token: string) {
   }
 }
 
-export function deleteProjectById(id: string, token :string) {
+export function deleteProjectById(id: string) {
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation())
     try {
