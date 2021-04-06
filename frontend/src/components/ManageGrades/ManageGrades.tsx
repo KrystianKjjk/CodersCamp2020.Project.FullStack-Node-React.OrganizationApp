@@ -59,8 +59,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         const name = target.name;
         const value = +target.value;
 
-        let tmpGrades: IGrade[] = [ ...grades as IGrade[] ];
-        let grade = tmpGrades[index];
+        const tmpGrades: IGrade[] = [ ...grades as IGrade[] ];
+        const grade = tmpGrades[index];
         // @ts-ignore
         grade[name] = +value;
         tmpGrades[index] = grade;
@@ -72,21 +72,19 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     function getSectionNames(sections: ISectionsUtility[]) {
         const tmpSections: ISectionsUtility[] = [...sections];
-        if(sections.length){
-            sections.forEach( (section: ISectionsUtility, index: number) => {
-                sectionService.getSectionByID(section?._id)
-                    .then( res => {
-                        if(res.status === 200) {
-                            tmpSections[index] = {_id: res.data._id, name: res.data.name};
-                            setSections([...tmpSections]);
-                        }
-                    })
-                    .catch(err => {
-                        tmpSections[index] = {_id: section?._id, name: 'no section'};
+        sections.forEach( (section: ISectionsUtility, index: number) => {
+            sectionService.getSectionByID(section?._id)
+                .then( res => {
+                    if(res.status === 200) {
+                        tmpSections[index] = {_id: res.data._id, name: res.data.name};
                         setSections([...tmpSections]);
-                    });
-            });
-        }
+                    }
+                })
+                .catch(err => {
+                    tmpSections[index] = {_id: section?._id, name: 'no section'};
+                    setSections([...tmpSections]);
+                });
+        });
     }
 
     function getGrades(userID: string) {
@@ -180,8 +178,8 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     }
 
     function addGrade(event: any) {
-        let tmpGrades = [ ...grades as IGrade[] ];
-        let tmpGrade: Omit<IGrade, "_id"> = {
+        const tmpGrades = [ ...grades as IGrade[] ];
+        const tmpGrade: Omit<IGrade, "_id"> = {
             sectionId: '',
             testPoints: 0,
             testMaxPoints: 0,
@@ -214,11 +212,11 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         return function onSectionSelection(sectionID: string, sectionName: string) {
 
             setOpenSectionsModal(false)
-            let tmpGrades = [...grades];
+            const tmpGrades = [...grades];
             tmpGrades[index].sectionId = sectionID;
             setGrades([...tmpGrades]);
 
-            let tmpSections = [...sections];
+            const tmpSections = [...sections];
             tmpSections[index].name = sectionName;
             setSections([...tmpSections]);
         }

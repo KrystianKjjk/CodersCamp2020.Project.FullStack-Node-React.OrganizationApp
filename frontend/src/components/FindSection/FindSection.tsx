@@ -82,11 +82,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
                 "Start date": new Date(section.startDate).toLocaleDateString(),
                 "End date": new Date(section.endDate).toLocaleDateString(),
             } ));
-        return new Promise(
-            (resolve) => {
-                resolve(sectionsTmp);
-            }
-        );
+        return Promise.resolve(sectionsTmp);
     }
 
     const columns = [
