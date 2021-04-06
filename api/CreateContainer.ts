@@ -78,7 +78,6 @@ import MaterialService from "./Src/Services/MaterialService";
 import MaterialRepository from "./Src/Repositories/MaterialRepository";
 import MaterialModel from "./Src/Models/Material"
 
-
 const appContainer = new Container();
 
 // JWT .ENV
