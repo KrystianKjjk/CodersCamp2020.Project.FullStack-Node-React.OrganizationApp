@@ -7,6 +7,7 @@ import {
   fetchCourses,
 } from "../Course/CourseClient";
 import CourseList from "./CourseList";
+import {getActiveCourse, setActiveCourse} from "../../app/ActiveCourse";
 // import CourseCreateObject from '../CourseCreate';
 
 export interface CourseListElementModel extends CourseCreateObject {
@@ -39,6 +40,12 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
     var courseListElementStartDate2 = courseListElement2.startDate.getTime();
     return courseListElementStartDate2 - courseListElementStartDate1;
   });
+  const activeCourse=getActiveCourse();
+  if(!activeCourse){
+    const mostRecentCourse=courses[0];
+    setActiveCourse(mostRecentCourse);
+  }
+  console.log(activeCourse);
   dispatch(setCourses(courses));
 };
 

@@ -5,6 +5,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { deleteCourseAsync } from "../CourseList/CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
+import { setActiveCourse } from "../../app/ActiveCourse";
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
@@ -21,7 +22,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
         "&:hover": {
           borderColor: "#2196F3",
           cursor: "pointer",
-          outlineStyle:'solid',
+          outlineStyle: "solid",
           outlineColor: "#2196F3",
         },
       },
@@ -50,30 +51,28 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const handleDeleteButtonClick = (event:any) => {
+  const handleDeleteButtonClick = (event: any) => {
     dispatch(deleteCourseAsync(course._id));
-    event.stopPropagation()
+    event.stopPropagation();
   };
 
-  const handleEditButtonClick = (event:any) => {
+  const handleEditButtonClick = (event: any) => {
     history.push("courses/" + course._id);
-    event.stopPropagation()
+    event.stopPropagation();
   };
 
   const handleCourseClick = () => {
+    setActiveCourse(course);
   };
 
-//posortowac kursy po pobraniu i dodac if ograniczajacy sie tylko do 1 renderowania , jak nie ma active course
-//pierwszy kurs ma miec z automatu outline niebieski, pokazac sie w headerze, ma byc jako active course 
-//po kliknieciu w inny kafelek, ma sie zmieniac jego outline, ma byc w headerze, ma byc jako active, poprzedni active course musi
-//juz nie byc active 
-
+  //posortowac kursy po pobraniu i dodac if ograniczajacy sie tylko do 1 renderowania , jak nie ma active course
+  //pierwszy kurs ma miec z automatu outline niebieski, pokazac sie w headerze, ma byc jako active course
+  //po kliknieciu w inny kafelek, ma sie zmieniac jego outline, ma byc w headerze, ma byc jako active, poprzedni active course musi
+  //juz nie byc active
 
   return (
     <div className={classes.box} onClick={handleCourseClick}>
-      <div className={classes.name}>
-        {course.name}
-      </div>
+      <div className={classes.name}>{course.name}</div>
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>Start date:</div>
