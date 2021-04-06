@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 export interface Project {
     _id: mongoose.ObjectId,
-    sectionId: number,
+    sectionId: string,
     projectName: string,
     projectUrl: string,
     description?: string

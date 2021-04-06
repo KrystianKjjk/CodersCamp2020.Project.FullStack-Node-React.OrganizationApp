@@ -1,5 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../components/counter/counterSlice';
+import teamProjectReducer from '../components/TeamProject/TeamProjectSlice'
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice';
 import courseDetails from '../components/Course/CourseDetailsSlice';
 import courseList from '../components/CourseList/CourseListSlice';
@@ -7,6 +8,7 @@ import courseList from '../components/CourseList/CourseListSlice';
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    teamProjects: teamProjectReducer,
     tables: reusableTableReducer,
     courseDetails,
     courseList

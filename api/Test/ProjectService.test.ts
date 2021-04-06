@@ -45,7 +45,7 @@ describe("Project Service", () => {
     it("persists project model", async () => {
         const project = {
             _id: mongoose.Types.ObjectId(), 
-            sectionId: 1, 
+            sectionId: "1", 
             projectName: "Projekt 1", 
             projectUrl: "projekt url 1", 
             description: "description"
@@ -59,7 +59,7 @@ describe("Project Service", () => {
     it("can list out all projects", async () => {
         const firstProject = {
             _id: mongoose.Types.ObjectId(), 
-            sectionId: 1, 
+            sectionId: "1", 
             projectName: "Projekt 1", 
             projectUrl: "projekt url 1", 
             description: "description"
@@ -67,7 +67,7 @@ describe("Project Service", () => {
 
         const secondProject = {
             _id: mongoose.Types.ObjectId(), 
-            sectionId: 2, 
+            sectionId: "2", 
             projectName: "Projekt 2", 
             projectUrl: "projekt url 2", 
             description: "description"
@@ -83,7 +83,7 @@ describe("Project Service", () => {
     it("should delete a project", async () => {
         const project = {
             _id: mongoose.Types.ObjectId(),
-            sectionId: 1, 
+            sectionId: "1", 
             projectName: "Projekt 1", 
             projectUrl: "projekt url 1", 
         };
@@ -98,7 +98,7 @@ describe("Project Service", () => {
     it("should update a project", async () => {
         const project = {
             _id: mongoose.Types.ObjectId(),
-            sectionId: 3, 
+            sectionId: "3", 
             projectName: "Projekt 3", 
             projectUrl: "projekt url 3", 
         };
@@ -107,13 +107,13 @@ describe("Project Service", () => {
         const updatedProject = await service.updateProjectById(project._id, {projectName: "Nowa nazwa projektu 3"});
 
         expect(updatedProject.projectName).toEqual("Nowa nazwa projektu 3"); // changed
-        expect(updatedProject.sectionId).toEqual(3); // stayed the same
+        expect(updatedProject.sectionId).toEqual("3"); // stayed the same
         expect(updatedProject.projectUrl).toEqual("projekt url 3"); // stayed the same
     });
 
     it("validates by using custom method", async () => {
         const allDataNeededToCreate = {
-            sectionId: 3, 
+            sectionId: "3", 
             projectName: "Projekt 3", 
             projectUrl: "projekt url 3", 
         };
@@ -123,7 +123,7 @@ describe("Project Service", () => {
         };
 
         const allDataButWrongTypes = {
-            sectionId: "3", // wrong type
+            sectionId: 3, // wrong type
             projectName: "",
             projectUrl: ["aaa.pl"] // wrong type
         }
