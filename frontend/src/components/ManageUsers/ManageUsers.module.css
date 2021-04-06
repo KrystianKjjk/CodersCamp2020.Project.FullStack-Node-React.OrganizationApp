@@ -16,7 +16,7 @@
 .manageContainer {
     margin-bottom: 3rem;
     display: grid;
-    grid-template-areas:    "mainHeader sortBy addBtn"
+    grid-template-areas:    "mainHeader empty sortBy"
                             "header header header"
                             "checkboxes checkboxes checkboxes";
     border-bottom: gray 1px solid;
@@ -31,11 +31,6 @@
 
 .checkbox {
     text-transform: capitalize;
-}
-.addButton {
-    grid-area: addBtn;
-    justify-self: end;
-    align-self: center;
 }
 .selectSortBy {
     grid-area: sortBy;

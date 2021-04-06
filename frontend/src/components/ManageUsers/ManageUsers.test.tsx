@@ -20,16 +20,12 @@ const getFakeUsers = () => {
 describe('ManageUsers', () => {
    it('renders without error', async () => {
       const getUsers = jest.fn( getFakeUsers );
-      const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageUsers onClickAdd={onClickAdd} getUsers={getUsers}/>
+            <ManageUsers getUsers={getUsers}/>
          </Provider>
       );
       expect(getUsers).toBeCalledTimes(1);
-      const addBtn = screen.getByLabelText('Add user');
-      userEvent.click(addBtn);
-      expect(onClickAdd).toBeCalledTimes(1);
       const tableComp = await screen.findByLabelText('Table - Users');
       const table = store.getState().tables['Users'];
       expect(table.rows).toHaveLength(usersDatabase.length);
@@ -37,10 +33,9 @@ describe('ManageUsers', () => {
 
    it('search input works', async () => {
       const getUsers = jest.fn( getFakeUsers );
-      const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageUsers onClickAdd={onClickAdd} getUsers={getUsers}/>
+            <ManageUsers getUsers={getUsers}/>
          </Provider>
       );
 
@@ -55,10 +50,9 @@ describe('ManageUsers', () => {
 
    it('sort list works', async () => {
       const getUsers = jest.fn( getFakeUsers );
-      const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageUsers onClickAdd={onClickAdd} getUsers={getUsers}/>
+            <ManageUsers getUsers={getUsers}/>
          </Provider>
       );
       const tableComp = await screen.findByLabelText('Table - Users');
@@ -69,15 +63,13 @@ describe('ManageUsers', () => {
 
    it('filters work', async () => {
       const getUsers = jest.fn( getFakeUsers );
-      const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageUsers onClickAdd={onClickAdd} getUsers={getUsers}/>
+            <ManageUsers getUsers={getUsers}/>
          </Provider>
       );
 
       const tableComp = await screen.findByLabelText('Table - Users');
-      const table = store.getState().tables['Users'];
       const adminCheckbox = screen.getByLabelText('Admin');
       const resignedCheckbox = screen.getByLabelText('Resigned');
       userEvent.click(adminCheckbox);
