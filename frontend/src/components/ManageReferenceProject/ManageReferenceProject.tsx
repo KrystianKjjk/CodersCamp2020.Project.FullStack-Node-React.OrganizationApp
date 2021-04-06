@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from './ManageReferenceProject.module.css';
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {Box, Breadcrumbs, Link, Snackbar, Typography} from "@material-ui/core";
 import UButton from "../UButton";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -67,8 +67,6 @@ const ManageReferenceProject = (props: any) => {
           <Link href="/projects" color="primary">PROJECTS </Link>
           <Typography color="primary">{projectID}</Typography>
         </Breadcrumbs>
-        {console.log(project)}
-
         <Box className={styles.container}>
           <Box display="flex" className={styles.container__header}>
             <span>Manage project</span>
