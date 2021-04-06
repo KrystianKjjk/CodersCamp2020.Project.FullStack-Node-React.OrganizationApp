@@ -6,14 +6,17 @@ import { store } from '../../app/store';
 import TeamProjects from './TeamProjects';
 import { getTeamProjects } from '../../api/TeamProjects.service'
 
-const teamProjects = [{   
-   id: '6042af0f06ad6350dcdaee27',
-   projectName: 'Star Wars - child project by one of teams',
-   projectUrl: 'url test',
-   description: 'dummy desc'
+const teamProjects = [{
+   id: 'myTestID',
+   Name: 'Star Wars - child project by one of teams',
+   Mentor: 'Test Mentor',
+   ReferenceProject: 'Star Wars Standard Project',
+   Section: 'Javascript'
  }]
 
-const mockGet = jest.fn(() => Promise.resolve(teamProjects));
+const mockGet = () => {
+   return Promise.resolve(teamProjects);
+}
 
 const TestEdit = (selectedProjectId: Object) => {
    return (
@@ -25,7 +28,7 @@ describe('TeamProjects', () => {
    it('renders without error', async () => {
       render(
          <Provider store={store}>
-            <TeamProjects course="" getFunction={getTeamProjects} editComponent={TestEdit} />
+            <TeamProjects course="123" getFunction={mockGet} editComponent={TestEdit} />
          </Provider>
       );
       const header = await screen.findByLabelText(`TeamProjectsHeader`);
@@ -35,5 +38,17 @@ describe('TeamProjects', () => {
       expect(table).toBeInTheDocument();
    });
 
-   //I had issues with mocking the get request, so the rest of the tests are not prepared atm
+   // it('clicking on the row triggers the edit component', async () => {
+   //    render(
+   //       <Provider store={store}>
+   //          <TeamProjects course="123" getFunction={mockGet} editComponent={TestEdit} />
+   //       </Provider>
+   //    );
+
+   //    const row = await screen.getByText('Star Wars - child project by one of teams');
+   //    userEvent.click(row);
+
+   //    const edit = await screen.findByLabelText(`test`);
+   //    expect(edit).toBeInTheDocument();
+   // });
 });
