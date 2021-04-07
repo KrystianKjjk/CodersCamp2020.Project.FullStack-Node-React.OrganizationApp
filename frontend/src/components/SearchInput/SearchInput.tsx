@@ -26,7 +26,6 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
   return (
     <FormControl variant="outlined" className={styles.searchInput}>
       <OutlinedInput
-        className={styles.textBox}
         inputRef={inputRef}
         placeholder={placeholder}
         onKeyPress={onKeyPress}

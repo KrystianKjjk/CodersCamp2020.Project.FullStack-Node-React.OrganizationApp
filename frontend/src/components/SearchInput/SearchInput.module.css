@@ -1,6 +1,4 @@
 .searchInput {
     width: 100%;
-}
-.textBox {
-    background-color: #292929 ;
+    max-width: 300px;
 }
