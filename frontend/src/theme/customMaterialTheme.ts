@@ -13,6 +13,21 @@ export default createMuiTheme({
     },
 });
 
+export const mainTheme = createMuiTheme({
+    palette: {
+        type: 'dark',
+        primary: {
+            main: "#ffffff",
+        },
+        secondary: {
+            main: "#ff384a",
+        },
+    },
+    typography: {
+        fontFamily: "Montserrat",
+    },
+});
+
 export const addBtnTheme = createMuiTheme({
     palette: {
         primary: {
@@ -25,6 +40,17 @@ export const deleteBtnTheme = createMuiTheme({
     palette: {
         primary: {
             main: "#FF384A",
+        }
+    }
+});
+
+export const UButtonTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#1a90ff",
+        },
+        secondary: {
+            main: "#ff384a",
         }
     }
 });
