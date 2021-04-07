@@ -16,6 +16,10 @@
     margin-bottom: 3rem;
     border: gray 1px solid;
 }
+
+.mainHeader h2 {
+    margin: 0px;
+}
 .searchInput {
     width: 350px;
 }

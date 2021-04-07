@@ -50,11 +50,11 @@ export default async function getSections(authToken: string | null): Promise<any
         }
     };
     //const team = await api.get<Team[]>('/teams', config);
-    const coursesRes = await api.get<Course[]>('api/courses', config);
+    const coursesRes = await api.get<Course[]>('courses', config);
     const courses = coursesRes.data;
     let allSections: Section[] = [];
     for (let i in courses) {
-        const sections = await api.get<SectionData[]>('api/sections', config);
+        const sections = await api.get<SectionData[]>('sections', config);
         const newData = sections.data.map( section => ({
             id: section._id,
             name: section.name,

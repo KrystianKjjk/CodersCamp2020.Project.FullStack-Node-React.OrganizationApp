@@ -24,6 +24,9 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/courses">
           <Courses/>
         </PrivateRoute>
+        <PrivateRoute path="/sections/:id/edit">
+          <SectionView />
+        </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />
         </PrivateRoute>
@@ -66,13 +69,10 @@ function Courses() {
   return <h2>Courses</h2>;
 }
 function Sections() {
-  const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
-  return <ManageSections getSections={() => getSections(authToken)} onClickAdd = {() => console.log('Clicked Add')}/>
+  return <ManageSections />
 }
+
 function Gradesheets() {
-  const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
-  const id = '604be70f339f6f18e4b5b083';
-  return <SectionView getOneSection={() => getOneSection(authToken, id)}/>
   return <h2>Greadsheets</h2>
 }
 function Projects() {

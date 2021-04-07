@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 //
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { GridValueFormatterParams } from '@material-ui/data-grid';
@@ -10,22 +11,22 @@ import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
+import SectionService from '../../api/Section.service';
 
 export interface ManageSectionsProps {
-  getSections: () => Promise<any[]>;
-  onClickAdd: () => void;
+
 }
 
-const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickAdd }) => {
+const ManageSections: React.FC< ManageSectionsProps > = () => {
+  const sectionService = new SectionService();
+
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
   const [search, setSearch] = useState('');
-  const displayFormattedDate = (dateString: string) => {
-    if (!dateString) return '';
+  const displayFormattedDate = (date: Date) => {
+    if (!date) return '';
 
-    const dateObject = new Date(dateString);
-
-    return `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
   const changeSortBy = (value: string) => {
@@ -48,11 +49,17 @@ const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickA
     dispatch(filterData({table: 'Sections', filters: [ f ]}));
   }, [search]);
 
+  const history = useHistory();
+
+  const handleRowClick = (data: {id: string | number}) => {
+    history.push(`/sections/${data.id}/edit`)
+  }
+
   const sortByOptions = ['name', 'startDate', 'endDate', 'courseName'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 200, sortable: true},
-    {field: 'startDate', headerName: 'Start date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value || '') as string)},
-    {field: 'endDate', headerName: 'End date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value || '') as string)},
+    {field: 'startDate', headerName: 'Start date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as Date)},
+    {field: 'endDate', headerName: 'End date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as Date)},
     {field: 'courseName', headerName: 'Course name', width: 150, sortable: true},
   ]
   
@@ -68,7 +75,7 @@ const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickA
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sections</h2>
-          <span onClick={onClickAdd} className={styles.addButton} aria-label='Add section'>
+          <span onClick={undefined} className={styles.addButton} aria-label='Add section'>
             <AddButton text='Add'/>
           </span>
           <span className={styles.selectSortBy}>
@@ -76,7 +83,7 @@ const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickA
           </span>
         </div>
         <div className={styles.table}>
-          <Table name='Sections' columns={columns} getData={getSections}/>
+          <Table name='Sections' columns={columns} onRowClick={handleRowClick} getData={() => sectionService.getSections()}/>
         </div>
         </Paper>
     </Container>

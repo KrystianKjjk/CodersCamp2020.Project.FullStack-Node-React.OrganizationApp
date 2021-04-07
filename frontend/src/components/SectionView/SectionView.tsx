@@ -9,20 +9,21 @@ import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper, TextField } from '@material-ui/core';
 import BaseService from '../../app/baseService';
+import { useParams } from 'react-router-dom';
+import SectionService from '../../api/Section.service';
 
 export interface SectionViewProps {
-  getOneSection: () => Promise<any[]>;
 }
 
-const SectionView: React.FC< SectionViewProps > = ({getOneSection}) => {
-
+const SectionView: React.FC< SectionViewProps > = () => {
+  const sectionService = new SectionService();
   const [sectionName, setSectionName] = useState("");
-  const [courseName, changeCourseName] = useState("");
-  const [description, changeDescription] = useState("");
-  const [startDate, changeStartDate] = useState<Date | null>(new Date());
-  const [endDate, changeEndDate] = useState<Date | null>(new Date());
-  const [referenceProj, changeReferenceProj] = useState("")
-  const [sectionData, setSectionData] = useState("");
+  const [courseName, setCourseName] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [referenceProject, setReferenceProject] = useState("")
+  const { id } = useParams();
 
   const deleteSection = () => {
     console.log('test');
@@ -37,16 +38,24 @@ const SectionView: React.FC< SectionViewProps > = ({getOneSection}) => {
   };
 
   const handleDescriptionChange = (e: any) => {
-    changeDescription(e.target.value);
+    setDescription(e.target.value);
   };
 
+  const displayFormattedDate = (date?: Date) => {
+    if (!date) return '';
+
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  }
+
   const getOneSectionData = async () => {
-    const data: any = await getOneSection();
+    const data = await sectionService.getOneSection(id);
 
     setSectionName(data.name);
-    changeDescription(data.description);
-    changeStartDate(data.startDate);
-    changeEndDate(data.endDate);
+    setCourseName(data.courseName);
+    setDescription(data.description || '');
+    setStartDate(displayFormattedDate(data.startDate));
+    setEndDate(displayFormattedDate(data.endDate));
+    setReferenceProject(data.referenceProjectName || '');
   };
   
   useEffect(() => {
@@ -71,7 +80,7 @@ const SectionView: React.FC< SectionViewProps > = ({getOneSection}) => {
         </div>
         <div className={styles.manageDescription}>
           <span className={styles.section_title}> {sectionName} </span>
-          <span> Course Name</span>
+          <span> {courseName}</span>
           <span> description: {description} </span>
         </div>
           <div className={styles.manageSectionInfo}> 
@@ -86,6 +95,7 @@ const SectionView: React.FC< SectionViewProps > = ({getOneSection}) => {
             </div>
             <div className={styles.manageSectionRefPro}> 
               <h3>Referenece project:</h3>
+              <p>{referenceProject}</p>
             </div>
         </div>
         </Paper>

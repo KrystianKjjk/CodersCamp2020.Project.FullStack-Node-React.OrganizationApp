@@ -34,7 +34,6 @@ const getFakeSections = () => {
 
 export const SampleFakeManageSections = Template.bind({});
 SampleFakeManageSections.args = {
-  getSections: getFakeSections,
   onClickAdd: () => console.log('Clicked Add'),
 };
 
@@ -42,6 +41,5 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdh
 
 export const SampleManageSections = Template.bind({});
 SampleManageSections.args = {
-  getSections: () => getSections(token),
   onClickAdd: () => console.log('Clicked Add'),
 };
