@@ -27,6 +27,24 @@ export interface User {
     type: string;
 }
 
+export interface IUser {
+    name: string,
+    surname: string,
+    email: string,
+    type: UserType,
+    status: UserStatus,
+};
+
+export interface IGrade {
+    _id: string,
+    sectionId: string,
+    testPoints: number,
+    testMaxPoints: number,
+    taskPoints: number,
+    taskMaxPoints: number,
+    projectPoints: number
+}
+
 export const userStatusDict = {
     [UserStatus.Active]: 'Active',
     [UserStatus.Archived]: 'Archived',
