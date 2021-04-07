@@ -1,12 +1,4 @@
 .select {
     min-width: 200px;
     text-transform: capitalize;
-    color: white;
-    background-color: grey;
-}
-.select:hover {
-    background-color: grey !important;
-}
-.label {
-    color: white !important;
 }
