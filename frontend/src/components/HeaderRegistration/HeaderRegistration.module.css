@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarpanch:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Sarpanch:wght@600&display=swap');
+
+.header {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #292929;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #666666;
+}
+
+.logo{
+    margin-left: 2rem;
+    font-family:'Sarpanch', sans-serif;
+    font-size: 2rem;
+}
+
+.logo span{
+  color: #ffc53d;
+}
+
+
+
