@@ -5,7 +5,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import SectionsService from "../../api/sections.service";
 import BaseService from "../../app/baseService";
 import GradeService from "../../api/grades.service";
-import {IGrade} from "../../models/user.model";
+import {IGrade} from "../../models/User.model";
 import UButton from "../UButton";
 import FindSection from "../FindSection";
 

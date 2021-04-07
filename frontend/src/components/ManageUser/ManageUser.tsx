@@ -7,7 +7,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import UserService from "../../api/users.service";
 import BaseService from "../../app/baseService";
-import {Role, Status, IUser} from "../../models/user.model";
+import {IUser} from "../../models/User.model";
+import {UserStatus as Status} from "../../models/User.model";
+import {UserType as Role} from "../../models/User.model";
 import ManageGrades from "../ManageGrades";
 import UButton from "../UButton";
 

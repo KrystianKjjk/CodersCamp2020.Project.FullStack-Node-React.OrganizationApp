@@ -1,5 +1,5 @@
 import BaseService from "../app/baseService";
-import {IUser} from "../models/user.model";
+import {IUser} from "../models/User.model";
 
 export default class UserService {
 

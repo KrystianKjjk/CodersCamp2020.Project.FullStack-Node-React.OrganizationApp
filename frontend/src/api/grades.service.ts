@@ -1,4 +1,4 @@
-import {IGrade} from "../models/user.model";
+import {IGrade} from "../models/User.model";
 import BaseService from "../app/baseService";
 
 export default class GradeService {
