@@ -6,3 +6,8 @@ export interface SectionData {
     referenceProjectId: string;
     description: string;
 }
+
+export interface Section {
+    id: string;
+    name: string;
+}

@@ -1,29 +1,32 @@
 import { AxiosResponse } from 'axios';
+import { SectionService } from '.';
 import BaseService from '../app/baseService';
-import { Project, ProjectData, SectionData } from '../models';
+import { Project, ProjectData } from '../models';
 
 
 export default class ProjectService {
     
-    constructor(private api = new BaseService()) { }
+    constructor(
+        private api = new BaseService(),
+        private sectionApi = new SectionService()
+    ) { }
 
     async getProject(id: string): Promise<Project | null> {
         let projectRes: AxiosResponse<ProjectData>;
+        let project: ProjectData;
         try {
             projectRes = await this.api.get(`/projects/${id}`);
+            console.log ('============================================================')
+            project = projectRes.data;
+            console.log(project)
         } catch(err) {
             return null;
         }
-        console.log ('============================================================')
-        console.log (projectRes.status)
-        const project = projectRes.data;
-        const sectionRes = await this.api.get(`/sections/${project.sectionId}`);
-        const section = sectionRes.data as SectionData;
-        console.log(projectRes);
+        const section = await this.sectionApi.getSection(project.sectionId);
         return {
             id: project._id,
             name: project.projectName,
-            sectionName: section.name,
+            sectionName: section?.name,
             url: project.projectUrl,
             description: project.description,
         };

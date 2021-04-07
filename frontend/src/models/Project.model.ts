@@ -9,7 +9,7 @@ export interface ProjectData {
 export interface Project {
     id: string;
     name: string;
-    sectionName: string;
+    sectionName?: string;
     url: string;
     description: string;
 };
