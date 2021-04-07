@@ -8,9 +8,12 @@ import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
+import ManageSections from "../ManageSections";
+import SectionView from "../SectionView";
+import getSections, { getOneSection } from '../../api/getSections';
 
 const MainView: React.FC = () => {
-  
+
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -19,7 +22,7 @@ const MainView: React.FC = () => {
           <Users />
         </PrivateRoute>
         <PrivateRoute path="/courses">
-          <Courses />
+          <Courses/>
         </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />
@@ -63,10 +66,14 @@ function Courses() {
   return <h2>Courses</h2>;
 }
 function Sections() {
-  return <h2>Sections</h2>;
+  const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
+  return <ManageSections getSections={() => getSections(authToken)} onClickAdd = {() => console.log('Clicked Add')}/>
 }
 function Gradesheets() {
-  return <h2>Grade sheets</h2>;
+  const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
+  const id = '604be70f339f6f18e4b5b083';
+  return <SectionView getOneSection={() => getOneSection(authToken, id)}/>
+  return <h2>Greadsheets</h2>
 }
 function Projects() {
   return <h2>Projects</h2>;

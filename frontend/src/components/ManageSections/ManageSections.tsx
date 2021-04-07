@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+//
+import { Container, CssBaseline, Paper } from '@material-ui/core';
+import { GridValueFormatterParams } from '@material-ui/data-grid';
+//
 import styles from './ManageSections.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
@@ -6,7 +10,6 @@ import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
-import { Container, CssBaseline, Paper } from '@material-ui/core';
 
 export interface ManageSectionsProps {
   getSections: () => Promise<any[]>;
@@ -14,14 +17,21 @@ export interface ManageSectionsProps {
 }
 
 const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickAdd }) => {
-
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
   const [search, setSearch] = useState('');
+  const displayFormattedDate = (dateString: string) => {
+    if (!dateString) return '';
+
+    const dateObject = new Date(dateString);
+
+    return `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
+  }
 
   const changeSortBy = (value: string) => {
     setSortBy(value);
   };
+
   const changeSearch = (value: string) => {
     setSearch(value);
   }
@@ -29,6 +39,7 @@ const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickA
   useEffect(() => {
     dispatch(sortData({table: 'Sections', column: sortBy }));
   }, [sortBy]);
+  
   useEffect(() => {
     const f = {
       column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'name',
@@ -39,12 +50,12 @@ const ManageSections: React.FC< ManageSectionsProps > = ({ getSections, onClickA
 
   const sortByOptions = ['name', 'startDate', 'endDate', 'courseName'];
   const columns = [
-    {field: 'name', headerName: 'Name', width: 150, sortable: true},
-    {field: 'startDate', headerName: 'Start date', width: 100, sortable: true},
-    {field: 'endDate', headerName: 'End date', width: 100, sortable: true},
-    {field: 'courseName', headerName: 'Course name', width: 200, sortable: true},
+    {field: 'name', headerName: 'Name', width: 200, sortable: true},
+    {field: 'startDate', headerName: 'Start date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value || '') as string)},
+    {field: 'endDate', headerName: 'End date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value || '') as string)},
+    {field: 'courseName', headerName: 'Course name', width: 150, sortable: true},
   ]
-
+  
   return (
     <Container className={styles.manageSections} aria-label='Manage Sections'>
       <CssBaseline />

@@ -20,7 +20,7 @@
     width: 350px;
 }
 .manageContainer {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     display: grid;
     grid-template-areas:    "mainHeader sortBy addBtn";
     border-bottom: gray 1px solid;
@@ -43,4 +43,5 @@
 }
 .table {
     padding: 3rem;
+    max-width: 800;
 }

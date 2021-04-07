@@ -2,10 +2,10 @@
     min-width: 200px;
     text-transform: capitalize;
     color: white;
-    background-color: grey;
+    background-color: #292929;
 }
 .select:hover {
-    background-color: grey !important;
+    background-color: #292929 !important;
 }
 .label {
     color: white !important;

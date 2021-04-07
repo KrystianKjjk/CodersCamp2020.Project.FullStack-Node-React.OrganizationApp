@@ -7,7 +7,7 @@ export default createMuiTheme({
             paper: '#1C1C1C',
         },
         text: {
-            primary: 'white',
+            primary: '#fff',
         },
     },
 });
@@ -16,6 +16,14 @@ export const addBtnTheme = createMuiTheme({
     palette: {
         primary: {
             main: "#2196F3",
+        }
+    }
+});
+
+export const deleteBtnTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#FF384A",
         }
     }
 });

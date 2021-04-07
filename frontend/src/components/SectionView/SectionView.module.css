@@ -1,0 +1,94 @@
+.manageSections {
+    margin: auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    border: gray 1px solid;
+}
+
+.mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border: gray 1px solid;
+}
+
+.manageContainer {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-areas: "mainHeader delBtn edBtn";
+    border-bottom: gray 1px solid;
+    padding: 1rem;
+}
+
+.deleteButton {
+    grid-area: delBtn;
+    justify-self: end;
+    align-self: center;
+}
+
+.editButton {
+    grid-area: edBtn;
+    justify-self: end;
+    align-self: center;
+}
+
+.manageHeader {
+    grid-area: mainHeader;
+    align-self: center;
+    padding: 1rem;
+}
+
+.manageDescription {
+    display: flex;
+    flex-direction: column;
+    border-bottom: gray 1px solid;
+  }
+
+.manageSectionInfo {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-areas: "material dates"
+                        "material refpro";
+    padding: 1rem;
+}
+
+.section_title {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    letter-spacing: 0.15px;
+}
+
+.manageSectionMaterial {
+    grid-area: material;
+    justify-self: center;
+    align-self: start;
+    display:flex;
+    flex-direction:column;
+}
+
+.manageSectionDates {
+    grid-area: dates;
+    justify-self: center;
+    align-self: start;
+    display:flex;
+    flex-direction:column;
+}
+
+.manageSectionRefPro {
+    grid-area: refpro;
+    justify-self: center;
+    align-self: start;
+    display:flex;
+    flex-direction:column;
+}
