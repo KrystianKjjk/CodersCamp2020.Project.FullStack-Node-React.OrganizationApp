@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
+import UButton from '../UButton';
 import Table from '../ReusableTable';
 import { Button, Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, User } from '../../models';
@@ -54,7 +55,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
                   <span>{teamInfo.mentor.name} {teamInfo.mentor.surname}</span>
-                  <Button>Change</Button>
+                  <UButton text="Change" color="primary" onClick={() => 1}/>
                 </li>
                 <li className={styles.teamInfoRow}>
                   <span>Average grade:</span>
