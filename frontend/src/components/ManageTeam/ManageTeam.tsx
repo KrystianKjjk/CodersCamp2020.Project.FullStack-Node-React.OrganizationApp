@@ -40,10 +40,10 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
     <>
       {
         loading === 'loading' ? <p>...Loading</p> :
-        (<Container className={styles.manageTeams} aria-label='Manage Teams'>
+        teamInfo && (<Container className={styles.manageTeams} aria-label='Manage Teams'>
           <CssBaseline />
           <Paper className={styles.mainHeader}>
-            <h2><Link href="/teams" color="inherit">Teams</Link>/{teamId}</h2>
+            <h2><Link href="/teams" color="inherit">Teams</Link> / <span className={styles.teamId}>{teamId}</span></h2>
           </Paper>
           <Paper className={styles.container}>
             <Container className={styles.manageHeader}>
