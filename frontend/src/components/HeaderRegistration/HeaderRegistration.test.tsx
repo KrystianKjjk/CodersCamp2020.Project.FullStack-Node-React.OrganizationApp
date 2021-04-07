@@ -6,5 +6,6 @@ describe("HeaderRegistration", () => {
   it("should render header registration", () => {
    const {container}= render(<HeaderRegistration />);
     expect(container).toMatchSnapshot()
+    
   });
 });
