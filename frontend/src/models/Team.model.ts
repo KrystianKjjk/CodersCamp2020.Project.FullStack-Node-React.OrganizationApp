@@ -24,8 +24,9 @@ export interface Team {
 export interface TeamInfo {
     id: string;
     mentor: {
-      name: string;
-      surname: string;
+        id: string;
+        name: string;
+        surname: string;
     };
     users: User[];
     projects: TeamProject[];

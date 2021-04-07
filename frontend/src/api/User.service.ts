@@ -1,5 +1,5 @@
 import BaseService from '../app/baseService';
-import { userStatusDict, userTypeDict, User, UserData } from '../models/User.model';
+import { userStatusDict, userTypeDict, User, UserData, UserType } from '../models/User.model';
 
 
 export default class UserService {
@@ -14,5 +14,10 @@ export default class UserService {
             type: userTypeDict[user.type],
             status: userStatusDict[user.status],
         }) );
+    }
+
+    getMentors = async (): Promise<User[]> => {
+        const users = await this.getUsers();
+        return users.filter((user: User) => user.type === 'Mentor');
     }
 }

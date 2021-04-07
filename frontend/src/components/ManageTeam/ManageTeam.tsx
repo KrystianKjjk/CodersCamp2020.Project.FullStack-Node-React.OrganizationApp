@@ -3,7 +3,8 @@ import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
-import { Button, Container, CssBaseline, Link, Paper } from '@material-ui/core';
+import FindMentor from '../FindMentor';
+import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, User } from '../../models';
 
 
@@ -18,6 +19,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [teamInfo, setTeamInfo] = useState<TeamInfo>();
   const [teamMembers, setTeamMembers] = useState<User[]>();
+  const [openMentorsModal, setOpenMentorsModal] = useState<Boolean>(false);
 
   useEffect(() => {
     getTeamInfo(teamId)
@@ -26,10 +28,19 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
         setTeamMembers(team.users);
       });
   }, [teamId]);
+
   useEffect(() => {
     if(teamMembers && teamInfo) setLoading('idle');
   }, [teamInfo, teamMembers])
   
+  const handleMentorSelection = (id: string, name: string, surname: string) => {
+    setOpenMentorsModal(false);
+    setTeamInfo({ 
+      ...teamInfo as TeamInfo,
+      mentor: { id, name, surname },
+    });
+  };
+
   const columns = [
     {field: 'surname', headerName: 'Last name', width: 150, sortable: true},
     {field: 'name', headerName: 'First name', width: 150, sortable: true},
@@ -51,11 +62,12 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
               <h2>Manage Team</h2>
             </Container>
             <div>
+            { openMentorsModal && (<FindMentor onMentorSelection={handleMentorSelection}/>)}
               <ul className={styles.teamInfo}>
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
                   <span>{teamInfo.mentor.name} {teamInfo.mentor.surname}</span>
-                  <UButton text="Change" color="primary" onClick={() => 1}/>
+                  <UButton text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
                 <li className={styles.teamInfoRow}>
                   <span>Average grade:</span>
