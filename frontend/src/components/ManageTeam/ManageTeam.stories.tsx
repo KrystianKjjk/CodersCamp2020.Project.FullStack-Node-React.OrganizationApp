@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ManageTeam , { ManageTeamProps } from './ManageTeam';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import getTeam from '../../api/getTeam';
+import { TeamService } from '../../api';
 import darkTheme from '../../theme/customMaterialTheme';
 import { ThemeProvider } from '@material-ui/styles';
 
@@ -51,10 +51,11 @@ SampleFakeManageTeam.args = {
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTY4NzIzNTcsImV4cCI6MTYxNjk1ODc1N30.RX1EzN6tHmdMFhDWtm6TmQPFzML6min3e_11RH3B6GA';
 localStorage.setItem('token', token);
+const api = new TeamService();
 
 export const SampleManageTeam = Template.bind({});
 SampleManageTeam.args = {
   teamId: '6041184b4864b56a243b20bf',
-  getTeamInfo: getTeam,
+  getTeamInfo: (id: string) => api.getTeam(id),
   onClickAdd: () => console.log('Clicked Add'),
 };

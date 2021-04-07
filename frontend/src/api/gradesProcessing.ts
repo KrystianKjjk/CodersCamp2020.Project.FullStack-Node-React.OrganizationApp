@@ -1,5 +1,4 @@
-import { User } from './getUsers';
-import { Grades, GradeSheetData } from './getMentorSheets'
+import { UserData, Grades, GradeSheetData } from '../models';
 
 
 const sum = (numbers: number[]) => numbers.reduce((acc, x) => acc + x, 0);
@@ -8,7 +7,7 @@ const sumPoints = (grades: Grades) => [sum( Object.values(grades) ), (Object.val
 export function calcProjectGrade(sheet: GradeSheetData) {
     const mentorPoints = sumPoints(sheet.mentorGrades);
     let [points, maxPoints] = mentorPoints;
-    sheet.mentorReviewerGrades.map(reviewer => {
+    sheet.mentorReviewerGrades.forEach(reviewer => {
         const [revPooints, revMaxPoints] = sumPoints(reviewer.grades);
         points += revPooints;
         maxPoints += revMaxPoints;
@@ -26,7 +25,7 @@ export function calcUserProjectGrade(sheet: GradeSheetData, userId: string) {
     return [points, max];
 }
 
-export function calcUserTasksGrade(user: User) {
+export function calcUserTasksGrade(user: UserData) {
     let [points, maxPoints] = [0, 0];
     user.grades.forEach(grade => {
         if(grade.taskPoints && grade.taskMaxPoints){
@@ -37,7 +36,7 @@ export function calcUserTasksGrade(user: User) {
     return [points, maxPoints];
 }
 
-export function calcUserTestsGrade(user: User) {
+export function calcUserTestsGrade(user: UserData) {
     let [points, maxPoints] = [0, 0];
     user.grades.forEach(grade => {
         if(grade.testPoints && grade.testMaxPoints){

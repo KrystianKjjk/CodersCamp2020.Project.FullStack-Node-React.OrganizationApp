@@ -11,20 +11,33 @@ export enum UserStatus {
     Archived,
 };
 
+export interface Grade {
+    _id: string;
+    sectionId?: string;
+    testPoints?: number;
+    testMaxPoints?: number;
+    taskPoints?: number;
+    taskMaxPoints?: number;
+    projectPoints?: number;
+}
+
 export interface UserData {
     _id: string;
     name: string;
     surname: string;
     status: UserStatus;
     type: UserType;
+    grades: Grade[];
 }
 
 export interface User {
     id: string;
     name: string;
     surname: string;
-    status: string;
-    type: string;
+    status?: string;
+    type?: string;
+    averageGrade?: number;
+    maxGrade?: number;
 }
 
 export const userStatusDict = {

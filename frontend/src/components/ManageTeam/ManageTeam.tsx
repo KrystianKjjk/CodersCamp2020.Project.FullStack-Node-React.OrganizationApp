@@ -2,38 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import Table from '../ReusableTable';
-import { useAppDispatch } from '../../app/hooks';
 import { Button, Container, CssBaseline, Link, Paper } from '@material-ui/core';
+import { TeamInfo, User } from '../../models';
 
 
-interface Project {
-  name: string;
-  overallGrade: number;
-  sectionName: string;
-  url: string;
-  description: string;
-};
-
-export interface User {
-  id: string;
-  name: string;
-  surname: string;
-  status: string;
-  averageGrade: number;
-  maxGrade: number;
-};
-
-export interface TeamInfo {
-  id: string;
-  mentor: {
-    name: string;
-    surname: string;
-  };
-  users: User[];
-  projects: Project[];
-  teamAvgGrade: number;
-  maxPoints: number;
-}
 export interface ManageTeamProps {
   teamId: string;
   getTeamInfo: (id: string) => Promise<TeamInfo>;
@@ -42,7 +14,6 @@ export interface ManageTeamProps {
 
 const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickAdd }) => {
 
-  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [teamInfo, setTeamInfo] = useState<TeamInfo>();
   const [teamMembers, setTeamMembers] = useState<User[]>();
