@@ -94,6 +94,9 @@ function Mentor() {
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
         </PrivateRoute>
+        <PrivateRoute path="/myprofile">
+          <MyProfile />
+        </PrivateRoute>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -115,6 +118,9 @@ function User() {
         </PrivateRoute>
         <PrivateRoute path="/team">
           <Projects />
+        </PrivateRoute>
+        <PrivateRoute path="/myprofile">
+          <MyProfile />
         </PrivateRoute>
         <Route exact path="/">
           <Redirect to="/home" />
