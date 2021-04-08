@@ -41,6 +41,12 @@ export default class SectionService {
         };
        
     }
+
+    patchSection  = async (id: string, data: any) => {
+        console.log(data);
+        // const section = (await this.api.put(`/sections/${id}`, data)).data as SectionData;
+       
+    }
 }
 
 
