@@ -40,6 +40,7 @@ export default class TeamService {
         const teamInfo: TeamInfo = {
             id: team._id,
             mentor: {
+                id: team?.mentor?._id ?? '---',
                 name: team?.mentor?.name ?? '---',
                 surname: team?.mentor?.surname ?? '---',
             },
@@ -73,5 +74,12 @@ export default class TeamService {
         console.log(teamInfo);
         return teamInfo;
     };
+
+    setMentor = async (teamId: string, mentorId: string) => {
+        const reqBody = {
+            mentor: mentorId
+        }
+        await this.api.patch(`/teams/${teamId}`, reqBody);
+    }
 
 }

@@ -5,7 +5,8 @@ import UButton from '../UButton';
 import Table from '../ReusableTable';
 import FindMentor from '../FindMentor';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
-import { TeamInfo, User } from '../../models';
+import { TeamInfo, TeamProject, User } from '../../models';
+import { TeamService } from '../../api';
 
 
 export interface ManageTeamProps {
@@ -15,30 +16,35 @@ export interface ManageTeamProps {
 }
 
 const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickAdd }) => {
-
+  const api = new TeamService();
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
-  const [teamInfo, setTeamInfo] = useState<TeamInfo>();
+  const [mentor, setMentor] = useState<User>();
+  const [projects, setProjects] = useState<TeamProject[]>();
+  const [avgGrade, setAvgGrade] = useState<number>();
+  const [maxPoints, setMaxPoints] = useState<number>();
   const [teamMembers, setTeamMembers] = useState<User[]>();
   const [openMentorsModal, setOpenMentorsModal] = useState<Boolean>(false);
 
   useEffect(() => {
-    getTeamInfo(teamId)
+    api.getTeam(teamId)
       .then(team => {
-        setTeamInfo(team);
+        setMentor(team.mentor);
+        setProjects(team.projects);
+        setAvgGrade(team.teamAvgGrade);
+        setMaxPoints(team.maxPoints);
         setTeamMembers(team.users);
+        setLoading('idle')
       });
   }, [teamId]);
-
-  useEffect(() => {
-    if(teamMembers && teamInfo) setLoading('idle');
-  }, [teamInfo, teamMembers])
   
+  useEffect(() => {
+    if(mentor)
+      api.setMentor(teamId, mentor.id);
+  }, [mentor])
+
   const handleMentorSelection = (id: string, name: string, surname: string) => {
     setOpenMentorsModal(false);
-    setTeamInfo({ 
-      ...teamInfo as TeamInfo,
-      mentor: { id, name, surname },
-    });
+    setMentor({ id, name, surname });
   };
 
   const columns = [
@@ -52,7 +58,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
     <>
       {
         loading === 'loading' ? <p>...Loading</p> :
-        teamInfo && (<Container className={styles.manageTeams} aria-label='Manage Teams'>
+        mentor && (<Container className={styles.manageTeams} aria-label='Manage Teams'>
           <CssBaseline />
           <Paper className={styles.mainHeader}>
             <h2><Link href="/teams" color="inherit">Teams</Link> / <span className={styles.teamId}>{teamId}</span></h2>
@@ -66,12 +72,12 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
               <ul className={styles.teamInfo}>
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
-                  <span>{teamInfo.mentor.name} {teamInfo.mentor.surname}</span>
+                  <span>{mentor.name} {mentor.surname}</span>
                   <UButton text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
                 <li className={styles.teamInfoRow}>
                   <span>Average grade:</span>
-                  <span>{teamInfo.teamAvgGrade}%</span>
+                  <span>{avgGrade}%</span>
                 </li>
               </ul>
             </div>
