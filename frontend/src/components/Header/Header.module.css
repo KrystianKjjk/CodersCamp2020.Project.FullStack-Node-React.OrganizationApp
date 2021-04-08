@@ -26,6 +26,7 @@
     font-family: 'Roboto', sans-serif;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .logout span{
