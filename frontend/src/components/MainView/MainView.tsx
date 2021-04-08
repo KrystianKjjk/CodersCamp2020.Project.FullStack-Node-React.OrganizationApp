@@ -1,16 +1,39 @@
 import React from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
-import { Switch, Route, Redirect} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
+import { UserType } from '../../models/User.model'
 
 const MainView: React.FC = () => {
-  
+
+  const userData = getUserFromLocalStorage();
+
+  const MainContent = () => {
+    switch (parseInt(userData.userType)) {
+      case UserType.Admin:
+        return <Admin />
+      case UserType.Mentor:
+        return <Mentor />
+      default:
+        return <User />
+    }
+  }
+
+  return (
+    <div className={styles.mainContainer}>
+      {getUserFromLocalStorage().userType ? <MainContent /> : <LogIn />}
+    </div>
+  );
+};
+
+
+function Admin() {
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -46,15 +69,60 @@ const MainView: React.FC = () => {
           <ResetPassword />
         </Route>
         <PrivateRoute path="/home">
-          <HomePage/>
+          <HomePage />
         </PrivateRoute>
         <Route exact path="/">
-          {getUserFromLocalStorage().userType ? <Redirect to="/home" /> : <LogIn />}
+          <Redirect to="/home" />
         </Route>
       </Switch>
     </div>
-  );
-};
+  )
+}
+
+
+function Mentor() {
+  return (
+    <div className={styles.mainContainer}>
+      <Header />
+      <Switch>
+        <PrivateRoute path="/home">
+          <HomePage />
+        </PrivateRoute>
+        <PrivateRoute path="/team">
+          <Teams />
+        </PrivateRoute>
+        <PrivateRoute path="/gradesheets">
+          <Gradesheets />
+        </PrivateRoute>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+      </Switch>
+    </div>
+  )
+}
+
+function User() {
+  return (
+    <div className={styles.mainContainer}>
+      <Header />
+      <Switch>
+        <PrivateRoute path="/home">
+          <HomePage />
+        </PrivateRoute>
+        <PrivateRoute path="/grades">
+          <UserGrades />
+        </PrivateRoute>
+        <PrivateRoute path="/team">
+          <Projects />
+        </PrivateRoute>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+      </Switch>
+    </div>
+  )
+}
 
 function Users() {
   return <h2>Users</h2>
@@ -79,6 +147,9 @@ function Teams() {
 }
 function MyProfile() {
   return <h2>My profile</h2>;
+}
+function UserGrades() {
+  return <h2>My grades</h2>;
 }
 
 export default MainView;
