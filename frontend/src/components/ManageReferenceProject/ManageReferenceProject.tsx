@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import styles from './ManageReferenceProject.module.css';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Box, Breadcrumbs, Link, Snackbar, Typography} from "@material-ui/core";
 import UButton from "../UButton";
 import MuiAlert from '@material-ui/lab/Alert';
 import {ThemeProvider} from "@material-ui/styles";
 import {mainTheme} from "../../theme/customMaterialTheme";
 import EditableField from "../EditableField";
+import {addRefProject, deleteRefProject, updateRefProject} from "../ReferenceProjects/ReferenceProjectsSlice";
+import {useHistory} from "react-router-dom";
 
 export interface ManageReferenceProjectProps {
 }
@@ -16,6 +18,10 @@ function Alert(props: any) {
 }
 
 const ManageReferenceProject = (props: any) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+
   const projectID = props.match.params.projectID;
 
   const [isEdit, setIsEdit] = useState(false);
@@ -48,6 +54,7 @@ const ManageReferenceProject = (props: any) => {
     const target = event.target;
     const name = target.id;
     let value = target.value;
+    if (name === "sectionId") value = parseInt(value,10);
     // @ts-ignore
     setProject({
       ...project,
@@ -57,8 +64,20 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleSave() {
-
+    if(isAdding) {
+      dispatch(addRefProject(project));
+      setIsAdding(false);
+    }
+    else {
+      dispatch(updateRefProject(project));
+    }
     toggleEdit();
+  }
+
+  function handleDelete() {
+    dispatch(deleteRefProject(project._id));
+    if(isEdit) toggleEdit();
+    history.push('/projects');
   }
 
   return (
@@ -74,7 +93,7 @@ const ManageReferenceProject = (props: any) => {
               <UButton
                   text='DELETE'
                   color='secondary'
-                  onClick={()=>{}} />
+                  onClick={handleDelete} />
               {isEdit ? (
                   <UButton
                       text='SAVE'
@@ -101,9 +120,9 @@ const ManageReferenceProject = (props: any) => {
 
             <EditableField isEdit={isEdit}
                            fieldName={"Section name:"}
-                           fieldID={"sectionName"}
-                           fieldValue={project?.["Section name"]}
-                           placeholder={project?.["Section name"]}
+                           fieldID={"sectionId"}
+                           fieldValue={project?.sectionId}
+                           placeholder={project?.sectionId}
                            onChange={handleInputChange}
             />
 

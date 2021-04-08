@@ -29,6 +29,7 @@ const EditableField = (props: EditableFieldProps) => {
               <input type="text"
                      id={props.fieldID}
                      name={props.fieldName}
+                     value={props.fieldValue}
                      placeholder={props.placeholder}
                      onChange={props.onChange}/>
           ) : (

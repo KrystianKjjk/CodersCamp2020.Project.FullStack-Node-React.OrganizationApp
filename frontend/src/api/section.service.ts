@@ -4,7 +4,7 @@ export default class SectionService {
 
     endpoint: string = '';
 
-    constructor(private httpService: BaseService) {
+    constructor(private httpService: BaseService = new BaseService()) {
         this.endpoint = `section`
     };
 
