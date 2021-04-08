@@ -36,11 +36,14 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
         borderColor: "#FFFF00",
         outlineStyle: "solid",
         outlineColor: "#FFFF00",
+        backgroundColor: "#1C1C1C",
+        "&:hover": {
+          borderColor: "#FFFF00",
+          // cursor: "pointer",
+          // outlineStyle: "solid",
+          outlineColor: "#FFFF00",
       },
-      // "&:hover": {
-      //   backgroundColor: "#737373",
-      // }
-      // },
+    },
       name: {
         borderBottom: "1px solid #666666",
         padding: "5% 0",
@@ -76,11 +79,6 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
     setActiveCourse(course);
     setActiveCourseId(course._id);
   };
-
-  //posortowac kursy po pobraniu i dodac if ograniczajacy sie tylko do 1 renderowania , jak nie ma active course
-  //pierwszy kurs ma miec z automatu outline niebieski, pokazac sie w headerze, ma byc jako active course
-  //po kliknieciu w inny kafelek, ma sie zmieniac jego outline, ma byc w headerze, ma byc jako active, poprzedni active course musi
-  //juz nie byc active
 
   const boxClasses = isActive
     ? `${classes.box} ${classes.boxActive}`
