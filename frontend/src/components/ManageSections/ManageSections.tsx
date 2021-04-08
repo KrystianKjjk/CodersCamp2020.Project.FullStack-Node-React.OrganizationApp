@@ -12,6 +12,7 @@ import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import SectionService from '../../api/Section.service';
+import UButton from "../UButton";
 
 export interface ManageSectionsProps {
 
@@ -52,7 +53,11 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const history = useHistory();
 
   const handleRowClick = (data: {id: string | number}) => {
-    history.push(`/sections/${data.id}/edit`)
+    history.push(`/sections/${data.id}/edit`);
+  }
+
+  const handleAddClick = () => {
+    history.push('/sections/create');
   }
 
   const sortByOptions = ['name', 'startDate', 'endDate', 'courseName'];
@@ -76,7 +81,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sections</h2>
           <span onClick={undefined} className={styles.addButton} aria-label='Add section'>
-            <AddButton text='Add'/>
+          <UButton text='ADD' color='primary' onClick={handleAddClick}/>
           </span>
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>

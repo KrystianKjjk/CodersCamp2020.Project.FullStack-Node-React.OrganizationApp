@@ -28,11 +28,10 @@
     display: grid;
     grid-template-areas:    "mainHeader sortBy addBtn";
     border-bottom: gray 1px solid;
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 .addButton {
     grid-area: addBtn;
-    justify-self: end;
     align-self: center;
 }
 .selectSortBy {
