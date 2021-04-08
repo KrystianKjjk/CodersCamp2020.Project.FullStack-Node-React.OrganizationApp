@@ -3,62 +3,49 @@ import { Backdrop, CssBaseline, Fade, Modal } from "@material-ui/core";
 
 import ReusableTable from "../ReusableTable";
 import SearchInput from "../SearchInput";
+import { selectTables, searchData } from '../ReusableTable/ReusableTableSlice';
 
 import styles from './FindModal.module.css';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export interface FindModalProps<T> {
     onRowSelection: any,
-    dataPromise: Promise<T[]>,
+    getData: () => Promise<T[]>,
     columns: {field: string, width:number, fieldName?: string}[],
+    searchPlaceholder?: string,
+    searchBy: keyof T,
+    name: string;
+    open: boolean;
+    handleClose: () => void;
+    handleOpen: () => void;
 }
 
 const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
-
-    const [open, setOpen] = React.useState(false);
-    const [isUpdate, setIsUpdate] = React.useState(true);
+    const dispatch = useAppDispatch();
+    const tables = useAppSelector(selectTables);
     const [search, setSearch] = useState('');
-    const [data, setData] = useState<T[]>([]);
-    const [filteredData, setFilteredData] = useState<T[]>([]);
 
     useEffect(() => {
-        props.dataPromise
-            .then((res: T[]) => {
-                setData([...res]);
-                setFilteredData([...res]);
-                handleOpen();
-            })
-            .catch(err => {
-            })
+        props.handleOpen();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     useEffect(() => {
-        const result = data.filter((mentor: any) => {
-            return mentor.name.match(search);
-        })
-        setIsUpdate(false);
-        setFilteredData([...result]);
+        dispatch(searchData({
+            table: props.name,
+            column: `${props.searchBy}`,
+            search,
+        }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
-
-    useEffect(() => {
-        setIsUpdate(true);
-    },[filteredData]);
 
     function onSearch(name: string) {
         setSearch(name);
     }
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-    };
-
     function handleRowClick(params: any, e: any) {
         props.onRowSelection(params.row);
-        handleClose();
+        props.handleClose();
     }
 
     return (
@@ -68,37 +55,35 @@ const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={styles.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
+                open={props.open}
+                onClose={props.handleClose}
+                closeAfterTransition={true}
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
                 
-                <Fade in={open}>
+                <Fade in={props.open}>
                     <div className={styles.container}>
                         <div className={styles.container__header}>
-                            <span>Find Mentor</span>
+                            <span>{props.name}</span>
                         </div>
 
                         <div className={styles.container__body}>
                             <div className={styles.container__body__search}>
                                 <SearchInput
                                     onSubmit={onSearch}
-                                    placeholder='Search by surname'
+                                    placeholder={props.searchPlaceholder ?? ''}
                                 />
                             </div>
                             <div className={styles.container__body__table}>
-                                {isUpdate &&
-                                    (<ReusableTable
-                                        name=""
-                                        getData={() => Promise.resolve(data)}
-                                        columns={props.columns}
-                                        onRowClick={handleRowClick}
-                                    />)
-                                }
+                                <ReusableTable
+                                    name={props.name}
+                                    getData={props.getData}
+                                    columns={props.columns}
+                                    onRowClick={handleRowClick}
+                                />
                             </div>
                         </div>
                     </div>

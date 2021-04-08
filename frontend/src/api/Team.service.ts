@@ -18,12 +18,13 @@ export default class TeamService {
         const courses = coursesRes.data as CourseData[];
         let allTeams: Team[] = [];
         for (let i in courses) {
-            const teams = (await this.api.get('/teams')).data as TeamData[];
+            const teams = (await this.api.get(`courses/${courses[i]._id}/teams`)).data as TeamData[];
             const newData = teams.map( team => ({
                 id: team._id,
                 name: team?.mentor?.name ?? '---',
                 surname: team?.mentor?.surname ?? '---',
                 courseName: courses[i].name,
+                users: team.users,
             }) );
             allTeams = allTeams.concat(newData);
         }

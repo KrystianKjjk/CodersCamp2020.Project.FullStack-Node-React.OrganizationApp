@@ -15,16 +15,17 @@ export interface ManageTeamProps {
   onClickAdd: () => void;
 }
 
-const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickAdd }) => {
+const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
   const api = new TeamService();
   const usersApi = new UserService();
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
-  const [projects, setProjects] = useState<TeamProject[]>();
+  const [projects, setProjects] = useState<TeamProject[]>([]);
   const [avgGrade, setAvgGrade] = useState<number>();
   const [maxPoints, setMaxPoints] = useState<number>();
-  const [teamMembers, setTeamMembers] = useState<User[]>();
-  const [openMentorsModal, setOpenMentorsModal] = useState<Boolean>(false);
+  const [teamMembers, setTeamMembers] = useState<User[]>([]);
+  const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
+  const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
 
   useEffect(() => {
     api.getTeam(teamId)
@@ -37,18 +38,21 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
         setLoading('idle')
       });
   }, [teamId]);
-  
-  useEffect(() => {
-    if(mentor)
-      api.setMentor(teamId, mentor.id);
-  }, [mentor])
 
   const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false);
+    api.setMentor(teamId, row.id);
     setMentor({ 
       id: row.id, 
       name: row.name, 
       surname: row.surname });
+  };
+
+  const handleUserSelection = (row: User) => {
+    setOpenUsersModal(false);
+    //api.
+    console.log(row);
+    setTeamMembers([...teamMembers, row]);
   };
 
   const columns = [
@@ -76,7 +80,20 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
               <h2>Manage Team</h2>
             </Container>
             <div>
-            { openMentorsModal && (<FindModal onRowSelection={handleMentorSelection} dataPromise={usersApi.getMentors()} columns={mentorColumns}/>)}
+            { 
+              openMentorsModal && 
+              <FindModal<User> 
+                onRowSelection={handleMentorSelection} 
+                getData={() => usersApi.getUsersOfType('Mentor')} 
+                columns={mentorColumns}
+                searchPlaceholder='Search by surname'
+                searchBy='surname'
+                name='Find mentor'
+                open={openMentorsModal}
+                handleClose={() => setOpenMentorsModal(false)}
+                handleOpen={() => setOpenMentorsModal(true)}
+              />
+            }
               <ul className={styles.teamInfo}>
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
@@ -92,10 +109,27 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
           </Paper>
           <Paper className={styles.container}>
             <div className={styles.manageContainer}>
+              { 
+                openUsersModal && 
+                <FindModal<User> 
+                  onRowSelection={handleUserSelection} 
+                  getData={() => usersApi.getParticipantsNotInTeam()} 
+                  columns={mentorColumns}
+                  searchPlaceholder='Search by surname'
+                  searchBy='surname'
+                  name="Find participant"
+                  open={openUsersModal}
+                  handleClose={() => setOpenUsersModal(false)}
+                  handleOpen={() => setOpenUsersModal(true)}
+                />
+              }
               <h2 className={styles.manageHeader}>Users</h2>
-              <span onClick={onClickAdd} className={styles.addButton} aria-label='Add user'>
-                <AddButton text='Add'/>
-              </span>
+              <AddButton 
+                className={styles.addButton} 
+                aria-label='Add user' 
+                text='Add'
+                onClick={() => setOpenUsersModal(true)}
+              />
             </div>
             <div className={styles.table}>
               <Table name='Team' columns={columns} getData={() => Promise.resolve(teamMembers as User[])}/>

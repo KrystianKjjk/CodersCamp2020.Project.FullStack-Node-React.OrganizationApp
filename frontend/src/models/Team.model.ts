@@ -19,6 +19,7 @@ export interface Team {
     name: string;
     surname: string;
     courseName: string;
+    users?: UserData[];
 }
 
 export interface TeamInfo {

@@ -15,7 +15,12 @@ describe('FindModal', () => {
       const dataPromise = Promise.resolve([{id: '1'}]);
       render(
          <Provider store={store}>
-            <FindModal<ITest> onRowSelection={onSelection} columns={columns} dataPromise={dataPromise}/>
+            <FindModal<ITest> 
+               onRowSelection={onSelection}
+               columns={columns}
+               dataPromise={dataPromise}
+               searchBy='id'
+            />
          </Provider>
       );
    });
