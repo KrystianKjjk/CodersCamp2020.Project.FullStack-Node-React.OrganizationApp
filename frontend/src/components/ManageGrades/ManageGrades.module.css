@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+.error {
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  margin: 5rem auto;
+  color: #ff384a;
+}
+
+.loading {
+  margin: 5rem auto;
+}
+
+.container {
+  background: #1c1c1c;
+  margin: 1rem 0;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header {
+  justify-content: space-between;
+  padding: 1rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+}
+.container__header span {
+  font-weight: 500;
+  align-self: center;
+}
+
+.gradeContainer {
+  background: #1c1c1c;
+  margin: 1rem auto;
+  padding-bottom: 1rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+  flex-basis: 20rem;
+}
+.gradeContainer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 1rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+  height: 2rem;
+}
+.gradeContainer__header span {
+  font-weight: 500;
+}
+.gradeContainer__body {
+  margin: 1rem 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: left;
+}
+.gradeContainer__body__row {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+}
+.gradeContainer__body__row__key {
+  flex: 2;
+}
+.gradeContainer__body__row__value div {
+  margin: 0.3rem 0;
+  font-weight: 300;
+  flex: 4;
+  display: flex;
+}
+.gradeContainer__body__row__value div input {
+  padding: 0.7rem 1rem;
+  width: 2rem;
+  margin: 0.5rem;
+  background: #1c1c1c;
+  color: #fff;
+  border: rgba(255, 255, 255, 0.87) 1px solid;
+  border-radius: 0.4rem;
+}
+.gradeContainer__body__row__value div input:focus {
+  outline: none;
+  border: #fff 1px solid;
+}
+.gradeContainer__body__row__value div p {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+}

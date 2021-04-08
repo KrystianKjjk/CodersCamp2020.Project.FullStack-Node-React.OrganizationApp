@@ -1,13 +1,20 @@
 import React from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect} from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+
+import LogIn from "../LogIn";
+import RegistrationView from "../Registration";
+import ResetPassword from "../ResetPassword";
+import { getUserFromLocalStorage } from "../../app/utils";
+
 import ReferenceProjects from "../ReferenceProjects";
 import ManageReferenceProject from "../ManageReferenceProject";
 
 const MainView: React.FC = () => {
+  
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -43,20 +50,25 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/myprofile">
           <MyProfile />
         </PrivateRoute>
-        <Route path="/login">
-          <Login />
-        </Route>
         <Route path="/registration">
-          <Registration />
+          <RegistrationView />
         </Route>
-        <PrivateRoute path="/"><HomePage/></PrivateRoute>
+        <Route path="/resetpassword">
+          <ResetPassword />
+        </Route>
+        <PrivateRoute path="/home">
+          <HomePage/>
+        </PrivateRoute>
+        <Route exact path="/">
+          {getUserFromLocalStorage().userType ? <Redirect to="/home" /> : <LogIn />}
+        </Route>
       </Switch>
     </div>
   );
 };
 
 function Users() {
-  return <h2>Users</h2>;
+  return <h2>Users</h2>
 }
 function Courses() {
   return <h2>Courses</h2>;
@@ -78,12 +90,6 @@ function Teams() {
 }
 function MyProfile() {
   return <h2>My profile</h2>;
-}
-function Login() {
-  return <h2>Log in</h2>;
-}
-function Registration() {
-  return <h2>Registration</h2>;
 }
 
 export default MainView;

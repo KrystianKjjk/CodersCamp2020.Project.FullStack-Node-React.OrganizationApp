@@ -3,7 +3,6 @@ import styles from './SearchInput.module.css';
 import { InputAdornment, IconButton, FormControl, OutlinedInput } from '@material-ui/core';
 import { ArrowForwardOutlined, SearchRounded } from '@material-ui/icons';
 
-
 export interface SearchInputProps {
   onSubmit: (value: string) => void;
   placeholder: string;
@@ -22,9 +21,10 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
   }
   useEffect(() => {
     onSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   return (
-    <FormControl variant="outlined">
+    <FormControl variant="outlined" className={styles.searchInput}>
       <OutlinedInput
         inputRef={inputRef}
         placeholder={placeholder}

@@ -35,9 +35,11 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   const tables = useAppSelector(selectTables);
   const dispatch = useAppDispatch();
   const [tableName] = useState(name);
+
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -45,13 +47,11 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
         ( !tables[tableName] || tables[tableName].loading !== 'idle' ) ? (<p>Loading...</p>) :
         (
           <div className={styles.container} aria-label={'Table - ' + tableName}>
-            {name}
             <DataGrid
-              rows={tables[tableName].rows}
+              rows={tables[tableName].displayedRows}
               columns={columns}
               pageSize={5}
               autoHeight
-              checkboxSelection
               disableSelectionOnClick={true}
               onRowClick={onRowClick}
             />

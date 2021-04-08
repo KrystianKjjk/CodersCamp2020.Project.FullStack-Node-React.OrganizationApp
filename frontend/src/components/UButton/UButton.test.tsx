@@ -9,7 +9,7 @@ describe('UButton', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <UButton name='UButton'/>
+            <UButton text='UButton' color='primary' onClick={()=>{}}/>
          </Provider>
       );
    });
