@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
-import {fetchCourse} from './CourseClient';
+import {fetchCourse, updateCourse} from './CourseClient';
 
 export interface Course extends CourseCreateObject {
   _id: string;
@@ -26,6 +26,11 @@ export const fetchCourseAsync = (courseId: string): AppThunk => async dispatch =
   dispatch(setCourse(course)); 
 }
 
+export const updateCourseAsync = (course:Course):AppThunk=> dispatch=>{
+return updateCourse(course);
+}
+
+
 export const courseSlice = createSlice({
   name: "course",
   initialState,
@@ -37,8 +42,5 @@ export const courseSlice = createSlice({
 });
 
 export const {setCourse} = courseSlice.actions;
-
-// if you want, add selectors here, change the one below, remember to register reducer in store.ts
-// export const selectCourse = (state: RootState) => state.course.value;
 
 export default courseSlice.reducer;

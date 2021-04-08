@@ -120,7 +120,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
       description: description,
       startDate: startDate!,
       endDate: endDate!,
-    };
+    }; 
     
     createCourse(course).then((response: any) => {
       const createdCourse: Course = response.data;

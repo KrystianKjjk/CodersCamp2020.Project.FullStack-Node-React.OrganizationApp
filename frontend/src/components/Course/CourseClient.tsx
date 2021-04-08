@@ -1,4 +1,4 @@
-import { CourseCreateObject } from "./CourseDetailsSlice";
+import { Course, CourseCreateObject } from "./CourseDetailsSlice";
 const axios = require("axios");
 
 export interface CourseListElementDto {
@@ -20,6 +20,15 @@ export const createCourse = (course: CourseCreateObject) => {
   // return axios.post('localhost:5000/api/courses', {course}, config);
   return axios.post(
     "https://coders-camp-organization-app.herokuapp.com/api/courses",
+    course,
+    config
+  );
+};
+
+export const updateCourse = (course: Course) => {
+  // return axios.post('localhost:5000/api/courses', {course}, config);
+  return axios.put(
+    "https://coders-camp-organization-app.herokuapp.com/api/courses/"+course._id,
     course,
     config
   );

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Button, Box } from "@material-ui/core";
-import { CourseListElementModel } from "../CourseList/CourseListSlice";
+import { CourseListElementModel } from "./CourseListSlice";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { deleteCourseAsync } from "../CourseList/CourseListSlice";
+import { deleteCourseAsync } from "./CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { setActiveCourse } from "../../app/ActiveCourse";
 
