@@ -23,6 +23,11 @@ const initialState: CourseListState = {
 };
 
 export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
+  const courses=await fetchCoursesAndSort();
+  dispatch(setCourses(courses));
+};
+
+export const fetchCoursesAndSort=async ()=>{
   const response = await fetchCourses();
   const coursesDto: CourseListElementDto[] = response.data;
   const courses: CourseListElementModel[] = coursesDto.map((courseDto) => {
@@ -40,15 +45,8 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
     var courseListElementStartDate2 = courseListElement2.startDate.getTime();
     return courseListElementStartDate2 - courseListElementStartDate1;
   });
-  const activeCourse=getActiveCourse();
-  if(!activeCourse){
-    const mostRecentCourse=courses[0];
-    setActiveCourse(mostRecentCourse);
-  }
-  console.log(activeCourse);
-  dispatch(setCourses(courses));
-};
-
+  return courses;
+}
 
 export const deleteCourseAsync = (courseId: string): AppThunk => async (
   dispatch

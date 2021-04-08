@@ -8,7 +8,9 @@ const Header: React.FC= () => {
   return (
     <div className={styles.header}>
         <div className={styles.logo}><span>.</span>Coders<span>Camp</span></div>
-        <div className={styles.logout}><div>Active course: {activeCourse?.name} </div><PowerSettingsNewIcon style={{color:"rgba(255, 255, 255, 0.6)"}}></PowerSettingsNewIcon><span> Log out</span></div>
+        <div className={styles.logout}>
+          {/* <div>Active course: {activeCourse?.name} </div> */}
+          <PowerSettingsNewIcon style={{color:"rgba(255, 255, 255, 0.6)"}}></PowerSettingsNewIcon><span> Log out</span></div>
     </div>
    );
 };

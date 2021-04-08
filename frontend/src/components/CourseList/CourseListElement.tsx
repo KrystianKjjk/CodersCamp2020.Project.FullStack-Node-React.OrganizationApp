@@ -9,9 +9,15 @@ import { setActiveCourse } from "../../app/ActiveCourse";
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
+  isActive: boolean;
+  setActiveCourseId: (activeCourseId: string) => void;
 }
 
-const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
+const CourseListElement: React.FC<CourseListElementProps> = ({
+  course,
+  isActive,
+  setActiveCourseId,
+}) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       box: {
@@ -25,6 +31,11 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
           outlineStyle: "solid",
           outlineColor: "#2196F3",
         },
+      },
+      boxActive: {
+        borderColor: "#FFFF00",
+        outlineStyle: "solid",
+        outlineColor: "#FFFF00",
       },
       // "&:hover": {
       //   backgroundColor: "#737373",
@@ -63,6 +74,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
 
   const handleCourseClick = () => {
     setActiveCourse(course);
+    setActiveCourseId(course._id);
   };
 
   //posortowac kursy po pobraniu i dodac if ograniczajacy sie tylko do 1 renderowania , jak nie ma active course
@@ -70,8 +82,12 @@ const CourseListElement: React.FC<CourseListElementProps> = ({ course }) => {
   //po kliknieciu w inny kafelek, ma sie zmieniac jego outline, ma byc w headerze, ma byc jako active, poprzedni active course musi
   //juz nie byc active
 
+  const boxClasses = isActive
+    ? `${classes.box} ${classes.boxActive}`
+    : classes.box;
+
   return (
-    <div className={classes.box} onClick={handleCourseClick}>
+    <div className={boxClasses} onClick={handleCourseClick}>
       <div className={classes.name}>{course.name}</div>
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
