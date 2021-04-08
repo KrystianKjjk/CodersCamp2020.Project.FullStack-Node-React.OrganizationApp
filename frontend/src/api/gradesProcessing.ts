@@ -8,6 +8,7 @@ export function calcProjectGrade(sheet: GradeSheetData) {
     const mentorPoints = sumPoints(sheet.mentorGrades);
     let [points, maxPoints] = mentorPoints;
     sheet.mentorReviewerGrades.forEach(reviewer => {
+        if (!reviewer.grades) return;
         const [revPooints, revMaxPoints] = sumPoints(reviewer.grades);
         points += revPooints;
         maxPoints += revMaxPoints;

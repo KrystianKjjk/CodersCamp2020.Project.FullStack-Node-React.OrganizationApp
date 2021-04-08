@@ -3,10 +3,10 @@ import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
-import FindMentor from '../FindMentor';
+import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, TeamProject, User } from '../../models';
-import { TeamService } from '../../api';
+import { TeamService, UserService } from '../../api';
 
 
 export interface ManageTeamProps {
@@ -17,6 +17,7 @@ export interface ManageTeamProps {
 
 const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickAdd }) => {
   const api = new TeamService();
+  const usersApi = new UserService();
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
   const [projects, setProjects] = useState<TeamProject[]>();
@@ -42,9 +43,12 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
       api.setMentor(teamId, mentor.id);
   }, [mentor])
 
-  const handleMentorSelection = (id: string, name: string, surname: string) => {
+  const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false);
-    setMentor({ id, name, surname });
+    setMentor({ 
+      id: row.id, 
+      name: row.name, 
+      surname: row.surname });
   };
 
   const columns = [
@@ -53,6 +57,10 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
     {field: 'averageGrade', headerName: 'Average grade', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
   ]
+  const mentorColumns = [
+    {field: 'name', width: 270},
+    {field: 'surname', width: 250},
+  ];
   
   return (
     <>
@@ -68,7 +76,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, getTeamInfo, onClickA
               <h2>Manage Team</h2>
             </Container>
             <div>
-            { openMentorsModal && (<FindMentor onMentorSelection={handleMentorSelection}/>)}
+            { openMentorsModal && (<FindModal onRowSelection={handleMentorSelection} dataPromise={usersApi.getMentors()} columns={mentorColumns}/>)}
               <ul className={styles.teamInfo}>
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
