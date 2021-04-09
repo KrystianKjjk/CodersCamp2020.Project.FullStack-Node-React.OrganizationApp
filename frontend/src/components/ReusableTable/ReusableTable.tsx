@@ -1,5 +1,5 @@
-import React, { useEffect, MouseEvent, useState } from 'react';
-import { DataGrid, DataGridProps, GridRowParams } from '@material-ui/data-grid';
+import React, { useEffect, useState } from 'react';
+import { DataGrid, DataGridProps } from '@material-ui/data-grid';
 import styles from './ReusableTable.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { 
@@ -39,7 +39,6 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
   }, [getData]);
 
   return (

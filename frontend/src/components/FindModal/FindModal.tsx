@@ -3,10 +3,10 @@ import { Backdrop, CssBaseline, Fade, Modal } from "@material-ui/core";
 
 import ReusableTable from "../ReusableTable";
 import SearchInput from "../SearchInput";
-import { selectTables, searchData } from '../ReusableTable/ReusableTableSlice';
+import { searchData } from '../ReusableTable/ReusableTableSlice';
 
 import styles from './FindModal.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 
 export interface FindModalProps<T> {
     onRowSelection: any,
@@ -22,7 +22,6 @@ export interface FindModalProps<T> {
 
 const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
     const dispatch = useAppDispatch();
-    const tables = useAppSelector(selectTables);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
