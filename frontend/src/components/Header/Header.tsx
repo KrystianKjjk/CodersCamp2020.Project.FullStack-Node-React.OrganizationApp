@@ -4,7 +4,11 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import {removeUserFromLocalStorage} from '../../app/utils'
 import { useHistory } from 'react-router-dom';
 
-const Header: React.FC= () => {
+interface HeaderProps {
+  onLogout?: Function
+}
+
+const Header = (props: HeaderProps) => {
 
   const handleLogOut = () => {
     removeUserFromLocalStorage();
@@ -23,6 +27,7 @@ const Header: React.FC= () => {
         <div className={styles.logout} onClick={() => {
           handleLogOut();
           routeChange();
+          if (props.onLogout) props.onLogout();
         }
         }><PowerSettingsNewIcon style={{color:"rgba(255, 255, 255, 0.6)"}}></PowerSettingsNewIcon><span> Log out</span></div>
     </div>

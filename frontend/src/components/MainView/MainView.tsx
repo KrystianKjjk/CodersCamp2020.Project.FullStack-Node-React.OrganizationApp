@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -10,15 +10,21 @@ import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
 
+interface LoggedInViewProps {
+  onLogout?: Function
+}
+
 const MainView: React.FC = () => {
+  const [isLogged, setIsLogged] = useState(false);
 
   const userData = getUserFromLocalStorage();
 
   const MainContent = () => {
+    if( !(userData.userType) ) return <LogIn onLogin={() => setIsLogged(true)}/>;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
       case UserType.Admin:
-        return <Admin />
+        return <Admin onLogout={() => setIsLogged(false)}/>
       case UserType.Mentor:
         return <Mentor />
       default:
@@ -28,17 +34,17 @@ const MainView: React.FC = () => {
 
   return (
     <div className={styles.mainContainer}>
-      {getUserFromLocalStorage().userType ? <MainContent /> : <LogIn />}
+      <MainContent/>
     </div>
   );
 };
 
 
 
-function Admin() {
+function Admin(props: LoggedInViewProps) {
   return (
-    <div className={styles.mainContainer}>
-      <Header />
+    <div className={styles.mainContainer} >
+      <Header onLogout={props.onLogout}/>
       <Switch>
         <PrivateRoute path="/users">
           <Users />
@@ -64,17 +70,11 @@ function Admin() {
         <PrivateRoute path="/myprofile">
           <MyProfile />
         </PrivateRoute>
-        <Route path="/registration">
-          <RegistrationView />
-        </Route>
-        <Route path="/resetpassword">
-          <ResetPassword />
-        </Route>
         <PrivateRoute path="/home">
           <HomePage />
         </PrivateRoute>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/" />
         </Route>
       </Switch>
     </div>
@@ -82,10 +82,10 @@ function Admin() {
 }
 
 
-function Mentor() {
+function Mentor(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
-      <Header />
+      <Header onLogout={props.onLogout}/>
       <Switch>
         <PrivateRoute path="/home">
           <HomePage />
@@ -107,10 +107,10 @@ function Mentor() {
   )
 }
 
-function User() {
+function User(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
-      <Header />
+      <Header onLogout={props.onLogout}/>
       <Switch>
         <PrivateRoute path="/home">
           <HomePage />
