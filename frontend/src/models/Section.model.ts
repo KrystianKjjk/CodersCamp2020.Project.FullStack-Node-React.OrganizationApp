@@ -5,10 +5,15 @@ export interface SectionData {
     endDate?: string;
     tests?: Test[];
     referenceProjectId?: {
+        _id: string
         projectName: string
     };
     description?: string;
     course: string;
+}
+
+export interface SectionDataUpdate extends Omit<SectionData, 'referenceProjectId'> {
+    referenceProjectId?: string;
 }
 
 export enum TestType {
@@ -32,6 +37,7 @@ export interface Section {
     endDate?: Date;
     description?: string;
     referenceProjectName?: string;
+    referenceProjectId?: string;
     courseName: string;
     courseId: string;
 };
