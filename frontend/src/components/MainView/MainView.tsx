@@ -14,21 +14,25 @@ interface LoggedInViewProps {
   onLogout?: Function
 }
 
+interface LoggedOutViewProps {
+  onLogin?: Function
+}
+
 const MainView: React.FC = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   const userData = getUserFromLocalStorage();
 
   const MainContent = () => {
-    if( !(userData.userType) ) return <LogIn onLogin={() => setIsLogged(true)}/>;
+    if( !(userData.userType) ) return <LoggedOut onLogin={() => setIsLogged(true)}/>;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
       case UserType.Admin:
         return <Admin onLogout={() => setIsLogged(false)}/>
       case UserType.Mentor:
-        return <Mentor />
+        return <Mentor onLogout={() => setIsLogged(false)}/>
       default:
-        return <User/>
+        return <User onLogout={() => setIsLogged(false)}/>
     }
   }
 
@@ -39,7 +43,26 @@ const MainView: React.FC = () => {
   );
 };
 
-
+function LoggedOut(props: LoggedOutViewProps) {
+  return (
+    <div className={styles.mainContainer} >
+      <Switch>
+        <Route path="/login">
+          <LogIn onLogin={props.onLogin}/>
+        </Route>
+        <Route path="/registration">
+          <RegistrationView />
+        </Route>
+        <Route path="/resetpassword">
+          <ResetPassword />
+        </Route>
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+      </Switch>
+    </div>
+  )
+}
 
 function Admin(props: LoggedInViewProps) {
   return (
@@ -100,7 +123,7 @@ function Mentor(props: LoggedInViewProps) {
           <MyProfile />
         </PrivateRoute>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/" />
         </Route>
       </Switch>
     </div>
@@ -119,13 +142,13 @@ function User(props: LoggedInViewProps) {
           <UserGrades />
         </PrivateRoute>
         <PrivateRoute path="/team">
-          <Projects />
+          <Teams />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
         </PrivateRoute>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/" />
         </Route>
       </Switch>
     </div>
