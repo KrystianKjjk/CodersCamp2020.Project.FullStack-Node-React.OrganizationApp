@@ -122,7 +122,11 @@ const Menu: React.FC<MenuProps> = (props) => {
               icon={<AssignmentIcon />}
               text="Grade sheets"
             />
-            <ListItemLink path="/team" icon={<PeopleIcon />} text="Team" />
+            <ListItemLink 
+              path="/team" 
+              icon={<PeopleIcon />} 
+              text="Team" 
+            />
             <span className={classes.span}>Settings</span>
             <ListItemLink
               path="/myprofile"
@@ -147,7 +151,11 @@ const Menu: React.FC<MenuProps> = (props) => {
               icon={<AssignmentIcon />}
               text="Grades"
             />
-            <ListItemLink path="/team" icon={<PeopleIcon />} text="Team" />
+            <ListItemLink 
+              path="/team" 
+              icon={<PeopleIcon />} 
+              text="Team" 
+            />
             <span className={classes.span}>Settings</span>
             <ListItemLink
               path="/myprofile"
