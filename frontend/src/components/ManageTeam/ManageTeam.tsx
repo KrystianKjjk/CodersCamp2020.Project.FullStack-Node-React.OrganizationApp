@@ -58,7 +58,6 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
     api.addUserToTeam(teamId, row.id);
-    console.log(row);
     setTeamMembers([...teamMembers, row]);
     getTeamMemebers = () => Promise.resolve(teamMembers as User[]);
   };
@@ -72,7 +71,6 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
 
   const handleUserSelection = (params: GridSelectionModelChangeParams) => {
     selectedUsers.current = params.selectionModel as string[];
-    console.log(params)
   }
 
   const deleteSelectedUsers = () => {
@@ -131,7 +129,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
                   <span>{mentor?.name ?? '---'} {mentor?.surname ?? '---'}</span>
-                  <UButton text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
+                  <UButton test-id='change-mentor' text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
                 <li className={styles.teamInfoRow}>
                   <span>Average grade:</span>
@@ -173,7 +171,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
                 columns={columns} 
                 getData={getTeamMemebers} 
                 checkboxSelection={true}
-                onSelectionModelChange={(params) => handleUserSelection(params)}
+                onSelectionModelChange={handleUserSelection}
               />
             </div>
             <div className={styles.manageContainer}>
