@@ -51,6 +51,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   const userData = getUserFromLocalStorage();
 
   const VisibleOptions = () => {
+    //@ts-ignore
     switch (parseInt(userData.userType)) {
       case UserType.Admin:
         return (
