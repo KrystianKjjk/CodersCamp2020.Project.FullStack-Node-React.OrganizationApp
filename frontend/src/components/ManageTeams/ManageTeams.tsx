@@ -11,11 +11,10 @@ import { TeamService } from '../../api';
 
 
 export interface ManageTeamsProps {
-  getTeams: () => Promise<any[]>;
   onClickAdd: () => void;
 }
 
-const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => {
+const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
   const api = new TeamService();
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
@@ -66,7 +65,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => 
           </span>
         </div>
         <div className={styles.table}>
-          <Table name='Teams' columns={columns} getData={getTeams}/>
+          <Table name='Teams' columns={columns} getData={api.getTeams}/>
         </div>
       </Paper>
     </Container>
