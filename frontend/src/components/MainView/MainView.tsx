@@ -24,7 +24,7 @@ const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
 
   const MainContent = () => {
-    if( !(userData.userType) ) return <LoggedOut onLogin={() => setIsLogged(true)}/>;
+    if( !(isLogged) ) return <LoggedOut onLogin={() => setIsLogged(true)}/>;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
       case UserType.Admin:
