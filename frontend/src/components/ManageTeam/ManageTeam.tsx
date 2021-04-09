@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
@@ -7,6 +7,7 @@ import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, TeamProject, User } from '../../models';
 import { TeamService, UserService } from '../../api';
+import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 
 
 export interface ManageTeamProps {
@@ -26,6 +27,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
+  const selectedUsers = useRef<string[]>([]);
 
   useEffect(() => {
     api.getTeam(teamId)
@@ -56,7 +58,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
 
   let getTeamMemebers = () => Promise.resolve(teamMembers as User[]);
 
-  const handleUserSelection = (row: User) => {
+  const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
     api.addUserToTeam(teamId, row.id);
     console.log(row);
@@ -70,6 +72,19 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
     {field: 'averageGrade', headerName: 'Average grade', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
   ]
+
+  const handleUserSelection = (params: GridSelectionModelChangeParams) => {
+    selectedUsers.current = params.selectionModel as string[];
+    console.log(params)
+  }
+
+  const deleteSelectedUsers = () => {
+    selectedUsers.current.forEach((user) => {
+      api.deleteUserFromTeam(teamId, user);
+    })
+    setTeamMembers( teamMembers.filter( (user) => !( selectedUsers.current.includes(user.id) ) ) )
+    selectedUsers.current = [];
+  }
 
   const mentorColumns = [
     {field: 'name', width: 270},
@@ -122,7 +137,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
               { 
                 openUsersModal && 
                 <FindModal<User> 
-                  onRowSelection={handleUserSelection} 
+                  onRowSelection={handleAddUserSelection} 
                   getData={() => usersApi.getParticipantsNotInTeam()} 
                   columns={mentorColumns}
                   searchPlaceholder='Search by surname'
@@ -134,15 +149,23 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
                 />
               }
               <h2 className={styles.manageHeader}>Users</h2>
-              <AddButton 
-                className={styles.addButton} 
-                aria-label='Add user' 
-                text='Add'
-                onClick={() => setOpenUsersModal(true)}
-              />
+              <div className={styles.buttons}>
+                <AddButton 
+                  aria-label='Add user' 
+                  text='Add'
+                  onClick={() => setOpenUsersModal(true)}
+                />
+                <UButton text="Delete" color="secondary" onClick={deleteSelectedUsers}/>
+              </div>
             </div>
             <div className={styles.table}>
-              <Table name='Team' columns={columns} getData={getTeamMemebers}/>
+              <Table 
+                name='Team' 
+                columns={columns} 
+                getData={getTeamMemebers} 
+                checkboxSelection={true}
+                onSelectionModelChange={(params) => handleUserSelection(params)}
+              />
             </div>
             <div className={styles.manageContainer}>
               <h2 className={styles.manageHeader}>Projects</h2>

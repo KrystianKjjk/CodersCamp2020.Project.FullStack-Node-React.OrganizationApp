@@ -1,5 +1,5 @@
 import React, { useEffect, MouseEvent, useState } from 'react';
-import { DataGrid, GridRowParams } from '@material-ui/data-grid';
+import { DataGrid, DataGridProps, GridRowParams } from '@material-ui/data-grid';
 import styles from './ReusableTable.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { 
@@ -19,18 +19,19 @@ interface Column {
   sortComparator?: (v1: any, v2: any, cellParams1: any, cellParams2: any) => any;
 }
 
-export interface ReusableTableProps {
+export type ReusableTableProps = {
   name: string;
   getData?: () => Promise<any[]>;
   columns?: Column[];
   onRowClick?: (params: GridRowParams, e: MouseEvent) => void;
-}
+} & Omit<DataGridProps, 'rows'>;
 
 const ReusableTable: React.FC< ReusableTableProps > = ({
         name, 
         columns = [], 
         getData = () => Promise.resolve([]),
-        onRowClick = (params, e) => {} }) => {
+        onRowClick = (params, e) => {},
+        ...restOfProps }) => {
   
   const tables = useAppSelector(selectTables);
   const dispatch = useAppDispatch();
@@ -58,6 +59,7 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
               autoHeight
               disableSelectionOnClick={true}
               onRowClick={onRowClick}
+              {...restOfProps}
             />
           </div>
         ) 
