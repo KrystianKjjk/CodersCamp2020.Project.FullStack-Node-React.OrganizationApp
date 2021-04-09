@@ -5,15 +5,13 @@ import UButton from '../UButton';
 import Table from '../ReusableTable';
 import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
-import { TeamInfo, TeamProject, User } from '../../models';
+import { TeamProject, User } from '../../models';
 import { TeamService, UserService } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 
 
 export interface ManageTeamProps {
   teamId: string;
-  getTeamInfo: (id: string) => Promise<TeamInfo>;
-  onClickAdd: () => void;
 }
 
 const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
@@ -170,6 +168,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
             </div>
             <div className={styles.table}>
               <Table 
+                aria-label='Team members table'
                 name='Team' 
                 columns={columns} 
                 getData={getTeamMemebers} 

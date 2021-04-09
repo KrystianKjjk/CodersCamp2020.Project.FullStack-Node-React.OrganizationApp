@@ -23,14 +23,12 @@ export type ReusableTableProps = {
   name: string;
   getData?: () => Promise<any[]>;
   columns?: Column[];
-  onRowClick?: (params: GridRowParams, e: MouseEvent) => void;
 } & Omit<DataGridProps, 'rows'>;
 
 const ReusableTable: React.FC< ReusableTableProps > = ({
         name, 
         columns = [], 
         getData = () => Promise.resolve([]),
-        onRowClick = (params, e) => {},
         ...restOfProps }) => {
   
   const tables = useAppSelector(selectTables);
@@ -39,11 +37,6 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
-    dispatch(fetchData(tableName, getData));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     dispatch(fetchData(tableName, getData));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getData]);
@@ -60,7 +53,6 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
               pageSize={5}
               autoHeight
               disableSelectionOnClick={true}
-              onRowClick={onRowClick}
               {...restOfProps}
             />
           </div>
