@@ -97,7 +97,6 @@ export const referenceProjectsSlice = createSlice({
             [fetchRefProjects.rejected]: (state, action) => {
                 if (state.loading) state.loading = false;
                     state.error = action.error;
-
             },
             [addRefProject.pending]: (state) => {
                 if (!state.loading) state.loading = true;
@@ -106,6 +105,10 @@ export const referenceProjectsSlice = createSlice({
                 if(state.loading) state.loading = false;
                     state.refProjects.push(action.payload);
 
+            },
+            [addRefProject.rejected]: (state, action) => {
+                if (state.loading) state.loading = false;
+                state.error = action.error;
             },
             [deleteRefProject.pending]: (state) => {
                 if (!state.loading) state.loading = true;

@@ -75,7 +75,9 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleDelete() {
-    dispatch(deleteRefProject(project._id));
+    if(!isAdding) {
+      dispatch(deleteRefProject(project._id));
+    }
     if(isEdit) toggleEdit();
     history.push('/projects');
   }
