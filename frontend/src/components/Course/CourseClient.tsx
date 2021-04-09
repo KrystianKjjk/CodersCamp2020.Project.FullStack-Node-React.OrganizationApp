@@ -56,3 +56,11 @@ export const deleteCourse = (courseId: string) => {
     config
   );
 };
+
+
+export const fetchCourseSections = (courseId: string) => {
+  return axios.get(
+    `https://coders-camp-organization-app.herokuapp.com/api/courses/${courseId}/sections`,
+    config
+  );
+};

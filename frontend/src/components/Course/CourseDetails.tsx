@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
+import CourseSectionElement from './CourseSectionListElement';
 import {
   Button,
   makeStyles,
@@ -73,6 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     dateContainer: {
       display: "flex",
+      // flexDirection:"column",
       justifyContent: "space-between",
       margin: "2% 15%",
     },
@@ -185,26 +187,6 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       </div>
     );
   }
-  // return (<div>
-  //   <div>
-  //     <Input value={courseName} onChange={handleCourseNameChange}></Input>
-  //     <TextField value={description} onChange={handleDescriptionChange}></TextField>
-  //   </div>
-  //   <div>
-  //     <p>Sections:</p>
-  //     <p>Dates:</p>
-  //     <input type="date"></input>
-  //     <input type="date"></input>
-  //     <Button
-  //       onClick={handleSaveButtonClick}
-  //       variant="contained"
-  //       color="primary"
-  //       disabled={!courseName || !description}
-  //     >
-  //       SAVE
-  //     </Button>
-  //   </div>
-  // </div>);
   return (
     <div className={classes.root}>
       <PageHeader name={"EDIT COURSE"}></PageHeader>
@@ -267,7 +249,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                   onChange={handleStartDateChange}
                 />
               ) : (
-                <p>{startDate?.toISOString().split("T")[0]}</p>
+                <p>Start date: {startDate?.toISOString().split("T")[0]}</p>
               )}
               {isEdit?(
               <DatePicker
@@ -280,7 +262,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               inputVariant="outlined"
               value={endDate}
               onChange={handleEndDateChange}
-            />):(<p>{endDate?.toISOString().split("T")[0]}</p>)
+            />):(<p>End date: {endDate?.toISOString().split("T")[0]}</p>)
             
             }
               
@@ -300,9 +282,12 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             
           </div>
         </div>
+        <h4>Sections:</h4>
+        {course.sections.map(section => <CourseSectionElement section={section} isEdit={isEdit} />)}
       </div>
     </div>
   );
 };
+
 
 export default CourseComponent;

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
-import { fetchCourse, updateCourse } from "./CourseClient";
+import { fetchCourse, updateCourse, fetchCourseSections } from "./CourseClient";
 
 export interface Course extends CourseCreateObject {
   _id: string;
-  sections: any[];
+  sections: SectionListElement[];
 }
 
 export interface CourseCreateObject {
@@ -20,7 +20,11 @@ interface CourseDto {
   description?: string;
   startDate: string;
   endDate: string;
-  sections: any[];
+}
+
+export interface SectionListElement {
+  _id: string;
+  name: string;
 }
 
 interface CourseState {
@@ -32,12 +36,16 @@ const initialState: CourseState = {};
 export const fetchCourseAsync = (courseId: string): AppThunk => async (
   dispatch
 ) => {
-  const response = await fetchCourse(courseId);
-  const courseDto: CourseDto = response.data;
+  const courseResponse = await fetchCourse(courseId);
+  const courseDto: CourseDto = courseResponse.data;
+
+  const sectionsResponse = await fetchCourseSections(courseId);
+  const sections: SectionListElement[] = sectionsResponse.data;
   const course: Course = {
     ...courseDto,
     startDate: new Date(Date.parse(courseDto.startDate)),
-    endDate: new Date(Date.parse(courseDto.endDate))
+    endDate: new Date(Date.parse(courseDto.endDate)),
+    sections: sections
   };
   dispatch(setCourse(course));
 };
@@ -53,9 +61,16 @@ export const courseSlice = createSlice({
     setCourse: (state, action: PayloadAction<Course>) => {
       state.course = action.payload;
     },
+    deleteSection: (state, action: PayloadAction<string>) => {
+      const sectionId = action.payload;
+      if(!state.course){
+        return;
+      }
+      state.course.sections = state.course.sections.filter(section => section._id !== sectionId);
+    }
   },
 });
 
-export const { setCourse } = courseSlice.actions;
+export const { setCourse, deleteSection } = courseSlice.actions;
 
 export default courseSlice.reducer;
