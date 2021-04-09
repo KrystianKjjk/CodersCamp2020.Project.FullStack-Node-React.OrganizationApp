@@ -20,8 +20,10 @@ const MainView: React.FC = () => {
         return <Admin />
       case UserType.Mentor:
         return <Mentor />
+      case UserType.Participant:
+        return <User/>
       default:
-        return <User />
+        return <LoggedOut/>
     }
   }
 
@@ -32,6 +34,28 @@ const MainView: React.FC = () => {
   );
 };
 
+
+function LoggedOut() {
+  return (
+    <div className={styles.mainContainer}>
+      <Header />
+      <Switch>
+        <PrivateRoute path="/">
+          <LogIn />
+        </PrivateRoute>
+        <Route path="/registration">
+          <RegistrationView />
+        </Route>
+        <Route path="/resetpassword">
+          <ResetPassword />
+        </Route>
+        <Route exact path="/">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
+    </div>
+  )
+}
 
 function Admin() {
   return (
