@@ -3,7 +3,7 @@ export interface SectionData {
     name: string;
     startDate?: string;
     endDate?: string;
-    tests: Test[];
+    tests?: Test[];
     referenceProjectId?: {
         projectName: string
     };
@@ -33,6 +33,7 @@ export interface Section {
     description?: string;
     referenceProjectName?: string;
     courseName: string;
+    courseId: string;
 };
 
 export const testTypDict = {

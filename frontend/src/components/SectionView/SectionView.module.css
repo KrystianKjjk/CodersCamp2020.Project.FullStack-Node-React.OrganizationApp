@@ -6,6 +6,11 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.select {
+    min-width: 200px;
+    text-transform: capitalize;
+}
+
 .container {
     border: gray 1px solid;
 }
@@ -54,6 +59,13 @@
     justify-self: end;
     align-self: center;
     padding-right: 10px;
+}
+
+.saveButton {
+    justify-self: end;
+    align-self: center;
+    padding-right: 10px;
+    display:flex;
 }
 
 .manageHeader {
@@ -158,4 +170,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: baseline;
+}
+
+.select {
+    min-width: 250px;
+    text-transform: capitalize;
+    text-align: justify;
+}
+
+.textFieldCourse {
+    width: 250px;
+    align-self: center;
+    padding-bottom: 10px;
+
 }
