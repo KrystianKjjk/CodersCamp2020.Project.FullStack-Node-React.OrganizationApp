@@ -7,29 +7,26 @@ import { User, UserData, userStatusDict, userTypeDict } from '../models';
 
 export default class TeamService {
     
+    courseId: string | null;
     constructor(
         private api = new BaseService(),
         private teamProjectApi = new TeamProjectService(),
         private sheetApi = new SheetService()
-    ) { };
+    ) { 
+        this.courseId = localStorage.getItem('courseId');
+    };
 
     getTeams = async (): Promise<Team[]> => {
-        const coursesRes = await this.api.get('/courses');
-        const courses = coursesRes.data as CourseData[];
-        let allTeams: Team[] = [];
-        for (let i in courses) {
-            const teams = (await this.api.get(`courses/${courses[i]._id}/teams`)).data as TeamData[];
-            const newData = teams.map( team => ({
-                id: team._id,
-                name: team?.mentor?.name ?? '---',
-                surname: team?.mentor?.surname ?? '---',
-                courseName: courses[i].name,
-                users: team.users,
-            }) );
-            allTeams = allTeams.concat(newData);
-        }
-
-        return allTeams;
+        const courseRes = await this.api.get('/courses/' + this.courseId);
+        const course = courseRes.data as CourseData;
+        const teams = (await this.api.get(`courses/${course._id}/teams`)).data as TeamData[];
+        return teams.map( team => ({
+            id: team._id,
+            name: team?.mentor?.name ?? '---',
+            surname: team?.mentor?.surname ?? '---',
+            courseName: course.name,
+            users: team.users,
+        }) );
     };
 
     getTeam = async (id: string): Promise<TeamInfo> => {

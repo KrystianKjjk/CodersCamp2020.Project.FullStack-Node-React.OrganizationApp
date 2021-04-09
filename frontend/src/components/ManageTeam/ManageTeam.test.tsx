@@ -7,6 +7,7 @@ import UserService from '../../api/User.service';
 import { usersDatabase } from '../ManageUsers';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
+import { Route, Switch, BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 const teamsDatabase = [{
    id: '0',
@@ -76,9 +77,19 @@ describe('ManageTeam', () => {
       // @ts-ignore
       UserService.mockImplementation(() => UserServiceMock);
 
+      const teamId = '0';
       render(
          <Provider store={store} >
-            <ManageTeam teamId='0' />
+            <Router>
+               <Switch>
+                  <Route path='/teams/:teamId'>
+                     <ManageTeam />
+                  </Route>
+                  <Route path='/'>
+                     <Redirect  to={'/teams/'+teamId} />
+                  </Route>
+               </Switch>
+            </Router>
          </Provider>
       );
       const tableComp = await screen.findByLabelText('Table - Team');
