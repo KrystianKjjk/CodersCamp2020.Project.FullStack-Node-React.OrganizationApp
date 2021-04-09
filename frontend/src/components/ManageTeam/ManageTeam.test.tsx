@@ -81,7 +81,6 @@ describe('ManageTeam', () => {
       );
       const tableComp = await screen.findByLabelText('Table - Team');
       expect(getTeamMock).toBeCalledTimes(1);
-      
       const table = store.getState().tables['Team'];
       expect(table.rows).toHaveLength(teamsDatabase[0].users.length);
    });
