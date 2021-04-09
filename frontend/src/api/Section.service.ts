@@ -1,6 +1,6 @@
 import { String } from 'lodash';
 import BaseService from '../app/baseService';
-import { CourseData } from '../models/Course.model';
+import { Course, CourseData } from '../models/Course.model';
 import { Section, SectionData } from '../models/Section.model';
 
 export default class SectionService {
@@ -20,9 +20,20 @@ export default class SectionService {
                 endDate: section.endDate ? new Date(section.endDate) : undefined,
                 referenceProjectName: section.referenceProjectId?.projectName || '',
                 courseName: course ? course.name : '',
+                courseId: course?._id || '',
             })
         });
 
+    }
+
+    getCourses = async (): Promise<Course[]> => {
+        const courses = (await this.api.get('/courses')).data as CourseData[];
+        return courses.map( course => {
+            return ({
+                id: course._id,
+                courseName: course.name,
+            })
+        });
     }
 
     getOneSection  = async (id: string): Promise<Section> => {
@@ -36,15 +47,15 @@ export default class SectionService {
             startDate: section.startDate ? new Date(section.startDate) : undefined,
             endDate: section.endDate ? new Date(section.endDate) : undefined,
             referenceProjectName: section.referenceProjectId?.projectName || '',
+            referenceProjectId: section.referenceProjectId?._id || '',
             description: section.description,
             courseName: course ? course.name : '',
+            courseId: course?._id || '',
         };
-       
     }
 
-    patchSection  = async (id: string, data: any) => {
-        console.log(data);
-        // const section = (await this.api.put(`/sections/${id}`, data)).data as SectionData;
+    patchSection  = async (data: any) => {
+        await this.api.put(`/sections/${data._id}`, data);
        
     }
 }
