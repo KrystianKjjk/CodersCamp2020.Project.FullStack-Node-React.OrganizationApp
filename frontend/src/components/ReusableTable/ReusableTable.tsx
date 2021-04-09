@@ -40,10 +40,12 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     dispatch(fetchData(tableName, getData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getData]);
 
   return (

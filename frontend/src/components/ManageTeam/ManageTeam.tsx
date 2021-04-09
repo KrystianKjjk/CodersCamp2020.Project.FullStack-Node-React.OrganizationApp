@@ -3,7 +3,6 @@ import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
-import TeamProjectView from '../TeamProject';
 import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, TeamProject, User } from '../../models';
@@ -17,14 +16,13 @@ export interface ManageTeamProps {
   onClickAdd: () => void;
 }
 
-const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
+const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
   const api = new TeamService();
   const usersApi = new UserService();
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
   const [projects, setProjects] = useState<TeamProject[]>([]);
   const [avgGrade, setAvgGrade] = useState<number>();
-  const [maxPoints, setMaxPoints] = useState<number>();
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
@@ -36,10 +34,10 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
         setMentor(team.mentor);
         setProjects(team.projects);
         setAvgGrade(team.teamAvgGrade);
-        setMaxPoints(team.maxPoints);
         setTeamMembers(team.users);
         setLoading('idle')
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teamId]);
 
   useEffect(() => {
