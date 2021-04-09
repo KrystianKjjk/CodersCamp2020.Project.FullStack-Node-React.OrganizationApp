@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
-import { Switch, Route, Redirect} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
+import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 
 const MainView: React.FC = () => {
@@ -32,6 +33,9 @@ const MainView: React.FC = () => {
         </PrivateRoute>
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
+        </PrivateRoute>
+        <PrivateRoute path="/teams/:teamId">
+          <ManageTeam />
         </PrivateRoute>
         <PrivateRoute path="/teams">
           <Teams />

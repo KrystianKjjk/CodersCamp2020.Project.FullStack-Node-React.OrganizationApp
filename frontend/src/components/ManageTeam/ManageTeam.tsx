@@ -8,15 +8,15 @@ import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamProject, User } from '../../models';
 import { TeamService, UserService } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
+import { useParams } from "react-router-dom";
 
 
-export interface ManageTeamProps {
-  teamId: string;
-}
+export interface ManageTeamProps { };
 
-const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
+const ManageTeam: React.FC< ManageTeamProps > = () => {
   const api = new TeamService();
   const usersApi = new UserService();
+  
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
   const [projects, setProjects] = useState<TeamProject[]>([]);
@@ -24,7 +24,10 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
+
   const selectedUsers = useRef<string[]>([]);
+
+  let { teamId } = useParams<{teamId: string}>();
 
   useEffect(() => {
     api.getTeam(teamId)
@@ -104,7 +107,11 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId }) => {
         (<Container className={styles.manageTeams} aria-label='Manage Teams'>
           <CssBaseline />
           <Paper className={styles.mainHeader}>
-            <h2><Link href="/teams" color="inherit">Teams</Link> / <span className={styles.teamId}>{teamId}</span></h2>
+            <h2>
+              <Link href="/teams" color="inherit">Teams</Link>
+              <span> / </span>
+              <span className={styles.teamId}>{mentor ? `${mentor.name} ${mentor.surname}` : teamId}</span>
+            </h2>
           </Paper>
           <Paper className={styles.container}>
             <Container className={styles.manageHeader}>
