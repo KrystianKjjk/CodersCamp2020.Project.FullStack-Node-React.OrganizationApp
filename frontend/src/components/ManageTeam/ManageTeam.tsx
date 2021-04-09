@@ -3,6 +3,7 @@ import styles from './ManageTeam.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
+import TeamProjectView from '../TeamProject';
 import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamInfo, TeamProject, User } from '../../models';
@@ -87,10 +88,21 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
   }
 
   const mentorColumns = [
-    {field: 'name', width: 270},
-    {field: 'surname', width: 250},
+    {field: 'name', headerName: 'Mentor name', width: 270},
+    {field: 'surname', headerName: 'Mentor surname', width: 250},
   ];
-  
+
+  const participantColumns = [
+    {field: 'name', headerName: 'Participant name', width: 270},
+    {field: 'surname', headerName: 'Participant surname', width: 250},
+  ];
+
+  const projectColumns = [
+    {field: 'name', headerName: 'Name', width: 270},
+    {field: 'overallGrade', headerName: 'Overall grade', width: 270},
+    {field: 'sectionName', headerName: 'Section', width: 270},
+  ];
+
   return (
     <>
       {
@@ -139,7 +151,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
                 <FindModal<User> 
                   onRowSelection={handleAddUserSelection} 
                   getData={() => usersApi.getParticipantsNotInTeam()} 
-                  columns={mentorColumns}
+                  columns={participantColumns}
                   searchPlaceholder='Search by surname'
                   searchBy='surname'
                   name="Find participant"
@@ -170,8 +182,12 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
             <div className={styles.manageContainer}>
               <h2 className={styles.manageHeader}>Projects</h2>
             </div>
-            <div>
-              Project
+            <div className={styles.table}>
+              <Table 
+                name='TeamProjects' 
+                columns={projectColumns} 
+                getData={() => Promise.resolve(projects)} 
+              />
             </div>
           </Paper>
         </Container>)
