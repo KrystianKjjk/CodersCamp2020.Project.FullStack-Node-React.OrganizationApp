@@ -1,6 +1,7 @@
 import { TeamService } from '.';
 import BaseService from '../app/baseService';
 import { userStatusDict, userTypeDict, User, UserData } from '../models/User.model';
+import { calcAvgGrade } from './gradesProcessing';
 
 
 export default class UserService {
@@ -17,6 +18,9 @@ export default class UserService {
             id: user._id,
             type: userTypeDict[user.type],
             status: userStatusDict[user.status],
+            averageGrade: user.grades.length ? user.grades
+                            .map(calcAvgGrade)
+                            .reduce((a, b) => a + b, 0) / user.grades.length : 0,
         }) );
     }
 

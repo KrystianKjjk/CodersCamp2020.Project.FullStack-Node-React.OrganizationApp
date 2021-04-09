@@ -1,4 +1,4 @@
-import { UserData, Grades, GradeSheetData } from '../models';
+import { UserData, Grades, GradeSheetData, Grade } from '../models';
 
 
 const sum = (numbers: number[]) => numbers.reduce((acc, x) => acc + x, 0);
@@ -46,4 +46,27 @@ export function calcUserTestsGrade(user: UserData) {
         }
     });
     return [points, maxPoints];
+}
+
+export function calcTaskGrade(grade: Grade) {
+    let taskGrade = grade?.taskPoints ?? 0;
+    const taskMax = grade?.taskMaxPoints;
+    if(taskMax) taskGrade = taskGrade / taskMax;
+    else taskGrade = 0;
+    return taskGrade;
+}
+
+export function calcTestGrade(grade: Grade) {
+    let testGrade = grade?.testPoints ?? 0;
+    const testMax = grade?.testMaxPoints;
+    if(testMax) testGrade = testGrade / testMax;
+    else testGrade = 0;
+    return testGrade;
+}
+
+export function calcAvgGrade(grade: Grade) {
+    const taskGrade = calcTaskGrade(grade);
+    const testGrade = calcTestGrade(grade);
+    const projectGrade = grade?.projectPoints ?? 0;
+    return 2 * testGrade + 3 * taskGrade + 5 * projectGrade;
 }

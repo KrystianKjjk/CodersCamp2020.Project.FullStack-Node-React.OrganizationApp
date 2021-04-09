@@ -39,6 +39,12 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
       });
   }, [teamId]);
 
+  useEffect(() => {
+    const avg = teamMembers
+      .reduce((acc: number, user: User) => user.averageGrade ?? 0 + acc, 0) / teamMembers.length;
+    setAvgGrade(avg);
+  }, [teamMembers])
+
   const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false);
     api.setMentor(teamId, row.id);
@@ -48,11 +54,14 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
       surname: row.surname });
   };
 
+  let getTeamMemebers = () => Promise.resolve(teamMembers as User[]);
+
   const handleUserSelection = (row: User) => {
     setOpenUsersModal(false);
-    //api.
+    api.addUserToTeam(teamId, row.id);
     console.log(row);
     setTeamMembers([...teamMembers, row]);
+    getTeamMemebers = () => Promise.resolve(teamMembers as User[]);
   };
 
   const columns = [
@@ -61,6 +70,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
     {field: 'averageGrade', headerName: 'Average grade', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
   ]
+
   const mentorColumns = [
     {field: 'name', width: 270},
     {field: 'surname', width: 250},
@@ -70,7 +80,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
     <>
       {
         loading === 'loading' ? <p>...Loading</p> :
-        mentor && (<Container className={styles.manageTeams} aria-label='Manage Teams'>
+        (<Container className={styles.manageTeams} aria-label='Manage Teams'>
           <CssBaseline />
           <Paper className={styles.mainHeader}>
             <h2><Link href="/teams" color="inherit">Teams</Link> / <span className={styles.teamId}>{teamId}</span></h2>
@@ -97,7 +107,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
               <ul className={styles.teamInfo}>
                 <li className={styles.teamInfoRow}>
                   <span>Mentor:</span>
-                  <span>{mentor.name} {mentor.surname}</span>
+                  <span>{mentor?.name ?? '---'} {mentor?.surname ?? '---'}</span>
                   <UButton text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
                 <li className={styles.teamInfoRow}>
@@ -132,7 +142,7 @@ const ManageTeam: React.FC< ManageTeamProps > = ({ teamId, onClickAdd }) => {
               />
             </div>
             <div className={styles.table}>
-              <Table name='Team' columns={columns} getData={() => Promise.resolve(teamMembers as User[])}/>
+              <Table name='Team' columns={columns} getData={getTeamMemebers}/>
             </div>
             <div className={styles.manageContainer}>
               <h2 className={styles.manageHeader}>Projects</h2>

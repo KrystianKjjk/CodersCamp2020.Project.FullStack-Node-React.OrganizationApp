@@ -2,7 +2,7 @@ import BaseService from '../app/baseService';
 import { TeamData, Team, TeamInfo } from '../models/Team.model';
 import { CourseData } from '../models/Course.model';
 import { calcUserProjectGrade, calcUserTasksGrade, calcUserTestsGrade, SheetService, TeamProjectService } from '.';
-import { User, UserData, userStatusDict } from '../models';
+import { User, UserData, userStatusDict, userTypeDict } from '../models';
 
 
 export default class TeamService {
@@ -64,14 +64,18 @@ export default class TeamService {
             const averageGrade = 3 * tasksPoints + 2 * testsPoints + 5 * projectsPoints;
             const maxGrade = 3 * tasksMaxPoints + 2 * testsMaxPoints + 5 * projectsMaxPoints;
             return {
+                ...user,
                 id: user._id,
                 name: user.name,
                 surname: user.surname,
+                type: userTypeDict[user.type],
                 status: userStatusDict[user.status],
                 averageGrade,
                 maxGrade,
             }
         });
+        teamInfo.teamAvgGrade = teamInfo.users
+            .reduce((acc, user) => user.averageGrade ?? 0 + acc, 0) / teamInfo.users.length;
         console.log(teamInfo);
         return teamInfo;
     };
@@ -81,6 +85,10 @@ export default class TeamService {
             mentor: mentorId
         }
         await this.api.patch(`/teams/${teamId}`, reqBody);
+    }
+
+    addUserToTeam = async (teamId: string, userId: string) => {
+        await this.api.post(`teams/${teamId}/users`, { userId });
     }
 
 }

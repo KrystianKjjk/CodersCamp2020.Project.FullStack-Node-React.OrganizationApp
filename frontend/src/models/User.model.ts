@@ -36,6 +36,7 @@ export interface User {
     surname: string;
     status?: string;
     type?: string;
+    grades?: Grade[];
     averageGrade?: number;
     maxGrade?: number;
 }

@@ -35,10 +35,16 @@ const ReusableTable: React.FC< ReusableTableProps > = ({
   const tables = useAppSelector(selectTables);
   const dispatch = useAppDispatch();
   const [tableName] = useState(name);
+  
   useEffect(() => {
     dispatch(initTable({ name: tableName }));
     dispatch(fetchData(tableName, getData));
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchData(tableName, getData));
+  }, [getData]);
+
   return (
     <>
       { 
