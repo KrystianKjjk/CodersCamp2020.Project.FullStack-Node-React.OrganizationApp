@@ -149,6 +149,11 @@
     flex-direction:column;
 }
 
+.manageSectionRefPro p {
+    font-size: 20px;
+    margin: 0px;
+}
+
 .textFieldSectionName {
     width: 250px;
     align-self: center;
