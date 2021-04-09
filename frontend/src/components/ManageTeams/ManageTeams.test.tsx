@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import ManageTeams from './ManageTeams';
 import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
+import TeamService from '../../api/Team.service';
 
 const teamsDatabase = [
    {id: 1, name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
@@ -12,59 +13,40 @@ const teamsDatabase = [
    {id: 3, name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 1. edition'},
    {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 1. edition'},
    {id: 5, name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 1. edition'},
- ]
-const getFakeTeams = () => {
-   return Promise.resolve(teamsDatabase);
-}
+];
 
+jest.mock('../../api/Team.service.ts', () => jest.fn());
+      
 describe('ManageTeams', () => {
-   it('renders without error', async () => {
-      const getTeams = jest.fn( getFakeTeams );
+   it('renders without error, filters and sorts data', async () => {
+      const getTeamsMock = jest.fn( () => Promise.resolve(teamsDatabase) );
+      const TeamServiceMock = {
+         getTeams: getTeamsMock,
+      };
+      // @ts-ignore
+      TeamService.mockImplementation(() => TeamServiceMock);
       const onClickAdd = jest.fn();
       render(
          <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
+            <ManageTeams onClickAdd={onClickAdd} />
          </Provider>
       );
-      expect(getTeams).toBeCalledTimes(1);
+      expect(getTeamsMock).toBeCalledTimes(1);
       const addBtn = screen.getByLabelText('Add team');
       userEvent.click(addBtn);
       expect(onClickAdd).toBeCalledTimes(1);
       const tableComp = await screen.findByLabelText('Table - Teams');
       const table = store.getState().tables['Teams'];
       expect(table.rows).toHaveLength(teamsDatabase.length);
-   });
 
-   it('search input works', async () => {
-      const getTeams = jest.fn( getFakeTeams );
-      const onClickAdd = jest.fn();
-      render(
-         <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
-         </Provider>
-      );
-
-      const tableComp = await screen.findByLabelText('Table - Teams');
       store.dispatch(filterData({
          table: 'Teams',
          filters: [ {column: 'surname', values: ['CSurname']} ]
       }));
-      const table = store.getState().tables['Teams'];
-      expect(table.displayedRows).toHaveLength(1);
-   });
+      expect(store.getState().tables['Teams'].displayedRows).toHaveLength(1);
 
-   it('sort list works', async () => {
-      const getTeams = jest.fn( getFakeTeams );
-      const onClickAdd = jest.fn();
-      render(
-         <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
-         </Provider>
-      );
-      const tableComp = await screen.findByLabelText('Table - Teams');
       store.dispatch(sortData({table: 'Teams', column: 'name'}));
-      const table = store.getState().tables['Teams'];
-      expect(table.displayedRows[0].name).toBe('CName');
+      expect(store.getState().tables['Teams'].displayedRows[0].name).toBe('CName');
    });
 
 });
