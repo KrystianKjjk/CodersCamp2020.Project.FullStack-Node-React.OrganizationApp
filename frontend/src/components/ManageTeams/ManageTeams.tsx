@@ -7,6 +7,7 @@ import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper } from '@material-ui/core';
+import { TeamService } from '../../api';
 
 
 export interface ManageTeamsProps {
@@ -15,7 +16,7 @@ export interface ManageTeamsProps {
 }
 
 const ManageTeams: React.FC< ManageTeamsProps > = ({ getTeams, onClickAdd }) => {
-
+  const api = new TeamService();
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
   const [search, setSearch] = useState('');
