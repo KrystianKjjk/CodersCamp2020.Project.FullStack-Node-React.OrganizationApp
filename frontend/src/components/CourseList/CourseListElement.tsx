@@ -33,15 +33,15 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
         },
       },
       boxActive: {
-        borderColor: "#FFFF00",
+        borderColor: "#FBA846",
         outlineStyle: "solid",
-        outlineColor: "#FFFF00",
+        outlineColor: "#FBA846",
         backgroundColor: "#1C1C1C",
         "&:hover": {
-          borderColor: "#FFFF00",
+          borderColor: "#FBA846",
           // cursor: "pointer",
           // outlineStyle: "solid",
-          outlineColor: "#FFFF00",
+          outlineColor: "#FBA846",
       },
     },
       name: {

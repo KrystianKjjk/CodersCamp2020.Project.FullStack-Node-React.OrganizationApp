@@ -6,7 +6,13 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
-import { Button, makeStyles, Theme, createStyles } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Theme,
+  createStyles,
+  Box,
+} from "@material-ui/core";
 import PageHeader from "../PageHeader";
 
 import DateFnsUtils from "@date-io/date-fns";
@@ -31,14 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       "& .MuiOutlinedInput-root": {
         "& fieldset": {
-          borderColor: "#666666",
+          // borderColor: "#666666",
         },
         "&.Mui-focused fieldset": {
-          borderColor: "#1A90FF",
+          // borderColor: "#1A90FF",
         },
       },
       "& .MuiInputLabel-root": {
-        color: theme.palette.text.primary,
+        // color: theme.palette.text.primary,
       },
     },
     nameInput: {
@@ -83,6 +89,15 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#67b5ff",
       },
     },
+    buttonEdit: {
+      backgroundColor: "#1A90FF",
+      width: "90px",
+      height: "50%",
+      marginRight:'3%',
+      "&:hover": {
+        backgroundColor: "#67b5ff",
+      },
+    },
     buttonAlignment: {
       display: "flex",
       justifyContent: "center",
@@ -97,8 +112,13 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const [description, changeDescription] = useState("");
   const [startDate, changeStartDate] = useState<Date | null>(new Date());
   const [endDate, changeEndDate] = useState<Date | null>(new Date());
+  const [isEdit, setIsEdit] = useState(false);
 
   const classes = useStyles();
+
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+  };
 
   const handleCourseNameChange = (e: any) => {
     changeCourseName(e.target.value);
@@ -116,6 +136,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       startDate: startDate!,
       endDate: endDate!,
     };
+
     updateCourse(courseToSave);
     // console.log(courseToSave);
   };
@@ -186,59 +207,88 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   // </div>);
   return (
     <div className={classes.root}>
-      <PageHeader name={"CREATE COURSE"}></PageHeader>
+      <PageHeader name={"EDIT COURSE"}></PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
-          <h3>Manage course</h3>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <h3>Manage course</h3>
+            <Button
+              onClick={toggleEdit}
+              variant="contained"
+              className={classes.buttonEdit}
+            >
+              EDIT
+            </Button>
+          </Box>
         </div>
         <div className={classes.inputs}>
-          <TextField
-            // label="Course name"
-            className={classes.nameInput}
-            onChange={handleCourseNameChange}
-            variant="outlined"
-            value={courseName}
-          ></TextField>
-          <TextField
-            // label="Course description"
-            variant="outlined"
-            multiline
-            onChange={handleDescriptionChange}
-            value={description}
-          ></TextField>
+          {isEdit ? (
+            <div>
+              <TextField
+                label="Course name"
+                className={classes.nameInput}
+                onChange={handleCourseNameChange}
+                variant="outlined"
+                value={courseName}
+              ></TextField>
+            </div>
+          ) : (
+            <p>{courseName}</p>
+          )}
+          {isEdit ? (
+            <TextField
+              label="Course description"
+              variant="outlined"
+              multiline
+              onChange={handleDescriptionChange}
+              value={description}
+            ></TextField>
+          ) : (
+            <p>{description}</p>
+          )}
         </div>
         <div>
           <div className={classes.dateContainer}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              {isEdit ? (
+                <DatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="dd/MM/yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label="Start date"
+                  inputVariant="outlined"
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                />
+              ) : (
+                <p>{startDate?.toISOString().split("T")[0]}</p>
+              )}
+              {isEdit?(
               <DatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Start date"
-                inputVariant="outlined"
-                value={startDate}
-                onChange={handleStartDateChange}
-                // KeyboardButtonProps={{
-                //   "aria-label": "change date",
-                // }}
-              />
-              <DatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="End date"
-                inputVariant="outlined"
-                value={endDate}
-                onChange={handleEndDateChange}
-              />
+              disableToolbar
+              variant="inline"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="End date"
+              inputVariant="outlined"
+              value={endDate}
+              onChange={handleEndDateChange}
+            />):(<p>{endDate?.toISOString().split("T")[0]}</p>)
+            
+            }
+              
             </MuiPickersUtilsProvider>
           </div>
           <div className={classes.buttonAlignment}>
-            <Button
+            {isEdit?(
+              <Button
               className={classes.button}
               onClick={handleSaveButtonClick}
               variant="contained"
@@ -246,6 +296,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             >
               SAVE
             </Button>
+            ):(null)}
+            
           </div>
         </div>
       </div>
