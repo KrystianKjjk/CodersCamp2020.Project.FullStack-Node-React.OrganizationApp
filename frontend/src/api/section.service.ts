@@ -5,7 +5,7 @@ export default class SectionService {
     endpoint: string = '';
 
     constructor(private httpService: BaseService = new BaseService()) {
-        this.endpoint = `section`
+        this.endpoint = `sections`
     };
 
     async getSection(sectionID: string) {

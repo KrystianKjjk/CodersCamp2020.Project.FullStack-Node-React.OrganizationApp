@@ -12,6 +12,7 @@ import { getUserFromLocalStorage } from "../../app/utils";
 
 import ReferenceProjects from "../ReferenceProjects";
 import ManageReferenceProject from "../ManageReferenceProject";
+import ManageUser from "../ManageUser";
 
 const MainView: React.FC = () => {
   
@@ -20,7 +21,7 @@ const MainView: React.FC = () => {
       <Header />
       <Switch>
         <PrivateRoute path="/users">
-          <Users />
+          <ManageUser userID="606dd2d12a86c5001501ade7" />
         </PrivateRoute>
         <PrivateRoute path="/courses">
           <Courses />

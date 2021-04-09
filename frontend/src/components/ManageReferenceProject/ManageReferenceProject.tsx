@@ -9,6 +9,7 @@ import {mainTheme} from "../../theme/customMaterialTheme";
 import EditableField from "../EditableField";
 import {addRefProject, deleteRefProject, updateRefProject} from "../ReferenceProjects/ReferenceProjectsSlice";
 import {useHistory} from "react-router-dom";
+import FindSection from "../FindSection";
 
 export interface ManageReferenceProjectProps {
 }
@@ -60,7 +61,6 @@ const ManageReferenceProject = (props: any) => {
       ...project,
       [name]: value
     })
-    console.log(project)
   }
 
   function handleSave() {
@@ -78,6 +78,22 @@ const ManageReferenceProject = (props: any) => {
     dispatch(deleteRefProject(project._id));
     if(isEdit) toggleEdit();
     history.push('/projects');
+  }
+
+  const [openSectionsModal, setOpenSectionsModal] = useState(false);
+
+  function modalAction() {
+    setOpenSectionsModal(true)
+  }
+
+  function handleSectionSelection(sectionID: string, sectionName: string) {
+      setOpenSectionsModal(false);
+
+    setProject({
+      ...project,
+      sectionId: sectionID,
+      "Section name": sectionName
+    });
   }
 
   return (
@@ -114,23 +130,26 @@ const ManageReferenceProject = (props: any) => {
                            fieldName={"Name:"}
                            fieldID={"projectName"}
                            fieldValue={project?.projectName}
-                           placeholder={project?.projectName}
+                           placeholder={project?.projectName || 'example project name'}
                            onChange={handleInputChange}
             />
 
             <EditableField isEdit={isEdit}
+                           isAdding={isAdding}
                            fieldName={"Section name:"}
-                           fieldID={"sectionId"}
-                           fieldValue={project?.sectionId}
-                           placeholder={project?.sectionId}
-                           onChange={handleInputChange}
+                           fieldID={"Section name"}
+                           fieldValue={project?.["Section name"]}
+                           modalAction = {modalAction}
             />
+
+            { openSectionsModal && isEdit
+            && (<FindSection onSectionSelection={handleSectionSelection}/>)}
 
             <EditableField isEdit={isEdit}
                            fieldName={"URL:"}
                            fieldID={"projectUrl"}
                            fieldValue={project?.projectUrl}
-                           placeholder={project?.projectUrl}
+                           placeholder={project?.projectUrl || 'http://example.project.url'}
                            onChange={handleInputChange}
             />
 
@@ -138,13 +157,12 @@ const ManageReferenceProject = (props: any) => {
                            fieldName={"Description:"}
                            fieldID={"description"}
                            fieldValue={project?.description}
-                           placeholder={project?.description}
+                           placeholder={project?.description || 'Some example description'}
                            onChange={handleInputChange}
                            textArea={true}
             />
 
           </form>
-
         </Box>
       </ThemeProvider>
   );

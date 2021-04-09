@@ -50,6 +50,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
     };
 
     const handleClose = () => {
+        setOpen(false);
     };
 
     function handleRowClick(params: any, e: any) {
