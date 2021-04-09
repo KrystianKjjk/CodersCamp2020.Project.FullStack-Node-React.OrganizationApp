@@ -6,7 +6,7 @@ export interface Section {
     startDate: Date,
     endDate: Date,
     tests: Test[],
-    referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
+    referenceProjectId?: mongoose.Types.ObjectId, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
     materials?: mongoose.Types.ObjectId[] //materials reference
     course: mongoose.Types.ObjectId
@@ -65,7 +65,7 @@ const SectionSchema = new mongoose.Schema({
         type: [TestSchema],
     },
     referenceProjectId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         ref: 'Project'
     },
     description:{
