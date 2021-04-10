@@ -14,6 +14,7 @@ import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 import StyledTextField from '../StyledTextField';
 import BaseService from '../../app/baseService';
 import useStyles from './Registration.style';
+import HeaderRegistration from '../HeaderRegistration';
 
 export interface RegistrationProps {
   
@@ -59,6 +60,8 @@ export default function SignUp() {
   const areAllFieldsFilled = name && surname && email && password && confirmPassword;
 
   return (
+    <div>
+      <HeaderRegistration />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -155,5 +158,6 @@ export default function SignUp() {
         </form>
       </div>
     </Container>
+    </div>
   );
 }
