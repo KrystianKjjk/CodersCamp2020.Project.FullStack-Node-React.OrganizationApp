@@ -8,6 +8,7 @@ import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
+import ManageSheets from '../ManageSheets';
 
 const MainView: React.FC = () => {
   
@@ -25,7 +26,7 @@ const MainView: React.FC = () => {
           <Sections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
-          <Gradesheets />
+          <ManageSheets />
         </PrivateRoute>
         <PrivateRoute path="/projects">
           <Projects />
@@ -64,9 +65,6 @@ function Courses() {
 }
 function Sections() {
   return <h2>Sections</h2>;
-}
-function Gradesheets() {
-  return <h2>Grade sheets</h2>;
 }
 function Projects() {
   return <h2>Projects</h2>;

@@ -5,7 +5,7 @@ import { store } from '../../app/store';
 import { Provider } from 'react-redux';
 import darkTheme from '../../theme/customMaterialTheme';
 import { ThemeProvider } from '@material-ui/styles';
-import TeamService from '../../api/Teams.service';
+import TeamService from '../../api/Team.service';
 
 
 export default {

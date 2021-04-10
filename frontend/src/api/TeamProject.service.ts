@@ -11,8 +11,8 @@ export default class TeamProjectService {
         private sheetApi = new SheetService()
     ) { }
 
-    async getTeamProjects(id: string, mentorId?: string): Promise<TeamProject[]> {
-        const projectsRes = await this.api.get(`/teams/${id}/projects`);
+    getTeamProjects = async (teamId: string, mentorId?: string): Promise<TeamProject[]> => {
+        const projectsRes = await this.api.get(`/teams/${teamId}/projects`);
         const projectsData = projectsRes.data as TeamProjectData[];
         console.log(projectsRes);
         const projects = await Promise.all( projectsData.map( async project => {
@@ -34,6 +34,17 @@ export default class TeamProjectService {
             }
         })
         return projects;
+    }
+
+    getTeamProject = async (id: string): Promise<TeamProject> => {
+        const response = await this.api.get('/team/projects/' + id);
+        const project: TeamProjectData = response.data;
+        return {
+            ...project,
+            id: project._id,
+            name: project.projectName,
+            url: project.projectUrl,
+        }
     }
 
 }

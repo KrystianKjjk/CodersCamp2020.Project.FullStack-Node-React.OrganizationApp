@@ -24,6 +24,20 @@ export default class UserService {
         }) );
     }
 
+    getUser = async (id: string) => {
+        const response = await this.api.get('/users/' + id);
+        const user = response.data as UserData;
+        return {
+            ...response.data,
+            id: user._id,
+            type: userTypeDict[user.type],
+            status: userStatusDict[user.status],
+            averageGrade: user.grades.length ? user.grades
+                            .map(calcAvgGrade)
+                            .reduce((a, b) => a + b, 0) / user.grades.length : 0,
+        };
+    }
+
     getUsersOfType = async (type: string): Promise<User[]> => {
         const users = await this.getUsers();
         return users.filter((user: User) => user.type === type);

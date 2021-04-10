@@ -8,11 +8,9 @@ import { sortData, filterData, searchData } from '../ReusableTable/ReusableTable
 import SheetService from '../../api/Sheet.service';
 
 const sheetsDatabase = [
-   {id: '1', name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
-   {id: '2', name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 1. edition'},
-   {id: '3', name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 1. edition'},
-   {id: '4', name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 1. edition'},
-   {id: '5', name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 1. edition'},
+   {id: '1', mentorName: 'Krystian', mentorSurname: 'Kijak', projectName: 'FitNotFat'},
+   {id: '2', mentorName: 'MentorName', mentorSurname: 'MentorSurname', projectName: 'Pokemon Quiz'},
+   {id: '3', mentorName: 'TorName', mentorSurname: 'OrSurname', projectName: 'StarWars Quiz'},
 ];
 const sheetsCount = sheetsDatabase.length;
 const tableName = 'Sheets';
@@ -24,7 +22,7 @@ describe('ManageSheets', () => {
    it('renders without error, filters and sorts data', async () => {
       const getSheetsMock = jest.fn( () => Promise.resolve(sheetsDatabase) );
       const createSheetMock = jest.fn( async () => {
-         sheetsDatabase.push({id: '7', name: '---', surname: '---', courseName: 'Course from local storage'})
+         sheetsDatabase.push({id: '7', mentorName: 'Piotr', mentorSurname: 'Bocian', projectName: 'Chess'})
       } );
       const deleteSheetMock = jest.fn( async (id: string) => {
          sheetsDatabase.filter(sheet => sheet.id !== id)
@@ -54,15 +52,15 @@ describe('ManageSheets', () => {
 
       store.dispatch(filterData({
          table: tableName,
-         filters: [ {column: 'surname', values: ['CSurname']} ]
+         filters: [ {column: 'mentorSurname', values: ['Bocian']} ]
       }));
       expect(store.getState().tables[tableName].displayedRows).toHaveLength(1);
 
-      store.dispatch(sortData({table: tableName, column: 'name'}));
-      expect(store.getState().tables[tableName].displayedRows[0].name).toBe('CName');
-
-      store.dispatch(searchData({table: tableName, column: 'name', search: ''}));
+      store.dispatch(searchData({table: tableName, column: 'mentorName', search: ''}));
       expect(store.getState().tables[tableName].displayedRows).toHaveLength(sheetsCount + 1);
+
+      store.dispatch(sortData({table: tableName, column: 'mentorName'}));
+      expect(store.getState().tables[tableName].displayedRows[0].mentorName).toBe('Krystian');
 
       await screen.findByLabelText('Table - ' + tableName);
       const sheetCheckboxes = screen.getAllByLabelText('Select Row checkbox');

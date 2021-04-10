@@ -34,11 +34,11 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
     dispatch(searchData(searchQuery));
   }
 
-  const sortByOptions = ['name', 'surname', 'courseName'];
+  const sortByOptions = ['mentorName', 'mentorSurname', 'projectName'];
   const columns = [
-    {field: 'surname', headerName: 'Mentor surname', width: 200, sortable: true},
-    {field: 'name', headerName: 'Mentor name', width: 150, sortable: true},
-    {field: 'courseName', headerName: 'Course name', width: 250, sortable: true},
+    {field: 'mentorSurname', headerName: 'Mentor surname', width: 200, sortable: true},
+    {field: 'mentorName', headerName: 'Mentor name', width: 150, sortable: true},
+    {field: 'projectName', headerName: 'Project name', width: 250, sortable: true},
   ]
 
   const handleAddClick = async () => {
