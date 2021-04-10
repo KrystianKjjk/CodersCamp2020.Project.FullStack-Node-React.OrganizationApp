@@ -1,7 +1,7 @@
 import { String } from 'lodash';
 import BaseService from '../app/baseService';
 import { Course, CourseData } from '../models/Course.model';
-import { Section, SectionData } from '../models/Section.model';
+import { Section, SectionData, Project, ProjectData } from '../models/Section.model';
 
 export default class SectionService {
     
@@ -18,7 +18,6 @@ export default class SectionService {
                 name: section.name,
                 startDate: section.startDate ? new Date(section.startDate) : undefined,
                 endDate: section.endDate ? new Date(section.endDate) : undefined,
-                referenceProjectName: section.referenceProjectId?.projectName || '',
                 courseName: course ? course.name : '',
                 courseId: course?._id || '',
             })
@@ -36,18 +35,30 @@ export default class SectionService {
         });
     }
 
+    getProjectForSection = async (id: string): Promise<Project> => {
+        const projects = (await this.api.get('/projects')).data as ProjectData[];
+        const project = projects.find(project => project.sectionId === id);
+        return {
+            id: project?._id || '',
+            projectName: project?.projectName || '',
+        }
+    }
+
     getOneSection  = async (id: string): Promise<Section> => {
         
         const section = (await this.api.get(`/sections/${id}`)).data as SectionData;
-        const coursesResponse = await this.api.get(`/courses/${section.course}`);
-        const course = coursesResponse.data as CourseData;
+        let course = null;
+        if (section.course) {
+            try {
+                const coursesResponse = await this.api.get(`/courses/${section.course}`);
+                course = coursesResponse.data as CourseData;
+            } catch (e) {};
+        } 
         return {
             id: section._id,
             name: section.name,
             startDate: section.startDate ? new Date(section.startDate) : undefined,
             endDate: section.endDate ? new Date(section.endDate) : undefined,
-            referenceProjectName: section.referenceProjectId?.projectName || '',
-            referenceProjectId: section.referenceProjectId?._id || '',
             description: section.description,
             courseName: course ? course.name : '',
             courseId: course?._id || '',
