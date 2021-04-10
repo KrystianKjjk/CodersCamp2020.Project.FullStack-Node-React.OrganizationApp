@@ -6,3 +6,10 @@ export const getUserFromLocalStorage = () => {
     return {userId, userToken, userType};
   }
 
+
+export const removeUserFromLocalStorage = () => {
+      localStorage.removeItem('id');
+      localStorage.removeItem('token');
+      localStorage.removeItem('type');
+}
+

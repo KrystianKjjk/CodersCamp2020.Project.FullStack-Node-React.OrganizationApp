@@ -9,6 +9,7 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
 import ManageTeams from '../ManageTeams';
+import ManageUsers from '../ManageUsers';
 
 const MainView: React.FC = () => {
   
@@ -17,7 +18,7 @@ const MainView: React.FC = () => {
       <Header />
       <Switch>
         <PrivateRoute path="/users">
-          <Users />
+          <ManageUsers />
         </PrivateRoute>
         <PrivateRoute path="/courses">
           <Courses />
@@ -57,9 +58,6 @@ const MainView: React.FC = () => {
   );
 };
 
-function Users() {
-  return <h2>Users</h2>
-}
 function Courses() {
   return <h2>Courses</h2>;
 }

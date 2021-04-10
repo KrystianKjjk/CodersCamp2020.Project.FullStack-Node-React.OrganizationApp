@@ -6,6 +6,7 @@ import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
+import { UserService } from '../../api';
 
 
 interface CheckboxProps {
@@ -29,11 +30,10 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
   />
 );
 
-export interface ManageUsersProps {
-  getUsers: () => Promise<any[]>;
-}
+export interface ManageUsersProps { };
 
-const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
+const ManageUsers: React.FC< ManageUsersProps > = () => {
+  const api = new UserService();
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
     Active: false,
@@ -74,9 +74,11 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
       {column: 'status', values: statusValues}
     ];
     dispatch(filterData({table: 'Users', filters }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeFilters, statusFilters]);
   useEffect(() => {
     dispatch(sortData({table: 'Users', column: sortBy }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
   useEffect(() => {
     const f = {
@@ -84,6 +86,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
       values: [ search ],
     }
     dispatch(filterData({table: 'Users', filters: [ f ]}));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   const sortByOptions = ['name', 'surname', 'type', 'status'];
@@ -150,7 +153,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
             </span>
           </div>
         </div>
-        <Table name='Users' columns={columns} getData={getUsers}/>
+        <Table name='Users' columns={columns} getData={api.getUsers}/>
       </Paper>
     </div>
   );
