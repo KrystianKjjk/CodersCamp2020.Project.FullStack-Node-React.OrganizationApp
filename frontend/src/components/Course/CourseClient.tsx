@@ -64,3 +64,10 @@ export const fetchCourseSections = (courseId: string) => {
     config
   );
 };
+
+export const deleteSectionById = (sectionId:string)=>{
+  return axios.delete(
+    "https://coders-camp-organization-app.herokuapp.com/api/sections/"+sectionId,
+    config
+  );
+};

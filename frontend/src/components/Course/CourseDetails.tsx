@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Course.module.css";
 import { RouteComponentProps } from "react-router-dom";
-import { fetchCourseAsync, Course } from "./CourseDetailsSlice";
+import { fetchCourseAsync, Course, updateCourseAsync } from "./CourseDetailsSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Input from "@material-ui/core/Input";
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const dispatch = useAppDispatch();
-  const { course } = useAppSelector((state) => state.courseDetails);
+  const { course,  sectionsIdToDelete} = useAppSelector((state) => state.courseDetails);
   const [courseName, changeCourseName] = useState("");
   const [description, changeDescription] = useState("");
   const [startDate, changeStartDate] = useState<Date | null>(new Date());
@@ -129,7 +129,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       endDate: endDate!,
     };
 
-    updateCourse(courseToSave);
+    dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete));
   };
 
   // const handleSaveButtonClick = async () => {
@@ -226,7 +226,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
           <Box marginLeft="3%" marginTop="2%">
             <h4>Sections:</h4>
             {course.sections.map((section) => (
-              <CourseSectionElement section={section} isEdit={isEdit} />
+              <CourseSectionElement section={section} isEdit={isEdit} key={section._id} />
             ))}
           </Box>
           {/* <div className={classes.dateContainer}></div> */}
