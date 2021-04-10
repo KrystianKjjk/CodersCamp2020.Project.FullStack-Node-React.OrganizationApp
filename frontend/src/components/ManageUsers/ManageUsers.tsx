@@ -30,7 +30,7 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
   />
 );
 
-export interface ManageUsersProps { }
+export interface ManageUsersProps { };
 
 const ManageUsers: React.FC< ManageUsersProps > = () => {
   const api = new UserService();
