@@ -81,7 +81,8 @@ async function getProjectDetailedData(project: TeamProject) {
         Mentor: '',
         Name: project.projectName,
         ReferenceProject: '',
-        Section: ''
+        Section: '',
+        CourseId: ''
     }
 
     if (project.teamId.mentor) {
@@ -93,9 +94,10 @@ async function getProjectDetailedData(project: TeamProject) {
         try {
             const section = await api.get(`/sections/${project.parentProjectId.sectionId}`);
             returnProject.Section = section.data.name;
+            returnProject.CourseId = section.data.course;
         }
         catch {
-            returnProject.Section = ''
+            returnProject.Section = '';
         }
     }
     return returnProject;
