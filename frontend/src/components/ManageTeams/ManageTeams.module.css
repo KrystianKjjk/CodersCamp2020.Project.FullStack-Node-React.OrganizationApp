@@ -22,14 +22,20 @@
 .manageContainer {
     margin-bottom: 3rem;
     display: grid;
-    grid-template-areas:    "mainHeader sortBy addBtn";
+    grid-template-areas:    "mainHeader sortBy buttons";
     border-bottom: gray 1px solid;
     padding: 1rem;
 }
-.addButton {
-    grid-area: addBtn;
+.buttons {
+    display: flex;
+    grid-area: buttons;
     justify-self: end;
     align-self: center;
+    justify-content: space-around;
+    align-items: center;
+}
+.buttons > * {
+    margin-left: 2rem !important;
 }
 .selectSortBy {
     grid-area: sortBy;

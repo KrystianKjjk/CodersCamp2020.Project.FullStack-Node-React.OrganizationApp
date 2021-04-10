@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import styles from './ManageTeams.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
@@ -8,6 +8,8 @@ import { fetchData, filterData, sortData } from '../ReusableTable/ReusableTableS
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamService } from '../../api';
+import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
+import UButton from '../UButton';
 
 
 export interface ManageTeamsProps { };
@@ -15,31 +17,21 @@ export interface ManageTeamsProps { };
 const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const api = new TeamService();
   const dispatch = useAppDispatch();
-  const [sortBy, setSortBy] = useState('');
-  const [search, setSearch] = useState('');
+  const selectedTeams = useRef([] as string[]);
 
   const tableName = 'Teams';
 
   const changeSortBy = (value: string) => {
-    setSortBy(value);
+    dispatch(sortData({table: 'Teams', column: value }));
   };
-  const changeSearch = (value: string) => {
-    setSearch(value);
-  }
-  
-  useEffect(() => {
-    dispatch(sortData({table: 'Teams', column: sortBy }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy]);
 
-  useEffect(() => {
+  const changeSearch = (value: string) => {
     const f = {
-      column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'surname',
-      values: [ search ],
+      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
+      values: [ value ],
     }
     dispatch(filterData({table: 'Teams', filters: [ f ]}));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }
 
   const sortByOptions = ['name', 'surname', 'courseName'];
   const columns = [
@@ -51,6 +43,18 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const handleAddClick = async () => {
     await api.createTeam();
     dispatch(fetchData(tableName, api.getTeams));
+  }
+
+  const handleTeamSelection = (params: GridSelectionModelChangeParams) => {
+    selectedTeams.current = params.selectionModel as string[];
+  }
+
+  const deleteSelectedTeams = () => {
+    selectedTeams.current.forEach((teamId) => {
+      api.deleteTeam(teamId);
+    })
+    dispatch(fetchData(tableName, api.getTeams));
+    selectedTeams.current = [];
   }
   
   return (
@@ -65,15 +69,22 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Teams</h2>
-          <span onClick={handleAddClick} className={styles.addButton} aria-label='Add team'>
-            <AddButton text='Add'/>
-          </span>
+          <div className={styles.buttons}>
+            <AddButton text='Add' onClick={handleAddClick} aria-label='Add team'/>
+            <UButton text="Delete" color="secondary" onClick={deleteSelectedTeams}/>
+          </div>
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
           </span>
         </div>
         <div className={styles.table}>
-          <Table name={tableName} columns={columns} getData={api.getTeams}/>
+          <Table 
+            name={tableName} 
+            columns={columns} 
+            getData={api.getTeams} 
+            onSelectionModelChange={handleTeamSelection}
+            checkboxSelection
+          />
         </div>
       </Paper>
     </Container>

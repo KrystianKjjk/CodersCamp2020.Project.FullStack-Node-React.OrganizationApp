@@ -95,4 +95,8 @@ export default class TeamService {
         await this.api.post('/teams', {course: courseId});
     }
 
+    deleteTeam = async (id: string) => {
+        await this.api.delete('/teams/' + id);
+    }
+
 }
