@@ -4,7 +4,7 @@ import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { fetchData, filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { fetchData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamService } from '../../api';

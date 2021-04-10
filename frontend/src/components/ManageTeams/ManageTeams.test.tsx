@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, wait } from '@testing-library/react';
+import { render, screen, wait } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
@@ -20,7 +20,7 @@ const tableName = 'Teams';
 jest.mock('../../api/Team.service.ts', () => jest.fn());
       
 describe('ManageTeams', () => {
-   jest.setTimeout(15000);
+   jest.setTimeout(20000);
    it('renders without error, filters and sorts data', async () => {
       const getTeamsMock = jest.fn( () => Promise.resolve(teamsDatabase) );
       const createTeamMock = jest.fn( async () => {
