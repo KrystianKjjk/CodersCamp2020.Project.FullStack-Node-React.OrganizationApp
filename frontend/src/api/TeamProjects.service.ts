@@ -75,6 +75,7 @@ async function getTeamProjects(): Promise<any[]> {
 }
 
 async function getProjectDetailedData(project: TeamProject) {
+    const courseId = localStorage.getItem('courseId');
     const returnProject = {
         ...project,
         id: project._id,
@@ -100,7 +101,9 @@ async function getProjectDetailedData(project: TeamProject) {
             returnProject.Section = '';
         }
     }
-    return returnProject;
+
+    if (returnProject.CourseId === courseId) return returnProject;
+    return null;
 }
 
 export {getTeamProjects};
