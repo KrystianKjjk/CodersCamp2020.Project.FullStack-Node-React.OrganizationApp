@@ -41,12 +41,15 @@ export default class SheetService {
                 projectName,
             });
         }
-        
+
         return sheets;
     }
 
     createSheet = async () => {
-        await this.api.post('/grade/sheets', {});
+        await this.api.post('/grade/sheets', {
+            mentorID: '507f1f77bcf86cd799439011',
+            projectID: '507f1f77bcf86cd799439011',
+        });
     }
 
     deleteSheet = async (id: string) => {
