@@ -3,13 +3,8 @@ import styles from './ManageReferenceProject.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {
   Box,
-  Breadcrumbs, Button,
-  Dialog,
-  DialogActions, DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Breadcrumbs,
   Link,
-  Snackbar,
   Typography
 } from "@material-ui/core";
 import UButton from "../UButton";
@@ -105,15 +100,16 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenDelete(false);
   };
 
-  const [openSectionsModal, setOpenSectionsModal] = useState(false);
+  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false);
 
-  function modalAction() {
-    setOpenSectionsModal(true)
+  function openSectionsModal() {
+    setIsOpenSectionsModal(true)
   }
-
+  function closeSectionsModal() {
+    setIsOpenSectionsModal(false)
+  }
   function handleSectionSelection(sectionID: string, sectionName: string) {
-      setOpenSectionsModal(false);
-
+    closeSectionsModal();
     setProject({
       ...project,
       sectionId: sectionID,
@@ -172,11 +168,14 @@ const ManageReferenceProject = (props: any) => {
                            fieldName={"Section name:"}
                            fieldID={"Section name"}
                            fieldValue={project?.["Section name"]}
-                           modalAction = {modalAction}
+                           modalAction = {openSectionsModal}
             />
 
-            { openSectionsModal && isEdit
-            && (<FindSection onSectionSelection={handleSectionSelection}/>)}
+            { isOpenSectionsModal && isEdit
+            && (<FindSection
+                isOpen={isOpenSectionsModal}
+                handleClose={closeSectionsModal}
+                onSectionSelection={handleSectionSelection}/>)}
 
             <EditableField isEdit={isEdit}
                            fieldName={"URL:"}

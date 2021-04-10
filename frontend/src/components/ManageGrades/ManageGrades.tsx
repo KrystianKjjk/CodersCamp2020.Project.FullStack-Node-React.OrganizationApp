@@ -36,9 +36,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     const [openErrorAlert, setOpenErrorAlert] = useState(false);
     const [openWarningAlert, setOpenWarningAlert] = React.useState(false);
 
-    const [openSectionsModal, setOpenSectionsModal] = useState(false);
     const [grades, setGrades] = useState<IGrade[]>([]);
     const [sections, setSections] = useState<ISectionsUtility[]>([]);
+
+    const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false);
 
     useEffect(() => {
         getGrades(props.userID);
@@ -51,6 +52,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
         setIsEdit(
             [...edits],
         )
+    }
+
+    function openSectionsModal() {
+        setIsOpenSectionsModal(true)
+    }
+    function closeSectionsModal() {
+        setIsOpenSectionsModal(false)
     }
 
     function handleInputChangeGrade(event: React.ChangeEvent<HTMLInputElement>) {
@@ -211,7 +219,7 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
     function handleSectionSelection(index: number){
         return function onSectionSelection(sectionID: string, sectionName: string) {
 
-            setOpenSectionsModal(false)
+            closeSectionsModal();
             const tmpGrades = [...grades];
             tmpGrades[index].sectionId = sectionID;
             setGrades([...tmpGrades]);
@@ -257,8 +265,11 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                 <Box display="flex" flexWrap="wrap">
                     {grades?.map((grade, index) => (
                         <div className={styles.gradeContainer} key={index}>
-                            { openSectionsModal && isEdit[index]
-                            && (<FindSection onSectionSelection={handleSectionSelection(index)}/>)}
+                            { isOpenSectionsModal && isEdit[index]
+                            && (<FindSection
+                                isOpen={isOpenSectionsModal}
+                                handleClose={closeSectionsModal}
+                                onSectionSelection={handleSectionSelection(index)}/>)}
 
                                 <div className={styles.gradeContainer__header}>
                                 <span>{sections[index]?.name ?? 'Section Name'}</span>
@@ -266,13 +277,13 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                 <UButton
                                     text='SELECT'
                                     color='primary'
-                                    onClick={() => setOpenSectionsModal(true)} />
+                                    onClick={openSectionsModal} />
                                     ) }
                                     { isEdit[index] && grades[index]?.sectionId !== '' && (
                                 <UButton
                                     text='CHANGE'
                                     color='primary'
-                                    onClick={() => setOpenSectionsModal(true)} />
+                                    onClick={openSectionsModal} />
                             ) }
                             </div>
 
