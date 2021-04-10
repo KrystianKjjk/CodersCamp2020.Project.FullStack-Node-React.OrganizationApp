@@ -1,4 +1,4 @@
-import { Button, makeStyles, createStyles, Theme } from "@material-ui/core";
+import { Button, makeStyles, createStyles, Theme, Box } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { deleteSection, SectionListElement } from "./CourseDetailsSlice";
@@ -14,11 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: "10%",
       width: "7%",
       marginLeft: "3%",
-    },
-    sectionsDiv: {
-      display: "flex",
-      alignItems: "center",
-      marginLeft: "5%",
+      marginRight: "26%"
     },
   })
 );
@@ -35,14 +31,14 @@ const CourseSectionElement = ({
   };
 
   return (
-    <div className={classes.sectionsDiv}>
-      <p>{section.name}</p>
+    <Box display="flex" alignItems="center" justifyContent="space-between" width="400px">
+      <Box><p>{section.name}</p></Box>
       {isEdit ? (
         <Button className={classes.button} onClick={handleDeleteButtonClick}>
           DELETE
         </Button>
       ) : null}
-    </div>
+    </Box>
   );
 };
 

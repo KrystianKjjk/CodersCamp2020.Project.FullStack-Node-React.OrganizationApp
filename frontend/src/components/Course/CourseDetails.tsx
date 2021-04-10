@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     nameInput: {
       "&.MuiTextField-root": {
-        width: "50%",
+        width: "100%",
         paddingBottom: "2%",
       },
     },
@@ -72,12 +72,6 @@ const useStyles = makeStyles((theme: Theme) =>
     header: {
       paddingLeft: "3%",
     },
-    // dateContainer: {
-    //   display: "flex",
-    //   // flexDirection:"column",
-    //   justifyContent: "space-between",
-    //   margin: "2% 15%",
-    // },
     datePicker: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
@@ -99,10 +93,6 @@ const useStyles = makeStyles((theme: Theme) =>
       "&:hover": {
         backgroundColor: "#67b5ff",
       },
-    },
-    buttonAlignment: {
-      display: "flex",
-      justifyContent: "center",
     },
   })
 );
@@ -232,8 +222,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             <Box><p>{description}</p></Box>
           )}
         </div>
-        <Box display="flex" justifyContent="start" borderTop="1px solid #666666" alignContent="space-around" margin="3% 0">
-          <Box marginRight="30%" marginLeft="3%" marginTop="2%">
+        <Box display="flex" justifyContent="start" borderTop="1px solid #666666" alignContent="space-between" margin="3% 0">
+          <Box marginLeft="3%" marginTop="2%">
             <h4>Sections:</h4>
             {course.sections.map((section) => (
               <CourseSectionElement section={section} isEdit={isEdit} />
@@ -283,7 +273,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             </MuiPickersUtilsProvider>
           </Box>
         </Box>
-        <div className={classes.buttonAlignment}>
+        <Box display="flex" justifyContent="center" borderTop="1px solid #666666">
           {isEdit ? (
             <Button
               className={classes.button}
@@ -294,7 +284,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               SAVE
             </Button>
           ) : null}
-        </div>
+        </Box>
       </div>
     </div>
   );
