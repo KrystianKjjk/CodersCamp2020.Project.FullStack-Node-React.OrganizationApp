@@ -1,8 +1,8 @@
-.teamId {
+.sheetId {
     font-size: 0.7em;
     font-weight: 500;
 }
-.manageTeams {
+.manageSheet {
     margin: auto;
     max-width: 800px;
     display: flex;

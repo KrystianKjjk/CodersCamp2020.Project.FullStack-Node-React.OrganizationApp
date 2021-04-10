@@ -2,7 +2,7 @@ export interface Grades {
     [grade: string]: number;
 };
 
-interface Participant {
+export interface Participant {
     participantID: string;
     engagement?: number;
     role?: string;
@@ -31,6 +31,8 @@ export interface GradeSheet {
     id: string;
     projectID?: string;
     projectName: string;
+    projectUrl: string;
+    projectDescription: string;
     mentorName: string;
     mentorSurname: string;
     participants?: Participant[];

@@ -7,7 +7,7 @@ import ManageUsers from './ManageUsers';
 import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
 import UserService from '../../api/User.service';
 
-const usersDatabase = [
+export const usersDatabase = [
    {id: 1, name: 'Naame', surname: 'Suurname', type: 'Mentor', status: 'Active'},
    {id: 2, name: 'Naaame', surname: 'Suuuurname', type: 'Participant', status: 'Archived'},
    {id: 3, name: 'Naaaame', surname: 'Suuurname', type: 'Participant', status: 'Resigned'},

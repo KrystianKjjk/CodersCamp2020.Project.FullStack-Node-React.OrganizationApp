@@ -14,35 +14,49 @@ export default class SheetService {
         const sheetsData = response.data as GradeSheetData[];
         const sheets: GradeSheet[] = [];
         for(let i in sheetsData) {
-            const sheet = sheetsData[i];
-            let mentorName: string, mentorSurname: string;
-            try {
-                const mentorRes = await this.api.get('/users/' + sheet.mentorID);
-                const mentor = mentorRes.data as UserData;
-                [mentorName, mentorSurname] = [mentor.name, mentor.surname];
-            } catch(err) {
-                [mentorName, mentorSurname] = ['---', '---'];
-            }
-            
-            let projectName: string;
-            try {
-                const projectRes = await this.api.get('/team/projects/' + sheet.projectID);
-                const project: TeamProjectData = projectRes.data;
-                projectName = project.projectName;
-            } catch (err) {
-                projectName = '---';
-            }
-            
-            sheets.push({
-                ..._.omit(sheet, '_id'),
-                id: sheet._id,
-                mentorName,
-                mentorSurname,
-                projectName,
-            });
+            const sheet = await this.getSheetInfo(sheetsData[i]);
+            sheets.push(sheet);
         }
 
         return sheets;
+    }
+
+    getSheetInfo = async (sheet: GradeSheetData) => {
+        let mentorName: string, mentorSurname: string;
+        try {
+            const mentorRes = await this.api.get('/users/' + sheet.mentorID);
+            const mentor = mentorRes.data as UserData;
+            [mentorName, mentorSurname] = [mentor.name, mentor.surname];
+        } catch(err) {
+            [mentorName, mentorSurname] = ['---', '---'];
+        }
+        
+        let projectName: string, projectUrl: string, projectDescription: string;
+        try {
+            const projectRes = await this.api.get('/team/projects/' + sheet.projectID);
+            const project: TeamProjectData = projectRes.data;
+            projectName = project.projectName;
+            projectUrl = project.projectUrl;
+            projectDescription = project.description;
+        } catch (err) {
+            projectName = '---';
+            [projectName, projectUrl, projectDescription] = ['---', '---', '---'];
+        }
+        
+        return {
+            ..._.omit(sheet, '_id'),
+            id: sheet._id,
+            mentorName,
+            mentorSurname,
+            projectName,
+            projectUrl,
+            projectDescription,
+        };
+    }
+
+    getSheet = async (id: string) => {
+        const response = await this.api.get('/grade/sheets/' + id);
+        return this.getSheetInfo(response.data);
     }
 
     createSheet = async () => {

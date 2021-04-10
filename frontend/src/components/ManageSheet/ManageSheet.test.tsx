@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, wait } from '@testing-library/react';
 import { store } from '../../app/store';
-import ManageTeam from './ManageTeam';
+import ManageTeam from './ManageSheet';
 import TeamService from '../../api/Team.service';
 import UserService from '../../api/User.service';
 import { usersDatabase } from '../ManageUsers';
@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
 import { Route, Switch, BrowserRouter as Router, Redirect } from 'react-router-dom';
 
-const teamsDatabase = [{
+const sheetsDatabase = [{
    id: '0',
    mentor: {
       id: '100',
@@ -49,15 +49,15 @@ jest.mock('../../api/User.service.ts', () => jest.fn());
 describe('ManageTeam', () => {
    
    it('renders without error', async () => {
-      const getTeamMock = jest.fn( (id: string) => Promise.resolve(teamsDatabase[+id]) );
-      const setMentorMock = jest.fn(async (teamId: string, mentorId: string) => {
-         teamsDatabase[+teamId].mentor = mentorsDatabase[+mentorId];
+      const getTeamMock = jest.fn( (id: string) => Promise.resolve(sheetsDatabase[+id]) );
+      const setMentorMock = jest.fn(async (sheetId: string, mentorId: string) => {
+         sheetsDatabase[+sheetId].mentor = mentorsDatabase[+mentorId];
       });
-      const addUserToTeamMock = jest.fn(async (teamId: string, userId: string) => {
-         teamsDatabase[+teamId].users.push(usersDatabase[+userId]);
+      const addUserToTeamMock = jest.fn(async (sheetId: string, userId: string) => {
+         sheetsDatabase[+sheetId].users.push(usersDatabase[+userId]);
       });
-      const deleteUserFromTeamMock = jest.fn(async (teamId: string, userId: string) => {
-         teamsDatabase[+teamId].users = teamsDatabase[+teamId].users.filter(user => user.id !== `${userId}`);
+      const deleteUserFromTeamMock = jest.fn(async (sheetId: string, userId: string) => {
+         sheetsDatabase[+sheetId].users = sheetsDatabase[+sheetId].users.filter(user => user.id !== `${userId}`);
       });
       const TeamServiceMock = {
          getTeam: getTeamMock,
@@ -77,16 +77,16 @@ describe('ManageTeam', () => {
       // @ts-ignore
       UserService.mockImplementation(() => UserServiceMock);
 
-      const teamId = '0';
+      const sheetId = '0';
       render(
          <Provider store={store} >
             <Router>
                <Switch>
-                  <Route path='/teams/:teamId'>
+                  <Route path='/grade/sheets/:sheetId'>
                      <ManageTeam />
                   </Route>
                   <Route path='/'>
-                     <Redirect  to={'/teams/'+teamId} />
+                     <Redirect  to={'/grade/sheets/'+sheetId} />
                   </Route>
                </Switch>
             </Router>
@@ -101,7 +101,7 @@ describe('ManageTeam', () => {
       expect(getParticipantsNotInTeamMock).toBeCalledTimes(0);
 
       const table = store.getState().tables['Team'];
-      expect(table.rows).toHaveLength(teamsDatabase[0].users.length);
+      expect(table.rows).toHaveLength(sheetsDatabase[0].users.length);
 
       const changeMentorBtn = screen.getByText('Change');
       changeMentorBtn.click();
