@@ -30,6 +30,7 @@ import {
 } from "@material-ui/pickers";
 import { updateCourse } from "./CourseClient";
 import { Alert } from "@material-ui/lab";
+import AddButton from "../AddButton";
 
 export interface CourseProps {
   id: string;
@@ -277,6 +278,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 key={section._id}
               />
             ))}
+            {isEdit?(<AddButton text="ADD"></AddButton>):null}
+            
           </Box>
           {/* <div className={classes.dateContainer}></div> */}
           <Box marginTop="2%">
@@ -342,7 +345,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 open={isOpen}
                 autoHideDuration={1000}
                 onClose={handleClose}
-                anchorOrigin={{ vertical:"bottom",horizontal:"center" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               >
                 <Alert onClose={handleClose} severity="info">
                   {message}
