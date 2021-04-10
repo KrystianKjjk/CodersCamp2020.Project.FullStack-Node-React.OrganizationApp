@@ -30,9 +30,11 @@ describe('TeamProjects', () => {
          </Provider>
       );
       const header = await screen.findByLabelText(`TeamProjectsHeader`);
+      //@ts-ignore
       expect(header).toBeInTheDocument();
 
       const table = await screen.findByLabelText(`Table - Manage Team Projects`);
+      //@ts-ignore
       expect(table).toBeInTheDocument();
    });
 });

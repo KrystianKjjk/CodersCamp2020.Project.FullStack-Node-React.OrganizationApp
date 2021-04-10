@@ -3,7 +3,6 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import TeamProjects , { TeamProjectsProps } from './TeamProjects';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import styles from './TeamProjects.module.css';
 import { ThemeProvider } from '@material-ui/styles';
 import darkTheme from '../../theme/customMaterialTheme';
 
