@@ -19,26 +19,25 @@ interface LoggedOutViewProps {
 }
 
 const MainView: React.FC = () => {
-  const [isLogged, setIsLogged] = useState(false);
-
   const userData = getUserFromLocalStorage();
+  const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
 
   const MainContent = () => {
-    if( !(isLogged) ) return <LoggedOut onLogin={() => setIsLogged(true)}/>;
+    if (!(isLogged)) return <LoggedOut onLogin={() => setIsLogged(true)} />;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
       case UserType.Admin:
-        return <Admin onLogout={() => setIsLogged(false)}/>
+        return <Admin onLogout={() => setIsLogged(false)} />
       case UserType.Mentor:
-        return <Mentor onLogout={() => setIsLogged(false)}/>
+        return <Mentor onLogout={() => setIsLogged(false)} />
       default:
-        return <User onLogout={() => setIsLogged(false)}/>
+        return <User onLogout={() => setIsLogged(false)} />
     }
   }
 
   return (
     <div className={styles.mainContainer}>
-      <MainContent/>
+      <MainContent />
     </div>
   );
 };
@@ -48,7 +47,7 @@ function LoggedOut(props: LoggedOutViewProps) {
     <div className={styles.mainContainer} >
       <Switch>
         <Route path="/login">
-          <LogIn onLogin={props.onLogin}/>
+          <LogIn onLogin={props.onLogin} />
         </Route>
         <Route path="/registration">
           <RegistrationView />
@@ -67,7 +66,7 @@ function LoggedOut(props: LoggedOutViewProps) {
 function Admin(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer} >
-      <Header onLogout={props.onLogout}/>
+      <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/users">
           <Users />
@@ -108,7 +107,7 @@ function Admin(props: LoggedInViewProps) {
 function Mentor(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
-      <Header onLogout={props.onLogout}/>
+      <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/home">
           <HomePage />
@@ -133,7 +132,7 @@ function Mentor(props: LoggedInViewProps) {
 function User(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
-      <Header onLogout={props.onLogout}/>
+      <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/home">
           <HomePage />
