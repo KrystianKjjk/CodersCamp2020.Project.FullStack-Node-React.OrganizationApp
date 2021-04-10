@@ -4,16 +4,8 @@ export interface SectionData {
     startDate?: string;
     endDate?: string;
     tests?: Test[];
-    referenceProjectId?: {
-        _id: string
-        projectName: string
-    };
     description?: string;
     course: string;
-}
-
-export interface SectionDataUpdate extends Omit<SectionData, 'referenceProjectId'> {
-    referenceProjectId?: string;
 }
 
 export enum TestType {
@@ -36,8 +28,6 @@ export interface Section {
     startDate?: Date;
     endDate?: Date;
     description?: string;
-    referenceProjectName?: string;
-    referenceProjectId?: string;
     courseName: string;
     courseId: string;
 };
@@ -46,4 +36,15 @@ export const testTypDict = {
     [TestType.sample]: 'sample',
     [TestType.theoretical]: 'theoretical',
     [TestType. practical]: ' practical',
+}
+
+export interface ProjectData {
+    _id: string;
+    projectName: string;
+    sectionId: string;
+}
+
+export interface Project {
+    id: string;
+    projectName: string;
 }
