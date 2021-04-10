@@ -117,14 +117,12 @@ export function getProjectById(id: string) {
         catch (error) {
           console.log('Section', error.message)
         }
-
       }
       catch (error) {
         console.log('Parent Project', error.message)
       }
 
       dispatch(projectOperationSuccess(data));
-      dispatch(switchEditMode);
     } catch (error) {
       dispatch(projectOperationFailure());
     }
@@ -139,7 +137,7 @@ export function saveProjectById(project: Object, id: string) {
       await api.put(`/teams/projects/${id}`, JSON.stringify(project));
     } catch (error) {
       dispatch(projectOperationFailure());
-    }
+    }    
     dispatch(switchEditMode());
   }
 }

@@ -34,6 +34,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
+
     return () => {dispatch(projectOperationSuccess(initialProjectState))}
   }, [dispatch]);
 
