@@ -70,12 +70,16 @@ interface Section {
 const api = new BaseService();
 
 async function getTeamProjects(): Promise<any[]> {
+    const courseId = localStorage.getItem('courseId');
+
     const response = await api.get('/teams/projects');
-    return await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
+    const allProjects = await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
+    //@ts-ignore
+    if (courseId)  return allProjects.filter(project => project.CourseId === courseId);
+    return allProjects;
 }
 
 async function getProjectDetailedData(project: TeamProject) {
-    const courseId = localStorage.getItem('courseId');
     const returnProject = {
         ...project,
         id: project._id,
@@ -100,10 +104,9 @@ async function getProjectDetailedData(project: TeamProject) {
         catch {
             returnProject.Section = '';
         }
-    }
+    }   
 
-    if (returnProject.CourseId === courseId) return returnProject;
-    return null;
+    return returnProject;
 }
 
 export {getTeamProjects};
