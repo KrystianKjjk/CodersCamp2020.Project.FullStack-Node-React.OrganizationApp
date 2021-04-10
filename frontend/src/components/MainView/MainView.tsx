@@ -21,7 +21,7 @@ const MainView: React.FC = () => {
       <Header />
       <Switch>
         <PrivateRoute path="/users">
-          <ManageUser userID="606dd2d12a86c5001501ade7" />
+          <ManageUser userID="60722df3509d2100156f6464" />
         </PrivateRoute>
         <PrivateRoute path="/courses">
           <Courses />

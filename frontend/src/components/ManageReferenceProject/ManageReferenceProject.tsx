@@ -108,6 +108,7 @@ const ManageReferenceProject = (props: any) => {
   function closeSectionsModal() {
     setIsOpenSectionsModal(false)
   }
+
   function handleSectionSelection(sectionID: string, sectionName: string) {
     closeSectionsModal();
     setProject({
@@ -121,7 +122,7 @@ const ManageReferenceProject = (props: any) => {
       <ThemeProvider theme={mainTheme}>
         <ConfirmationDialog
             title="Are you sure you want to delete the project?"
-            content="This action is irreversible!"
+            content="This action is irreversible."
             isOpen={isOpenDelete}
             onClose={handleCloseDeleteConfirmation }
             handleAgree={handleDelete}
