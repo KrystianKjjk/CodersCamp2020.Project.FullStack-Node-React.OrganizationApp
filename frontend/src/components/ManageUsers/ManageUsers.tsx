@@ -1,10 +1,10 @@
-import React, { ReactEventHandler, useEffect, useState } from 'react';
+import React, { ReactEventHandler, useEffect, useRef, useState } from 'react';
 import { FormControlLabel, Checkbox, Paper, CssBaseline, Container } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { UserService } from '../../api';
 
@@ -31,8 +31,10 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
 );
 
 export interface ManageUsersProps { };
-const api = new UserService();
+
 const ManageUsers: React.FC< ManageUsersProps > = () => {
+  const api = useRef<UserService>(new UserService());
+  const tableName = 'Users';
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
     Active: false,
@@ -45,8 +47,6 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
     Mentor: false,
     Admin: false,
   });
-  const [sortBy, setSortBy] = useState('');
-  const [search, setSearch] = useState('');
 
   const changeStatusFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatusFilters({ ...statusFilters, [event.target.name]: event.target.checked });
@@ -55,12 +55,17 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
     setTypeFilters({ ...typeFilters, [event.target.name]: event.target.checked });
   };
   const changeSortBy = (value: string) => {
-    setSortBy(value);
+    dispatch(sortData({table: tableName, column: value }));
   };
   const changeSearch = (value: string) => {
-    setSearch(value);
+    const searchQuery = {
+      table: tableName,
+      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
+      search: value,
+    }
+    dispatch(searchData(searchQuery));
   }
-  
+
   useEffect(() => {
     const typeValues = Object.entries(typeFilters)
       .filter(([, value]) => value)
@@ -72,22 +77,10 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
       {column: 'type', values: typeValues},
       {column: 'status', values: statusValues}
     ];
-    dispatch(filterData({table: 'Users', filters }));
+    dispatch(filterData({table: tableName, filters }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeFilters, statusFilters]);
-  useEffect(() => {
-    dispatch(sortData({table: 'Users', column: sortBy }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy]);
-  useEffect(() => {
-    const f = {
-      column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'surname',
-      values: [ search ],
-    }
-    dispatch(filterData({table: 'Users', filters: [ f ]}));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
-
+  
   const sortByOptions = ['name', 'surname', 'type', 'status'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 150, sortable: true},
@@ -152,7 +145,7 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
             </span>
           </div>
         </div>
-        <Table name='Users' columns={columns} getData={api.getUsers}/>
+        {api.current && <Table name={tableName} columns={columns} getData={api.current.getUsers}/>}
       </Paper>
     </Container>
   );
