@@ -218,7 +218,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               ></TextField>
             </div>
           ) : (
-            <h4>{courseName}</h4>
+          <h3>{courseName}</h3>
           )}
           {isEdit ? (
             <TextField
@@ -229,59 +229,55 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               value={description}
             ></TextField>
           ) : (
-            <p>{description}</p>
+            <Box><p>{description}</p></Box>
           )}
         </div>
-        <Box display="flex" justifyContent="start" marginLeft="3%">
-          <Box marginRight="30%">
+        <Box display="flex" justifyContent="start" borderTop="1px solid #666666" alignContent="space-around" margin="3% 0">
+          <Box marginRight="30%" marginLeft="3%" marginTop="2%">
             <h4>Sections:</h4>
             {course.sections.map((section) => (
               <CourseSectionElement section={section} isEdit={isEdit} />
             ))}
           </Box>
           {/* <div className={classes.dateContainer}></div> */}
-          <Box>
+          <Box marginTop="2%">
             <h4>Dates:</h4>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               {isEdit ? (
-                <DatePicker
-                  disableToolbar
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Start date"
-                  inputVariant="outlined"
-                  value={startDate}
-                  onChange={handleStartDateChange}
-                />
+                <Box>
+                  <DatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="Start date"
+                    inputVariant="outlined"
+                    value={startDate}
+                    onChange={handleStartDateChange}
+                  />
+                  <DatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="End date"
+                    inputVariant="outlined"
+                    value={endDate}
+                    onChange={handleEndDateChange}
+                  />
+                </Box>
               ) : (
                 <Box display="flex">
-                  <Box marginRight="6rem">
+                  <Box paddingRight="6rem">
                     <p>Start date:</p>
                     <p>End date:</p>
                   </Box>
-                  <Box><p>{startDate?.toISOString().split("T")[0]}</p></Box>
-                </Box>
-              )}
-              {isEdit ? (
-                <DatePicker
-                  disableToolbar
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="End date"
-                  inputVariant="outlined"
-                  value={endDate}
-                  onChange={handleEndDateChange}
-                />
-              ) : (
-                <Box display="flex">
-                  <Box marginRight="6rem">
-                  <p>End date:</p>
+                  <Box>
+                    <p>{startDate?.toISOString().split("T")[0]}</p>
+                    <p>{endDate?.toISOString().split("T")[0]}</p>
                   </Box>
-                  <Box><p>{endDate?.toISOString().split("T")[0]}</p></Box>
                 </Box>
               )}
             </MuiPickersUtilsProvider>
