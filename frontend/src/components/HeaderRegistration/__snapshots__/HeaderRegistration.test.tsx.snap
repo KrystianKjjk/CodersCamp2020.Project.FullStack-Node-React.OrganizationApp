@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderRegistration should render header registration 1`] = `
+<div>
+  <div
+    class="header"
+  >
+    <div
+      class="logo"
+    >
+      <span>
+        .
+      </span>
+      Coders
+      <span>
+        Camp
+      </span>
+    </div>
+  </div>
+</div>
+`;

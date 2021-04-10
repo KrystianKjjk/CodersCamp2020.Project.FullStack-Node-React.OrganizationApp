@@ -19,6 +19,7 @@ import StyledTextField from "../StyledTextField";
 import useStyles from "./LogIn.style";
 import BaseService from "../../app/baseService";
 import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
+import HeaderRegistration from '../HeaderRegistration';
 
 export interface LogInProps {}
 
@@ -75,6 +76,8 @@ export default function SignIn() {
   };
 
   return (
+    <div>
+      <HeaderRegistration />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -142,6 +145,7 @@ export default function SignIn() {
         </form>
       </div>
     </Container>
+    </div>
   );
 }
 function dispatch(arg0: {
