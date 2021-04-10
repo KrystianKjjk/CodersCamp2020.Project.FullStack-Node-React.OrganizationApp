@@ -24,6 +24,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
   const [search, setSearch] = useState('');
+  const history = useHistory();
   const displayFormattedDate = (date: Date) => {
     if (!date) return '';
 
@@ -49,8 +50,6 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
     }
     dispatch(filterData({table: 'Sections', filters: [ f ]}));
   }, [search]);
-
-  const history = useHistory();
 
   const handleRowClick = (data: {id: string | number}) => {
     history.push(`/sections/${data.id}/edit`);
@@ -81,7 +80,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sections</h2>
           <span onClick={undefined} className={styles.addButton} aria-label='Add section'>
-          <UButton text='ADD' color='primary' onClick={handleAddClick}/>
+            <UButton text='ADD' color='primary' onClick={handleAddClick}/>
           </span>
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>

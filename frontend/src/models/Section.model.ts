@@ -8,6 +8,9 @@ export interface SectionData {
     course: string;
 }
 
+export interface NewSectionData extends Omit<SectionData, '_id'> {
+}
+
 export enum TestType {
     sample,
     theoretical,

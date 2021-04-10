@@ -1,35 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import styles from './SectionView.module.css';
-import AddButton from '../AddButton';
-import DeleteButton from '../DeleteButton';
-import SelectSortBy from '../SelectSortBy';
-import SearchInput from '../SearchInput';
-import Table from '../ReusableTable';
-import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
-import { useAppDispatch } from '../../app/hooks';
-import { Container, CssBaseline, Paper, TextField, InputLabel, MenuItem, Select } from '@material-ui/core';
-import BaseService from '../../app/baseService';
+import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import SectionService from '../../api/Section.service';
-import { SectionData } from '../../models/Section.model';
-import { Course } from '../../models/Course.model';
-import UButton from "../UButton";
-import StyledTextField from '../StyledTextField';
 import DateFnsUtils from '@date-io/date-fns'; 
 import 'date-fns'
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-  DatePicker,
-} from "@material-ui/pickers";
-import CoursesService from '../../api/courses.service';
+//
+import { Container, CssBaseline, Paper, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+//
+import styles from './SectionView.module.css';
+import SectionService from '../../api/Section.service';
+import { NewSectionData } from '../../models/Section.model';
+import { Course } from '../../models/Course.model';
+import StyledTextField from '../StyledTextField';
+import UButton from "../UButton";
 
-export interface SectionViewProps {
-  editMode?: boolean;
-}
-
-const SectionView: React.FC< SectionViewProps > = (editMode) => {
+const SectionView = () => {
   const sectionService = new SectionService();
   const [sectionName, setSectionName] = useState("");
   const [courseName, setCourseName] = useState("");
@@ -41,28 +26,7 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isInEditMode, setIsInEditMode] = useState(false);
   const { id } = useParams<Record<'id', string>>()
-
-  const deleteSection = () => {
-    console.log('test');
-  }
-
-  const editSection = () => {
-    console.log('test');
-  }
-
-  const handleSectionNameChange = (e: any) => {
-    setSectionName(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: any) => {
-    setDescription(e.target.value);
-  };
-
-  const displayFormattedDate = (date: Date | undefined) => {
-    if (!date) return '';
-
-    return `${date.toLocaleDateString()}`;
-  }
+  const history = useHistory();
 
   const getOneSectionData = async () => {
     const data = await sectionService.getOneSection(id);
@@ -86,23 +50,28 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
   };
   
   useEffect(() => {
-      getOneSectionData();
-      getCourseData();
-      getProjectData();
+    if (id) getOneSectionData();
+    else setIsInEditMode(true);
+    getCourseData();
+    getProjectData();
   }, []);
 
   const saveSection = async () => {
-    const sectionToUpdate: SectionData = {
-      _id: id,
+    const sectionData: NewSectionData = {
       name: sectionName,
       startDate: startDate?.toISOString() || undefined,
       endDate: endDate?.toISOString() || undefined,
       description: description,
       course: courseId,
     } 
- 
-    const data = await sectionService.patchSection(sectionToUpdate);
+    
+    const data = id ? await sectionService.patchSection(id, sectionData) : await sectionService.addSection(sectionData);
     setIsInEditMode(false);
+  }
+
+  const handleDeleteClick = async () => {
+    await sectionService.deleteSection(id);
+    history.push('/sections');
   }
 
   const renderButtonEditSave = () => {
@@ -110,13 +79,13 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
       return (
         <span onClick={saveSection} className={styles.saveButton} aria-label='Save section'>
           <UButton text='SAVE' color='primary' onClick={() => setIsInEditMode(true)}/>
-          </span>
+        </span>
       )
     } else {
       return (
-        <span onClick={editSection} className={styles.editButton} aria-label='Edit section'>
+        <span className={styles.editButton} aria-label='Edit section'>
           <UButton text='EDIT' color='primary' onClick={() => setIsInEditMode(true)}/>
-          </span>
+        </span>
       )
     }
   }
@@ -126,11 +95,11 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
       return (
         <div className={styles.textFieldSectionName}>
           <InputLabel>Change Section Name</InputLabel>
-        <StyledTextField
-          value={sectionName}
-          onChange={e => setSectionName(e.target.value)}
-          onBlur={() => console.log({sectionName})}
-        /></div>
+          <StyledTextField
+            value={sectionName}
+            onChange={e => setSectionName(e.target.value)}
+          />
+        </div>
       )
     } else {
       return (
@@ -144,12 +113,12 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
       return (
         <div className={styles.textFieldDescription}>
           <InputLabel>Change description</InputLabel>
-        <StyledTextField
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          multiline={true}
-          onBlur={() => console.log({description})}
-        /></div>
+          <StyledTextField
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            multiline={true}
+          />
+        </div>
       )
     } else {
       return (
@@ -172,22 +141,31 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
       return (
         <div className={styles.textFieldCourse}>
           <InputLabel>Select Course</InputLabel>
-        <Select
-          variant="outlined"
-          className={styles.select}
-          value={courseId}
-          onChange={handleChangeCourse}
-        >
-          <MenuItem disabled>Pick a course</MenuItem>
-          {courses.map(course => <MenuItem value={course.id}>{course.courseName}</MenuItem>)}
-
-        </Select>
+          <Select
+            variant="outlined"
+            className={styles.select}
+            value={courseId}
+            onChange={handleChangeCourse}
+          >
+            <MenuItem disabled>Pick a course</MenuItem>
+            {courses.map(course => <MenuItem value={course.id}>{course.courseName}</MenuItem>)}
+          </Select>
         </div>
       )
     } else {
       return (
         <span className={styles.course_title}> {courseName}</span>
       )
+    }
+  }
+
+  const renderButtonDelete = () => {
+    if (id) {
+      return (
+        <div><UButton text='DELETE' color='secondary' onClick={handleDeleteClick}/></div>
+      )
+    } else {
+      return null
     }
   }
     
@@ -201,10 +179,10 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Section</h2>
           <div className={styles.buttonContainer}>
-          <span onClick={deleteSection} className={styles.deleteButton} aria-label='Delete section'>
-            <UButton text='DELETE' color='secondary' onClick={console.log("string")}/>
-          </span>
-          {renderButtonEditSave()}
+            <span className={styles.deleteButton} aria-label='Delete section'>
+              {renderButtonDelete()}
+            </span>
+              {renderButtonEditSave()}
           </div>
         </div>
         <div className={styles.manageDescription}>

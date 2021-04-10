@@ -1,7 +1,7 @@
 import { String } from 'lodash';
 import BaseService from '../app/baseService';
 import { Course, CourseData } from '../models/Course.model';
-import { Section, SectionData, Project, ProjectData } from '../models/Section.model';
+import { Section, SectionData, NewSectionData, Project, ProjectData } from '../models/Section.model';
 
 export default class SectionService {
     
@@ -37,7 +37,7 @@ export default class SectionService {
 
     getProjectForSection = async (id: string): Promise<Project> => {
         const projects = (await this.api.get('/projects')).data as ProjectData[];
-        const project = projects.find(project => project.sectionId === id);
+        const project = projects.find(project => project.sectionId && project.sectionId === id);
         return {
             id: project?._id || '',
             projectName: project?.projectName || '',
@@ -65,9 +65,16 @@ export default class SectionService {
         };
     }
 
-    patchSection  = async (data: any) => {
-        await this.api.put(`/sections/${data._id}`, data);
-       
+    patchSection  = async (id: string, data: NewSectionData) => {
+        await this.api.put(`/sections/${id}`, data);
+    }
+
+    addSection  = async (data: NewSectionData) => {
+        await this.api.post(`/sections`, data);
+    }
+
+    deleteSection = async (id: string) => {
+        await this.api.delete(`/sections/${id}`);
     }
 }
 

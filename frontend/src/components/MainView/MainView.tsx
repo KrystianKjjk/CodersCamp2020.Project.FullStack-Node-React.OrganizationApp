@@ -27,6 +27,9 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/sections/:id/edit">
           <SectionView />
         </PrivateRoute>
+        <PrivateRoute path="/sections/create">
+          <SectionView />
+        </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />
         </PrivateRoute>
