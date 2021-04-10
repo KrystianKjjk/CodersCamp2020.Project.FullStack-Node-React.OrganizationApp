@@ -11,7 +11,7 @@ import { Container, CssBaseline, Paper, TextField, InputLabel, MenuItem, Select 
 import BaseService from '../../app/baseService';
 import { useParams } from 'react-router-dom';
 import SectionService from '../../api/Section.service';
-import { SectionData, SectionDataUpdate } from '../../models/Section.model';
+import { SectionData } from '../../models/Section.model';
 import { Course } from '../../models/Course.model';
 import UButton from "../UButton";
 import StyledTextField from '../StyledTextField';
@@ -38,10 +38,9 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const [referenceProject, setReferenceProject] = useState("");
-  const [referenceProjectId, setReferenceProjectId] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [isInEditMode, setIsInEditMode] = useState(false);
-  const { id } = useParams();
+  const { id } = useParams<Record<'id', string>>()
 
   const deleteSection = () => {
     console.log('test');
@@ -74,28 +73,31 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
     setDescription(data.description || '');
     setStartDate(data.startDate || undefined);
     setEndDate(data.endDate || undefined);
-    setReferenceProject(data.referenceProjectName || '');
-    setReferenceProjectId(data.referenceProjectId || '');
   };
 
   const getCourseData = async () => {
     const data = await sectionService.getCourses();
     setCourses(data);
   };
+
+  const getProjectData = async () => {
+    const project = await sectionService.getProjectForSection(id);
+    setReferenceProject(project.projectName);
+  };
   
   useEffect(() => {
       getOneSectionData();
       getCourseData();
+      getProjectData();
   }, []);
 
   const saveSection = async () => {
-    const sectionToUpdate: SectionDataUpdate = {
+    const sectionToUpdate: SectionData = {
       _id: id,
       name: sectionName,
       startDate: startDate?.toISOString() || undefined,
       endDate: endDate?.toISOString() || undefined,
       description: description,
-      referenceProjectId: referenceProjectId,
       course: courseId,
     } 
  
@@ -193,7 +195,7 @@ const SectionView: React.FC< SectionViewProps > = (editMode) => {
     <Container className={styles.manageSections} aria-label='Manage Section'>
       <CssBaseline />
       <Paper className={styles.mainHeader}>
-        <h2>SECTION/SECTION ID </h2>
+        <h2>SECTION/{sectionName} </h2>
       </Paper>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>

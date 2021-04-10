@@ -26,6 +26,7 @@
 
 .mainHeader h2 {
     margin: 0px;
+    text-transform: uppercase;
     font-size: 15px;
 }
 
