@@ -1,7 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import styles from './ManageReferenceProject.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Breadcrumbs, Link, Snackbar, Typography} from "@material-ui/core";
+import {
+  Box,
+  Breadcrumbs, Button,
+  Dialog,
+  DialogActions, DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Link,
+  Snackbar,
+  Typography
+} from "@material-ui/core";
 import UButton from "../UButton";
 import MuiAlert from '@material-ui/lab/Alert';
 import {ThemeProvider} from "@material-ui/styles";
@@ -10,6 +20,7 @@ import EditableField from "../EditableField";
 import {addRefProject, deleteRefProject, updateRefProject} from "../ReferenceProjects/ReferenceProjectsSlice";
 import {useHistory} from "react-router-dom";
 import FindSection from "../FindSection";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 export interface ManageReferenceProjectProps {
 }
@@ -79,8 +90,20 @@ const ManageReferenceProject = (props: any) => {
       dispatch(deleteRefProject(project._id));
     }
     if(isEdit) toggleEdit();
+
+    handleCloseDeleteConfirmation();
     history.push('/projects');
   }
+
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+  const handleOpenDeleteConfirmation = () => {
+    setIsOpenDelete(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setIsOpenDelete(false);
+  };
 
   const [openSectionsModal, setOpenSectionsModal] = useState(false);
 
@@ -100,6 +123,14 @@ const ManageReferenceProject = (props: any) => {
 
   return (
       <ThemeProvider theme={mainTheme}>
+        <ConfirmationDialog
+            title="Are you sure you want to delete the project?"
+            content="This action is irreversible!"
+            isOpen={isOpenDelete}
+            onClose={handleCloseDeleteConfirmation }
+            handleAgree={handleDelete}
+            handleDisagree={handleCloseDeleteConfirmation}
+        />
         <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
           <Link href="/projects" color="primary">PROJECTS </Link>
           <Typography color="primary">{projectID}</Typography>
@@ -111,7 +142,7 @@ const ManageReferenceProject = (props: any) => {
               <UButton
                   text='DELETE'
                   color='secondary'
-                  onClick={handleDelete} />
+                  onClick={handleOpenDeleteConfirmation} />
               {isEdit ? (
                   <UButton
                       text='SAVE'
