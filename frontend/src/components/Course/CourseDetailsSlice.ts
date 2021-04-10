@@ -51,12 +51,18 @@ export const fetchCourseAsync = (courseId: string): AppThunk => async (
   dispatch(setCourse(course));
 };
 
-export const updateCourseAsync = (course: Course, sectionsIdToDelete:string[]): AppThunk =>async (dispatch) => {
- sectionsIdToDelete.forEach(async(sectionId)=>{
-  await deleteSectionById(sectionId);
-})
-await updateCourse(course);
-dispatch(setCourse(course));
+export const updateCourseAsync =  (course: Course, sectionsIdToDelete:string[]): AppThunk<Promise<void>> =>async (dispatch) => {
+ try{
+  sectionsIdToDelete.forEach(async(sectionId)=>{
+    await deleteSectionById(sectionId);
+  })
+  await updateCourse(course);
+  dispatch(setCourse(course));
+  return Promise.resolve();
+ }
+  catch(exception){
+    return Promise.reject(exception);
+  }
 // deleteSectionById(sectionId);
 };
 

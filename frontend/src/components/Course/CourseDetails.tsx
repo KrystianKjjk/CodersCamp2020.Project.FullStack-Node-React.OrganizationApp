@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Course.module.css";
 import { RouteComponentProps } from "react-router-dom";
-import { fetchCourseAsync, Course, updateCourseAsync } from "./CourseDetailsSlice";
+import {
+  fetchCourseAsync,
+  Course,
+  updateCourseAsync,
+} from "./CourseDetailsSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Input from "@material-ui/core/Input";
@@ -13,6 +17,7 @@ import {
   Theme,
   createStyles,
   Box,
+  Snackbar,
 } from "@material-ui/core";
 import PageHeader from "../PageHeader";
 
@@ -24,6 +29,7 @@ import {
   DatePicker,
 } from "@material-ui/pickers";
 import { updateCourse } from "./CourseClient";
+import { Alert } from "@material-ui/lab";
 
 export interface CourseProps {
   id: string;
@@ -99,12 +105,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const dispatch = useAppDispatch();
-  const { course,  sectionsIdToDelete} = useAppSelector((state) => state.courseDetails);
+  const { course, sectionsIdToDelete } = useAppSelector(
+    (state) => state.courseDetails
+  );
   const [courseName, changeCourseName] = useState("");
   const [description, changeDescription] = useState("");
   const [startDate, changeStartDate] = useState<Date | null>(new Date());
   const [endDate, changeEndDate] = useState<Date | null>(new Date());
   const [isEdit, setIsEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const classes = useStyles();
 
@@ -129,8 +139,27 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       endDate: endDate!,
     };
 
-    dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete));
+    dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete))
+      .then((response) => {
+        setMessage("Course was updated");
+        setIsOpen(true);
+      })
+      .catch((exception) => {
+        setMessage("Sorry, something went wrong");
+        setIsOpen(true);
+      });
   };
+
+  // dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete))
+  //     .then((response) => {
+  //       setMessage("Course was updated");
+  //       setIsOpen(true);
+  //     })
+  //     .catch((exception) => {
+  //       setMessage("Sorry, something went wrong");
+  //       setIsOpen(true);
+  //     });
+  // };
 
   // const handleSaveButtonClick = async () => {
   //   const course: CourseCreateObject = {
@@ -152,6 +181,14 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
 
   const handleEndDateChange = (date: Date | null) => {
     changeEndDate(date);
+  };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -208,7 +245,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               ></TextField>
             </div>
           ) : (
-          <h3>{courseName}</h3>
+            <h3>{courseName}</h3>
           )}
           {isEdit ? (
             <TextField
@@ -219,14 +256,26 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               value={description}
             ></TextField>
           ) : (
-            <Box><p>{description}</p></Box>
+            <Box>
+              <p>{description}</p>
+            </Box>
           )}
         </div>
-        <Box display="flex" justifyContent="start" borderTop="1px solid #666666" alignContent="space-between" margin="3% 0">
+        <Box
+          display="flex"
+          justifyContent="start"
+          borderTop="1px solid #666666"
+          alignContent="space-between"
+          margin="3% 0"
+        >
           <Box marginLeft="3%" marginTop="2%">
             <h4>Sections:</h4>
             {course.sections.map((section) => (
-              <CourseSectionElement section={section} isEdit={isEdit} key={section._id} />
+              <CourseSectionElement
+                section={section}
+                isEdit={isEdit}
+                key={section._id}
+              />
             ))}
           </Box>
           {/* <div className={classes.dateContainer}></div> */}
@@ -260,11 +309,15 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 </Box>
               ) : (
                 <Box display="flex">
-                  <Box paddingRight="6rem">
+                  <Box
+                    paddingRight="6rem"
+                    display="flex"
+                    flexDirection="column"
+                  >
                     <p>Start date:</p>
                     <p>End date:</p>
                   </Box>
-                  <Box>
+                  <Box display="flex" flexDirection="column">
                     <p>{startDate?.toISOString().split("T")[0]}</p>
                     <p>{endDate?.toISOString().split("T")[0]}</p>
                   </Box>
@@ -273,7 +326,11 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             </MuiPickersUtilsProvider>
           </Box>
         </Box>
-        <Box display="flex" justifyContent="center" borderTop="1px solid #666666">
+        <Box
+          display="flex"
+          justifyContent="center"
+          borderTop="1px solid #666666"
+        >
           {isEdit ? (
             <Button
               className={classes.button}
@@ -281,6 +338,16 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               variant="contained"
               disabled={!courseName || !startDate || !endDate}
             >
+              <Snackbar
+                open={isOpen}
+                autoHideDuration={1000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical:"bottom",horizontal:"center" }}
+              >
+                <Alert onClose={handleClose} severity="info">
+                  {message}
+                </Alert>
+              </Snackbar>
               SAVE
             </Button>
           ) : null}
