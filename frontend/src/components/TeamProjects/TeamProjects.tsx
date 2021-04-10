@@ -5,12 +5,10 @@ import { CssBaseline, Paper } from '@material-ui/core';
 import SearchInput from '../SearchInput';
 import { useAppDispatch } from '../../app/hooks';
 import { filterData } from '../ReusableTable/ReusableTableSlice';
+import TeamProject from '../TeamProject/index'
+import { getTeamProjects } from '../../api/TeamProjects.service'
 
-export interface TeamProjectsProps {
-  course: string,
-  getFunction: () => Promise<any[]>,
-  editComponent: Function
-}
+export interface TeamProjectsProps {}
 
 interface MainViewProps {
   detailedView: boolean
@@ -22,6 +20,7 @@ enum HeaderText {
 }
 
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
+  
   const dispatch = useAppDispatch();
   const [detailedView, setDetailedView] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState({});  
@@ -62,7 +61,8 @@ const MainView = (props: MainViewProps) => {
   }
 
 const EditView = () => {
-  return props.editComponent(selectedProjectId, setDetailedView)
+  //@ts-ignore
+  return <TeamProject _id='123' changeViewFn={() => setDetailedView(false)}/>
 }
 
   return (
@@ -76,11 +76,12 @@ const EditView = () => {
         <div className={styles.table} style={{display : tableDisplay}}>        
         <ReusableTable
           name="Manage Team Projects"
-          getData={props.getFunction}
+          getData={getTeamProjects}
           columns={columns}
           onRowClick={(params, e) => {
               setDetailedView(true);
               setSelectedProjectId(params.row.id);
+              console.log(selectedProjectId);
               setTableDisplay('none');
           }}
         />
