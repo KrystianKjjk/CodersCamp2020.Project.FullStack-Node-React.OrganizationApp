@@ -23,22 +23,24 @@ interface initialstate {
   project: TeamProjectState 
 }
 
+export const initialProjectState = {
+  _id: "loading...",
+  teamId: "loading...",
+  parentProjectId: "loading...",
+  projectName: "loading...",
+  projectUrl: "loading...",
+  description: "loading...",
+  mentor: "loading...",
+  referenceProjectName: "loading...",
+  sectionName: "loading..."
+}
+
 const initialState: initialstate = {
   projectEditMode: false,
   projectDeleteMode: false,
   loading: false,
   hasErrors: false,
-  project: {
-    _id: "loading...",
-    teamId: "loading...",
-    parentProjectId: "loading...",
-    projectName: "loading...",
-    projectUrl: "loading...",
-    description: "loading...",
-    mentor: "loading...",
-    referenceProjectName: "loading...",
-    sectionName: "loading..."
-  }
+  project: initialProjectState
 };
 
 export const teamProjectSlice = createSlice({
@@ -93,21 +95,32 @@ export function getProjectById(id: string) {
       const responseProject = await api.get(`/teams/projects/${id}`);
       const data = await responseProject.data;
 
-      const responseTeam = await api.get(`teams/${data.teamId}`)
-      const dataTeam = await responseTeam.data;
-      data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
-
-      const responseParentProject = await api.get(`/projects/${data.parentProjectId}`);
-      const dataParentProject = await responseParentProject.data;
-      data.referenceProjectName = dataParentProject.projectName;
+      try {
+        const responseTeam = await api.get(`teams/${data.teamId}`)
+        const dataTeam = await responseTeam.data;
+        data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
+      }
+      catch (error) {
+        console.log('Team', error.message)
+      }
 
       try {
-        const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
-        const dataSection = await responseSection.data;
-        data.sectionName = dataSection.name;
+        const responseParentProject = await api.get(`/projects/${data.parentProjectId}`);
+        const dataParentProject = await responseParentProject.data;
+        data.referenceProjectName = dataParentProject.projectName;
+
+        try {
+          const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
+          const dataSection = await responseSection.data;
+          data.sectionName = dataSection.name;
+        }
+        catch (error) {
+          console.log('Section', error.message)
+        }
+
       }
-      catch (error){
-        console.log('Section',error.message)
+      catch (error) {
+        console.log('Parent Project', error.message)
       }
 
       dispatch(projectOperationSuccess(data));

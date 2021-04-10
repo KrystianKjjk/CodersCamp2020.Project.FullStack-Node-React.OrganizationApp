@@ -57,12 +57,15 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   } 
 
 const MainView = (props: MainViewProps) => {
-    return props.detailedView ? <div onClick={() => setDetailedView(false)}><EditView/></div> : null
+    return props.detailedView ? <div><EditView/></div> : null
   }
 
 const EditView = () => {
   //@ts-ignore
-  return <TeamProject _id='123' changeViewFn={() => setTableDisplay('initial')}/>
+  return <TeamProject _id={selectedProjectId} changeViewFn={() => {
+    setTableDisplay('initial');
+    setDetailedView(false);
+  }}/>
 }
 
   return (
@@ -81,7 +84,6 @@ const EditView = () => {
           onRowClick={(params, e) => {
               setDetailedView(true);
               setSelectedProjectId(params.row.id);
-              console.log(selectedProjectId);
               setTableDisplay('none');
           }}
         />

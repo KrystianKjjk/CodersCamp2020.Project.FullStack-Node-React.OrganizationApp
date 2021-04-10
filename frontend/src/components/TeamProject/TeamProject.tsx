@@ -7,7 +7,9 @@ import {
   saveProjectById,
   deleteProjectById,
   switchEditMode,
-  switchDeleteMode
+  switchDeleteMode,
+  projectOperationSuccess,
+  initialProjectState
 } from './TeamProjectSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
@@ -32,6 +34,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
+    return () => {dispatch(projectOperationSuccess(initialProjectState))}
   }, [dispatch]);
 
   useEffect(() => {
