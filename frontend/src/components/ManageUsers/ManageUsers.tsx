@@ -1,5 +1,5 @@
 import React, { ReactEventHandler, useEffect, useState } from 'react';
-import { FormControlLabel, Checkbox, Paper, CssBaseline } from '@material-ui/core';
+import { FormControlLabel, Checkbox, Paper, CssBaseline, Container } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
@@ -31,9 +31,8 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
 );
 
 export interface ManageUsersProps { };
-
+const api = new UserService();
 const ManageUsers: React.FC< ManageUsersProps > = () => {
-  const api = new UserService();
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
     Active: false,
@@ -98,7 +97,7 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
   ]
   
   return (
-    <div className={styles.container} aria-label='Manage Users'>
+    <Container className={styles.container} aria-label='Manage Users'>
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>Users</h2>
@@ -110,7 +109,7 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
           </span>
-          <h3 className={styles.checkboxesHeader}>Sorting options</h3>
+          <h3 className={styles.checkboxesHeader}>Filter options</h3>
           <div className={styles.checkboxContainer}>
             <span>
               <PrimaryCheckBox 
@@ -155,7 +154,7 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
         </div>
         <Table name='Users' columns={columns} getData={api.getUsers}/>
       </Paper>
-    </div>
+    </Container>
   );
 };
 
