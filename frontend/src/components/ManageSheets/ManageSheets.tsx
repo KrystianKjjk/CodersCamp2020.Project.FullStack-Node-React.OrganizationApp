@@ -28,13 +28,18 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
   const changeSearch = (value: string) => {
     const searchQuery = {
       table: tableName,
-      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
+      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'mentorSurname',
       search: value,
     }
     dispatch(searchData(searchQuery));
   }
 
   const sortByOptions = ['mentorName', 'mentorSurname', 'projectName'];
+  const sortByLabels = {
+    mentorName: 'Mentor name',
+    mentorSurname: 'Mentor surname',
+    projectName: 'Project name'
+  };
   const columns = [
     {field: 'mentorSurname', headerName: 'Mentor surname', width: 200, sortable: true},
     {field: 'mentorName', headerName: 'Mentor name', width: 150, sortable: true},
@@ -54,7 +59,7 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
     selectedSheets.current.forEach((sheetId) => {
       api.deleteSheet(sheetId);
     })
-    dispatch(fetchData(tableName, api.getSheets));
+    setTimeout(() => dispatch(fetchData(tableName, api.getSheets)), 300);
     selectedSheets.current = [];
   }
   
@@ -75,7 +80,7 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
             <UButton text="Delete" color="secondary" onClick={deleteSelectedSheets}/>
           </div>
           <span className={styles.selectSortBy}>
-            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
+            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions} labels={sortByLabels}/>
           </span>
         </div>
         <div className={styles.table}>
