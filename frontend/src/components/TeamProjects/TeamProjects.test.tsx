@@ -1,10 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import TeamProjects from './TeamProjects';
-import { getTeamProjects } from '../../api/TeamProjects.service'
 
 const teamProjects = [{
    id: 'myTestID',
@@ -37,18 +35,4 @@ describe('TeamProjects', () => {
       const table = await screen.findByLabelText(`Table - Manage Team Projects`);
       expect(table).toBeInTheDocument();
    });
-
-   // it('clicking on the row triggers the edit component', async () => {
-   //    render(
-   //       <Provider store={store}>
-   //          <TeamProjects course="123" getFunction={mockGet} editComponent={TestEdit} />
-   //       </Provider>
-   //    );
-
-   //    const row = await screen.getByText('Star Wars - child project by one of teams');
-   //    userEvent.click(row);
-
-   //    const edit = await screen.findByLabelText(`test`);
-   //    expect(edit).toBeInTheDocument();
-   // });
 });
