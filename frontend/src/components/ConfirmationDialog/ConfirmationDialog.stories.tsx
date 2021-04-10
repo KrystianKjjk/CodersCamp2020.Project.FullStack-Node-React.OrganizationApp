@@ -21,6 +21,6 @@ SampleConfirmationDialog.args = {
     content: "Some example content",
     isOpen: true,
     onClose: ()=>{},
-    handleAgree: ()=>{},
-    handleDisagree: ()=>{}
+    handleConfirm: ()=>{},
+    handleCancel: ()=>{}
 };

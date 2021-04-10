@@ -125,8 +125,8 @@ const ManageReferenceProject = (props: any) => {
             content="This action is irreversible."
             isOpen={isOpenDelete}
             onClose={handleCloseDeleteConfirmation }
-            handleAgree={handleDelete}
-            handleDisagree={handleCloseDeleteConfirmation}
+            handleConfirm={handleDelete}
+            handleCancel={handleCloseDeleteConfirmation}
         />
         <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
           <Link href="/projects" color="primary">PROJECTS </Link>

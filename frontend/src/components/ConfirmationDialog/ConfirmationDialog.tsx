@@ -6,8 +6,8 @@ export interface ConfirmationDialogProps {
   content?: string,
   isOpen: boolean,
   onClose: any,
-  handleAgree: any,
-  handleDisagree: any
+  handleCancel: any,
+  handleConfirm: any
 }
 
 const ConfirmationDialog: React.FC< ConfirmationDialogProps > = props => {
@@ -25,11 +25,11 @@ const ConfirmationDialog: React.FC< ConfirmationDialogProps > = props => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleDisagree} color="primary">
-            Disagree
+          <Button onClick={props.handleCancel} color="primary">
+            CANCEL
           </Button>
-          <Button onClick={props.handleAgree} color="primary" autoFocus>
-            Agree
+          <Button onClick={props.handleConfirm} color="primary" autoFocus>
+            CONFIRM
           </Button>
         </DialogActions>
       </Dialog>

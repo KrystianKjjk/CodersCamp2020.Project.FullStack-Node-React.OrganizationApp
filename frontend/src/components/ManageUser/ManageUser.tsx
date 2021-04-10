@@ -144,8 +144,8 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                     content="This action is irreversible."
                     isOpen={isOpenDelete}
                     onClose={handleCloseDeleteConfirmation }
-                    handleAgree={deleteUser}
-                    handleDisagree={handleCloseDeleteConfirmation}
+                    handleConfirm={deleteUser}
+                    handleCancel={handleCloseDeleteConfirmation}
                 />
 
                 <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
