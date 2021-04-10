@@ -62,7 +62,7 @@ const MainView = (props: MainViewProps) => {
 
 const EditView = () => {
   //@ts-ignore
-  return <TeamProject _id='123' changeViewFn={() => setDetailedView(false)}/>
+  return <TeamProject _id='123' changeViewFn={() => setTableDisplay('initial')}/>
 }
 
   return (
