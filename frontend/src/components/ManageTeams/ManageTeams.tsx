@@ -4,21 +4,21 @@ import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { fetchData, filterData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamService } from '../../api';
 
 
-export interface ManageTeamsProps {
-  onClickAdd: () => void;
-}
+export interface ManageTeamsProps { };
 
-const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
+const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const api = new TeamService();
   const dispatch = useAppDispatch();
   const [sortBy, setSortBy] = useState('');
   const [search, setSearch] = useState('');
+
+  const tableName = 'Teams';
 
   const changeSortBy = (value: string) => {
     setSortBy(value);
@@ -29,13 +29,16 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
   
   useEffect(() => {
     dispatch(sortData({table: 'Teams', column: sortBy }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
+
   useEffect(() => {
     const f = {
       column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'surname',
       values: [ search ],
     }
     dispatch(filterData({table: 'Teams', filters: [ f ]}));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   const sortByOptions = ['name', 'surname', 'courseName'];
@@ -44,6 +47,11 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
     {field: 'name', headerName: 'Mentor name', width: 150, sortable: true},
     {field: 'courseName', headerName: 'Course name', width: 250, sortable: true},
   ]
+
+  const handleAddClick = async () => {
+    await api.createTeam();
+    dispatch(fetchData(tableName, api.getTeams));
+  }
   
   return (
     <Container className={styles.manageTeams} aria-label='Manage Teams'>
@@ -57,7 +65,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Teams</h2>
-          <span onClick={onClickAdd} className={styles.addButton} aria-label='Add team'>
+          <span onClick={handleAddClick} className={styles.addButton} aria-label='Add team'>
             <AddButton text='Add'/>
           </span>
           <span className={styles.selectSortBy}>
@@ -65,7 +73,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = ({ onClickAdd }) => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table name='Teams' columns={columns} getData={api.getTeams}/>
+          <Table name={tableName} columns={columns} getData={api.getTeams}/>
         </div>
       </Paper>
     </Container>

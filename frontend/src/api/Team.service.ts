@@ -90,4 +90,9 @@ export default class TeamService {
         await this.api.delete(`teams/${teamId}/users/${userId}`);
     }
 
+    createTeam = async () => {
+        const courseId = localStorage.getItem('courseId');
+        await this.api.post('/teams', {course: courseId});
+    }
+
 }
