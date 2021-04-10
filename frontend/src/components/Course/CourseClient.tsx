@@ -12,7 +12,7 @@ export interface CourseListElementDto {
 let config = {
   headers: {
     "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTczMDQxNTcsImV4cCI6MTYxNzMwNTM1N30.sqm5n8ucZi-bT4P3bPdAHVakjN1zJEnlT054OAqWxME",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDRjNjQyZTUzNDdhZDE5ZDRmOWE0MzciLCJ0eXBlIjozLCJpYXQiOjE2MTgwODM4MzksImV4cCI6MTYxODA4NTAzOX0.4CdB_7LMkVsBZra3shIcYolSTVM3_xNQj47V1HLUEKQ",
   },
 };
 

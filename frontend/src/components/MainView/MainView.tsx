@@ -11,6 +11,7 @@ import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
+import FindSection from "../FindSection";
 
 const MainView: React.FC = () => {
   
@@ -30,7 +31,8 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute path="/sections">
-          <Sections />
+          <FindSection onSectionSelection={[]}/>
+          {/* <Sections /> */}
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <Gradesheets />

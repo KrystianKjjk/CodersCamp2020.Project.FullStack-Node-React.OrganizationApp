@@ -20,6 +20,7 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import PageHeader from "../PageHeader";
+import UButton from '../UButton';
 
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -31,6 +32,7 @@ import {
 import { updateCourse } from "./CourseClient";
 import { Alert } from "@material-ui/lab";
 import AddButton from "../AddButton";
+import { UButtonTheme } from "../../theme/customMaterialTheme";
 
 export interface CourseProps {
   id: string;
@@ -92,15 +94,9 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#67b5ff",
       },
     },
-    buttonEdit: {
-      backgroundColor: "#1A90FF",
-      width: "90px",
-      height: "50%",
-      marginRight: "3%",
-      "&:hover": {
-        backgroundColor: "#67b5ff",
-      },
-    },
+    // buttonEdit: {
+    //   marginRight: "3%",
+    // },
   })
 );
 
@@ -225,13 +221,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             alignItems="center"
           >
             <h3>Manage course</h3>
-            <Button
-              onClick={toggleEdit}
-              variant="contained"
-              className={classes.buttonEdit}
-            >
-              EDIT
-            </Button>
+            <Box marginRight="1%"><UButton text="EDIT" color="primary" onClick={toggleEdit}></UButton></Box>
           </Box>
         </div>
         <div className={classes.inputs}>
@@ -269,7 +259,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
           alignContent="space-between"
           margin="3% 0"
         >
-          <Box marginLeft="3%" marginTop="2%">
+          <Box marginLeft="3%" marginTop="2%" width="400px">
             <h4>Sections:</h4>
             {course.sections.map((section) => (
               <CourseSectionElement
@@ -278,10 +268,9 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 key={section._id}
               />
             ))}
-            {isEdit?(<AddButton text="ADD"></AddButton>):null}
+            {isEdit?(<UButton text="ADD" color="primary" onClick={console.log('cos')}></UButton>):null}
             
           </Box>
-          {/* <div className={classes.dateContainer}></div> */}
           <Box marginTop="2%">
             <h4>Dates:</h4>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -332,7 +321,6 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
         <Box
           display="flex"
           justifyContent="center"
-          borderTop="1px solid #666666"
         >
           {isEdit ? (
             <Button
