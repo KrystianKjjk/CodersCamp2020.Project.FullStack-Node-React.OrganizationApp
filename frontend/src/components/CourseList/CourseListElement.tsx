@@ -42,8 +42,8 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
           // cursor: "pointer",
           // outlineStyle: "solid",
           outlineColor: "#FBA846",
+        },
       },
-    },
       name: {
         borderBottom: "1px solid #666666",
         padding: "5% 0",

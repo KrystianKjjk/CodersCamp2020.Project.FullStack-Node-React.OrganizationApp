@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
-import CourseSectionElement from './CourseSectionListElement';
+import CourseSectionElement from "./CourseSectionListElement";
 import {
   Button,
   makeStyles,
@@ -72,12 +72,12 @@ const useStyles = makeStyles((theme: Theme) =>
     header: {
       paddingLeft: "3%",
     },
-    dateContainer: {
-      display: "flex",
-      // flexDirection:"column",
-      justifyContent: "space-between",
-      margin: "2% 15%",
-    },
+    // dateContainer: {
+    //   display: "flex",
+    //   // flexDirection:"column",
+    //   justifyContent: "space-between",
+    //   margin: "2% 15%",
+    // },
     datePicker: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "#1A90FF",
       width: "90px",
       height: "50%",
-      marginRight:'3%',
+      marginRight: "3%",
       "&:hover": {
         backgroundColor: "#67b5ff",
       },
@@ -140,7 +140,6 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     };
 
     updateCourse(courseToSave);
-    // console.log(courseToSave);
   };
 
   // const handleSaveButtonClick = async () => {
@@ -219,7 +218,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               ></TextField>
             </div>
           ) : (
-            <p>{courseName}</p>
+            <h4>{courseName}</h4>
           )}
           {isEdit ? (
             <TextField
@@ -233,8 +232,16 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             <p>{description}</p>
           )}
         </div>
-        <div>
-          <div className={classes.dateContainer}>
+        <Box display="flex" justifyContent="start" marginLeft="3%">
+          <Box marginRight="30%">
+            <h4>Sections:</h4>
+            {course.sections.map((section) => (
+              <CourseSectionElement section={section} isEdit={isEdit} />
+            ))}
+          </Box>
+          {/* <div className={classes.dateContainer}></div> */}
+          <Box>
+            <h4>Dates:</h4>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               {isEdit ? (
                 <DatePicker
@@ -249,28 +256,40 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                   onChange={handleStartDateChange}
                 />
               ) : (
-                <p>Start date: {startDate?.toISOString().split("T")[0]}</p>
+                <Box display="flex">
+                  <Box marginRight="6rem">
+                    <p>Start date:</p>
+                    <p>End date:</p>
+                  </Box>
+                  <Box><p>{startDate?.toISOString().split("T")[0]}</p></Box>
+                </Box>
               )}
-              {isEdit?(
-              <DatePicker
-              disableToolbar
-              variant="inline"
-              format="dd/MM/yyyy"
-              margin="normal"
-              id="date-picker-inline"
-              label="End date"
-              inputVariant="outlined"
-              value={endDate}
-              onChange={handleEndDateChange}
-            />):(<p>End date: {endDate?.toISOString().split("T")[0]}</p>)
-            
-            }
-              
+              {isEdit ? (
+                <DatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="dd/MM/yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label="End date"
+                  inputVariant="outlined"
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                />
+              ) : (
+                <Box display="flex">
+                  <Box marginRight="6rem">
+                  <p>End date:</p>
+                  </Box>
+                  <Box><p>{endDate?.toISOString().split("T")[0]}</p></Box>
+                </Box>
+              )}
             </MuiPickersUtilsProvider>
-          </div>
-          <div className={classes.buttonAlignment}>
-            {isEdit?(
-              <Button
+          </Box>
+        </Box>
+        <div className={classes.buttonAlignment}>
+          {isEdit ? (
+            <Button
               className={classes.button}
               onClick={handleSaveButtonClick}
               variant="contained"
@@ -278,16 +297,11 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             >
               SAVE
             </Button>
-            ):(null)}
-            
-          </div>
+          ) : null}
         </div>
-        <h4>Sections:</h4>
-        {course.sections.map(section => <CourseSectionElement section={section} isEdit={isEdit} />)}
       </div>
     </div>
   );
 };
-
 
 export default CourseComponent;

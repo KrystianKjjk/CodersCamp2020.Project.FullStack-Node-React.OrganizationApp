@@ -1,4 +1,26 @@
-.container{
+.listContainer{
+    padding-top: 2%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    background-color: #1C1C1C;
+    border: 1px solid #666666;
+}
+
+.manageCourseBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:#1C1C1C;
+    border: 1px solid #666666;
+    border-bottom: none;
+    padding: 0 3%;
+}
+.manageCourseBar button{
+    background-color: #2196F3;
+    height: 50%;
+    width: 8%;
+}
+.manageCourseBar button:hover{
+    background-color:#67b5ff;
 }
