@@ -8,6 +8,7 @@ import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
+import ManageTeams from '../ManageTeams';
 
 const MainView: React.FC = () => {
   
@@ -34,7 +35,7 @@ const MainView: React.FC = () => {
           <TeamProjects />
         </PrivateRoute>
         <PrivateRoute path="/teams">
-          <Teams />
+          <ManageTeams />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
