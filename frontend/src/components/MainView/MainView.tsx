@@ -75,9 +75,6 @@ function Projects() {
 function TeamProjects() {
   return <h2>Team projects</h2>;
 }
-function Teams() {
-  return <h2>Teams</h2>;
-}
 function MyProfile() {
   return <h2>My profile</h2>;
 }
