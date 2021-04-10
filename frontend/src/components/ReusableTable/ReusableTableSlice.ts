@@ -41,6 +41,7 @@ export const reusableTableSlice = createSlice({
     
     filterData(state, action: PayloadAction<{ table: string, filters: Filter[] }>) {
       const { table, filters } = action.payload;
+      if ( !(state[table]) || state[table].loading !== 'idle' ) return;
       state[table].displayedRows = [ ...state[table].rows ];
       if (filters[0].values[0] === '') return;
 
@@ -56,6 +57,7 @@ export const reusableTableSlice = createSlice({
       const { table, column, search } = action.payload;
       if ( !(state[table]) || state[table].loading !== 'idle' ) return;
       state[table].displayedRows = [ ...state[table].rows ];
+      if (search === '') return;
       state[table].displayedRows = state[table].displayedRows.filter( row => `${row[column]}`.match(search) );
     },
     

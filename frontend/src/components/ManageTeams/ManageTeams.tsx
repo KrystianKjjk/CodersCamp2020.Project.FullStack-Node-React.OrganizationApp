@@ -4,7 +4,7 @@ import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { fetchData, filterData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { fetchData, filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamService } from '../../api';
@@ -22,15 +22,16 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const tableName = 'Teams';
 
   const changeSortBy = (value: string) => {
-    dispatch(sortData({table: 'Teams', column: value }));
+    dispatch(sortData({table: tableName, column: value }));
   };
 
   const changeSearch = (value: string) => {
-    const f = {
+    const searchQuery = {
+      table: tableName,
       column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
-      values: [ value ],
+      search: value,
     }
-    dispatch(filterData({table: 'Teams', filters: [ f ]}));
+    dispatch(searchData(searchQuery));
   }
 
   const sortByOptions = ['name', 'surname', 'courseName'];
