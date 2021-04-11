@@ -107,7 +107,6 @@ describe("Project Service", () => {
         const updatedProject = await service.updateProjectById(project._id, {projectName: "Nowa nazwa projektu 3"});
 
         expect(updatedProject.projectName).toEqual("Nowa nazwa projektu 3"); // changed
-        expect(updatedProject.sectionId).toEqual("3"); // stayed the same
         expect(updatedProject.projectUrl).toEqual("projekt url 3"); // stayed the same
     });
 
