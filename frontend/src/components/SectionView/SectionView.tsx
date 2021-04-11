@@ -65,7 +65,7 @@ const SectionView = () => {
       course: courseId,
     } 
     
-    const data = id ? await sectionService.patchSection(id, sectionData) : await sectionService.addSection(sectionData);
+    id ? await sectionService.patchSection(id, sectionData) : await sectionService.addSection(sectionData);
     setIsInEditMode(false);
   }
 

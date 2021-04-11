@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 //
 import { Container, CssBaseline, Paper } from '@material-ui/core';
@@ -8,7 +8,7 @@ import styles from './ManageSections.module.css';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import SectionService from '../../api/Section.service';
 import UButton from "../UButton";
@@ -21,9 +21,8 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const sectionService = new SectionService();
 
   const dispatch = useAppDispatch();
-  const [sortBy, setSortBy] = useState('');
-  const [search, setSearch] = useState('');
   const history = useHistory();
+  const tableName = 'Sections';
   const displayFormattedDate = (date: Date) => {
     if (!date) return '';
 
@@ -31,25 +30,30 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   }
 
   const changeSortBy = (value: string) => {
-    setSortBy(value);
+    dispatch(sortData({table: tableName, column: value }));
   };
 
   const changeSearch = (value: string) => {
-    setSearch(value);
+    const searchQuery = {
+      table: tableName,
+      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'name',
+      search: value,
+    }
+    dispatch(searchData(searchQuery));
   }
 
-  useEffect(() => {
-    dispatch(sortData({table: 'Sections', column: sortBy }));
-  }, [sortBy]);
+  // useEffect(() => {
+  //   dispatch(sortData({table: 'Sections', column: sortBy }));
+  // }, [sortBy]);
   
-  useEffect(() => {
-    const f = {
-      column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'name',
-      values: [ search ],
-    }
-    dispatch(filterData({table: 'Sections', filters: [ f ]}));
-  }, [search]);
-
+  // useEffect(() => {
+  //   const f = {
+  //     column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'name',
+  //     values: [ search ],
+  //   }
+  //   dispatch(filterData({table: 'Sections', filters: [ f ]}));
+  // }, [search]);
+  
   const handleRowClick = (data: {id: string | number}) => {
     history.push(`/sections/${data.id}/edit`);
   }
@@ -86,7 +90,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table name='Sections' columns={columns} onRowClick={handleRowClick} getData={() => sectionService.getSections()}/>
+          <Table name={tableName} columns={columns} onRowClick={handleRowClick} getData={() => sectionService.getSections()}/>
         </div>
         </Paper>
     </Container>
