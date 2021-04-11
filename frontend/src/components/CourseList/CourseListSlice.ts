@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 import { CourseCreateObject } from "../Course/CourseDetailsSlice";
-import {
-  CourseListElementDto,
-  deleteCourse,
-  fetchCourses,
-} from "../Course/CourseClient";
+// import {
+//   CourseListElementDto,
+//   deleteCourse,
+//   fetchCourses,
+// } from "../Course/CourseClient";
 import CourseList from "./CourseList";
 import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
-import CoursesService from "../../api/courses.service";
+import CoursesService, { CourseListElementDto } from "../../api/courses.service";
 // import CourseCreateObject from '../CourseCreate';
 
 export interface CourseListElementModel extends CourseCreateObject {

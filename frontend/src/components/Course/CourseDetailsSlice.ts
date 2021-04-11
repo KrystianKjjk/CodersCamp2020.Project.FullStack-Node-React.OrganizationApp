@@ -3,7 +3,7 @@ import CoursesService from "../../api/courses.service";
 import SectionsService from "../../api/sections.service";
 import BaseService from "../../app/baseService";
 import { AppThunk, RootState } from "../../app/store";
-import { fetchCourse, updateCourse, fetchCourseSections, deleteSectionById} from "./CourseClient";
+
 
 export interface Course extends CourseCreateObject {
   _id: string;
