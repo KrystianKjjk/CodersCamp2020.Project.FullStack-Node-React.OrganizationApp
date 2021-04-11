@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, CssBaseline, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
+import { Container, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import styles from './SelectSortBy.module.css';
 
 export interface SelectSortByProps {
@@ -15,6 +15,7 @@ const SelectSortBy: React.FC< SelectSortByProps > = ({ onChange, options, initia
   };
   useEffect(() => {
     onChange(value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   return (
     <Container>
