@@ -26,22 +26,48 @@ export default class CoursesService {
     return this.httpService.get(endpoint);
   }
 
-  async createCourse (course: CourseCreateObject){
-    // return axios.post('localhost:5000/api/courses', {course}, config);
-   
+  async createCourse(course: CourseCreateObject) {
     return this.httpService.post(this.endpoint, course);
-    // `${this.endpoint}/`, course
-  };
-  
+  }
+
   async fetchCourses() {
     return this.httpService.get(this.endpoint);
   }
+
+  async fetchCourse(courseId:string){
+    return this.httpService.get(`${this.endpoint}/${courseId}`);
+  }
+
+  async updateCourse(course: Course) {
+    return this.httpService.put(`${this.endpoint}/${course._id}`, course);
+  }
+
+  async deleteCourse(courseId:string){
+  return this.httpService.delete(`${this.endpoint}/${courseId}`); 
+  }
+
+  async fetchCourseSections(courseId:string){
+  return this.httpService.get(`${this.endpoint}/${courseId}/sections`);
+  }
+
 }
 
+// export const fetchCourseSections = (courseId: string) => {
+  //     return axios.get(
+  //       `https://coders-camp-organization-app.herokuapp.com/api/courses/${courseId}/sections`,
+  //       config
+  //     );
+  //   };
 
+//OK export const deleteCourse = (courseId: string) => {
+  //     return axios.delete(
+  //       "https://coders-camp-organization-app.herokuapp.com/api/courses/" +
+  //         courseId,
+  //       config
+  //     );
+  //   };
 
-
-//   export const updateCourse = (course: Course) => {
+//OK   export const updateCourse = (course: Course) => {
 //     // return axios.post('localhost:5000/api/courses', {course}, config);
 //     return axios.put(
 //       "https://coders-camp-organization-app.herokuapp.com/api/courses/"+course._id,
@@ -50,7 +76,7 @@ export default class CoursesService {
 //     );
 //   };
 
-//   export const fetchCourse = (courseId: string) => {
+//OK   export const fetchCourse = (courseId: string) => {
 //     return axios.get(
 //       "https://coders-camp-organization-app.herokuapp.com/api/courses/" +
 //         courseId,
@@ -58,20 +84,14 @@ export default class CoursesService {
 //     );
 //   };
 
-//   export const fetchCourses = () => {
+//OK   export const fetchCourses = () => {
 //     return axios.get(
 //       "https://coders-camp-organization-app.herokuapp.com/api/courses/",
 //       config
 //     );
 //   };
 
-//   export const deleteCourse = (courseId: string) => {
-//     return axios.delete(
-//       "https://coders-camp-organization-app.herokuapp.com/api/courses/" +
-//         courseId,
-//       config
-//     );
-//   };
+//  
 
 //   export const fetchCourseSections = (courseId: string) => {
 //     return axios.get(

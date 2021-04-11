@@ -7,7 +7,7 @@ import {
   fetchCourses,
 } from "../Course/CourseClient";
 import CourseList from "./CourseList";
-import {getActiveCourse, setActiveCourse} from "../../app/ActiveCourse";
+import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
 import CoursesService from "../../api/courses.service";
 // import CourseCreateObject from '../CourseCreate';
 
@@ -24,11 +24,11 @@ const initialState: CourseListState = {
 };
 
 export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
-  const courses=await fetchCoursesAndSort();
+  const courses = await fetchCoursesAndSort();
   dispatch(setCourses(courses));
 };
 
-export const fetchCoursesAndSort=async ()=>{
+export const fetchCoursesAndSort = async () => {
   const courseService = new CoursesService();
   const response = await courseService.fetchCourses();
   // const response = await fetchCourses();
@@ -38,7 +38,7 @@ export const fetchCoursesAndSort=async ()=>{
       _id: courseDto._id,
       name: courseDto.name,
       description: courseDto.description,
-      endDate: new Date(Date.parse(courseDto.endDate)),
+      endDate: new Date(Date.parse(courseDto.endDate)), 
       startDate: new Date(Date.parse(courseDto.startDate)),
     };
     return courseListElement;
@@ -49,12 +49,14 @@ export const fetchCoursesAndSort=async ()=>{
     return courseListElementStartDate2 - courseListElementStartDate1;
   });
   return courses;
-}
+};
 
 export const deleteCourseAsync = (courseId: string): AppThunk => async (
   dispatch
 ) => {
-  deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
+  const courseService = new CoursesService();
+  courseService.deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
+  // deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
 };
 
 export const courseListSlice = createSlice({
@@ -79,4 +81,3 @@ export const { setCourses, removeCourse } = courseListSlice.actions;
 // export const selectCourseList = (state: RootState) => state.courseList.value;
 
 export default courseListSlice.reducer;
-

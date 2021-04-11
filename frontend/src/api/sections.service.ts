@@ -1,19 +1,28 @@
 import BaseService from "../app/baseService";
 
 export default class SectionsService {
+  endpoint: string = "";
 
-    endpoint: string = '';
+  constructor(private httpService: BaseService) {
+    this.endpoint = `sections`;
+  }
 
-    constructor(private httpService: BaseService) {
-        this.endpoint = `sections`
-    };
+  async getSections() {
+    return this.httpService.get(this.endpoint);
+  }
 
-    async getSections() {
-        return this.httpService.get(this.endpoint);
-    }
+  async getSectionByID(sectionID: string) {
+    return this.httpService.get(`${this.endpoint}/${sectionID}`);
+  }
 
-    async getSectionByID(sectionID: string) {
-        return this.httpService.get(`${this.endpoint}/${sectionID}`);
-    }
-
+  async deleteSectionById(sectionId: string) {
+    return this.httpService.delete(`${this.endpoint}/${sectionId}`);
+  }
 }
+
+//   export const deleteSectionById = (sectionId:string)=>{
+//     return axios.delete(
+//       "https://coders-camp-organization-app.herokuapp.com/api/sections/"+sectionId,
+//       config
+//     );
+//   };
