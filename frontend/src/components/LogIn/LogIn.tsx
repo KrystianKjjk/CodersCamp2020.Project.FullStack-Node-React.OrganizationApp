@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { fetchCoursesAndSort, setCourses } from "../CourseList/CourseListSlice";
+import { fetchCoursesAndSort, setActiveCourse } from "../CourseList/CourseListSlice";
 
 import {
   Button,
@@ -18,9 +18,9 @@ import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import StyledTextField from "../StyledTextField";
 import useStyles from "./LogIn.style";
 import BaseService from "../../app/baseService";
-import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
 import HeaderRegistration from '../HeaderRegistration';
 import axios from 'axios';
+import { useAppDispatch } from "../../app/hooks";
 
 export interface LogInProps {}
 
@@ -30,6 +30,7 @@ function Alert(props: AlertProps) {
 
 export default function SignIn() {
   const classes = useStyles();
+  const appDispatch = useAppDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +70,7 @@ export default function SignIn() {
       axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')};
       const courses = await fetchCoursesAndSort();
       const mostRecentCourse = courses[0];
-      setActiveCourse(mostRecentCourse);
+      appDispatch(setActiveCourse(mostRecentCourse));
       routeChange();
     } catch (error) {
       setFormError(error?.response?.data?.message);

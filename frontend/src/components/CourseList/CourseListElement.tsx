@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Box } from "@material-ui/core";
 import { CourseListElementModel } from "./CourseListSlice";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { deleteCourseAsync } from "./CourseListSlice";
+import { deleteCourseAsync, setActiveCourse } from "./CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
-import { setActiveCourse } from "../../app/ActiveCourse";
+
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
   isActive: boolean;
-  setActiveCourseId: (activeCourseId: string) => void;
 }
 
 const CourseListElement: React.FC<CourseListElementProps> = ({
   course,
   isActive,
-  setActiveCourseId,
 }) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,8 +72,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
   };
 
   const handleCourseClick = () => {
-    setActiveCourse(course);
-    setActiveCourseId(course._id);
+    dispatch(setActiveCourse(course));
   };
 
   const boxClasses = isActive

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk} from "../../app/store";
 import { CourseCreateObject } from "../Course/CourseDetailsSlice";
 import CoursesService, { CourseListElementDto } from "../../api/courses.service";
+import * as ActiveCourse  from '../../app/ActiveCourse';
 
 
 export interface CourseListElementModel extends CourseCreateObject {
@@ -10,10 +11,12 @@ export interface CourseListElementModel extends CourseCreateObject {
 
 interface CourseListState {
   courseList: CourseListElementModel[];
+  activeCourse?: CourseListElementModel;
 }
 
 const initialState: CourseListState = {
   courseList: [],
+  activeCourse: ActiveCourse.getActiveCourse()
 };
 
 export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
@@ -63,9 +66,14 @@ export const courseListSlice = createSlice({
         (courseListElement) => courseListElement._id !== idToDelete
       );
     },
+    setActiveCourse: (state, action: PayloadAction<CourseListElementModel>) => {
+      const course = action.payload;
+      ActiveCourse.setActiveCourse(course);
+      state.activeCourse = course;
+    }
   },
 });
 
-export const { setCourses, removeCourse } = courseListSlice.actions;
+export const { setCourses, removeCourse, setActiveCourse } = courseListSlice.actions;
 
 export default courseListSlice.reducer;
