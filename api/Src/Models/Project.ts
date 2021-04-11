@@ -13,9 +13,8 @@ export interface Project {
 
 const ProjectSchema = new mongoose.Schema({
     sectionId: {
-        type: SchemaTypes.ObjectId,
-        ref: 'Section',
-        required: true
+        type: String, 
+        required: true,
     },
     projectName: {
         type: String, 

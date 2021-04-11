@@ -17,6 +17,7 @@ import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 import StyledTextField from '../StyledTextField'
 import useStyles from './LogIn.style';
 import BaseService from '../../app/baseService';
+import HeaderRegistration from '../HeaderRegistration';
 
 export interface LogInProps {
 
@@ -73,6 +74,8 @@ export default function SignIn() {
   };
 
   return (
+    <div>
+      <HeaderRegistration />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -131,5 +134,6 @@ export default function SignIn() {
         </form>
       </div>
     </Container>
+    </div>
   );
 }
