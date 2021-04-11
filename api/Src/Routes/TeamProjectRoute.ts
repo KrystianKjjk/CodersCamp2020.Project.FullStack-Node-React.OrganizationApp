@@ -7,6 +7,7 @@ import { UserType } from '../Models/User';
 
 const courseRoute = (controller: TeamProjectController) => {
     return (router: express.Router) => {
+        router.route("/teams/projects/").get(HasRole([UserType.Admin]), controller.getTeamProjects);
         router.route("/teams/projects/:id").get(HasRole([UserType.Admin]), idValidation, controller.getTeamProjectById);
         router.route("/teams/projects").post(HasRole([UserType.Admin]), controller.createTeamProject);
         router.route("/teams/projects/:id").put(HasRole([UserType.Admin]), idValidation, controller.updateTeamProject);

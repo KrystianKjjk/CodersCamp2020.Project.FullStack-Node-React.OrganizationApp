@@ -17,16 +17,17 @@ import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
 import StyledTextField from '../StyledTextField'
 import useStyles from './LogIn.style';
 import BaseService from '../../app/baseService';
+import HeaderRegistration from '../HeaderRegistration';
 
 export interface LogInProps {
-
+  onLogin?: Function
 };
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function SignIn() {
+export default function SignIn(props: LogInProps) {
   const classes = useStyles();
 
   const [email, setEmail] = useState('');
@@ -65,6 +66,7 @@ export default function SignIn() {
       setFormError('');
       setResponseDataToLocalStorage(response);
       routeChange();
+      if (props.onLogin) props.onLogin();
     }
     catch (error) {
       setFormError(error?.response?.data?.message);
@@ -73,6 +75,8 @@ export default function SignIn() {
   };
 
   return (
+    <div>
+      <HeaderRegistration />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -131,5 +135,6 @@ export default function SignIn() {
         </form>
       </div>
     </Container>
+    </div>
   );
 }
