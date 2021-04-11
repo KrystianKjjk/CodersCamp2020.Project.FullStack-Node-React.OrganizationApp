@@ -82,7 +82,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
     : classes.box;
 
   return (
-    <div className={boxClasses} onClick={handleCourseClick}>
+    <div className={boxClasses} onClick={handleCourseClick} data-testid="course-list-element">
       <div className={classes.name}>{course.name}</div>
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">

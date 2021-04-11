@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import styles from "./CourseList.module.css";
 import { fetchCoursesAsync } from "./CourseListSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -13,8 +13,10 @@ export interface CourseListProps {}
 const CourseList: React.FC<CourseListProps> = (props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const { courseList, activeCourse } = useAppSelector((state) => state.courseList);
-  
+  const { courseList, activeCourse } = useAppSelector(
+    (state) => state.courseList
+  );
+
   useEffect(() => {
     dispatch(fetchCoursesAsync());
   }, [dispatch]);
@@ -37,7 +39,11 @@ const CourseList: React.FC<CourseListProps> = (props) => {
       <div>
         <div className={styles.manageCourseBar}>
           <h3>Manage courses</h3>
-          <UButton text="ADD" color="primary" onClick={handleAddButtonClick}></UButton>
+          <UButton
+            text="ADD"
+            color="primary"
+            onClick={handleAddButtonClick}
+          ></UButton>
         </div>
         <div className={styles.listContainer}>{listElements}</div>
       </div>
