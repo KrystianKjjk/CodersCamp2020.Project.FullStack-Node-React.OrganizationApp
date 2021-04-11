@@ -13,7 +13,6 @@ export default class SectionService {
         try {
             sectionRes = await this.api.get(`/sections/${id}`);
             section = sectionRes.data;
-            console.log(section);
         } catch(err) {
             return null;
         }

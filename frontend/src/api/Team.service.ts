@@ -32,7 +32,6 @@ export default class TeamService {
     getTeam = async (id: string): Promise<TeamInfo> => {
         const teamRes = await this.api.get('/teams/' + id);
         const team = teamRes.data as TeamData;
-        console.log(team);
         const projects = await this.teamProjectApi.getTeamProjects(id, team.mentor?._id);
         const sheets = await this.sheetApi.getMentorSheets(team.mentor?._id);
         const teamInfo: TeamInfo = {
@@ -73,7 +72,6 @@ export default class TeamService {
         });
         teamInfo.teamAvgGrade = teamInfo.users
             .reduce((acc, user) => user.averageGrade ?? 0 + acc, 0) / teamInfo.users.length;
-        console.log(teamInfo);
         return teamInfo;
     };
 

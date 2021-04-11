@@ -14,7 +14,6 @@ export default class TeamProjectService {
     async getTeamProjects(id: string, mentorId?: string): Promise<TeamProject[]> {
         const projectsRes = await this.api.get(`/teams/${id}/projects`);
         const projectsData = projectsRes.data as TeamProjectData[];
-        console.log(projectsRes);
         const projects = await Promise.all( projectsData.map( async project => {
             const parentProject = await this.projectApi.getProject(project.parentProjectId);
             return {
@@ -26,7 +25,6 @@ export default class TeamProjectService {
                 description: project.description,
         }} ) );
         const grades = await this.sheetApi.getMentorSheets(mentorId);
-        console.log(grades);
         grades?.forEach(sheet => {
             const idx = projects.findIndex(project => project.id === sheet.projectID);
             if(idx > -1){
