@@ -24,6 +24,7 @@ export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', as
     const projectsExtended = await Promise.all(projects.map(
         async (project: any) => {
             try {
+                if(!project?.sectionId) throw Error;
                 const section = await sectionService.getSectionByID(project.sectionId);
                 return {
                     ...project,
@@ -82,7 +83,6 @@ export const updateRefProject: any = createAsyncThunk('refProjects/updateProject
         }
     }
 })
-
 
 export const referenceProjectsSlice = createSlice({
         name: 'refProjects',

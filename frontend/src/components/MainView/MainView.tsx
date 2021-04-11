@@ -13,7 +13,6 @@ import { UserType } from '../../models/User.model'
 
 import ReferenceProjects from "../ReferenceProjects";
 import ManageReferenceProject from "../ManageReferenceProject";
-import ManageUser from "../ManageUser";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -75,7 +74,7 @@ function Admin(props: LoggedInViewProps) {
       <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/users">
-          <ManageUser userID="60722df3509d2100156f6464" />
+          <Users />
         </PrivateRoute>
         <PrivateRoute path="/courses">
           <Courses />
@@ -90,11 +89,8 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute exact path="/projects">
           <Projects />
         </PrivateRoute>
-        <PrivateRoute path="/projects/add"
-                      exact
-                      render={({ match }) => <ManageReferenceProject match={match} isAdding={true}/> } />
-        <PrivateRoute path="/projects/:projectID"
-                      render={({ match }) => <ManageReferenceProject match={match} isAdding={false}/> } />
+        <PrivateRoute path="/projects/add" component={ManageReferenceProject} />
+        <PrivateRoute path="/projects/:projectID" component={ManageReferenceProject} />
 
         <PrivateRoute path="/teamprojects">
           <TeamProjects />

@@ -9,7 +9,7 @@ describe('ReferenceProjects', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <ReferenceProjects name='ReferenceProjects'/>
+            <ReferenceProjects/>
          </Provider>
       );
    });

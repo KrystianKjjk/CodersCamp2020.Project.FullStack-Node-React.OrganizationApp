@@ -31,7 +31,7 @@ const ManageReferenceProject = (props: any) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const projectID = props.match.params.projectID;
+  const projectID = props?.match?.params?.projectID;
 
   const [isEdit, setIsEdit] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -41,12 +41,11 @@ const ManageReferenceProject = (props: any) => {
   const { actionError, actionSuccess } = useSelector(selectReferenceProjects);
 
   useEffect(()=>{
-    setIsAdding(props.isAdding);
+    if(props?.match?.path?.match('add')) {
+      setIsAdding(true);
+      setIsEdit(true);
+    }
   },[]);
-
-  useEffect(()=>{
-    if(isAdding) setIsEdit(true);
-  },[isAdding]);
 
   useEffect(()=>{
     if(actionError) {
