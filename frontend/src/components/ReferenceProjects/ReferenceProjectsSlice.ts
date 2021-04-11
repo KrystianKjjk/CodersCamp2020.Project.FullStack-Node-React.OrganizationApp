@@ -49,13 +49,14 @@ export const addRefProject: any = createAsyncThunk('refProjects/addProject', asy
         const section = await sectionService.getSectionByID(res.data.sectionId);
         return {
             ...res.data,
-            "Section name": section.data?.name || ''
+            "Section name": section.data?.name || '',
+            course: section.data.course,
         }
     }
     catch {
         return {
             ...res.data,
-            "Section name": 'Section does not exist'
+            "Section name": 'Section does not exist',
         }
     }
 });
@@ -71,7 +72,8 @@ export const updateRefProject: any = createAsyncThunk('refProjects/updateProject
         const section = await sectionService.getSectionByID(res.data.sectionId);
         return {
             ...res.data,
-            "Section name": section.data?.name || ''
+            "Section name": section.data?.name || '',
+            course: section.data.course,
         }
     } catch {
         return {

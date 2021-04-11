@@ -80,7 +80,7 @@ const ManageReferenceProject = (props: any) => {
     // @ts-ignore
     setProject({
       ...project,
-      [name]: value
+      [name]: value,
     })
   }
 
