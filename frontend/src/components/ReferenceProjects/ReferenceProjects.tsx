@@ -66,9 +66,6 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
         <ThemeProvider theme={mainTheme}>
           <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
             <Typography color="primary">PROJECTS</Typography>
-              <div className={styles.search}>
-                  <SearchInput onSubmit={()=>{}} placeholder='Search'/>
-              </div>
           </Breadcrumbs>
           <Box className={styles.container}>
             <Box display="flex" className={styles.container__header}>
