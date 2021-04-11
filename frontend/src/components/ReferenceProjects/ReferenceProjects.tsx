@@ -1,15 +1,16 @@
 import React, {useEffect} from 'react';
-import styles from './ReferenceProjects.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRefProjects, selectReferenceProjects} from "./ReferenceProjectsSlice";
 import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
-import UButton from "../UButton";
-import {mainTheme} from "../../theme/customMaterialTheme";
 import {ThemeProvider} from "@material-ui/styles";
-import ReusableTable from "../ReusableTable";
-import SearchInput from "../SearchInput";
 import { useHistory } from "react-router-dom";
 
+import UButton from "../UButton";
+import ReusableTable from "../ReusableTable";
+import SearchInput from "../SearchInput";
+
+import styles from './ReferenceProjects.module.css';
+import {mainTheme} from "../../theme/customMaterialTheme";
 
 export interface ReferenceProjectsProps {
 }

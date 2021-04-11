@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import styles from './ManageReferenceProject.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {
-  Box,
-  Breadcrumbs,
-  Link,
-  Typography
-} from "@material-ui/core";
-import UButton from "../UButton";
+import {Box, Breadcrumbs, Link, Snackbar, Typography} from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
-import {ThemeProvider} from "@material-ui/styles";
-import {mainTheme} from "../../theme/customMaterialTheme";
-import EditableField from "../EditableField";
-import {addRefProject, deleteRefProject, updateRefProject} from "../ReferenceProjects/ReferenceProjectsSlice";
+import { ThemeProvider } from "@material-ui/styles";
+import {
+  addRefProject,
+  deleteRefProject,
+  selectReferenceProjects,
+  updateRefProject
+} from "../ReferenceProjects/ReferenceProjectsSlice";
 import {useHistory} from "react-router-dom";
+
 import FindSection from "../FindSection";
 import ConfirmationDialog from "../ConfirmationDialog";
+import EditableField from "../EditableField";
+import UButton from "../UButton";
+import {clearActionError, clearActionSuccess} from "../ReferenceProjects/ReferenceProjectsSlice"
+
+import {mainTheme} from "../../theme/customMaterialTheme";
+import styles from './ManageReferenceProject.module.css';
 
 export interface ManageReferenceProjectProps {
 }
@@ -28,12 +31,14 @@ const ManageReferenceProject = (props: any) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-
   const projectID = props.match.params.projectID;
 
   const [isEdit, setIsEdit] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [project, setProject] = useState<any>();
+  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
+  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
+  const { actionError, actionSuccess } = useSelector(selectReferenceProjects);
 
   useEffect(()=>{
     setIsAdding(props.isAdding);
@@ -43,6 +48,16 @@ const ManageReferenceProject = (props: any) => {
     if(isAdding) setIsEdit(true);
   },[isAdding]);
 
+  useEffect(()=>{
+    if(actionError) {
+      setOpenErrorAlert(true);
+      dispatch(clearActionError());
+    }
+    if(actionSuccess) {
+      setOpenSuccessAlert(true);
+      dispatch(clearActionSuccess());
+    }
+  },[actionError, actionSuccess])
 
   let tmp: any;
   useSelector((state: any) => {
@@ -85,9 +100,11 @@ const ManageReferenceProject = (props: any) => {
       dispatch(deleteRefProject(project._id));
     }
     if(isEdit) toggleEdit();
-
     handleCloseDeleteConfirmation();
-    history.push('/projects');
+
+    setTimeout(()=>{
+      history.push('/projects');
+    },1500)
   }
 
   const [isOpenDelete, setIsOpenDelete] = useState(false);
@@ -118,8 +135,29 @@ const ManageReferenceProject = (props: any) => {
     });
   }
 
+  const handleClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccessAlert(false);
+    setOpenErrorAlert(false);
+  };
+
   return (
       <ThemeProvider theme={mainTheme}>
+
+        <Snackbar open={openSuccessAlert} autoHideDuration={3500} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            Operation successfully completed.
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openErrorAlert} autoHideDuration={3500} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error">
+            Operation failed.
+          </Alert>
+        </Snackbar>
+
+
         <ConfirmationDialog
             title="Are you sure you want to delete the project?"
             content="This action is irreversible."
@@ -128,10 +166,12 @@ const ManageReferenceProject = (props: any) => {
             handleConfirm={handleDelete}
             handleCancel={handleCloseDeleteConfirmation}
         />
+
         <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
           <Link href="/projects" color="primary">PROJECTS </Link>
           <Typography color="primary">{projectID}</Typography>
         </Breadcrumbs>
+
         <Box className={styles.container}>
           <Box display="flex" className={styles.container__header}>
             <span>Manage project</span>
@@ -196,6 +236,7 @@ const ManageReferenceProject = (props: any) => {
             />
 
           </form>
+
         </Box>
       </ThemeProvider>
   );

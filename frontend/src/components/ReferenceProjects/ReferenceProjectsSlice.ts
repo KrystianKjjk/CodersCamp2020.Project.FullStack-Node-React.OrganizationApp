@@ -13,7 +13,9 @@ const initialState: any = {
     loaded: false,
     refProjects: [],
     sections: [],
-    error: ''
+    error: '',
+    actionError: false,
+    actionSuccess: false,
 };
 
 export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', async () => {
@@ -82,9 +84,13 @@ export const referenceProjectsSlice = createSlice({
         name: 'refProjects',
         initialState,
         reducers: {
-
+            clearActionError(state) {
+                state.actionError = false;
+            },
+            clearActionSuccess(state) {
+                state.actionSuccess = false;
+            },
         },
-
         extraReducers: {
             [fetchRefProjects.pending]: (state) => {
                 if (!state.loading) state.loading = true;
@@ -98,31 +104,35 @@ export const referenceProjectsSlice = createSlice({
                 if (state.loading) state.loading = false;
                     state.error = action.error;
             },
+
             [addRefProject.pending]: (state) => {
                 if (!state.loading) state.loading = true;
             },
             [addRefProject.fulfilled]: (state, action) => {
                 if(state.loading) state.loading = false;
-                    state.refProjects.push(action.payload);
-
+                state.refProjects.push(action.payload);
+                state.actionSuccess = true;
             },
             [addRefProject.rejected]: (state, action) => {
                 if (state.loading) state.loading = false;
-                state.error = action.error;
+                state.actionError = true;
             },
+
             [deleteRefProject.pending]: (state) => {
                 if (!state.loading) state.loading = true;
             },
             [deleteRefProject.fulfilled]: (state, action) => {
                 if(state.loading) state.loading = false;
-                    state.refProjects = state.refProjects.filter((project: any) => project._id !== action.payload);
+                state.refProjects = state.refProjects.filter((project: any) => project._id !== action.payload);
+
             },
             [deleteRefProject.rejected]: (state, action) => {
                 if (state.loading) {
                     state.loading = false;
-                    state.error = action.error;
+                    state.actionError = true;
                 }
             },
+
             [updateRefProject.pending]: (state) => {
                 if (!state.loading) state.loading = true;
             },
@@ -133,10 +143,11 @@ export const referenceProjectsSlice = createSlice({
                     if(project._id !== action.payload._id) return project;
                     return action.payload;
                 })
+                state.actionSuccess = true;
             },
             [updateRefProject.rejected]: (state, action) => {
                 if (state.loading) state.loading = false;
-                    state.error = action.error;
+                state.actionError = true;
             },
         },
     }
@@ -145,6 +156,6 @@ export const referenceProjectsSlice = createSlice({
 
 export const selectReferenceProjects = (state: RootState) => state.refProjects;
 
-export const { } = referenceProjectsSlice.actions;
+export const { clearActionError, clearActionSuccess } = referenceProjectsSlice.actions;
 
 export default referenceProjectsSlice.reducer;
