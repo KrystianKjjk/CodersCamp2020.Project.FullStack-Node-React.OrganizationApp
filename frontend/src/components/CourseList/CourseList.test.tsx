@@ -2,12 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
-// import { store } from "../../app/store";
 import CourseList from "./CourseList";
 import configureStore from "redux-mock-store";
-// import { CourseListElementModel } from "./CourseListSlice";
 import * as CourseListSlice from "./CourseListSlice";
-// import * as ReactRouterDom from "react-router-dom";
 import { EnhancedStore } from "@reduxjs/toolkit";
 
 const mockStore = configureStore([]);
