@@ -40,14 +40,3 @@ export const testTypDict = {
     [TestType.theoretical]: 'theoretical',
     [TestType. practical]: ' practical',
 }
-
-export interface ProjectData {
-    _id: string;
-    projectName: string;
-    sectionId: string;
-}
-
-export interface Project {
-    id: string;
-    projectName: string;
-}

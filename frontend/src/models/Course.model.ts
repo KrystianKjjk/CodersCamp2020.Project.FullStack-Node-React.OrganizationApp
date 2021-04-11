@@ -1,9 +1,9 @@
-export interface CourseData {
+export interface CourseDataForSection {
     _id: string;
     name: string;
 }
 
-export interface Course {
+export interface CourseForSection {
     id: string;
     courseName: string;
 }

@@ -5,7 +5,6 @@ import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { GridValueFormatterParams } from '@material-ui/data-grid';
 //
 import styles from './ManageSections.module.css';
-import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';

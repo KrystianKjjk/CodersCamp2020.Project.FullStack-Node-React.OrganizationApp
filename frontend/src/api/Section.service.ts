@@ -1,7 +1,7 @@
-import { String } from 'lodash';
 import BaseService from '../app/baseService';
-import { Course, CourseData } from '../models/Course.model';
-import { Section, SectionData, NewSectionData, Project, ProjectData } from '../models/Section.model';
+import { CourseForSection, CourseDataForSection } from '../models/Course.model';
+import { Section, SectionData, NewSectionData } from '../models/Section.model';
+import { ProjectForSection, ProjectDataForSection } from '../models/Project.model';
 
 export default class SectionService {
     
@@ -9,7 +9,7 @@ export default class SectionService {
 
     getSections = async (): Promise<Section[]> => {
         const coursesResponse = await this.api.get('/courses');
-        const courses = coursesResponse.data as CourseData[];
+        const courses = coursesResponse.data as CourseDataForSection[];
         const sections = (await this.api.get('/sections')).data as SectionData[];
         return sections.map( section => {
             const course = courses.find(course => course._id === section.course);
@@ -25,8 +25,8 @@ export default class SectionService {
 
     }
 
-    getCourses = async (): Promise<Course[]> => {
-        const courses = (await this.api.get('/courses')).data as CourseData[];
+    getCourses = async (): Promise<CourseForSection[]> => {
+        const courses = (await this.api.get('/courses')).data as CourseDataForSection[];
         return courses.map( course => {
             return ({
                 id: course._id,
@@ -35,8 +35,8 @@ export default class SectionService {
         });
     }
 
-    getProjectForSection = async (id: string): Promise<Project> => {
-        const projects = (await this.api.get('/projects')).data as ProjectData[];
+    getProjectForSection = async (id: string): Promise<ProjectForSection> => {
+        const projects = (await this.api.get('/projects')).data as ProjectDataForSection[];
         const project = projects.find(project => project.sectionId && project.sectionId === id);
         return {
             id: project?._id || '',
@@ -51,7 +51,7 @@ export default class SectionService {
         if (section.course) {
             try {
                 const coursesResponse = await this.api.get(`/courses/${section.course}`);
-                course = coursesResponse.data as CourseData;
+                course = coursesResponse.data as CourseDataForSection;
             } catch (e) {};
         } 
         return {
