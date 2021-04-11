@@ -42,7 +42,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
       values: [ search ]
     }
     dispatch(filterData({table: 'Manage Team Projects', filters: [ f ]}));
-  }, [search]);
+  }, [search, dispatch]);
 
   const columns = [
     { field: 'Name', width: 250, sortable: true },
