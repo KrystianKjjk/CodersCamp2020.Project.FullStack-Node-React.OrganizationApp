@@ -48,7 +48,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
   useEffect(() => {
     dispatch(getProjectById(props._id));
     return () => {dispatch(projectOperationSuccess(initialProjectState))}
-  }, [dispatch]);
+  }, [dispatch, props._id]);
 
   useEffect(() => {
     setProjectName(project.projectName);
@@ -56,7 +56,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
     setProjectDescription(project.description);
     setReferenceProjectName(project.referenceProjectName);
     setSectionName(project.sectionName);
-  }, [projectEditMode]);
+  }, [project.description, project.projectName, project.projectUrl, project.referenceProjectName, project.sectionName, projectEditMode]);
 
   const DeleteModal = (props: deleteModalProps) => {
     const projectDeleteMode = props.projectDeleteMode;

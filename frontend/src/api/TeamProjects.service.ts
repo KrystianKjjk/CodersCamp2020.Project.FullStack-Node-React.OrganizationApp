@@ -24,49 +24,6 @@ interface Project {
     description: string
 }
 
- enum UserType {
-    Candidate,
-    Participant,
-    Mentor,
-    Admin,
-};
-
-enum UserStatus {
-    Active,
-    Resigned,
-    Archived,
-};
-
-interface Mentor {
-    name: string,
-    surname: string,
-    email: string,
-    type: UserType,
-    password: string,
-    status: UserStatus,
-    grades: number[]
-};
-
-interface ReferenceProject {
-    _id: string,
-    sectionId: number,
-    projectName: string,
-    projectUrl: string,
-    description?: string
-}
-
-interface Section {
-    _id: string,
-    name: string,
-    startDate: string,
-    endDate: string,
-    tests: [],
-    referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
-    description?: string,
-    materials?: string[], //materials reference
-    course: string
-}
-
 const api = new BaseService();
 
 async function getTeamProjects(): Promise<any[]> {
