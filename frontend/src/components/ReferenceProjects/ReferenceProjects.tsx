@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRefProjects, selectReferenceProjects} from "./ReferenceProjectsSlice";
 import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 
 import UButton from "../UButton";
 import ReusableTable from "../ReusableTable";
-import SearchInput from "../SearchInput";
 
 import styles from './ReferenceProjects.module.css';
 import {mainTheme} from "../../theme/customMaterialTheme";
@@ -21,9 +20,11 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
   const {refProjects, loading, loaded, error} = useSelector(selectReferenceProjects);
   const history = useHistory();
 
+  const courseID = localStorage.getItem('courseId');
+
   useEffect(() => {
     if(!loaded) dispatch(fetchRefProjects());
-  },[]);
+  },[loaded]);
 
     const columns = [
         {field: 'Name', width: 500},
@@ -31,13 +32,16 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
     ];
 
     function getReferenceProjects(): Promise<any[]> {
-        const projects = refProjects.map((project: any) => (
-            {
-                id: project._id,
-                Name: project.projectName,
-                'Section name': project["Section name"]
-            }));
-
+        const projects = refProjects
+                .filter( (project: any) => {
+                    if(courseID) return project.course === courseID;
+                    return project;
+                })
+                .map((project: any) => ({
+                    id: project._id,
+                    Name: project.projectName,
+                    'Section name': project["Section name"]
+                }));
         // @ts-ignore
         return new Promise(
             (resolve) => {

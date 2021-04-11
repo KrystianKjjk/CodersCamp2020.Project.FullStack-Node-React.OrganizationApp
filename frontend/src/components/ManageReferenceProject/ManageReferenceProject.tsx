@@ -102,9 +102,7 @@ const ManageReferenceProject = (props: any) => {
     if(isEdit) toggleEdit();
     handleCloseDeleteConfirmation();
 
-    setTimeout(()=>{
-      history.push('/projects');
-    },1500)
+    history.push('/projects');
   }
 
   const [isOpenDelete, setIsOpenDelete] = useState(false);

@@ -57,16 +57,32 @@ const FindSection: React.FC< FindSectionProps > = props => {
     }
 
     function getSections() {
-        sectionsService.getSections()
-            .then(res => {
-                if(res.status === 200) {
-                    setSections([...res.data]);
-                    setFilteredSections([...res.data]);
-                }
-                else throw Error;
-            })
-            .catch(err => {
-            })
+        const courseID = localStorage.getItem('courseId');
+        if(courseID)
+        {
+            sectionsService.getSectionsByCourseId(courseID)
+                .then(res => {
+                    if(res.status === 200) {
+                        setSections([...res.data]);
+                        setFilteredSections([...res.data]);
+                    }
+                    else throw Error;
+                })
+                .catch(err => {
+                })
+        }
+        else {
+            sectionsService.getSections()
+                .then(res => {
+                    if(res.status === 200) {
+                        setSections([...res.data]);
+                        setFilteredSections([...res.data]);
+                    }
+                    else throw Error;
+                })
+                .catch(err => {
+                })
+        }
     }
 
     function getSectionsTable(): Promise<[]> {

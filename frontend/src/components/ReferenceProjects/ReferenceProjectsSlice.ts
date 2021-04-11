@@ -8,7 +8,6 @@ import BaseService from "../../app/baseService";
 const projectsService = new ReferenceProjectsService();
 const sectionService = new SectionService(new BaseService());
 
-
 const initialState: any = {
     loading: false,
     loaded: false,
@@ -20,27 +19,29 @@ const initialState: any = {
 };
 
 export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', async () => {
-      const response = await projectsService.getProjects();
-      const projects = response.data;
-      const result = await Promise.all( projects.map(
-              async (project: any) => {
-                  try {
-                      const section = await sectionService.getSectionByID(project.sectionId);
-                      return {
-                          ...project,
-                          "Section name": section.data?.name || ''
-                      }
-                  }
-                  catch {
-                      return {
-                          ...project,
-                          "Section name": 'Section does not exist'
-                      }
-                  }
+    const response = await projectsService.getProjects();
+    const projects = response.data;
+    const projectsExtended = await Promise.all(projects.map(
+        async (project: any) => {
+            try {
+                const section = await sectionService.getSectionByID(project.sectionId);
+                return {
+                    ...project,
+                    "Section name": section.data?.name || '',
+                    course: section.data.course,
+                }
+            }
+            catch {
+                return {
+                    ...project,
+                    "Section name": 'Section does not exist'
+                }
+            }
+        }));
 
-              }))
-      return result;
-    });
+    return projectsExtended;
+});
+
 
 export const addRefProject: any = createAsyncThunk('refProjects/addProject', async project => {
     const res = await projectsService.createProject(project);
@@ -90,6 +91,9 @@ export const referenceProjectsSlice = createSlice({
             },
             clearActionSuccess(state) {
                 state.actionSuccess = false;
+            },
+            clearLoaded(state) {
+                state.loaded = false;
             },
         },
         extraReducers: {
@@ -157,6 +161,6 @@ export const referenceProjectsSlice = createSlice({
 
 export const selectReferenceProjects = (state: RootState) => state.refProjects;
 
-export const { clearActionError, clearActionSuccess } = referenceProjectsSlice.actions;
+export const { clearActionError, clearActionSuccess, clearLoaded } = referenceProjectsSlice.actions;
 
 export default referenceProjectsSlice.reducer;

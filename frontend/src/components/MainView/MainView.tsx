@@ -11,6 +11,10 @@ import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
 
+import ReferenceProjects from "../ReferenceProjects";
+import ManageReferenceProject from "../ManageReferenceProject";
+import ManageUser from "../ManageUser";
+
 interface LoggedInViewProps {
   onLogout?: Function
 }
@@ -19,9 +23,6 @@ interface LoggedOutViewProps {
   onLogin?: Function
 }
 
-import ReferenceProjects from "../ReferenceProjects";
-import ManageReferenceProject from "../ManageReferenceProject";
-import ManageUser from "../ManageUser";
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();

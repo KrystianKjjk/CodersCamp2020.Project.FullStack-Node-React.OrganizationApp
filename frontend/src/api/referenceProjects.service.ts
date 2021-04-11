@@ -11,6 +11,9 @@ export default class ReferenceProjectsService {
     async getProjects() {
         return this.httpService.get(`${this.endpoint}`);
     }
+    async getProjectByID(projectID: string) {
+        return this.httpService.get(`${this.endpoint}/${projectID}`);
+    }
     async createProject(project: any) {
         return this.httpService.post(`${this.endpoint}`, project);
     }
