@@ -8,6 +8,7 @@ import {
 } from "../Course/CourseClient";
 import CourseList from "./CourseList";
 import {getActiveCourse, setActiveCourse} from "../../app/ActiveCourse";
+import CoursesService from "../../api/courses.service";
 // import CourseCreateObject from '../CourseCreate';
 
 export interface CourseListElementModel extends CourseCreateObject {
@@ -28,7 +29,9 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
 };
 
 export const fetchCoursesAndSort=async ()=>{
-  const response = await fetchCourses();
+  const courseService = new CoursesService();
+  const response = await courseService.fetchCourses();
+  // const response = await fetchCourses();
   const coursesDto: CourseListElementDto[] = response.data;
   const courses: CourseListElementModel[] = coursesDto.map((courseDto) => {
     const courseListElement: CourseListElementModel = {

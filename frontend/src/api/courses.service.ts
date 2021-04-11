@@ -15,24 +15,31 @@ export interface CourseListElementDto {
 }
 
 export default class CoursesService {
-  endpoint: string = "";
-
-  constructor(private httpService: BaseService) {
-    this.endpoint = `courses`;
-  }
+  private endpoint: string = "courses";
+  private httpService = new BaseService();
+  // constructor() {
+  //   this.endpoint = `courses`;
+  // }
 
   async getCourse(id: string) {
     const endpoint = `${this.endpoint}/${id}`;
     return this.httpService.get(endpoint);
   }
 
-  createCourse = (course: CourseCreateObject) => {
+  async createCourse (course: CourseCreateObject){
     // return axios.post('localhost:5000/api/courses', {course}, config);
    
-    return this.httpService.post(`${this.endpoint}`, course);
+    return this.httpService.post(this.endpoint, course);
     // `${this.endpoint}/`, course
   };
+  
+  async fetchCourses() {
+    return this.httpService.get(this.endpoint);
+  }
 }
+
+
+
 
 //   export const updateCourse = (course: Course) => {
 //     // return axios.post('localhost:5000/api/courses', {course}, config);

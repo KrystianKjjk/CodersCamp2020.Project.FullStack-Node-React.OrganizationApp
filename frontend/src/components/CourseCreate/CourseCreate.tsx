@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import PageHeader from "../PageHeader";
 import moduleStyles from "./CourseCreate.module.css";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import 'date-fns'
+import "date-fns";
 
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -16,6 +16,7 @@ import {
   KeyboardDatePicker,
   DatePicker,
 } from "@material-ui/pickers";
+import CoursesService from "../../api/courses.service";
 
 export interface CourseCreateProps {}
 
@@ -89,6 +90,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
   );
 
   const classes = useStyles();
+  const courseService = new CoursesService();
 
   const [courseName, changeCourseName] = useState("");
   const [description, changeDescription] = useState("");
@@ -112,7 +114,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
   const handleEndDateChange = (date: Date | null) => {
     changeEndDate(date);
     // console.log(e.target.value);
-  }
+  };
 
   const handleSaveButtonClick = async () => {
     const course: CourseCreateObject = {
@@ -120,11 +122,11 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
       description: description,
       startDate: startDate!,
       endDate: endDate!,
-    }; 
-    
-    createCourse(course).then((response: any) => {
+    };
+
+    courseService.createCourse(course).then((response: any) => {
       const createdCourse: Course = response.data;
-      history.push("courses/" + createdCourse._id);
+      history.push("/courses/" + createdCourse._id);
     });
   };
 
@@ -151,35 +153,35 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
         </div>
         <div>
           <div className={classes.dateContainer}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DatePicker
-              disableToolbar
-              variant="inline"
-              format="dd/MM/yyyy"
-              margin="normal"
-              id="date-picker-inline"
-              label="Start date"
-              inputVariant="outlined"
-              value={startDate}
-              onChange={handleStartDateChange}
-              // KeyboardButtonProps={{
-              //   "aria-label": "change date",
-              // }}
-            />
-            <DatePicker
-              disableToolbar
-              variant="inline"
-              format="dd/MM/yyyy"
-              margin="normal"
-              id="date-picker-inline"
-              label="End date"
-              inputVariant="outlined"
-              value={endDate}
-              onChange={handleEndDateChange}
-              // KeyboardButtonProps={{
-              //   "aria-label": "change date",
-              // }}
-            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Start date"
+                inputVariant="outlined"
+                value={startDate}
+                onChange={handleStartDateChange}
+                // KeyboardButtonProps={{
+                //   "aria-label": "change date",
+                // }}
+              />
+              <DatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="End date"
+                inputVariant="outlined"
+                value={endDate}
+                onChange={handleEndDateChange}
+                // KeyboardButtonProps={{
+                //   "aria-label": "change date",
+                // }}
+              />
             </MuiPickersUtilsProvider>
             {/* <TextField
               id="date"

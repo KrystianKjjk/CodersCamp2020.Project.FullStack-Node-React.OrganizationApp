@@ -31,8 +31,7 @@ const MainView: React.FC = () => {
         <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute path="/sections">
-          <FindSection onSectionSelection={[]}/>
-          {/* <Sections /> */}
+          <Sections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <Gradesheets />

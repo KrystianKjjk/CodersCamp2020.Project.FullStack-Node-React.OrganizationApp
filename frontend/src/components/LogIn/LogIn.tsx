@@ -20,6 +20,7 @@ import useStyles from "./LogIn.style";
 import BaseService from "../../app/baseService";
 import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
 import HeaderRegistration from '../HeaderRegistration';
+import axios from 'axios';
 
 export interface LogInProps {}
 
@@ -65,10 +66,11 @@ export default function SignIn() {
       const response = await service.post("login", { email, password });
       setFormError("");
       setResponseDataToLocalStorage(response);
-      routeChange();
+      axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')};
       const courses = await fetchCoursesAndSort();
       const mostRecentCourse = courses[0];
       setActiveCourse(mostRecentCourse);
+      routeChange();
     } catch (error) {
       setFormError(error?.response?.data?.message);
       setOpenError(true);

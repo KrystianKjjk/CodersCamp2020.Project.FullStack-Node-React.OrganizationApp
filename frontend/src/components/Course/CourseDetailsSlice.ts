@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import CoursesService from "../../api/courses.service";
 import { AppThunk, RootState } from "../../app/store";
 import { fetchCourse, updateCourse, fetchCourseSections, deleteSectionById} from "./CourseClient";
 
@@ -37,7 +38,8 @@ const initialState: CourseState = {sectionsIdToDelete:[]};
 export const fetchCourseAsync = (courseId: string): AppThunk => async (
   dispatch
 ) => {
-  const courseResponse = await fetchCourse(courseId);
+  const courseService = new CoursesService();
+  const courseResponse = await courseService.getCourse(courseId);
   const courseDto: CourseDto = courseResponse.data;
 
   const sectionsResponse = await fetchCourseSections(courseId);
