@@ -6,6 +6,7 @@ import CourseListElement from "../CourseList/CourseListElement";
 import PageHeader from "../PageHeader";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import UButton from "../UButton";
 
 export interface CourseListProps {}
 
@@ -36,7 +37,7 @@ const CourseList: React.FC<CourseListProps> = (props) => {
       <div>
         <div className={styles.manageCourseBar}>
           <h3>Manage courses</h3>
-          <Button onClick={handleAddButtonClick} >ADD</Button>
+          <UButton text="ADD" color="primary" onClick={handleAddButtonClick}></UButton>
         </div>
         <div className={styles.listContainer}>{listElements}</div>
       </div>

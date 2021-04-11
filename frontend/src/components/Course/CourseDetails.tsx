@@ -30,6 +30,7 @@ import {
 // import { updateCourse } from "./CourseClient";
 import { Alert } from "@material-ui/lab";
 import { UButtonTheme } from "../../theme/customMaterialTheme";
+import { useHistory } from "react-router-dom";
 
 export interface CourseProps {
   id: string;
@@ -71,11 +72,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "50px",
     },
     button: {
-      backgroundColor: "#1A90FF",
+      backgroundColor: "#1a90ff",
       margin: "2% 0",
-      width: "150px",
+      width: "120px",
       "&:hover": {
-        backgroundColor: "#67b5ff",
+        backgroundColor: "#2272bd",
       },
     },
   })
@@ -83,6 +84,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const { course, sectionsIdToDelete } = useAppSelector(
     (state) => state.courseDetails
   );
@@ -107,6 +109,10 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const handleDescriptionChange = (e: any) => {
     changeDescription(e.target.value);
   };
+
+  const handleAddButtonClick=(e:React.SyntheticEvent)=>{
+    history.push("/sections/");
+  }
 
   const handleSaveButtonClick = () => {
     const courseToSave: Course = {
@@ -140,9 +146,10 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     if (reason === "clickaway") {
       return;
     }
-
     setIsOpen(false);
   };
+
+  
 
   useEffect(() => {
     const courseId = match.params.id;
@@ -224,7 +231,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 key={section._id}
               />
             ))}
-            {isEdit?(<UButton text="ADD" color="primary" onClick={console.log('cos')}></UButton>):null}
+            {isEdit?(<UButton text="ADD" color="primary" onClick={handleAddButtonClick}></UButton>):null}
             
           </Box>
           <Box marginTop="2%">
@@ -277,12 +284,13 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
         <Box
           display="flex"
           justifyContent="center"
+          borderTop="1px solid #666666"
         >
           {isEdit ? (
             <Button
               className={classes.button}
               onClick={handleSaveButtonClick}
-              variant="contained"
+              variant="text"
               disabled={!courseName || !startDate || !endDate}
             >
               <Snackbar

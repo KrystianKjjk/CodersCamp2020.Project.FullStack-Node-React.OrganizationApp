@@ -1,11 +1,12 @@
-import React from "react";
-import { Button, Box } from "@material-ui/core";
+import React, { useState } from "react";
+import { Button, Box, Snackbar } from "@material-ui/core";
 import { CourseListElementModel } from "./CourseListSlice";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { deleteCourseAsync, setActiveCourse } from "./CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
-
+import UButton from "../UButton";
+import { Alert } from "@material-ui/lab";
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
@@ -61,8 +62,9 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const handleDeleteButtonClick = (event: any) => {
-    dispatch(deleteCourseAsync(course._id));
+
+  const handleDeleteButtonClick = (event:any) => {
+    dispatch(deleteCourseAsync(course._id))
     event.stopPropagation();
   };
 
@@ -91,26 +93,19 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
           <div className={classes.date}>End date:</div>
           <div>{course.endDate.toISOString().split("T")[0]}</div>
         </Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          padding="8% 20% 10% 20%"
-        >
-          
-          <Button
-            variant="contained"
-            className={classes.buttonDelete}
+        <Box display="flex" justifyContent="center" padding="7% 0%">
+          <UButton
+            text="DELETE"
+            color="secondary"
             onClick={handleDeleteButtonClick}
           >
-            DELETE
-          </Button>
-          <Button
-            variant="contained"
-            className={classes.buttonEdit}
+          </UButton>
+
+          <UButton
+            text="EDIT"
+            color="primary"
             onClick={handleEditButtonClick}
-          >
-            EDIT
-          </Button>
+          ></UButton>
         </Box>
       </div>
     </div>
