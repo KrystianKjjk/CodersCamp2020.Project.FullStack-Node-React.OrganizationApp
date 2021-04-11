@@ -23,13 +23,9 @@ import UButton from '../UButton';
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
   DatePicker,
 } from "@material-ui/pickers";
-// import { updateCourse } from "./CourseClient";
 import { Alert } from "@material-ui/lab";
-import { UButtonTheme } from "../../theme/customMaterialTheme";
 import { useHistory } from "react-router-dom";
 
 export interface CourseProps {

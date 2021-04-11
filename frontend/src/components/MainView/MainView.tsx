@@ -12,7 +12,6 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
-import FindSection from "../FindSection";
 import { UserType } from '../../models/User.model'
 
 interface LoggedInViewProps {
@@ -169,9 +168,6 @@ function User(props: LoggedInViewProps) {
 
 function Users() {
   return <h2>Users</h2>
-}
-function Courses() {
-  return <h2>Courses</h2>;
 }
 function Sections() {
   return <h2>Sections</h2>;

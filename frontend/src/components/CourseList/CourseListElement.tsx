@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { Button, Box, Snackbar } from "@material-ui/core";
-import { CourseListElementModel } from "./CourseListSlice";
+import React from "react";
+import { Box} from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { deleteCourseAsync, setActiveCourse } from "./CourseListSlice";
+import { deleteCourseAsync, setActiveCourse, CourseListElementModel } from "./CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
 import UButton from "../UButton";
-import { Alert } from "@material-ui/lab";
+
 
 export interface CourseListElementProps {
   course: CourseListElementModel;

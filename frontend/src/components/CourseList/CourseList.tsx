@@ -4,7 +4,6 @@ import { fetchCoursesAsync } from "./CourseListSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CourseListElement from "../CourseList/CourseListElement";
 import PageHeader from "../PageHeader";
-import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import UButton from "../UButton";
 
