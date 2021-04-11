@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import ReferenceProjectsService from "../../api/referenceProjects.service";
 import {RootState} from "../../app/store";
-import SectionService from "../../api/section.service";
+import SectionService from "../../api/sections.service";
+import BaseService from "../../app/baseService";
 
 const projectsService = new ReferenceProjectsService();
-const sectionService = new SectionService();
+const sectionService = new SectionService(new BaseService());
 
 
 const initialState: any = {
@@ -24,7 +25,7 @@ export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', as
       const result = await Promise.all( projects.map(
               async (project: any) => {
                   try {
-                      const section = await sectionService.getSection(project.sectionId);
+                      const section = await sectionService.getSectionByID(project.sectionId);
                       return {
                           ...project,
                           "Section name": section.data?.name || ''
@@ -44,7 +45,7 @@ export const fetchRefProjects: any = createAsyncThunk('refProjects/fetchAll', as
 export const addRefProject: any = createAsyncThunk('refProjects/addProject', async project => {
     const res = await projectsService.createProject(project);
     try {
-        const section = await sectionService.getSection(res.data.sectionId);
+        const section = await sectionService.getSectionByID(res.data.sectionId);
         return {
             ...res.data,
             "Section name": section.data?.name || ''
@@ -66,7 +67,7 @@ export const deleteRefProject: any = createAsyncThunk('refProjects/deleteProject
 export const updateRefProject: any = createAsyncThunk('refProjects/updateProject', async project => {
     const res =  await projectsService.updateProject(project);
     try {
-        const section = await sectionService.getSection(res.data.sectionId);
+        const section = await sectionService.getSectionByID(res.data.sectionId);
         return {
             ...res.data,
             "Section name": section.data?.name || ''
