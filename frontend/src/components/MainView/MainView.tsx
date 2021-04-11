@@ -9,6 +9,7 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import { getUserFromLocalStorage } from "../../app/utils";
 import TeamProjectsComponent from '../TeamProjects/index';
+import { getTeamProjects } from '../../api/TeamProjects.service'
 
 const MainView: React.FC = () => {
   
@@ -73,7 +74,7 @@ function Projects() {
   return <h2>Projects</h2>;
 }
 function TeamProjects() {
-  return <TeamProjectsComponent/>;
+  return <TeamProjectsComponent getFunction={getTeamProjects}/>;
 }
 function Teams() {
   return <h2>Teams</h2>;

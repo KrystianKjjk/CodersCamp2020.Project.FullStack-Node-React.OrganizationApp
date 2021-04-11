@@ -6,12 +6,13 @@ import SearchInput from '../SearchInput';
 import { useAppDispatch } from '../../app/hooks';
 import { filterData } from '../ReusableTable/ReusableTableSlice';
 import TeamProject from '../TeamProject/index'
-import { getTeamProjects } from '../../api/TeamProjects.service'
 import {
   fetchData
 } from '../ReusableTable/ReusableTableSlice';
 
-export interface TeamProjectsProps {}
+export interface TeamProjectsProps {
+  getFunction: () => Promise<any[]>
+}
 
 interface MainViewProps {
   detailedView: boolean
@@ -29,6 +30,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   const [selectedProjectId, setSelectedProjectId] = useState({});  
   const [search, setSearch] = useState('');
   const [tableDisplay, setTableDisplay] = useState('initial');
+  const getFunction = props.getFunction;
 
   const changeSearch = (value: string) => {
     setSearch(value);
@@ -59,17 +61,18 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
     )
   } 
 
-const MainView = (props: MainViewProps) => {
-    return props.detailedView ? <div><EditView/></div> : null
-  }
-
 const EditView = () => {
+  
   //@ts-ignore
   return <TeamProject _id={selectedProjectId} changeViewFn={() => {
     setTableDisplay('initial');
     setDetailedView(false);
-    dispatch(fetchData("Manage Team Projects", getTeamProjects))
+    dispatch(fetchData("Manage Team Projects", getFunction))
   }}/>
+}
+
+const MainView = (props: MainViewProps) => {
+  return props.detailedView ? <div><EditView/></div> : null
 }
 
   return (
@@ -83,7 +86,7 @@ const EditView = () => {
         <div className={styles.table} style={{display : tableDisplay}}>        
         <ReusableTable
           name="Manage Team Projects"
-          getData={getTeamProjects}
+          getData={getFunction}
           columns={columns}
           onRowClick={(params, e) => {
               setDetailedView(true);
