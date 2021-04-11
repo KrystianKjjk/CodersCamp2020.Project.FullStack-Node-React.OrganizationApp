@@ -39,8 +39,6 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
         backgroundColor: "#1C1C1C",
         "&:hover": {
           borderColor: "#FBA846",
-          // cursor: "pointer",
-          // outlineStyle: "solid",
           outlineColor: "#FBA846",
         },
       },

@@ -1,15 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../../app/store";
+import { AppThunk} from "../../app/store";
 import { CourseCreateObject } from "../Course/CourseDetailsSlice";
-// import {
-//   CourseListElementDto,
-//   deleteCourse,
-//   fetchCourses,
-// } from "../Course/CourseClient";
-import CourseList from "./CourseList";
-import { getActiveCourse, setActiveCourse } from "../../app/ActiveCourse";
 import CoursesService, { CourseListElementDto } from "../../api/courses.service";
-// import CourseCreateObject from '../CourseCreate';
+
 
 export interface CourseListElementModel extends CourseCreateObject {
   _id: string;
@@ -31,7 +24,6 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
 export const fetchCoursesAndSort = async () => {
   const courseService = new CoursesService();
   const response = await courseService.fetchCourses();
-  // const response = await fetchCourses();
   const coursesDto: CourseListElementDto[] = response.data;
   const courses: CourseListElementModel[] = coursesDto.map((courseDto) => {
     const courseListElement: CourseListElementModel = {
@@ -56,7 +48,6 @@ export const deleteCourseAsync = (courseId: string): AppThunk => async (
 ) => {
   const courseService = new CoursesService();
   courseService.deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
-  // deleteCourse(courseId).then(() => dispatch(removeCourse(courseId)));
 };
 
 export const courseListSlice = createSlice({
@@ -76,8 +67,5 @@ export const courseListSlice = createSlice({
 });
 
 export const { setCourses, removeCourse } = courseListSlice.actions;
-
-// if you want, add selectors here, change the one below, remember to register reducer in store.ts
-// export const selectCourseList = (state: RootState) => state.courseList.value;
 
 export default courseListSlice.reducer;

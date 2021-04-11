@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Course.module.css";
 import { RouteComponentProps } from "react-router-dom";
 import {
   fetchCourseAsync,
@@ -8,7 +7,6 @@ import {
 } from "./CourseDetailsSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import CourseSectionElement from "./CourseSectionListElement";
 import {
@@ -31,7 +29,6 @@ import {
 } from "@material-ui/pickers";
 // import { updateCourse } from "./CourseClient";
 import { Alert } from "@material-ui/lab";
-import AddButton from "../AddButton";
 import { UButtonTheme } from "../../theme/customMaterialTheme";
 
 export interface CourseProps {
@@ -45,17 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1),
         width: "90%",
       },
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          // borderColor: "#666666",
-        },
-        "&.Mui-focused fieldset": {
-          // borderColor: "#1A90FF",
-        },
-      },
-      "& .MuiInputLabel-root": {
-        // color: theme.palette.text.primary,
-      },
     },
     nameInput: {
       "&.MuiTextField-root": {
@@ -68,8 +54,6 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: "Montserrat",
       backgroundColor: "#1C1C1C",
       border: "1px solid #666666",
-      //   display: 'flex',
-      // flexWrap: 'wrap',
     },
     inputs: {
       display: "flex",
@@ -94,9 +78,6 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#67b5ff",
       },
     },
-    // buttonEdit: {
-    //   marginRight: "3%",
-    // },
   })
 );
 
@@ -146,31 +127,6 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
         setIsOpen(true);
       });
   };
-
-  // dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete))
-  //     .then((response) => {
-  //       setMessage("Course was updated");
-  //       setIsOpen(true);
-  //     })
-  //     .catch((exception) => {
-  //       setMessage("Sorry, something went wrong");
-  //       setIsOpen(true);
-  //     });
-  // };
-
-  // const handleSaveButtonClick = async () => {
-  //   const course: CourseCreateObject = {
-  //     name: courseName,
-  //     description: description,
-  //     startDate: startDate!,
-  //     endDate: endDate!,
-  //   };
-
-  //   createCourse(course).then((response: any) => {
-  //     const createdCourse: Course = response.data;
-  //     history.push("courses/" + createdCourse._id);
-  //   });
-  // };
 
   const handleStartDateChange = (date: Date | null) => {
     changeStartDate(date);

@@ -19,10 +19,3 @@ export default class SectionsService {
     return this.httpService.delete(`${this.endpoint}/${sectionId}`);
   }
 }
-
-//   export const deleteSectionById = (sectionId:string)=>{
-//     return axios.delete(
-//       "https://coders-camp-organization-app.herokuapp.com/api/sections/"+sectionId,
-//       config
-//     );
-//   };

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import CoursesService from "../../api/courses.service";
 import SectionsService from "../../api/sections.service";
 import BaseService from "../../app/baseService";
-import { AppThunk, RootState } from "../../app/store";
+import { AppThunk} from "../../app/store";
 
 
 export interface Course extends CourseCreateObject {
@@ -44,7 +44,6 @@ export const fetchCourseAsync = (courseId: string): AppThunk => async (
   const courseResponse = await courseService.getCourse(courseId);
   const courseDto: CourseDto = courseResponse.data;
   const sectionsResponse = await courseService.fetchCourseSections(courseId);
-  // const sectionsResponse = await fetchCourseSections(courseId);
   const sections: SectionListElement[] = sectionsResponse.data;
   const course: Course = {
     ...courseDto,
@@ -55,16 +54,13 @@ export const fetchCourseAsync = (courseId: string): AppThunk => async (
   dispatch(setCourse(course));
 };
 
-//zmienic updateCourse 
 export const updateCourseAsync =  (course: Course, sectionsIdToDelete:string[]): AppThunk<Promise<void>> =>async (dispatch) => {
   const courseService = new CoursesService();
   const sectionsService = new SectionsService(new BaseService());
  try{
   sectionsIdToDelete.forEach(async(sectionId)=>{
-    // await deleteSectionById(sectionId);
     await sectionsService.deleteSectionById(sectionId);
   })
-  // await updateCourse(course);
   await courseService.updateCourse(course);
   dispatch(setCourse(course));
   return Promise.resolve();
@@ -72,12 +68,7 @@ export const updateCourseAsync =  (course: Course, sectionsIdToDelete:string[]):
   catch(exception){
     return Promise.reject(exception);
   }
-// deleteSectionById(sectionId);
 };
-
-// export const deleteSectionByIdAsync=(sectionId:string): AppThunk=>(dispatch)=>{
-//   return deleteSectionById(sectionId);
-// }
 
 export const courseSlice = createSlice({
   name: "course",

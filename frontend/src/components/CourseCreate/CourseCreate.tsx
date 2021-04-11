@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { createCourse } from "../Course/CourseClient";
 import { CourseCreateObject, Course } from "../Course/CourseDetailsSlice";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
@@ -51,8 +50,6 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
         fontFamily: "Montserrat",
         backgroundColor: "#1C1C1C",
         border: "1px solid #666666",
-        //   display: 'flex',
-        // flexWrap: 'wrap',
       },
       inputs: {
         display: "flex",
@@ -108,12 +105,10 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
 
   const handleStartDateChange = (date: Date | null) => {
     changeStartDate(date);
-    // console.log(e.target.value);
   };
 
   const handleEndDateChange = (date: Date | null) => {
     changeEndDate(date);
-    // console.log(e.target.value);
   };
 
   const handleSaveButtonClick = async () => {
@@ -183,28 +178,6 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
                 // }}
               />
             </MuiPickersUtilsProvider>
-            {/* <TextField
-              id="date"
-              label="Start date"
-              type="date"
-              className={classes.datePicker}
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleDateChange}
-              value={startDate.toString()}
-            /> */}
-            {/* <TextField
-              id="date"
-              label="End date"
-              type="date"
-              className={classes.datePicker}
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }} */}
-            {/* /> */}
           </div>
           <div className={classes.buttonAlignment}>
             <Button
