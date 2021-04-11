@@ -65,6 +65,11 @@ export const courseListSlice = createSlice({
       state.courseList = state.courseList.filter(
         (courseListElement) => courseListElement._id !== idToDelete
       );
+      if(idToDelete===state.activeCourse?._id){
+        const course=state.courseList[0];
+        state.activeCourse=course;
+        ActiveCourse.setActiveCourse(course);
+      }
     },
     setActiveCourse: (state, action: PayloadAction<CourseListElementModel>) => {
       const course = action.payload;
