@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import DateFnsUtils from '@date-io/date-fns'; 
 import 'date-fns'
 //
@@ -15,7 +14,7 @@ import StyledTextField from '../StyledTextField';
 import UButton from "../UButton";
 
 const SectionView = () => {
-  const sectionService = new SectionService();
+  const sectionService = useMemo(() => new SectionService(), []);
   const [sectionName, setSectionName] = useState("");
   const [courseName, setCourseName] = useState("");
   const [courseId, setCourseId] = useState("");
@@ -27,34 +26,41 @@ const SectionView = () => {
   const [isInEditMode, setIsInEditMode] = useState(false);
   const { id } = useParams<Record<'id', string>>()
   const history = useHistory();
-
-  const getOneSectionData = async () => {
-    const data = await sectionService.getOneSection(id);
-
-    setSectionName(data.name);
-    setCourseName(data.courseName);
-    setCourseId(data.courseId);
-    setDescription(data.description || '');
-    setStartDate(data.startDate || undefined);
-    setEndDate(data.endDate || undefined);
-  };
-
-  const getCourseData = async () => {
-    const data = await sectionService.getCourses();
-    setCourses(data);
-  };
-
-  const getProjectData = async () => {
-    const project = await sectionService.getProjectForSection(id);
-    setReferenceProject(project.projectName);
-  };
   
+
+
+
+
   useEffect(() => {
+    const getCourseData = async () => {
+      const data = await sectionService.getCourses();
+      setCourses(data);
+    };
+  
+    const getProjectData = async () => {
+      const project = await sectionService.getProjectForSection(id);
+      setReferenceProject(project.projectName);
+    };
+
+    const getOneSectionData = async () => {
+      const data = await sectionService.getOneSection(id);
+  
+      setSectionName(data.name);
+      setCourseName(data.courseName);
+      setCourseId(data.courseId);
+      setDescription(data.description || '');
+      setStartDate(data.startDate || undefined);
+      setEndDate(data.endDate || undefined);
+    };
+
     if (id) getOneSectionData();
     else setIsInEditMode(true);
     getCourseData();
     getProjectData();
-  }, []);
+  }, [sectionService, id]);
+
+
+
 
   const saveSection = async () => {
     const sectionData: NewSectionData = {
