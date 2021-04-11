@@ -155,9 +155,3 @@ export default function SignIn(props: LogInProps) {
     </div>
   );
 }
-function dispatch(arg0: {
-  payload: import("../CourseList/CourseListSlice").CourseListElementModel[];
-  type: string;
-}) {
-  throw new Error("Function not implemented.");
-}
