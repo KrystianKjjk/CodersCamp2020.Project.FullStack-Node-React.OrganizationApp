@@ -7,6 +7,9 @@ import { useAppDispatch } from '../../app/hooks';
 import { filterData } from '../ReusableTable/ReusableTableSlice';
 import TeamProject from '../TeamProject/index'
 import { getTeamProjects } from '../../api/TeamProjects.service'
+import {
+  fetchData
+} from '../ReusableTable/ReusableTableSlice';
 
 export interface TeamProjectsProps {}
 
@@ -65,6 +68,7 @@ const EditView = () => {
   return <TeamProject _id={selectedProjectId} changeViewFn={() => {
     setTableDisplay('initial');
     setDetailedView(false);
+    dispatch(fetchData("Manage Team Projects", getTeamProjects))
   }}/>
 }
 

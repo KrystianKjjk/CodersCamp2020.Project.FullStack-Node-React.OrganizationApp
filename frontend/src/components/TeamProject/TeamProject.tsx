@@ -57,7 +57,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
     return null
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newProjectData = {
       ...project,
       teamId: project.teamId,
@@ -65,7 +65,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
       projectUrl: projectUrl,
       description: projectDescription
     }
-    dispatch(saveProjectById(newProjectData, props._id));
+    await dispatch(saveProjectById(newProjectData, props._id));
     dispatch(getProjectById(props._id));
   }
 
