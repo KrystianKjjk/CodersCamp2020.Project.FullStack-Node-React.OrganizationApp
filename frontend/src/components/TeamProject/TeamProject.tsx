@@ -8,10 +8,12 @@ import {
   deleteProjectById,
   switchEditMode,
   switchDeleteMode,
+  switchSectionSelectionMode,
   projectOperationSuccess,
   initialProjectState
 } from './TeamProjectSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import FindSection from '../FindSection/index'
 
 export interface TeamProjectProps {
   _id: string, //id projektu wybranego w tabeli
@@ -23,8 +25,16 @@ interface deleteModalProps {
   _id: string;
 }
 
+interface referenceProjectButtonProps {
+  teamProject: String;
+}
+
+interface sectionSelectionModalProps {
+  sectionSelectionMode: boolean
+}
+
 const TeamProject: React.FC<TeamProjectProps> = props => {
-  const { projectEditMode, projectDeleteMode, project } = useAppSelector(selectTeamProjects);
+  const { projectEditMode, projectDeleteMode, sectionSelectionMode, project } = useAppSelector(selectTeamProjects);
   let selectedTeamProject = project;
 
   const dispatch = useAppDispatch();
@@ -34,7 +44,6 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
-
     return () => {dispatch(projectOperationSuccess(initialProjectState))}
   }, [dispatch]);
 
@@ -48,10 +57,25 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
     const projectDeleteMode = props.projectDeleteMode;
     if (projectDeleteMode) {
       return (
-        <div className={styles.deleteModal} onClick={() => dispatch(switchDeleteMode())}>
+        <div className={styles.modal} onClick={() => dispatch(switchDeleteMode())}>
           Do you really want to delete this project?
           <br /><br />
           <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id))}>Delete</Button>
+        </div>)
+    }
+    return null
+  }
+
+  const SectionSelectionModal = (props: sectionSelectionModalProps) => {
+    const sectionSelectionMode = props.sectionSelectionMode;
+    if (sectionSelectionMode) {
+      return (
+        <div className={styles.modal}>
+           Currently selected section: {project.sectionName}
+          <br /><br />
+          <FindSection onSectionSelection={(sectionID: string, sectionName: string) => { console.log(sectionID, sectionName)
+
+          }}/>
         </div>)
     }
     return null
@@ -71,6 +95,11 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
   const handleChange = (setState: Function, e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setState(e.target.value);
+  }
+
+  const ReferenceProjectButtonText = (props: referenceProjectButtonProps) => {
+    if (props.teamProject) return <span>Change</span>;
+    return <span>Set</span>;
   }
 
   return (
@@ -98,7 +127,12 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
                 onChange={(e) => handleChange(setProjectName, e)}
               ></input>
             </div>
-            <div>{selectedTeamProject!.referenceProjectName}</div>
+            <div>
+                {selectedTeamProject!.referenceProjectName}
+                <Button id={styles.buttonEdit} onClick={() => dispatch(switchSectionSelectionMode())}>
+                  <ReferenceProjectButtonText teamProject={selectedTeamProject!.referenceProjectName}/>
+                </Button>
+                </div>
             <div>{selectedTeamProject!.mentor}</div>
             <div>{selectedTeamProject!.sectionName}</div>
             <div>
@@ -118,6 +152,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
           </div>
         </div>
+        <SectionSelectionModal sectionSelectionMode={sectionSelectionMode}/>
       </div>)
       :
       (<div className={styles.teamProjectContainer}>

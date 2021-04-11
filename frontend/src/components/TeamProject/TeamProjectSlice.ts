@@ -18,6 +18,7 @@ export interface TeamProjectState {
 interface initialstate {
   projectEditMode: boolean,
   projectDeleteMode: boolean,
+  sectionSelectionMode: boolean,
   loading: boolean,
   hasErrors: boolean,
   project: TeamProjectState 
@@ -38,6 +39,7 @@ export const initialProjectState = {
 const initialState: initialstate = {
   projectEditMode: false,
   projectDeleteMode: false,
+  sectionSelectionMode: false,
   loading: false,
   hasErrors: false,
   project: initialProjectState
@@ -68,6 +70,9 @@ export const teamProjectSlice = createSlice({
     },
     switchDeleteMode: state => {
       if (!state.loading || state.projectDeleteMode === true) state.projectDeleteMode = !state.projectDeleteMode;
+    },
+    switchSectionSelectionMode: state => {
+      if (!state.loading || state.projectDeleteMode === true) state.sectionSelectionMode = !state.sectionSelectionMode;
     }
   }
 });
@@ -78,7 +83,8 @@ export const {
   projectDeleteSuccess,
   projectOperationFailure, 
   switchEditMode, 
-  switchDeleteMode 
+  switchDeleteMode,
+  switchSectionSelectionMode
 } = teamProjectSlice.actions;
 
 // if you want, add selectors here, change the one below, remember to register reducer in store.ts
@@ -111,6 +117,7 @@ export function getProjectById(id: string) {
 
         try {
           const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
+          console.log(responseSection);
           const dataSection = await responseSection.data;
           data.sectionName = dataSection.name;
         }
@@ -153,5 +160,18 @@ export function deleteProjectById(id: string) {
       dispatch(projectOperationFailure());
     }
     dispatch(switchDeleteMode());
+  }
+}
+
+export function saveProjectSectionById(project: Object, id: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch(projectOperation());
+
+    try {
+      await api.put(`/teams/projects/${id}`, JSON.stringify(project));
+    } catch (error) {
+      dispatch(projectOperationFailure());
+    }    
+    dispatch(switchEditMode());
   }
 }
