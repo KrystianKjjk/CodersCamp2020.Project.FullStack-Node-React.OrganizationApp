@@ -16,17 +16,11 @@ const mockGet = () => {
    return Promise.resolve(teamProjects);
 }
 
-const TestEdit = (selectedProjectId: Object) => {
-   return (
-      <div aria-label="test">Here you should be editing project with ID {selectedProjectId}</div>
-   )
-}
-
 describe('TeamProjects', () => {
    it('renders without error', async () => {
       render(
          <Provider store={store}>
-            <TeamProjects course="123" getFunction={mockGet} editComponent={TestEdit} />
+            <TeamProjects getFunction={mockGet}/>
          </Provider>
       );
       const header = await screen.findByLabelText(`TeamProjectsHeader`);

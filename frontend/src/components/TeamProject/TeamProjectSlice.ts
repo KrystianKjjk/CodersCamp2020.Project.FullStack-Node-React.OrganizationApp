@@ -117,7 +117,6 @@ export function getProjectById(id: string) {
 
         try {
           const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
-          console.log(responseSection);
           const dataSection = await responseSection.data;
           data.sectionName = dataSection.name;
         }
@@ -163,15 +162,29 @@ export function deleteProjectById(id: string) {
   }
 }
 
-export function saveProjectSectionById(project: Object, id: string) {
+export function saveProjectSectionById(project: TeamProjectState, sectionId: string) {
+  let responseParentProjectName: string, responseSectionName: string;
+
   return async (dispatch: Dispatch) => {
     dispatch(projectOperation());
+    let newProject = {
+      ...project, 
+      parentProjectId: ''};
 
     try {
-      await api.put(`/teams/projects/${id}`, JSON.stringify(project));
+      const allReferenceProjects = await api.get(`/projects`);
+      //@ts-ignore      
+      const referenceProject = allReferenceProjects.data.find(project => project.sectionId === sectionId);
+      newProject.parentProjectId = referenceProject._id;      
+      await dispatch(projectOperationSuccess(newProject));    
+      dispatch(switchSectionSelectionMode());       
+      responseParentProjectName = (await api.get(`/projects/${newProject.parentProjectId}`)).data.projectName;
+      responseSectionName = (await api.get(`/sections/${referenceProject.sectionId}`)).data.name;
     } catch (error) {
       dispatch(projectOperationFailure());
-    }    
-    dispatch(switchEditMode());
-  }
+      console.log(error);
+      dispatch(switchSectionSelectionMode());  
+    }        
+    return [responseParentProjectName, responseSectionName]  
+  }  
 }

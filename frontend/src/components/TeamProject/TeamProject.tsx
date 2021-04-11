@@ -6,6 +6,7 @@ import {
   getProjectById,
   saveProjectById,
   deleteProjectById,
+  saveProjectSectionById,
   switchEditMode,
   switchDeleteMode,
   switchSectionSelectionMode,
@@ -35,12 +36,14 @@ interface sectionSelectionModalProps {
 
 const TeamProject: React.FC<TeamProjectProps> = props => {
   const { projectEditMode, projectDeleteMode, sectionSelectionMode, project } = useAppSelector(selectTeamProjects);
-  let selectedTeamProject = project;
+  let selectedTeamProject = project; 
 
   const dispatch = useAppDispatch();
   const [projectName, setProjectName] = useState(project.projectName);
   const [projectUrl, setProjectUrl] = useState(project.projectUrl);
   const [projectDescription, setProjectDescription] = useState(project.description);
+  const [referenceProjectName, setReferenceProjectName] = useState(project.referenceProjectName);
+  const [sectionName, setSectionName] = useState(project.sectionName);
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
@@ -51,6 +54,8 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
     setProjectName(project.projectName);
     setProjectUrl(project.projectUrl);
     setProjectDescription(project.description);
+    setReferenceProjectName(project.referenceProjectName);
+    setSectionName(project.sectionName);
   }, [projectEditMode]);
 
   const DeleteModal = (props: deleteModalProps) => {
@@ -67,15 +72,16 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
   }
 
   const SectionSelectionModal = (props: sectionSelectionModalProps) => {
+
     const sectionSelectionMode = props.sectionSelectionMode;
     if (sectionSelectionMode) {
       return (
         <div className={styles.modal}>
-           Currently selected section: {project.sectionName}
-          <br /><br />
-          <FindSection onSectionSelection={(sectionID: string, sectionName: string) => { console.log(sectionID, sectionName)
-
-          }}/>
+          <FindSection onSectionSelection={async (sectionID: string) => {
+            const [projectName, sectionName] = await dispatch(saveProjectSectionById(selectedTeamProject, sectionID));
+            setReferenceProjectName(projectName);
+            setSectionName(sectionName);
+         }}/>
         </div>)
     }
     return null
@@ -127,14 +133,14 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
                 onChange={(e) => handleChange(setProjectName, e)}
               ></input>
             </div>
+            <div>{referenceProjectName}</div>
+            <div>{selectedTeamProject!.mentor}</div>
             <div>
-                {selectedTeamProject!.referenceProjectName}
-                <Button id={styles.buttonEdit} onClick={() => dispatch(switchSectionSelectionMode())}>
+              {sectionName}
+              <Button id={styles.buttonEdit} onClick={() => dispatch(switchSectionSelectionMode())}>
                   <ReferenceProjectButtonText teamProject={selectedTeamProject!.referenceProjectName}/>
                 </Button>
-                </div>
-            <div>{selectedTeamProject!.mentor}</div>
-            <div>{selectedTeamProject!.sectionName}</div>
+            </div>
             <div>
               <input
                 className={styles.input}
@@ -185,8 +191,6 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
       </div>)
   );
-
-
 };
 
 export default TeamProject;
