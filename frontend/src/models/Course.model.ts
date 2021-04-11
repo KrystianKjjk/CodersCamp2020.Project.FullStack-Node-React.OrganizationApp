@@ -1,3 +1,8 @@
+export interface CourseData {
+    _id: string;
+    name: string;
+}
+
 export interface CourseDataForSection {
     _id: string;
     name: string;
