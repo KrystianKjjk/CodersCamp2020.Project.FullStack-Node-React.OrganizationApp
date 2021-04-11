@@ -46,7 +46,6 @@ const ManageReferenceProject = (props: any) => {
       setIsEdit(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
   },[]);
 
   useEffect(()=>{
