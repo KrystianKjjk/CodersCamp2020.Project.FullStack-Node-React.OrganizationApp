@@ -45,6 +45,8 @@ const ManageReferenceProject = (props: any) => {
       setIsAdding(true);
       setIsEdit(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   },[]);
 
   useEffect(()=>{
@@ -56,6 +58,7 @@ const ManageReferenceProject = (props: any) => {
       setOpenSuccessAlert(true);
       dispatch(clearActionSuccess());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[actionError, actionSuccess])
 
   let tmp: any;

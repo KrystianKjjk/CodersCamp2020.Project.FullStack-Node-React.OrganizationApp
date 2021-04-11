@@ -5,8 +5,6 @@ import {BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
 
-  localStorage.setItem('courseId', '604bd56eef20be4368273700');
-
   useEffect(() => {
     document.title = "Coders Camp Organization App"
   }, [])

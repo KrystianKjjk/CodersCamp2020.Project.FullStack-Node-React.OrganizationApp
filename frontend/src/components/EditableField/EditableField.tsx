@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './EditableField.module.css';
 import UButton from "../UButton";
-import {ReactComponent} from "*.svg";
 import {Box} from "@material-ui/core";
 
 export interface EditableFieldProps {

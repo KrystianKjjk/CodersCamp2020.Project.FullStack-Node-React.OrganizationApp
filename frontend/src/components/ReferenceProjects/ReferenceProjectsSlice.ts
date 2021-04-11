@@ -63,7 +63,7 @@ export const addRefProject: any = createAsyncThunk('refProjects/addProject', asy
 });
 
 export const deleteRefProject: any = createAsyncThunk('refProjects/deleteProject', async (projectID: string) => {
-    const res = await projectsService.deleteProject(projectID);
+    await projectsService.deleteProject(projectID);
     return projectID;
 });
 

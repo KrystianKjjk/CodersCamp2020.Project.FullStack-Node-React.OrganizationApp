@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRefProjects, selectReferenceProjects} from "./ReferenceProjectsSlice";
 import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
@@ -24,6 +24,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
 
   useEffect(() => {
     if(!loaded) dispatch(fetchRefProjects());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[loaded]);
 
     const columns = [
