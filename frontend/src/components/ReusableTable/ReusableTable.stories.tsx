@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import ReusableTable , { ReusableTableProps } from './ReusableTable';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import TeamService from '../../api/Teams.service';
+import TeamService from '../../api/Team.service';
 
 export default {
   title: 'ReusableTable component',

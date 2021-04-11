@@ -7,6 +7,7 @@ import HomePage from "../HomePage";
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
+import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
 
@@ -85,6 +86,9 @@ function Admin(props: LoggedInViewProps) {
         </PrivateRoute>
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
+        </PrivateRoute>
+        <PrivateRoute path="/teams/:teamId">
+          <ManageTeam />
         </PrivateRoute>
         <PrivateRoute path="/teams">
           <Teams />
