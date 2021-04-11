@@ -10,7 +10,7 @@ import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import styles from './SectionView.module.css';
 import SectionService from '../../api/Section.service';
 import { NewSectionData } from '../../models/Section.model';
-import { Course } from '../../models/Course.model';
+import { CourseForSection } from '../../models/Course.model';
 import StyledTextField from '../StyledTextField';
 import UButton from "../UButton";
 
@@ -23,7 +23,7 @@ const SectionView = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const [referenceProject, setReferenceProject] = useState("");
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CourseForSection[]>([]);
   const [isInEditMode, setIsInEditMode] = useState(false);
   const { id } = useParams<Record<'id', string>>()
   const history = useHistory();
