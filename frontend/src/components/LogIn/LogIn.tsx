@@ -22,13 +22,15 @@ import HeaderRegistration from '../HeaderRegistration';
 import axios from 'axios';
 import { useAppDispatch } from "../../app/hooks";
 
-export interface LogInProps {}
+export interface LogInProps {
+  onLogin?: Function
+};
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function SignIn() {
+export default function SignIn(props: LogInProps) {
   const classes = useStyles();
   const appDispatch = useAppDispatch();
 
@@ -72,7 +74,9 @@ export default function SignIn() {
       const mostRecentCourse = courses[0];
       appDispatch(setActiveCourse(mostRecentCourse));
       routeChange();
-    } catch (error) {
+      if (props.onLogin) props.onLogin();
+    }
+    catch (error) {
       setFormError(error?.response?.data?.message);
       setOpenError(true);
     }

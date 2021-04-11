@@ -12,7 +12,7 @@ export interface Project {
 
 const ProjectSchema = new mongoose.Schema({
     sectionId: {
-        type: Number, 
+        type: String, 
         required: true,
     },
     projectName: {

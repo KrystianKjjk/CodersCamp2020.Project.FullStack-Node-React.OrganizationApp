@@ -2,13 +2,24 @@ import React from "react";
 import styles from "./Header.module.css";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import { removeUserFromLocalStorage } from "../../app/utils";
+import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { Box } from "@material-ui/core";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onLogout?: Function;
+}
+
+const Header = (props: HeaderProps) => {
+  // const Header: React.FC = () => {
   const { activeCourse } = useAppSelector((state) => state.courseList);
   const handleLogOut = () => {
     removeUserFromLocalStorage();
+  };
+
+  const history = useHistory();
+  const routeChange = () => {
+    let path = `/`;
+    history.push(path);
   };
 
   return (
@@ -17,10 +28,15 @@ const Header: React.FC = () => {
         <span>.</span>Coders<span>Camp</span>
       </div>
       <div className={styles.activeCourseBox}>
-        <p className={styles.activeCourse}>{activeCourse?.name}</p> 
-        {/* <div>Active course: </div>
-          <div className={styles.activeCourse}>{activeCourse?.name}</div> */}
-        <div className={styles.logout} onClick={() => handleLogOut()}>
+        <p className={styles.activeCourse}>{activeCourse?.name}</p>
+        <div
+          className={styles.logout}
+          onClick={() => {
+            handleLogOut();
+            routeChange();
+            if (props.onLogout) props.onLogout();
+          }}
+        >
           <PowerSettingsNewIcon
             style={{ color: "rgba(255, 255, 255, 0.6)" }}
           ></PowerSettingsNewIcon>
