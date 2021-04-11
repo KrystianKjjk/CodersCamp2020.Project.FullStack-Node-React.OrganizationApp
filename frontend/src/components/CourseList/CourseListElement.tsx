@@ -96,6 +96,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
           justifyContent="space-between"
           padding="8% 20% 10% 20%"
         >
+          
           <Button
             variant="contained"
             className={classes.buttonDelete}
