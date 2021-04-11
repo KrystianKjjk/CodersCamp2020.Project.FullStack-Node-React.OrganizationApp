@@ -14,6 +14,7 @@ const ProjectSchema = new mongoose.Schema({
     sectionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Section',
+        required: true,
     },
     projectName: {
         type: String, 

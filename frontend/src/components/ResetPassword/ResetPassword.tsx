@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import StyledTextField from '../StyledTextField'
+import HeaderRegistration from '../HeaderRegistration';
 
 export interface ResetPasswordProps {
 
@@ -36,6 +37,8 @@ export default function ResetPassword() {
   const classes = useStyles();
 
   return (
+<div>
+<HeaderRegistration />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -66,5 +69,6 @@ export default function ResetPassword() {
         </form>
       </div>
     </Container>
+    </div>
   );
 }
