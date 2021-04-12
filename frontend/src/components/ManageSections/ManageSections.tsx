@@ -12,6 +12,7 @@ import { searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import SectionService from '../../api/ManageSection.service';
 import UButton from "../UButton";
+import { getActiveCourse } from '../../app/utils';
 
 export interface ManageSectionsProps {
 
@@ -23,7 +24,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const tableName = 'Sections';
-  const courseID = localStorage.getItem('activeCourse');
+  const courseActive = getActiveCourse();
   const displayFormattedDate = (date: number) => {
     if (!date) return '';
     const dateObject = new Date(date * 1000);
@@ -80,7 +81,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table name={tableName} columns={columns} onRowClick={handleRowClick} getData={() => courseID ? sectionService.getSectionsByCourseId(courseID) : sectionService.getSections()}/>
+          <Table name={tableName} columns={columns} onRowClick={handleRowClick} getData={() => courseActive ? sectionService.getSectionsByCourseId(courseActive._id) : sectionService.getSections()}/>
         </div>
         </Paper>
     </Container>
