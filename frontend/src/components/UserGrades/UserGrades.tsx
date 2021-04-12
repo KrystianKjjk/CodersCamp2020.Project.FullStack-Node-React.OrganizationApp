@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from './UserGrades.module.css';
-import {Box, Breadcrumbs, CircularProgress, Link, Snackbar, Typography} from "@material-ui/core";
+import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 import {mainTheme} from "../../theme/customMaterialTheme";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,6 +14,8 @@ const UserGrades: React.FC< UserGradesProps > = props => {
 
     const dispatch = useDispatch();
     const {userData, loaded, error} = useSelector(selectUserData);
+
+    let finalResult = 0;
 
     useEffect(() => {
         if(!loaded) {
@@ -80,6 +82,7 @@ const UserGrades: React.FC< UserGradesProps > = props => {
                           }
 
                           average /= weight;
+                          finalResult += average;
 
                           return (
                               <tr>
@@ -115,7 +118,32 @@ const UserGrades: React.FC< UserGradesProps > = props => {
                           )})}
                   </table>
               ) }
+            <h2>Your current overall result</h2>
 
+              <div style={{
+                  height: "1rem",
+                  width: "400px",
+                  background: "rgba(255,255,255,.90)",
+                  borderRadius: "1rem",
+                  margin: "1rem auto 1rem auto",
+                  position: "relative"
+              }}>
+                  <div style={{
+                      height: "1rem",
+                      width: `${400*(finalResult / userData?.grades?.length)/100}px`,
+                      background: getColor((finalResult / userData?.grades?.length)),
+                      borderRadius: "1rem"}}
+                  />
+                  <div style={{
+                      width: "5px",
+                      height: "1rem",
+                      background: "#000",
+                      position: "absolute",
+                      top: "0",
+                      left: "320px"
+                  }} />
+              </div>
+              <h3 style={{marginBottom: "3rem"}}>{(finalResult / userData?.grades?.length).toFixed(2)}%</h3>
           </Box>
         </ThemeProvider>
     );
