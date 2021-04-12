@@ -73,7 +73,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sections</h2>
-          <span onClick={undefined} className={styles.addButton} aria-label='Add section'>
+          <span className={styles.addButton} aria-label='Add section'>
             <UButton text='ADD' color='primary' onClick={handleAddClick}/>
           </span>
           <span className={styles.selectSortBy}>

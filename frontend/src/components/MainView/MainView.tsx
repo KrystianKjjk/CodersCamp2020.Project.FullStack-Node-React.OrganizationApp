@@ -92,7 +92,7 @@ function Admin(props: LoggedInViewProps) {
           <SectionView />
         </PrivateRoute>
         <PrivateRoute path="/sections">
-          <Sections />
+          <ManageSections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
@@ -176,9 +176,6 @@ function User(props: LoggedInViewProps) {
 
 function Users() {
   return <h2>Users</h2>
-}
-function Sections() {
-  return <ManageSections />
 }
 
 function Gradesheets() {
