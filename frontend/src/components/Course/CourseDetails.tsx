@@ -203,7 +203,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               ></TextField>
             </div>
           ) : (
-            <Box>
+            <Box display="flex" flexDirection="column" alignItems="center">
               <h3>{courseName}</h3>
               <Box>
                 <p>{description}</p>
