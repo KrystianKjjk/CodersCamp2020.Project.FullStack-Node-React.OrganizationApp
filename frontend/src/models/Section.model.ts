@@ -3,27 +3,12 @@ export interface ManageSectionData {
     name: string;
     startDate?: string;
     endDate?: string;
-    tests?: Test[];
     description?: string;
     course: string;
 }
 
 export interface NewSectionData extends Omit<ManageSectionData, '_id'> {
 }
-
-export enum TestType {
-    sample,
-    theoretical,
-    practical,
-};
-
-export interface Test {
-    _id: string;
-    testType: TestType,
-    testDate: Date,
-    testUrl: string,
-    testDescription?: string,
-};
 
 export interface ManageSection {
     id: string;
@@ -33,13 +18,7 @@ export interface ManageSection {
     description?: string;
     courseName: string;
     courseId: string;
-};
-
-export const testTypDict = {
-    [TestType.sample]: 'sample',
-    [TestType.theoretical]: 'theoretical',
-    [TestType. practical]: ' practical',
-};
+}
 
 export interface SectionData {
     _id: string;
