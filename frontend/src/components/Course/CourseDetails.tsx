@@ -18,13 +18,10 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import PageHeader from "../PageHeader";
-import UButton from '../UButton';
+import UButton from "../UButton";
 
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  DatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
 
@@ -106,9 +103,9 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     changeDescription(e.target.value);
   };
 
-  const handleAddButtonClick=(e:React.SyntheticEvent)=>{
+  const handleAddButtonClick = (e: React.SyntheticEvent) => {
     history.push("/sections/");
-  }
+  };
 
   const handleSaveButtonClick = () => {
     const courseToSave: Course = {
@@ -145,8 +142,6 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     setIsOpen(false);
   };
 
-  
-
   useEffect(() => {
     const courseId = match.params.id;
     dispatch(fetchCourseAsync(courseId));
@@ -180,7 +175,13 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
             alignItems="center"
           >
             <h3>Manage course</h3>
-            <Box marginRight="1%"><UButton text="EDIT" color="primary" onClick={toggleEdit}></UButton></Box>
+            <Box marginRight="1%">
+              <UButton
+                text="EDIT"
+                color="primary"
+                onClick={toggleEdit}
+              ></UButton>
+            </Box>
           </Box>
         </div>
         <div className={classes.inputs}>
@@ -193,21 +194,20 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 variant="outlined"
                 value={courseName}
               ></TextField>
+              <TextField
+                label="Course description"
+                variant="outlined"
+                multiline
+                onChange={handleDescriptionChange}
+                value={description}
+              ></TextField>
             </div>
           ) : (
-            <h3>{courseName}</h3>
-          )}
-          {isEdit ? (
-            <TextField
-              label="Course description"
-              variant="outlined"
-              multiline
-              onChange={handleDescriptionChange}
-              value={description}
-            ></TextField>
-          ) : (
             <Box>
-              <p>{description}</p>
+              <h3>{courseName}</h3>
+              <Box>
+                <p>{description}</p>
+              </Box>
             </Box>
           )}
         </div>
@@ -227,8 +227,13 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 key={section._id}
               />
             ))}
-            {isEdit?(<UButton text="ADD" color="primary" onClick={handleAddButtonClick}></UButton>):null}
-            
+            {isEdit ? (
+              <UButton
+                text="ADD"
+                color="primary"
+                onClick={handleAddButtonClick}
+              ></UButton>
+            ) : null}
           </Box>
           <Box marginTop="2%">
             <h4>Dates:</h4>

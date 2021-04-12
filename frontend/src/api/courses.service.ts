@@ -30,10 +30,6 @@ export default class CoursesService {
     return this.httpService.get(this.endpoint);
   }
 
-  async fetchCourse(courseId:string){
-    return this.httpService.get(`${this.endpoint}/${courseId}`);
-  }
-
   async updateCourse(course: Course) {
     return this.httpService.put(`${this.endpoint}/${course._id}`, course);
   }
