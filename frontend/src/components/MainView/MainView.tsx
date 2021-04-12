@@ -12,6 +12,8 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
+import TeamProjectsComponent from '../TeamProjects/index';
+import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
 import { UserType } from '../../models/User.model'
@@ -23,6 +25,7 @@ interface LoggedInViewProps {
 interface LoggedOutViewProps {
   onLogin?: Function
 }
+
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
@@ -178,7 +181,7 @@ function Projects() {
   return <h2>Projects</h2>;
 }
 function TeamProjects() {
-  return <h2>Team projects</h2>;
+  return <TeamProjectsComponent getFunction={getTeamProjects}/>;
 }
 function MyTeam() {
   return <h2>My team</h2>;
