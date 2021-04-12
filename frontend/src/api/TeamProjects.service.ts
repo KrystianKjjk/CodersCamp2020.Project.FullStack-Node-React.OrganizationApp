@@ -24,54 +24,16 @@ interface Project {
     description: string
 }
 
- enum UserType {
-    Candidate,
-    Participant,
-    Mentor,
-    Admin,
-};
-
-enum UserStatus {
-    Active,
-    Resigned,
-    Archived,
-};
-
-interface Mentor {
-    name: string,
-    surname: string,
-    email: string,
-    type: UserType,
-    password: string,
-    status: UserStatus,
-    grades: number[]
-};
-
-interface ReferenceProject {
-    _id: string,
-    sectionId: number,
-    projectName: string,
-    projectUrl: string,
-    description?: string
-}
-
-interface Section {
-    _id: string,
-    name: string,
-    startDate: string,
-    endDate: string,
-    tests: [],
-    referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
-    description?: string,
-    materials?: string[], //materials reference
-    course: string
-}
-
 const api = new BaseService();
 
 async function getTeamProjects(): Promise<any[]> {
+    const courseId = localStorage.getItem('courseId');
+
     const response = await api.get('/teams/projects');
-    return await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
+    const allProjects = await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
+    //@ts-ignore
+    if (courseId)  return allProjects.filter(project => project.CourseId === courseId);
+    return allProjects;
 }
 
 async function getProjectDetailedData(project: TeamProject) {
@@ -81,7 +43,8 @@ async function getProjectDetailedData(project: TeamProject) {
         Mentor: '',
         Name: project.projectName,
         ReferenceProject: '',
-        Section: ''
+        Section: '',
+        CourseId: ''
     }
 
     if (project.teamId.mentor) {
@@ -93,11 +56,13 @@ async function getProjectDetailedData(project: TeamProject) {
         try {
             const section = await api.get(`/sections/${project.parentProjectId.sectionId}`);
             returnProject.Section = section.data.name;
+            returnProject.CourseId = section.data.course;
         }
         catch {
-            returnProject.Section = ''
+            returnProject.Section = '';
         }
-    }
+    }   
+
     return returnProject;
 }
 
