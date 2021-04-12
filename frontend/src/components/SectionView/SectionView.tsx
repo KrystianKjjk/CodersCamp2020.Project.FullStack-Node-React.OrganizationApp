@@ -27,10 +27,6 @@ const SectionView = () => {
   const { id } = useParams<Record<'id', string>>()
   const history = useHistory();
   
-
-
-
-
   useEffect(() => {
     const getCourseData = async () => {
       const data = await sectionService.getCourses();
@@ -58,9 +54,6 @@ const SectionView = () => {
     getCourseData();
     getProjectData();
   }, [sectionService, id]);
-
-
-
 
   const saveSection = async () => {
     const sectionData: NewSectionData = {
