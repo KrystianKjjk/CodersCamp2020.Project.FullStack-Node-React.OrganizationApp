@@ -3,17 +3,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
-import ManageUsers from './ManageUsers';
 import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
 import UserService from '../../api/User.service';
+import ManageUsers, { usersDatabase } from '.'
 
-const usersDatabase = [
-   {id: 1, name: 'Naame', surname: 'Suurname', type: 'Mentor', status: 'Active'},
-   {id: 2, name: 'Naaame', surname: 'Suuuurname', type: 'Participant', status: 'Archived'},
-   {id: 3, name: 'Naaaame', surname: 'Suuurname', type: 'Participant', status: 'Resigned'},
-   {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', type: 'Admin', status: 'Active'},
-   {id: 5, name: 'CName', surname: 'CSurname', type: 'Candidate', status: 'Active'},
-]
 
 jest.mock('../../api/User.service.ts', () => jest.fn());
 
