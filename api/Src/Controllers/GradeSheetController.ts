@@ -1,4 +1,4 @@
-import GradeSheetModel, { Participant } from '../Models/GradeSheet';
+import GradeSheetModel, { Participant, Grade } from '../Models/GradeSheet';
 import GradeSheetService from '../Services/GradeSheetService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
@@ -66,7 +66,7 @@ export default class GradeSheetController {
     setMentorGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = req.body.mentorId ? new mongoose.Types.ObjectId(req.params.mentorId) : null;
-        const grades: {[gradeName: string]: number} = req.body.grades;
+        const grades: {[gradeName: string]: Grade} = req.body.grades;
         const sheet = await this.gradeSheetService.setMentorGrades(id, grades, mentorId);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         if(sheet === 'FORBIDDEN') return res.status(403).json({message: 'FORBIDDEN'});
@@ -76,7 +76,7 @@ export default class GradeSheetController {
     setMentorReviewerGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
-        const grades: {[gradeName: string]: number} = req.body.grades;
+        const grades: {[gradeName: string]: Grade} = req.body.grades;
         const sheet = await this.gradeSheetService.setMentorReviewerGrades(id, mentorId, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
         res.status(200).json({message: 'Mentor reviewer grade set'});

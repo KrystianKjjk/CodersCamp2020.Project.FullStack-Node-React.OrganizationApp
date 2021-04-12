@@ -20,14 +20,14 @@ import BaseService from '../../app/baseService';
 import HeaderRegistration from '../HeaderRegistration';
 
 export interface LogInProps {
-
+  onLogin?: Function
 };
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function SignIn() {
+export default function SignIn(props: LogInProps) {
   const classes = useStyles();
 
   const [email, setEmail] = useState('');
@@ -66,6 +66,7 @@ export default function SignIn() {
       setFormError('');
       setResponseDataToLocalStorage(response);
       routeChange();
+      if (props.onLogin) props.onLogin();
     }
     catch (error) {
       setFormError(error?.response?.data?.message);

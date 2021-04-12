@@ -16,9 +16,7 @@ export default class ProjectService {
         let project: ProjectData;
         try {
             projectRes = await this.api.get(`/projects/${id}`);
-            console.log ('============================================================')
             project = projectRes.data;
-            console.log(project)
         } catch(err) {
             return null;
         }
