@@ -10,6 +10,7 @@ import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
+import UserGrades from "../UserGrades";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -181,9 +182,6 @@ function Teams() {
 }
 function MyProfile() {
   return <h2>My profile</h2>;
-}
-function UserGrades() {
-  return <h2>My grades</h2>;
 }
 
 export default MainView;

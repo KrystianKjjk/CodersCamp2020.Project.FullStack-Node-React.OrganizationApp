@@ -17,5 +17,4 @@ const Template: Story<UserGradesProps> = (args) => (
 
 export const SampleUserGrades = Template.bind({});
 SampleUserGrades.args = {
-  name: 'UserGrades',
 };
