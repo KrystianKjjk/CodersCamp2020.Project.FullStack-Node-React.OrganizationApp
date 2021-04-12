@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
-axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')}
+axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')};
 
 export default class BaseService {
     post = (path: string, data: any, config?: AxiosRequestConfig) => {

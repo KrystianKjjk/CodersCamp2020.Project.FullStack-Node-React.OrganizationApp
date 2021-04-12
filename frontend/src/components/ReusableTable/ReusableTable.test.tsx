@@ -6,21 +6,12 @@ import ReusableTable from './ReusableTable';
 import userEvent from '@testing-library/user-event';
 
 
-const tableName = 'Users';
+const tableName = 'Users Test';
 const users = [{id: 1, name: 'user1'}, {id: 2, name: 'user2'}];
 const columns = [{field: 'id', width: 100}, {field: 'name', width: 100}];
 
 describe('ReusableTable', () => {
-   it('renders without error', async () => {
-      render(
-         <Provider store={store}>
-            <ReusableTable name={tableName}/>
-         </Provider>
-      );
-      const table = await screen.findByLabelText(`Table - ${tableName}`);
-      expect(table).toBeInTheDocument();
-   });
-
+   
    it('loads data', async () => {
       const getData = jest.fn(() => Promise.resolve(users));
       render(
@@ -35,20 +26,4 @@ describe('ReusableTable', () => {
       expect(state.tables[tableName].rows).toEqual(users);
    });
 
-   it('after click on row, calls onRowClick', async () => {
-      const getData = jest.fn(() => Promise.resolve(users));
-      const onRowClick = jest.fn();
-      render(
-         <Provider store={store}>
-            <ReusableTable name={tableName} getData={getData} 
-                           columns={columns} onRowClick={onRowClick}/>
-         </Provider>
-      );
-      const table = await screen.findByLabelText(`Table - ${tableName}`);
-      expect(table).toBeInTheDocument();
-      const clickedName: string = 'user1';
-      const cell = screen.getByText(clickedName);
-      userEvent.click(cell);
-      expect(onRowClick).toBeCalledTimes(1);
-   });
 });

@@ -3,3 +3,8 @@
     min-width: 300px;
     height: 400px;
 }
+
+.MuiDataGrid-cellCheckbox, .MuiDataGrid-colCellCheckbox {
+    color: white !important;
+    background-color: white !important;
+}

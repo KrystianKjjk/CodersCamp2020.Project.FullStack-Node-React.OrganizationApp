@@ -55,8 +55,4 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: "./frontend/build"
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          force_orphan: true
-          keep_files: false
+          publish_dir: ./

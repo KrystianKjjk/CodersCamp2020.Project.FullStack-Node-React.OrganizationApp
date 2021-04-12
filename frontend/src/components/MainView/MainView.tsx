@@ -4,9 +4,13 @@ import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+import CourseCreate from "../CourseCreate";
+import Course from '../Course';
+import CourseList from '../CourseList';
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
+import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service'
@@ -74,8 +78,13 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/users">
           <Users />
         </PrivateRoute>
-        <PrivateRoute path="/courses">
-          <Courses />
+        <PrivateRoute exact path="/courses">
+          <CourseList/>
+        </PrivateRoute>
+        <PrivateRoute exact path="/coursecreate">
+          <CourseCreate/>
+        </PrivateRoute>
+        <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute path="/sections">
           <Sections />
@@ -88,6 +97,9 @@ function Admin(props: LoggedInViewProps) {
         </PrivateRoute>
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
+        </PrivateRoute>
+        <PrivateRoute path="/teams/:teamId">
+          <ManageTeam />
         </PrivateRoute>
         <PrivateRoute path="/teams">
           <Teams />
@@ -159,9 +171,6 @@ function User(props: LoggedInViewProps) {
 
 function Users() {
   return <h2>Users</h2>
-}
-function Courses() {
-  return <h2>Courses</h2>;
 }
 function Sections() {
   return <h2>Sections</h2>;

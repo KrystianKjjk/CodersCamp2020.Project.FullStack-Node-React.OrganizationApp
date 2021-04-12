@@ -76,8 +76,8 @@ describe('Test GradeSheetService ', () => {
             participants: [],
             reviewers: null,
             mentorGrades: {
-                design: 1,
-                extra: 2,
+                design: {points: 1},
+                extra: {points: 2},
             },
             mentorReviewerGrades: null,
         } as GradeSheet);
@@ -87,9 +87,9 @@ describe('Test GradeSheetService ', () => {
             const reviewerGrades = {
                 mentorID: mentorReviewerId,
                 grades: {
-                    code: Math.round(Math.random() * 10),
-                    repo: Math.round(Math.random() * 10),
-                    extra: Math.round(Math.random() * 10),
+                    code: {points: Math.round(Math.random() * 10)},
+                    repo: {points: Math.round(Math.random() * 10)},
+                    extra: {points: Math.round(Math.random() * 10)},
                 }
             };
             const mentorReviewerGrades = i/nSheets > 0.5 ? [reviewerGrades] : [];
@@ -99,9 +99,9 @@ describe('Test GradeSheetService ', () => {
                 participants: [],
                 reviewers: [mentorReviewerId],
                 mentorGrades: {
-                    code: Math.round(Math.random() * 10),
-                    repo: Math.round(Math.random() * 10),
-                    extra: Math.round(Math.random() * 10),
+                    code: {points: Math.round(Math.random() * 10)},
+                    repo: {points: Math.round(Math.random() * 10)},
+                    extra: {points: Math.round(Math.random() * 10)},
                 },
                 mentorReviewerGrades,
             } as GradeSheet);
@@ -144,13 +144,18 @@ describe('Test GradeSheetService ', () => {
         const idx = 7;
         const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx]);
         const sheetId = gradeSheets[idx]._id;
-        const grades = {'ExtraGrade': 111, 'Design': 10, 'repo': 9, 'App': 10};
+        const grades = {
+            'ExtraGrade': {points: 111},
+            'Design': {points: 10},
+            'repo': {points: 9},
+            'App': {points: 10},
+        };
         await service.setMentorGrades(sheetId, grades);
         for (let name in grades)
-            expect(gradeSheets[idx].mentorGrades[name]).toBe(grades[name]);
+            expect(gradeSheets[idx].mentorGrades[name]).toEqual(grades[name]);
         for (let name in sheet.mentorGrades)
             if ( !(name in grades) )
-                expect(gradeSheets[idx].mentorGrades[name]).toBe(sheet.mentorGrades[name]);
+                expect(gradeSheets[idx].mentorGrades[name]).toEqual(sheet.mentorGrades[name]);
         expect(await service.setMentorGrades(Types.ObjectId(), grades)).toBeNull();
     });
 
@@ -160,7 +165,12 @@ describe('Test GradeSheetService ', () => {
         const sheetId = gradeSheets[idx]._id;
         const mentorIdx = 0;
         const mentorId = gradeSheets[idx].reviewers[0];
-        const setGrades = {'ExtraGrade': 33, 'Design': 11, 'repo': 12, 'App': 13};
+        const setGrades = {
+            'ExtraGrade': {points: 33},
+            'Design': {points: 11},
+            'repo': {points: 12},
+            'App': {points: 13},
+        };
         await service.setMentorReviewerGrades(sheetId, mentorId, setGrades);
         const reviewerGrades = await service.getReviewerGrades(sheetId, mentorId);
         for (let name in setGrades)
@@ -168,7 +178,7 @@ describe('Test GradeSheetService ', () => {
         for (let name in reviewerGrades.grades)
             if ( !(name in setGrades) )
                 expect(reviewerGrades.grades[name])
-                    .toBe(prevSheet.mentorReviewerGrades[mentorIdx].grades[name]);
+                    .toEqual(prevSheet.mentorReviewerGrades[mentorIdx].grades[name]);
         expect(await service.setMentorReviewerGrades(Types.ObjectId(), mentorId, setGrades)).toBeNull();
         expect(await service.setMentorReviewerGrades(sheetId, Types.ObjectId(), setGrades)).toBeNull();
     });
