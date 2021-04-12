@@ -7,17 +7,15 @@ import { User, UserData, userStatusDict, userTypeDict } from '../models';
 
 export default class TeamService {
     
-    courseId: string | null;
     constructor(
         private api = new BaseService(),
         private teamProjectApi = new TeamProjectService(),
         private sheetApi = new SheetService()
-    ) { 
-        this.courseId = localStorage.getItem('courseId');
-    };
+    ) { };
 
     getTeams = async (): Promise<Team[]> => {
-        const courseRes = await this.api.get('/courses/' + this.courseId);
+        const courseId = localStorage.getItem('courseId');
+        const courseRes = await this.api.get('/courses/' + courseId);
         const course = courseRes.data as CourseData;
         const teams = (await this.api.get(`courses/${course._id}/teams`)).data as TeamData[];
         return teams.map( team => ({
@@ -88,6 +86,15 @@ export default class TeamService {
 
     deleteUserFromTeam = async (teamId: string, userId: string) => {
         await this.api.delete(`teams/${teamId}/users/${userId}`);
+    }
+
+    createTeam = async () => {
+        const courseId = localStorage.getItem('courseId');
+        await this.api.post('/teams', {course: courseId});
+    }
+
+    deleteTeam = async (id: string) => {
+        await this.api.delete('/teams/' + id);
     }
 
 }
