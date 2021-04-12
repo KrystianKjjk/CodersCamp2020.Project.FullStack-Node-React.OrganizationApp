@@ -52,14 +52,14 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   ];
 
   const Header = (detailedView: boolean) => {
-    return detailedView ? <div className={styles.header}><h2>{HeaderText.EDIT}</h2></div> : 
-    (
-    <div className={styles.header}>
-        <h2>{HeaderText.MAIN}</h2>
-        <SearchInput onSubmit={changeSearch} placeholder='Search for project name' />
-    </div>      
-    )
-  } 
+    return detailedView ? <><h2>{HeaderText.EDIT}</h2></> :
+      (
+        <>
+          <h2>{HeaderText.MAIN}</h2>
+          <SearchInput onSubmit={changeSearch} placeholder='Search for project name' />
+        </>
+      )
+  }
 
 const EditView = () => {
   
@@ -77,24 +77,24 @@ const MainView = (props: MainViewProps) => {
 
   return (
     <CssBaseline>
-      <Paper aria-label='TeamProjectsHeader'>
+      <Paper className={styles.header} aria-label='TeamProjectsHeader'>
         {Header(detailedView)}
       </Paper>
 
       <Paper className={styles.main}>
-        <MainView detailedView={detailedView}/>
-        <div className={styles.table} style={{display : tableDisplay}}>        
-        <ReusableTable
-          name="Manage Team Projects"
-          getData={getFunction}
-          columns={columns}
-          onRowClick={(params, e) => {
+        <MainView detailedView={detailedView} />
+        <div className={styles.table} style={{ display: tableDisplay }}>
+          <ReusableTable
+            name="Manage Team Projects"
+            getData={getFunction}
+            columns={columns}
+            onRowClick={(params, e) => {
               setDetailedView(true);
               setSelectedProjectId(params.row.id);
               setTableDisplay('none');
-          }}
-        />
-      </div>   
+            }}
+          />
+        </div>
       </Paper>
     </CssBaseline>
   );
