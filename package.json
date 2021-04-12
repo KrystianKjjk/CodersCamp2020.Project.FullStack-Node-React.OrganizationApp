@@ -35,7 +35,7 @@
   "bugs": {
     "url": "https://github.com/KrystianKjjk/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp/issues"
   },
-  "homepage": "https://krystiankjjk.github.io/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp/",
+  "homepage": "https://github.com/KrystianKjjk/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp#readme",
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@testing-library/dom": "^7.29.4",
