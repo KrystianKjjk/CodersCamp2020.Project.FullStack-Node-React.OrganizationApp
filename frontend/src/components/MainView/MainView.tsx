@@ -168,13 +168,6 @@ function User(props: LoggedInViewProps) {
   )
 }
 
-
-function Courses() {
-  return <h2>Courses</h2>;
-}
-function Users() {
-  return <h2>Users</h2>
-}
 function Sections() {
   return <h2>Sections</h2>;
 }
