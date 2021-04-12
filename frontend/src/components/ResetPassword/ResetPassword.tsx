@@ -126,7 +126,7 @@ export default function ResetPassword() {
           <CssBaseline />
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
-              Password with reset link has been sent!
+              Email with reset link has been sent!
         </Typography>
               <Button
                 type="submit"

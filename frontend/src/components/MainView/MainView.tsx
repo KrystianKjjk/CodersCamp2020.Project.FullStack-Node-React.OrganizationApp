@@ -57,7 +57,7 @@ function LoggedOut(props: LoggedOutViewProps) {
         <Route path="/resetpassword">
           <ResetPassword />
         </Route>
-        <Route path="/passwordreset">
+        <Route path="/passwordReset">
           <ResetPasswordFromLink />
         </Route>
         <Route exact path="/">
