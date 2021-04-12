@@ -10,7 +10,7 @@ import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
 import { searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
-import SectionService from '../../api/Section.service';
+import SectionService from '../../api/ManageSection.service';
 import UButton from "../UButton";
 
 export interface ManageSectionsProps {

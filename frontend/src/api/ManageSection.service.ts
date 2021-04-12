@@ -1,16 +1,16 @@
 import BaseService from '../app/baseService';
 import { CourseForSection, CourseDataForSection } from '../models/Course.model';
-import { Section, SectionData, NewSectionData } from '../models/Section.model';
+import { ManageSection, ManageSectionData, NewSectionData } from '../models/Section.model';
 import { ProjectForSection, ProjectDataForSection } from '../models/Project.model';
 
 export default class SectionService {
     
     constructor(private api = new BaseService()) { };
 
-    getSections = async (): Promise<Section[]> => {
+    getSections = async (): Promise<ManageSection[]> => {
         const coursesResponse = await this.api.get('/courses');
         const courses = coursesResponse.data as CourseDataForSection[];
-        const sections = (await this.api.get('/sections')).data as SectionData[];
+        const sections = (await this.api.get('/sections')).data as ManageSectionData[];
         return sections.map( section => {
             const course = courses.find(course => course._id === section.course);
             return ({
@@ -24,10 +24,10 @@ export default class SectionService {
         });
     }
 
-    getSectionsByCourseId = async (id: string): Promise<Section[]> => {
+    getSectionsByCourseId = async (id: string): Promise<ManageSection[]> => {
         const courseResponse = await this.api.get(`/courses/${id}`);
         const course = courseResponse.data as CourseDataForSection;
-        const sections = (await this.api.get(`/courses/${id}/sections`)).data as SectionData[];
+        const sections = (await this.api.get(`/courses/${id}/sections`)).data as ManageSectionData[];
         return sections.map( section => {
             return ({
                 id: section._id,
@@ -59,9 +59,9 @@ export default class SectionService {
         }
     }
 
-    getOneSection  = async (id: string): Promise<Section> => {
+    getOneSection  = async (id: string): Promise<ManageSection> => {
         
-        const section = (await this.api.get(`/sections/${id}`)).data as SectionData;
+        const section = (await this.api.get(`/sections/${id}`)).data as ManageSectionData;
         let course = null;
         if (section.course) {
             try {

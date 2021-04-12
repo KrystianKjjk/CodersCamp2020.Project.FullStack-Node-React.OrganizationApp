@@ -1,4 +1,4 @@
-export interface SectionData {
+export interface ManageSectionData {
     _id: string;
     name: string;
     startDate?: string;
@@ -8,7 +8,7 @@ export interface SectionData {
     course: string;
 }
 
-export interface NewSectionData extends Omit<SectionData, '_id'> {
+export interface NewSectionData extends Omit<ManageSectionData, '_id'> {
 }
 
 export enum TestType {
@@ -25,7 +25,7 @@ export interface Test {
     testDescription?: string,
 };
 
-export interface Section {
+export interface ManageSection {
     id: string;
     name: string;
     startDate?: number;

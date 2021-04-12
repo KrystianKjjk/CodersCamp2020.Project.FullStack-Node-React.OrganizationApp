@@ -7,7 +7,7 @@ import { Container, CssBaseline, Paper, InputLabel, MenuItem, Select } from '@ma
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 //
 import styles from './SectionView.module.css';
-import SectionService from '../../api/Section.service';
+import SectionService from '../../api/ManageSection.service';
 import { NewSectionData } from '../../models/Section.model';
 import { CourseForSection } from '../../models/Course.model';
 import StyledTextField from '../StyledTextField';
