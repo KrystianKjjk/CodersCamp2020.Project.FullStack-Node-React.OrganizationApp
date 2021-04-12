@@ -53,11 +53,12 @@ table tr {
 }
 table tr th {
     font-weight: 600;
-    max-width: 2.5rem;
+    max-width: 5rem;
 }
 
 table tr td, th {
-    height: 4.5rem;
+    height: 6rem;
+    width: 0rem;
 }
 
 .table__percentage {

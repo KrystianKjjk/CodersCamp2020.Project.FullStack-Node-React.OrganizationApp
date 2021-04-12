@@ -5,7 +5,7 @@ import {ThemeProvider} from "@material-ui/styles";
 import {mainTheme} from "../../theme/customMaterialTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
-import {Grade} from "../../models";
+import {MAX_PROJECT, PROJECT_WEIGHT, QUIZ_WEIGHT, SUM_WEIGHT, TASK_WEIGHT} from "../../app/constants";
 
 export interface UserGradesProps {
 }
@@ -23,7 +23,7 @@ const UserGrades: React.FC< UserGradesProps > = props => {
     }, []);
 
   function getColor(percentage: number) {
-      if( percentage > 90 ) return '#3E66FB';
+      if( percentage > 80 ) return '#3E66FB';
       else if (percentage > 50) return '#3CC13B';
       else if (percentage > 30) return '#FCE205';
       else return '#FF384A';
@@ -54,31 +54,50 @@ const UserGrades: React.FC< UserGradesProps > = props => {
                           <th>Test</th>
                           <th>Task</th>
                           <th>Project</th>
+                          <th>Average</th>
                       </tr>
 
                       {userData?.grades.map( (grade: any) =>{
 
                           const testPointsPer = grade?.testMaxPoints
-                              ? Math.round((grade?.testPoints || 0) / grade.testMaxPoints * 100)
+                              ? (grade?.testPoints || 0) / grade.testMaxPoints * 100
                               : 0;
 
                           const taskPointsPer = grade?.taskMaxPoints
-                              ? Math.round((grade?.taskPoints || 0) / grade.taskMaxPoints * 100)
+                              ? (grade?.taskPoints || 0) / grade.taskMaxPoints * 100
                               : 0;
+                          const projectPointsPer = (grade?.projectPoints || 0) / MAX_PROJECT * 100;
+
+                          let weight = QUIZ_WEIGHT;
+                          let average = QUIZ_WEIGHT * testPointsPer;
+                          if(grade?.taskMaxPoints) {
+                              average += TASK_WEIGHT * taskPointsPer;
+                              weight += TASK_WEIGHT;
+                          }
+                          if(grade?.projectPoints) {
+                              average += PROJECT_WEIGHT * projectPointsPer;
+                              weight += PROJECT_WEIGHT;
+                          }
+
+                          average /= weight;
 
                           return (
                               <tr>
                                   <th>{grade["Section name"]}</th>
                                   <td>
-                                      <span className={styles.table__percentage} style={{color: getColor(testPointsPer)}}>{testPointsPer}%</span>
+                                      <span className={styles.table__percentage} style={{color: getColor(testPointsPer)}}>{testPointsPer.toFixed(2)}%</span>
                                       <span className={styles.table__points}>{grade?.testPoints} / {grade?.testMaxPoints}</span>
                                   </td>
                                   <td>
-                                      <span className={styles.table__percentage} style={{color: getColor(taskPointsPer)}}>{taskPointsPer}%</span>
+                                      <span className={styles.table__percentage} style={{color: getColor(taskPointsPer)}}>{taskPointsPer.toFixed(2)}%</span>
                                       <span className={styles.table__points}>{grade?.taskPoints} / {grade?.taskMaxPoints}</span>
                                   </td>
                                   <td>
-                                      <span className={styles.table__percentage} style={{color: getColor(55)}}>{grade?.projectPoints} pkts</span>
+                                      <span className={styles.table__percentage} style={{color: getColor(projectPointsPer)}}>{projectPointsPer.toFixed(2)}%</span>
+                                      <span className={styles.table__points}>{grade?.projectPoints} / {MAX_PROJECT}</span>
+                                  </td>
+                                  <td>
+                                      <span className={styles.table__percentage} style={{color: getColor(average)}}>{average.toFixed(2)} %</span>
                                   </td>
                               </tr>
                           )
