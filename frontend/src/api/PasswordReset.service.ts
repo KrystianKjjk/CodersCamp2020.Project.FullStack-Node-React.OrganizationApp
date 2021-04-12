@@ -18,7 +18,7 @@ export default class PasswordResetService {
         const user = await this.getUserByEmail(email);
         if (!user) return false;
         const userId = user.id;
-        await this.api.post(`requestpasswordreset`, { userId });
+        await this.api.post(`users/requestpasswordreset`, { userId });
         return true
     }
 }
