@@ -1,70 +1,76 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, wait } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import ManageTeams from './ManageTeams';
-import { sortData, filterData } from '../ReusableTable/ReusableTableSlice';
+import { sortData, filterData, searchData } from '../ReusableTable/ReusableTableSlice';
+import TeamService from '../../api/Team.service';
 
 const teamsDatabase = [
-   {id: 1, name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
-   {id: 2, name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 1. edition'},
-   {id: 3, name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 1. edition'},
-   {id: 4, name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 1. edition'},
-   {id: 5, name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 1. edition'},
- ]
-const getFakeTeams = () => {
-   return Promise.resolve(teamsDatabase);
-}
+   {id: '1', name: 'Naame', surname: 'Suurname', courseName: 'CodersCamp 1. edition'},
+   {id: '2', name: 'Naaame', surname: 'Suuuurname', courseName: 'CodersCamp 1. edition'},
+   {id: '3', name: 'Naaaame', surname: 'Suuurname', courseName: 'CodersCamp 1. edition'},
+   {id: '4', name: 'Naaaaaame', surname: 'Suuuuurname', courseName: 'CodersCamp 1. edition'},
+   {id: '5', name: 'CName', surname: 'CSurname', courseName: 'CodersCamp 1. edition'},
+];
+const teamsCount = teamsDatabase.length;
+const tableName = 'Teams';
 
+jest.mock('../../api/Team.service.ts', () => jest.fn());
+      
 describe('ManageTeams', () => {
-   it('renders without error', async () => {
-      const getTeams = jest.fn( getFakeTeams );
-      const onClickAdd = jest.fn();
+   jest.setTimeout(20000);
+   it('renders without error, filters and sorts data', async () => {
+      const getTeamsMock = jest.fn( () => Promise.resolve(teamsDatabase) );
+      const createTeamMock = jest.fn( async () => {
+         teamsDatabase.push({id: '7', name: '---', surname: '---', courseName: 'Course from local storage'})
+      } );
+      const deleteTeamMock = jest.fn( async (id: string) => {
+         teamsDatabase.filter(team => team.id !== id)
+      } );
+      const TeamServiceMock = {
+         getTeams: getTeamsMock,
+         createTeam: createTeamMock,
+         deleteTeam: deleteTeamMock,
+      };
+      // @ts-ignore
+      TeamService.mockImplementation(() => TeamServiceMock);
+      
       render(
          <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
+            <ManageTeams />
          </Provider>
       );
-      expect(getTeams).toBeCalledTimes(1);
+      
+      await screen.findByLabelText('Table - ' + tableName);
+      expect(getTeamsMock).toBeCalledTimes(1);
+      expect(store.getState().tables[tableName].rows).toHaveLength(teamsCount);
       const addBtn = screen.getByLabelText('Add team');
       userEvent.click(addBtn);
-      expect(onClickAdd).toBeCalledTimes(1);
-      const tableComp = await screen.findByLabelText('Table - Teams');
-      const table = store.getState().tables['Teams'];
-      expect(table.rows).toHaveLength(teamsDatabase.length);
-   });
+      expect(createTeamMock).toBeCalledTimes(1);
+      await wait(() => expect(getTeamsMock).toBeCalledTimes(2));
+      await wait(() => expect(store.getState().tables[tableName].rows).toHaveLength(teamsCount + 1));
 
-   it('search input works', async () => {
-      const getTeams = jest.fn( getFakeTeams );
-      const onClickAdd = jest.fn();
-      render(
-         <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
-         </Provider>
-      );
-
-      const tableComp = await screen.findByLabelText('Table - Teams');
       store.dispatch(filterData({
-         table: 'Teams',
+         table: tableName,
          filters: [ {column: 'surname', values: ['CSurname']} ]
       }));
-      const table = store.getState().tables['Teams'];
-      expect(table.displayedRows).toHaveLength(1);
-   });
+      expect(store.getState().tables[tableName].displayedRows).toHaveLength(1);
 
-   it('sort list works', async () => {
-      const getTeams = jest.fn( getFakeTeams );
-      const onClickAdd = jest.fn();
-      render(
-         <Provider store={store}>
-            <ManageTeams onClickAdd={onClickAdd} getTeams={getTeams}/>
-         </Provider>
-      );
-      const tableComp = await screen.findByLabelText('Table - Teams');
-      store.dispatch(sortData({table: 'Teams', column: 'name'}));
-      const table = store.getState().tables['Teams'];
-      expect(table.displayedRows[0].name).toBe('CName');
+      store.dispatch(sortData({table: tableName, column: 'name'}));
+      expect(store.getState().tables[tableName].displayedRows[0].name).toBe('CName');
+
+      store.dispatch(searchData({table: tableName, column: 'name', search: ''}));
+      expect(store.getState().tables[tableName].displayedRows).toHaveLength(teamsCount + 1);
+
+      await screen.findByLabelText('Table - ' + tableName);
+      const teamCheckboxes = screen.getAllByLabelText('Select Row checkbox');
+      if(teamCheckboxes.length) userEvent.click(teamCheckboxes[0]);
+      
+      const deleteTeamBtn = screen.getByText('Delete');
+      deleteTeamBtn.click();
+      await wait(() => expect(deleteTeamMock).toBeCalledTimes(1));
    });
 
 });

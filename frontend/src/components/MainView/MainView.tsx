@@ -12,6 +12,8 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
+import ManageTeams from '../ManageTeams';
+import ManageUsers from '../ManageUsers';
 import { UserType } from '../../models/User.model'
 
 interface LoggedInViewProps {
@@ -73,7 +75,7 @@ function Admin(props: LoggedInViewProps) {
       <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/users">
-          <Users />
+          <ManageUsers />
         </PrivateRoute>
         <PrivateRoute exact path="/courses">
           <CourseList/>
@@ -99,7 +101,7 @@ function Admin(props: LoggedInViewProps) {
           <ManageTeam />
         </PrivateRoute>
         <PrivateRoute path="/teams">
-          <Teams />
+          <ManageTeams />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -125,7 +127,7 @@ function Mentor(props: LoggedInViewProps) {
           <HomePage />
         </PrivateRoute>
         <PrivateRoute path="/team">
-          <Teams />
+          <MyTeam />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
@@ -153,7 +155,7 @@ function User(props: LoggedInViewProps) {
           <UserGrades />
         </PrivateRoute>
         <PrivateRoute path="/team">
-          <Teams />
+          <MyTeam />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -166,9 +168,6 @@ function User(props: LoggedInViewProps) {
   )
 }
 
-function Users() {
-  return <h2>Users</h2>
-}
 function Sections() {
   return <h2>Sections</h2>;
 }
@@ -181,8 +180,8 @@ function Projects() {
 function TeamProjects() {
   return <h2>Team projects</h2>;
 }
-function Teams() {
-  return <h2>Teams</h2>;
+function MyTeam() {
+  return <h2>My team</h2>;
 }
 function MyProfile() {
   return <h2>My profile</h2>;
