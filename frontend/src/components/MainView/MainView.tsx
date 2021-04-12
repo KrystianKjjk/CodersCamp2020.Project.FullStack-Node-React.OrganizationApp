@@ -77,13 +77,13 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/users">
           <Users />
         </PrivateRoute>
-        <PrivateRoute path="/courses">
-          <CourseList/>
+        <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute exact path="/coursecreate">
           <CourseCreate/>
         </PrivateRoute>
-        <PrivateRoute path="/courses/:id" component={Course}>
+        <PrivateRoute path="/courses">
+          <CourseList/>
         </PrivateRoute>
         <PrivateRoute path="/sections/:id/edit">
           <SectionView />
