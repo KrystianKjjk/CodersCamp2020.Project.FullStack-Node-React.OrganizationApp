@@ -37,7 +37,7 @@ export default class PasswordController{
     }
 
     resetPassword = async (req:Request, res:Response) => {
-        const userId = new mongoose.Types.ObjectId(req.body.id);
+        const userId = new mongoose.Types.ObjectId(req.body.userId);
         const token = req.body.token;
         const password = req.body.password;
         try{
