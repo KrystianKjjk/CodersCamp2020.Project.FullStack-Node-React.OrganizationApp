@@ -14,9 +14,11 @@ export default class PasswordService{
         this.passwordTokenRepository = passwordTokenRepository
     }
 
-    async requestPasswordReset(userId: mongoose.Types.ObjectId) {
-        const user = await this.userRepository.getById(userId);
+    async requestPasswordReset(email: string) {
+        const users = await this.userRepository.getAll();
+        const user = users.find((user) => user.email === email);
         if (!user) throw new Error ("User does not exist!");
+        const userId = user._id
         let token = await this.passwordTokenRepository.getById(userId);
         if (token) await this.passwordTokenRepository.deleteById(userId);
         

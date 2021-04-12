@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Button, 
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import StyledTextField from '../StyledTextField'
 import HeaderRegistration from '../HeaderRegistration';
+import PasswordResetService from '../../api/PasswordReset.service'
 
 export interface ResetPasswordProps {
 
@@ -35,6 +36,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ResetPassword() {
   const classes = useStyles();
+  const [email, setEmail] = useState('');
+  const [beenSent, setBeenSent] = useState(false);
+
+  const handleChange = (setState: Function, e: any) => {
+    setState(e.target.value);
+  }
+
+  const passwordResetApi = new PasswordResetService();
+
+  const sendPasswordReset = async () => {
+    const result = await passwordResetApi.sendPasswordReset(email);
+    setBeenSent(result);
+  }
 
   return (
 <div>
@@ -45,7 +59,9 @@ export default function ResetPassword() {
         <Typography component="h1" variant="h5">
         Reset Password
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate
+        onSubmit={sendPasswordReset}
+        >
           <StyledTextField
             margin="normal"
             id="email"
@@ -54,6 +70,7 @@ export default function ResetPassword() {
             autoComplete="email"
             autoFocus
             data-testid="rp-email"
+            onChange = {(e) => {handleChange(setEmail, e)}}
           />
          
           <Button
@@ -62,7 +79,7 @@ export default function ResetPassword() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            data-testid="rp-button"
+            data-testid="rp-button"  
           >
             Send
           </Button>
