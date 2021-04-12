@@ -10,6 +10,7 @@ import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
+import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink'
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -55,6 +56,9 @@ function LoggedOut(props: LoggedOutViewProps) {
         </Route>
         <Route path="/resetpassword">
           <ResetPassword />
+        </Route>
+        <Route path="/passwordreset">
+          <ResetPasswordFromLink />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />
