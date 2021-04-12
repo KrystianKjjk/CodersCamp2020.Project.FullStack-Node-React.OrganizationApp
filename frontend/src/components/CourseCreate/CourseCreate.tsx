@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { CourseCreateObject, Course } from "../Course/CourseDetailsSlice";
 import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
+import { Button, ThemeProvider } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import PageHeader from "../PageHeader";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import "date-fns";
 
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  DatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import CoursesService from "../../api/courses.service";
+import { mainTheme } from "../../theme/customMaterialTheme";
 
 export interface CourseCreateProps {}
 
@@ -159,16 +157,18 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
               />
             </MuiPickersUtilsProvider>
           </div>
-          <div className={classes.buttonAlignment}>
-            <Button
-              className={classes.button}
-              onClick={handleSaveButtonClick}
-              variant="text"
-              disabled={!courseName || !startDate || !endDate}
-            >
-              SAVE
-            </Button>
-          </div>
+          <ThemeProvider theme={mainTheme}>
+            <div className={classes.buttonAlignment}>
+              <Button
+                className={classes.button}
+                onClick={handleSaveButtonClick}
+                variant="text"
+                disabled={!courseName || !startDate || !endDate}
+              >
+                SAVE
+              </Button>
+            </div>
+          </ThemeProvider>
         </div>
       </div>
     </div>

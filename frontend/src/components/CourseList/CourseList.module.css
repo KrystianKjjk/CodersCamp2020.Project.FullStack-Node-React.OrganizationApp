@@ -16,11 +16,3 @@
     border-bottom: none;
     padding: 0 3%;
 }
-.manageCourseBar button{
-    background-color: #2196F3;
-    height: 50%;
-    width: 8%;
-}
-.manageCourseBar button:hover{
-    background-color:#67b5ff;
-}

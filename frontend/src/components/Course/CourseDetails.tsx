@@ -16,6 +16,7 @@ import {
   createStyles,
   Box,
   Snackbar,
+  ThemeProvider,
 } from "@material-ui/core";
 import PageHeader from "../PageHeader";
 import UButton from "../UButton";
@@ -24,6 +25,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
+import { mainTheme } from "../../theme/customMaterialTheme";
 
 export interface CourseProps {
   id: string;
@@ -287,7 +289,9 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
           justifyContent="center"
           borderTop="1px solid #666666"
         >
+          <ThemeProvider theme={mainTheme}>
           {isEdit ? (
+          
             <Button
               className={classes.button}
               onClick={handleSaveButtonClick}
@@ -307,6 +311,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
               SAVE
             </Button>
           ) : null}
+          </ThemeProvider>
         </Box>
       </div>
     </div>
