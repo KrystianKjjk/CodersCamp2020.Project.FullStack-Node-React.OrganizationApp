@@ -5,12 +5,15 @@ export default class UserService {
 
     endpoint: string = '';
 
-    constructor(private httpService: BaseService) {
+    constructor(private httpService: BaseService = new BaseService()) {
         this.endpoint = `users`
     };
 
     async getUser(userID: string) {
         return this.httpService.get(`${this.endpoint}/${userID}`);
+    }
+    async getUserMe(userID: string) {
+        return this.httpService.get(`${this.endpoint}/me/${userID}`);
     }
     async deleteUser(userID: string) {
         return this.httpService.delete(`${this.endpoint}/${userID}`);

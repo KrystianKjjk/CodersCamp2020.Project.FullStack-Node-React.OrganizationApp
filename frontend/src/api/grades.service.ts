@@ -5,7 +5,7 @@ export default class GradeService {
 
     endpoint: string = '';
 
-    constructor(private httpService: BaseService) {
+    constructor(private httpService: BaseService = new BaseService()) {
         this.endpoint = `grades`
 
     };

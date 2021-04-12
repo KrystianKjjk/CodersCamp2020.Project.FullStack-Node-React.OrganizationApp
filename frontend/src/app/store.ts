@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import teamProjectReducer from '../components/TeamProject/TeamProjectSlice'
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice';
+import homePageReducer from '../components/HomePage/HomePageSlice';
 
 export const store = configureStore({
   reducer: {
     teamProjects: teamProjectReducer,
     tables: reusableTableReducer,
+    userData: homePageReducer
   },
 });
 
