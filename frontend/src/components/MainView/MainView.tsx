@@ -176,10 +176,6 @@ function User(props: LoggedInViewProps) {
   )
 }
 
-function Users() {
-  return <h2>Users</h2>
-}
-
 function Gradesheets() {
   return <h2>Greadsheets</h2>
 }
