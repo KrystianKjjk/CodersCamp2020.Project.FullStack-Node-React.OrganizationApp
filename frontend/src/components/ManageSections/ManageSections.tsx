@@ -23,6 +23,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const tableName = 'Sections';
+  const courseID = localStorage.getItem('activeCourse');
   const displayFormattedDate = (date: Date) => {
     if (!date) return '';
 
@@ -40,27 +41,15 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
       search: value,
     }
     dispatch(searchData(searchQuery));
-  }
-
-  // useEffect(() => {
-  //   dispatch(sortData({table: 'Sections', column: sortBy }));
-  // }, [sortBy]);
-  
-  // useEffect(() => {
-  //   const f = {
-  //     column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'name',
-  //     values: [ search ],
-  //   }
-  //   dispatch(filterData({table: 'Sections', filters: [ f ]}));
-  // }, [search]);
+  };
   
   const handleRowClick = (data: {id: string | number}) => {
     history.push(`/sections/${data.id}/edit`);
-  }
+  };
 
   const handleAddClick = () => {
     history.push('/sections/create');
-  }
+  };
 
   const sortByOptions = ['name', 'startDate', 'endDate', 'courseName'];
   const columns = [
@@ -90,7 +79,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table name={tableName} columns={columns} onRowClick={handleRowClick} getData={() => sectionService.getSections()}/>
+          <Table name={tableName} columns={columns} onRowClick={handleRowClick} getData={() => courseID ? sectionService.getSectionsByCourseId(courseID) : sectionService.getSections()}/>
         </div>
         </Paper>
     </Container>

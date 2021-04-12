@@ -22,7 +22,24 @@ export default class SectionService {
                 courseId: course?._id || '',
             })
         });
+    }
 
+    getSectionsByCourseId = async (id: string): Promise<Section[]> => {
+        const coursesResponse = await this.api.get(`/courses/${id}`);
+        const courses = coursesResponse.data as CourseDataForSection[];
+        const sections = (await this.api.get(`/courses/${id}/sections`)).data as SectionData[];
+        console.log(courses);
+            return sections.map( section => {
+            const course = courses.find(course => course._id === section.course);
+            return ({
+                id: section._id,
+                name: section.name,
+                startDate: section.startDate ? new Date(section.startDate) : undefined,
+                endDate: section.endDate ? new Date(section.endDate) : undefined,
+                courseName: course ? course.name : '',
+                courseId: course?._id || '',
+            })
+        });
     }
 
     getCourses = async (): Promise<CourseForSection[]> => {
