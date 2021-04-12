@@ -55,4 +55,4 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /
+          publish_dir: ./
