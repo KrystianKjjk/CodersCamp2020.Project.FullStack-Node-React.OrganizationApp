@@ -28,8 +28,7 @@ export default class SectionService {
         const coursesResponse = await this.api.get(`/courses/${id}`);
         const courses = coursesResponse.data as CourseDataForSection[];
         const sections = (await this.api.get(`/courses/${id}/sections`)).data as SectionData[];
-        console.log(courses);
-            return sections.map( section => {
+        return sections.map( section => {
             const course = courses.find(course => course._id === section.course);
             return ({
                 id: section._id,
