@@ -50,9 +50,5 @@ jobs:
         with:
           name: frontend-dist
           path: ./frontend/build
-      - name: Deploy app as GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3.7.0-6
-        if: ${{ github.event_name != 'pull_request' && always() }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+      - run: ls ./frontend
+      - run: cd frontend && npm run deploy
