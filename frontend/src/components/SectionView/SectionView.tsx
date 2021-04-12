@@ -90,7 +90,7 @@ const SectionView = () => {
     return isInEditMode 
     ? (
       <div className={styles.textFieldSectionName}>
-        <InputLabel>Change Section Name</InputLabel>
+        <InputLabel>Section Name</InputLabel>
         <StyledTextField
           value={sectionName}
           onChange={e => setSectionName(e.target.value)}
@@ -105,7 +105,7 @@ const SectionView = () => {
     return isInEditMode 
     ? (
       <div className={styles.textFieldDescription}>
-        <InputLabel>Change description</InputLabel>
+        <InputLabel>Description</InputLabel>
         <StyledTextField
           value={description}
           onChange={e => setDescription(e.target.value)}
