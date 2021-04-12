@@ -89,19 +89,30 @@ const UserGrades: React.FC< UserGradesProps > = props => {
                                       <span className={styles.table__points}>{grade?.testPoints} / {grade?.testMaxPoints}</span>
                                   </td>
                                   <td>
-                                      <span className={styles.table__percentage} style={{color: getColor(taskPointsPer)}}>{taskPointsPer.toFixed(2)}%</span>
-                                      <span className={styles.table__points}>{grade?.taskPoints} / {grade?.taskMaxPoints}</span>
+                                      {grade?.taskMaxPoints ? (
+                                          <>
+                                              <span className={styles.table__percentage} style={{color: getColor(taskPointsPer)}}>{taskPointsPer.toFixed(2)}%</span>
+                                              <span className={styles.table__points}>{grade?.taskPoints} / {grade?.taskMaxPoints}</span>
+                                          </>
+                                      ) : (
+                                          <span> - </span>
+                                          )}
                                   </td>
                                   <td>
-                                      <span className={styles.table__percentage} style={{color: getColor(projectPointsPer)}}>{projectPointsPer.toFixed(2)}%</span>
-                                      <span className={styles.table__points}>{grade?.projectPoints} / {MAX_PROJECT}</span>
-                                  </td>
+                                      {grade?.projectPoints ? (
+                                          <>
+                                              <span className={styles.table__percentage} style={{color: getColor(projectPointsPer)}}>{projectPointsPer.toFixed(2)}%</span>
+                                              <span className={styles.table__points}>{grade?.projectPoints} / {MAX_PROJECT}</span>
+                                          </>
+                                          ) : (
+                                          <span> - </span>
+                                          )}
+                                          </td>
                                   <td>
                                       <span className={styles.table__percentage} style={{color: getColor(average)}}>{average.toFixed(2)} %</span>
                                   </td>
                               </tr>
-                          )
-                      })}
+                          )})}
                   </table>
               ) }
 
