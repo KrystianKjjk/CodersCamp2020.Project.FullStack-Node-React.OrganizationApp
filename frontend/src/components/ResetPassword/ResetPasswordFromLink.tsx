@@ -62,7 +62,7 @@ export default function ResetPasswordFromLink() {
       setBeenSent(true);
     }
     catch (error) {
-      setError("Incorrect email!");
+      setError("Incorrect password or the reset link expired!");
       setOpenError(true);
     };
   };
