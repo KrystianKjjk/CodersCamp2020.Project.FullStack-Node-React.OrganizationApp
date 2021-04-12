@@ -39,8 +39,8 @@ export const fetchCoursesAndSort = async () => {
     return courseListElement;
   });
   courses.sort(function (courseListElement1, courseListElement2) {
-    var courseListElementStartDate1 = courseListElement1.startDate.getTime();
-    var courseListElementStartDate2 = courseListElement2.startDate.getTime();
+    const courseListElementStartDate1 = courseListElement1.startDate.getTime();
+    const courseListElementStartDate2 = courseListElement2.startDate.getTime();
     return courseListElementStartDate2 - courseListElementStartDate1;
   });
   return courses;
