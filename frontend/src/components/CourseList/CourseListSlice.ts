@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk} from "../../app/store";
 import { CourseCreateObject } from "../Course/CourseDetailsSlice";
 import CoursesService, { CourseListElementDto } from "../../api/courses.service";
-import * as ActiveCourse  from '../../app/ActiveCourse';
+import * as ActiveCourse  from '../../app/utils';
 
 
 export interface CourseListElementModel extends CourseCreateObject {
