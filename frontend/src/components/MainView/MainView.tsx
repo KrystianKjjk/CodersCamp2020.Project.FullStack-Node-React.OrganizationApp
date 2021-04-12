@@ -11,6 +11,7 @@ import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import { UserType } from '../../models/User.model'
 import UserGrades from "../UserGrades";
+import ManageUser from "../ManageUser";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -71,7 +72,7 @@ function Admin(props: LoggedInViewProps) {
       <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/users">
-          <Users />
+          <ManageUser userID={"60737a2e5f467c001582782d"} />
         </PrivateRoute>
         <PrivateRoute path="/courses">
           <Courses />

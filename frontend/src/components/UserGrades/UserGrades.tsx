@@ -13,7 +13,7 @@ export interface UserGradesProps {
 const UserGrades: React.FC< UserGradesProps > = props => {
 
     const dispatch = useDispatch();
-    const {userData, loading, loaded, error} = useSelector(selectUserData);
+    const {userData, loaded, error} = useSelector(selectUserData);
 
     useEffect(() => {
         if(!loaded) {
@@ -45,37 +45,49 @@ const UserGrades: React.FC< UserGradesProps > = props => {
             <Box display="flex" className={styles.container__header}>
               <span>My Grades</span>
             </Box>
+              {!userData?.grades.length ? (
+                  <h1 style={{margin: "3rem", fontWeight: 500}}>No grades yet.</h1>
+              ):(
+                  <table style={{width: "100%"}} className={styles.container__body}>
+                      <tr>
+                          <th></th>
+                          <th>Test</th>
+                          <th>Task</th>
+                          <th>Project</th>
+                      </tr>
+                      {userData?.grades.map( (grade: Grade) =>{
 
-              <table style={{width: "100%"}} className={styles.container__body}>
-                  <tr>
-                      <th></th>
-                      <th>Test</th>
-                      <th>Task</th>
-                      <th>Project</th>
-                  </tr>
-                  {userData?.grades.map( (grade: Grade) =>{
-                      if(grade?.testMaxPoints) var testPointsPer = Math.round(grade?.testPoints || 0 / grade.testMaxPoints);
-                      if(grade?.taskMaxPoints) var taskPointsPer = Math.round(grade?.taskPoints || 0 / grade.taskMaxPoints);
+                          const testPointsPer = grade?.testMaxPoints
+                              ? Math.round((grade?.testPoints || 0) / grade.testMaxPoints * 100)
+                              : 0;
 
-                      return (
-                          <tr>
-                              <th>Section 1</th>
-                              <td>
-                                  <span className={styles.table__percentage} style={{color: getColor(95)}}>95%</span>
-                                  <span className={styles.table__points}>{grade?.testPoints} / {grade?.testMaxPoints}</span>
-                              </td>
-                              <td>
-                                  <span className={styles.table__percentage} style={{color: getColor(20)}}>20%</span>
-                                  <span className={styles.table__points}>{grade?.taskPoints} / {grade?.taskMaxPoints}</span>
-                              </td>
-                              <td>
-                                  <span className={styles.table__percentage} style={{color: getColor(55)}}>55%</span>
-                                  <span className={styles.table__points}>55 / 66</span>
-                              </td>
-                          </tr>
-                      )
-                  })}
-              </table>
+                          const taskPointsPer = grade?.taskMaxPoints
+                              ? Math.round((grade?.taskPoints || 0) / grade.taskMaxPoints * 100)
+                              : 0;
+
+
+
+                          return (
+                              <tr>
+                                  <th>Section 1</th>
+                                  <td>
+                                      <span className={styles.table__percentage} style={{color: getColor(testPointsPer)}}>{testPointsPer}%</span>
+                                      <span className={styles.table__points}>{grade?.testPoints} / {grade?.testMaxPoints}</span>
+                                  </td>
+                                  <td>
+                                      <span className={styles.table__percentage} style={{color: getColor(taskPointsPer)}}>{taskPointsPer}%</span>
+                                      <span className={styles.table__points}>{grade?.taskPoints} / {grade?.taskMaxPoints}</span>
+                                  </td>
+                                  <td>
+                                      <span className={styles.table__percentage} style={{color: getColor(55)}}>55%</span>
+                                      <span className={styles.table__points}>55 / 66</span>
+                                  </td>
+                              </tr>
+                          )
+                      })}
+                  </table>
+              ) }
+
           </Box>
         </ThemeProvider>
     );
