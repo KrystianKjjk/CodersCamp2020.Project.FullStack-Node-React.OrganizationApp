@@ -46,9 +46,5 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: frontend-dist
-          path: ./frontend/build
       - run: ls ./frontend
       - run: cd frontend && npm run deploy
