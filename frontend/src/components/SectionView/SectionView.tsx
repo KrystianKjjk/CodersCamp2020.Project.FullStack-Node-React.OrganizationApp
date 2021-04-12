@@ -45,8 +45,8 @@ const SectionView = () => {
       setCourseName(data.courseName);
       setCourseId(data.courseId);
       setDescription(data.description || '');
-      setStartDate(data.startDate || undefined);
-      setEndDate(data.endDate || undefined);
+      setStartDate(data.startDate ? new Date(data.startDate * 1000) : undefined);
+      setEndDate(data.endDate ? new Date(data.endDate * 1000) : undefined);
     };
 
     if (id) getOneSectionData();
@@ -74,56 +74,47 @@ const SectionView = () => {
   }
 
   const renderButtonEditSave = () => {
-    if (isInEditMode) {
-      return (
-        <span onClick={saveSection} className={styles.saveButton} aria-label='Save section'>
-          <UButton text='SAVE' color='primary' onClick={() => setIsInEditMode(true)}/>
-        </span>
+    return isInEditMode 
+    ? (
+      <span onClick={saveSection} className={styles.saveButton} aria-label='Save section'>
+        <UButton text='SAVE' color='primary' onClick={() => setIsInEditMode(true)}/>
+      </span>) 
+    : (
+      <span className={styles.editButton} aria-label='Edit section'>
+        <UButton text='EDIT' color='primary' onClick={() => setIsInEditMode(true)}/>
+      </span>
       )
-    } else {
-      return (
-        <span className={styles.editButton} aria-label='Edit section'>
-          <UButton text='EDIT' color='primary' onClick={() => setIsInEditMode(true)}/>
-        </span>
-      )
-    }
   }
 
   const renderSectionName = () => {
-    if (isInEditMode) {
-      return (
-        <div className={styles.textFieldSectionName}>
-          <InputLabel>Change Section Name</InputLabel>
-          <StyledTextField
-            value={sectionName}
-            onChange={e => setSectionName(e.target.value)}
-          />
-        </div>
+    return isInEditMode 
+    ? (
+      <div className={styles.textFieldSectionName}>
+        <InputLabel>Change Section Name</InputLabel>
+        <StyledTextField
+          value={sectionName}
+          onChange={e => setSectionName(e.target.value)}
+        />
+      </div>) 
+    : (
+          <span className={styles.section_title}> {sectionName} </span>
       )
-    } else {
-      return (
-        <span className={styles.section_title}> {sectionName} </span>
-      )
-    }
   }
 
   const renderDescription = () => {
-    if (isInEditMode) {
-      return (
-        <div className={styles.textFieldDescription}>
-          <InputLabel>Change description</InputLabel>
-          <StyledTextField
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            multiline={true}
-          />
-        </div>
-      )
-    } else {
-      return (
+    return isInEditMode 
+    ? (
+      <div className={styles.textFieldDescription}>
+        <InputLabel>Change description</InputLabel>
+        <StyledTextField
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          multiline={true}
+        />
+      </div>) 
+    : (
         <span> Description: {description} </span>
       )
-    }
   }
 
   const handleChangeCourse = (e: any) => {
@@ -136,36 +127,32 @@ const SectionView = () => {
   };
 
   const renderCourse = () => {
-    if (isInEditMode) {
-      return (
-        <div className={styles.textFieldCourse}>
-          <InputLabel>Select Course</InputLabel>
-          <Select
-            variant="outlined"
-            className={styles.select}
-            value={courseId}
-            onChange={handleChangeCourse}
-          >
-            <MenuItem disabled>Pick a course</MenuItem>
-            {courses.map(course => <MenuItem value={course.id}>{course.courseName}</MenuItem>)}
-          </Select>
-        </div>
-      )
-    } else {
-      return (
+    return isInEditMode 
+    ? (
+      <div className={styles.textFieldCourse}>
+        <InputLabel>Select Course</InputLabel>
+        <Select
+          variant="outlined"
+          className={styles.select}
+          value={courseId}
+          onChange={handleChangeCourse}
+        >
+          <MenuItem disabled>Pick a course</MenuItem>
+          {courses.map(course => <MenuItem value={course.id} key={course.id}>{course.courseName}</MenuItem>)}
+        </Select>
+      </div>) 
+    : (
         <span className={styles.course_title}> {courseName}</span>
       )
-    }
-  }
+  };
 
   const renderButtonDelete = () => {
-    if (id) {
-      return (
-        <div><UButton text='DELETE' color='secondary' onClick={handleDeleteClick}/></div>
+    return id 
+    ? (
+      <div><UButton text='DELETE' color='secondary' onClick={handleDeleteClick}/></div>) 
+    : (
+      null
       )
-    } else {
-      return null
-    }
   }
     
   return (
@@ -203,7 +190,6 @@ const SectionView = () => {
                     disabled={!isInEditMode}
                     variant="inline"
                     format="dd/MM/yyyy"
-                    id="date-picker-inline"
                     label="Start date"
                     inputVariant="outlined"
                     value={startDate}
@@ -214,7 +200,6 @@ const SectionView = () => {
                     disabled={!isInEditMode}
                     variant="inline"
                     format="dd/MM/yyyy"
-                    id="date-picker-inline"
                     label="End date"
                     inputVariant="outlined"
                     autoOk

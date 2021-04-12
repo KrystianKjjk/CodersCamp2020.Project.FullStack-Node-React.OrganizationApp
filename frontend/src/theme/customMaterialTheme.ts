@@ -36,14 +36,6 @@ export const addBtnTheme = createMuiTheme({
     }
 });
 
-export const deleteBtnTheme = createMuiTheme({
-    palette: {
-        primary: {
-            main: "#FF384A",
-        }
-    }
-});
-
 export const UButtonTheme = createMuiTheme({
     palette: {
         primary: {

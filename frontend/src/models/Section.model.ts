@@ -28,8 +28,8 @@ export interface Test {
 export interface Section {
     id: string;
     name: string;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: number;
+    endDate?: number;
     description?: string;
     courseName: string;
     courseId: string;

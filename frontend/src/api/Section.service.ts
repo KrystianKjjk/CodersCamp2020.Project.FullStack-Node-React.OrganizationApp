@@ -16,8 +16,8 @@ export default class SectionService {
             return ({
                 id: section._id,
                 name: section.name,
-                startDate: section.startDate ? new Date(section.startDate) : undefined,
-                endDate: section.endDate ? new Date(section.endDate) : undefined,
+                startDate: section.startDate ? new Date(section.startDate).getTime() / 1000 : undefined,
+                endDate: section.endDate ? new Date(section.endDate).getTime() / 1000 : undefined,
                 courseName: course ? course.name : '',
                 courseId: course?._id || '',
             })
@@ -25,16 +25,15 @@ export default class SectionService {
     }
 
     getSectionsByCourseId = async (id: string): Promise<Section[]> => {
-        const coursesResponse = await this.api.get(`/courses/${id}`);
-        const courses = coursesResponse.data as CourseDataForSection[];
+        const courseResponse = await this.api.get(`/courses/${id}`);
+        const course = courseResponse.data as CourseDataForSection;
         const sections = (await this.api.get(`/courses/${id}/sections`)).data as SectionData[];
         return sections.map( section => {
-            const course = courses.find(course => course._id === section.course);
             return ({
                 id: section._id,
                 name: section.name,
-                startDate: section.startDate ? new Date(section.startDate) : undefined,
-                endDate: section.endDate ? new Date(section.endDate) : undefined,
+                startDate: section.startDate ? new Date(section.startDate).getTime() / 1000 : undefined,
+                endDate: section.endDate ? new Date(section.endDate).getTime() / 1000 : undefined,
                 courseName: course ? course.name : '',
                 courseId: course?._id || '',
             })
@@ -73,8 +72,8 @@ export default class SectionService {
         return {
             id: section._id,
             name: section.name,
-            startDate: section.startDate ? new Date(section.startDate) : undefined,
-            endDate: section.endDate ? new Date(section.endDate) : undefined,
+            startDate: section.startDate ? new Date(section.startDate).getTime() / 1000 : undefined,
+            endDate: section.endDate ? new Date(section.endDate).getTime() / 1000 : undefined,
             description: section.description,
             courseName: course ? course.name : '',
             courseId: course?._id || '',

@@ -24,10 +24,11 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const history = useHistory();
   const tableName = 'Sections';
   const courseID = localStorage.getItem('activeCourse');
-  const displayFormattedDate = (date: Date) => {
+  const displayFormattedDate = (date: number) => {
     if (!date) return '';
+    const dateObject = new Date(date * 1000);
 
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+    return `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
   }
 
   const changeSortBy = (value: string) => {
@@ -54,8 +55,8 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   const sortByOptions = ['name', 'startDate', 'endDate', 'courseName'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 200, sortable: true},
-    {field: 'startDate', headerName: 'Start date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as Date)},
-    {field: 'endDate', headerName: 'End date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as Date)},
+    {field: 'startDate', headerName: 'Start date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as number)},
+    {field: 'endDate', headerName: 'End date', width: 200, sortable: true, valueFormatter: (params: GridValueFormatterParams) => displayFormattedDate((params.value) as number)},
     {field: 'courseName', headerName: 'Course name', width: 150, sortable: true},
   ]
   
