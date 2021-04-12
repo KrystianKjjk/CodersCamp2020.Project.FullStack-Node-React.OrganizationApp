@@ -4,6 +4,9 @@ import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+import CourseCreate from "../CourseCreate";
+import Course from '../Course';
+import CourseList from '../CourseList';
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
@@ -75,7 +78,12 @@ function Admin(props: LoggedInViewProps) {
           <Users />
         </PrivateRoute>
         <PrivateRoute path="/courses">
-          <Courses/>
+          <CourseList/>
+        </PrivateRoute>
+        <PrivateRoute exact path="/coursecreate">
+          <CourseCreate/>
+        </PrivateRoute>
+        <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute path="/sections/:id/edit">
           <SectionView />
@@ -168,9 +176,6 @@ function User(props: LoggedInViewProps) {
 
 function Users() {
   return <h2>Users</h2>
-}
-function Courses() {
-  return <h2>Courses</h2>;
 }
 function Sections() {
   return <ManageSections />
