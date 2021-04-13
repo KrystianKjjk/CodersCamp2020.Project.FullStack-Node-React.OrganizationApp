@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -22,6 +22,8 @@ import UserGrades from "../UserGrades";
 import ManageUser from "../ManageUser";
 import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
+import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -35,6 +37,16 @@ interface LoggedOutViewProps {
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
+
+  const dispatch = useDispatch();
+  const {loaded} = useSelector(selectUserData);
+
+  useEffect(() => {
+    if(!loaded && isLogged) {
+      const userID = localStorage.getItem('id');
+      dispatch(fetchUser(userID));
+    }
+  }, []);
 
   const MainContent = () => {
     if (!(isLogged)) return <LoggedOut onLogin={() => setIsLogged(true)} />;
@@ -82,8 +94,8 @@ function Admin(props: LoggedInViewProps) {
     <div className={styles.mainContainer} >
       <Header onLogout={props.onLogout} />
       <Switch>
+        <PrivateRoute path="/users/:userID" component={ManageUser} />
         <PrivateRoute path="/users">
-         {/* <ManageUser userID={"60737a2e5f467c001582782d"} />*/}
           <ManageUsers />
         </PrivateRoute>
         <PrivateRoute path="/courses/:id" component={Course}>

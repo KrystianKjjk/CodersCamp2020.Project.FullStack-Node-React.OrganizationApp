@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from "react-router-dom";
-import {Box, Breadcrumbs, CircularProgress, Link, Snackbar, Typography} from "@material-ui/core";
-import {mainTheme} from "../../theme/customMaterialTheme";
+import {Box, Breadcrumbs, CircularProgress, CssBaseline, Link, Snackbar, Typography} from "@material-ui/core";
+import theme, {mainTheme} from "../../theme/customMaterialTheme";
 import {ThemeProvider} from "@material-ui/styles";
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -16,8 +16,8 @@ import UButton from "../UButton";
 import styles from './ManageUser.module.css';
 
 export interface ManageUserProps {
-    userID: string;
 }
+
 function Alert(props: any) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -35,7 +35,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
 
     const [user, setUser] = useState<IUser | undefined>(undefined);
 
-    let userID = props.userID;
+    let userID = props?.match?.params?.userID;
 
     useEffect(() => {
         getUser();
@@ -123,7 +123,6 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     } else {
         return (
             <ThemeProvider theme={mainTheme}>
-
                 <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
                         User updated correctly!
@@ -176,7 +175,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 ${isEdit && styles.status_radio_button__edit}
                             `}>
                                 {(isEdit || user?.status as Status === Status.Active) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Active"
                                                name="status"
@@ -185,11 +184,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__blue}`} htmlFor="Active">Active</label>
-                                    </div>
+                                    </>
                                 )}
 
                                 {(isEdit || user?.status as Status === Status.Resigned) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Resigned"
                                                name="status"
@@ -198,11 +197,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__red}`} htmlFor="Resigned">Resigned</label>
-                                    </div>
+                                    </>
                                 )}
 
                                 {(isEdit || user?.status as Status === Status.Archived) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Archived"
                                                name="status"
@@ -211,7 +210,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__green}`} htmlFor="Archived">Archived</label>
-                                    </div>
+                                    </>
                                 )}
                             </div>
                         </div>

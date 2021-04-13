@@ -2,25 +2,16 @@ import React, {useEffect, useState} from "react";
 import styles from "./HomePage.module.css";
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PageHeader from "../PageHeader";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchUser, selectUserData} from "./HomePageSlice";
 
 export interface HomePageProps {}
 
 const HomePage: React.FC<HomePageProps> = (props) => {
 
-    const dispatch = useDispatch();
-    const {loaded} = useSelector(selectUserData);
     const [course, setCourse] = useState<any>(null);
 
     useEffect(() => {
-        if(!loaded) {
-            const userID = localStorage.getItem('id');
-            dispatch(fetchUser(userID));
-        }
         setCourse(JSON.parse( localStorage.getItem('activeCourse')! ));
     }, []);
-
 
     return (
     <div className={styles.container}>
