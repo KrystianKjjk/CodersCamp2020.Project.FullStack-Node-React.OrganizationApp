@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+
 .error {
   font-family: Montserrat, sans-serif;
   font-size: 3rem;
@@ -33,6 +34,7 @@
 }
 
 .gradeContainer {
+  color: rgba(255, 255, 255, 0.87);
   background: #1c1c1c;
   margin: 1rem auto;
   padding-bottom: 1rem;
@@ -44,7 +46,7 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding: 1rem;
+  padding: 2rem;
   background: inherit;
   color: rgba(255, 255, 255, 0.87);
   font-size: 1.4rem;
@@ -77,20 +79,22 @@
   flex: 4;
   display: flex;
 }
-.gradeContainer__body__row__value div input {
-  padding: 0.7rem 1rem;
-  width: 2rem;
+.gradeContainer__body__row__value input {
+  width: 3.5rem;
+  height: 2.5rem;
   margin: 0.5rem;
   background: #1c1c1c;
   color: #fff;
+  padding: 0 .5rem;
   border: rgba(255, 255, 255, 0.87) 1px solid;
   border-radius: 0.4rem;
 }
-.gradeContainer__body__row__value div input:focus {
+.gradeContainer__body__row__value input:focus {
   outline: none;
+  color: #fff;
   border: #fff 1px solid;
 }
-.gradeContainer__body__row__value div p {
+.gradeContainer__body__row__value p {
   color: rgba(255, 255, 255, 0.8);
   font-family: Montserrat, sans-serif;
   font-weight: 500;

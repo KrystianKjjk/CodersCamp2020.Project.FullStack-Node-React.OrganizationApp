@@ -7,7 +7,6 @@
   margin: 17rem auto;
   color: #ff384a;
 }
-
 .loading {
   margin: 15rem auto;
 }
@@ -46,7 +45,6 @@
 .container__body {
   display: flex;
 }
-
 .manageUserForm {
   max-width: 40rem;
   color: rgba(255, 255, 255, 0.8);
