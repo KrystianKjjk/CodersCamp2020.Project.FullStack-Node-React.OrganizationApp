@@ -47,7 +47,7 @@ const MainView: React.FC = () => {
       dispatch(fetchUser(userID));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLogged, loaded]);
 
   const MainContent = () => {
     if (!(isLogged)) return <LoggedOut onLogin={() => setIsLogged(true)} />;
