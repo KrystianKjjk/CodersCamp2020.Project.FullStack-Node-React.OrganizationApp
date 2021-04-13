@@ -14,8 +14,8 @@ export interface TeamProjectData {
 export interface TeamProject {
     id: string;
     name: string;
-    overallGrade: number;
-    sectionName: string;
+    overallGrade?: number;
+    sectionName?: string;
     url: string;
     description: string;
 };

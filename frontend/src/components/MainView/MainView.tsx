@@ -12,6 +12,7 @@ import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
+import ManageSheets from '../ManageSheets';
 import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
@@ -100,7 +101,7 @@ function Admin(props: LoggedInViewProps) {
           <ManageSections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
-          <Gradesheets />
+          <ManageSheets />
         </PrivateRoute>
         <PrivateRoute path="/projects">
           <Projects />
@@ -141,7 +142,7 @@ function Mentor(props: LoggedInViewProps) {
           <MyTeam />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
-          <Gradesheets />
+          <ManageSheets />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -177,10 +178,6 @@ function User(props: LoggedInViewProps) {
       </Switch>
     </div>
   )
-}
-
-function Gradesheets() {
-  return <h2>Greadsheets</h2>
 }
 function Projects() {
   return <h2>Projects</h2>;
