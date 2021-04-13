@@ -4,6 +4,7 @@ import Header from "../Header";
 import { Switch, Route, Redirect, useParams } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+
 import CourseCreate from "../CourseCreate";
 import Course from '../Course';
 import CourseList from '../CourseList';
@@ -23,6 +24,8 @@ import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
 import MyProfileView from '../MyProfile/index'
 import {UserType as Role} from "../../models/User.model";
+import ReferenceProjects from "../ReferenceProjects";
+import ManageReferenceProject from "../ManageReferenceProject";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -111,9 +114,13 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/gradesheets">
           <ManageSheets />
         </PrivateRoute>
-        <PrivateRoute path="/projects">
+
+        <PrivateRoute exact path="/projects">
           <Projects />
         </PrivateRoute>
+        <PrivateRoute path="/projects/add" component={ManageReferenceProject} />
+        <PrivateRoute path="/projects/:projectID" component={ManageReferenceProject} />
+
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
@@ -187,7 +194,7 @@ function Participant(props: LoggedInViewProps) {
   )
 }
 function Projects() {
-  return <h2>Projects</h2>;
+  return <ReferenceProjects />
 }
 function TeamProjects() {
   return <TeamProjectsComponent getFunction={getTeamProjects}/>;

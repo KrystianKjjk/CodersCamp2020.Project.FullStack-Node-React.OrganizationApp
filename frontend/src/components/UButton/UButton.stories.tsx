@@ -17,5 +17,7 @@ const Template: Story<UButtonProps> = (args) => (
 
 export const SampleUButton = Template.bind({});
 SampleUButton.args = {
-  text: 'UButton', color: 'primary',
+    text: 'ADD',
+    color: 'primary',
+    onClick: ()=>{},
 };
