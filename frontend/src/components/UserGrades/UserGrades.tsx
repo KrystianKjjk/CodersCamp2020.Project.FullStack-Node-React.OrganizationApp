@@ -51,6 +51,7 @@ const UserGrades: React.FC< UserGradesProps > = props => {
               {!userData?.grades.length ? (
                   <h1 style={{margin: "3rem", fontWeight: 500}}>No grades yet.</h1>
               ):(
+                  <>
                   <table style={{width: "100%"}} className={styles.container__body}>
                       <tr>
                           <th></th>
@@ -118,33 +119,35 @@ const UserGrades: React.FC< UserGradesProps > = props => {
                               </tr>
                           )})}
                   </table>
-              ) }
-            <h2>Your current overall result</h2>
 
-              <div style={{
-                  height: "1rem",
-                  width: "400px",
-                  background: "rgba(255,255,255,.90)",
-                  borderRadius: "1rem",
-                  margin: "1rem auto 1rem auto",
-                  position: "relative"
-              }}>
+                <h2>Your current overall result</h2>
+
                   <div style={{
                       height: "1rem",
-                      width: `${400*(finalResult / userData?.grades?.length)/100}px`,
-                      background: getColor((finalResult / userData?.grades?.length)),
-                      borderRadius: "1rem"}}
-                  />
-                  <div style={{
-                      width: "5px",
-                      height: "1rem",
-                      background: "#000",
-                      position: "absolute",
-                      top: "0",
-                      left: "320px"
-                  }} />
-              </div>
-              <h3 style={{marginBottom: "3rem"}}>{(finalResult / userData?.grades?.length).toFixed(2)}%</h3>
+                      width: "400px",
+                      background: "rgba(255,255,255,.90)",
+                      borderRadius: "1rem",
+                      margin: "1rem auto 1rem auto",
+                      position: "relative"
+                  }}>
+                      <div style={{
+                          height: "1rem",
+                          width: `${400*(finalResult / userData?.grades?.length)/100}px`,
+                          background: getColor((finalResult / userData?.grades?.length)),
+                          borderRadius: "1rem"}}
+                      />
+                      <div style={{
+                          width: "5px",
+                          height: "1rem",
+                          background: "#000",
+                          position: "absolute",
+                          top: "0",
+                          left: "320px"
+                      }} />
+                  </div>
+                  <h3 style={{marginBottom: "3rem"}}>{(finalResult / userData?.grades?.length).toFixed(2)}%</h3>
+                  </>
+                  )}
           </Box>
         </ThemeProvider>
     );
