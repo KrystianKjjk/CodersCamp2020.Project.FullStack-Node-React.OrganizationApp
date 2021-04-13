@@ -10,6 +10,7 @@ import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamService } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import UButton from '../UButton';
+import { useHistory } from 'react-router-dom';
 
 
 export interface ManageTeamsProps { };
@@ -17,6 +18,7 @@ export interface ManageTeamsProps { };
 const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const api = new TeamService();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const selectedTeams = useRef([] as string[]);
 
   const tableName = 'Teams';
@@ -57,6 +59,10 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
     dispatch(fetchData(tableName, api.getTeams));
     selectedTeams.current = [];
   }
+
+  const handleRowClick = (data: {id: string | number}) => {
+    history.push(`/teams/${data.id}`);
+  };
   
   return (
     <Container className={styles.manageTeams} aria-label='Manage Teams'>
@@ -84,6 +90,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
             columns={columns} 
             getData={api.getTeams} 
             onSelectionModelChange={handleTeamSelection}
+            onRowClick={handleRowClick}
             checkboxSelection
           />
         </div>
