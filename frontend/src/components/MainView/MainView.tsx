@@ -4,13 +4,23 @@ import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+import CourseCreate from "../CourseCreate";
+import Course from '../Course';
+import CourseList from '../CourseList';
 import LogIn from "../LogIn";
 import RegistrationView from "../Registration";
 import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
-import { UserType } from '../../models/User.model'
-import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink'
+import ManageSheets from '../ManageSheets';
+import TeamProjectsComponent from '../TeamProjects/index';
+import { getTeamProjects } from '../../api/TeamProjects.service';
+import ManageTeams from '../ManageTeams';
+import ManageUsers from '../ManageUsers';
+import { UserType } from '../../models/User.model';
+import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
+import ManageSections from "../ManageSections";
+import SectionView from "../SectionView";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -19,6 +29,7 @@ interface LoggedInViewProps {
 interface LoggedOutViewProps {
   onLogin?: Function
 }
+
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
@@ -74,16 +85,27 @@ function Admin(props: LoggedInViewProps) {
       <Header onLogout={props.onLogout} />
       <Switch>
         <PrivateRoute path="/users">
-          <Users />
+          <ManageUsers />
+        </PrivateRoute>
+        <PrivateRoute path="/courses/:id" component={Course}>
+        </PrivateRoute>
+        <PrivateRoute exact path="/coursecreate">
+          <CourseCreate/>
         </PrivateRoute>
         <PrivateRoute path="/courses">
-          <Courses />
+          <CourseList/>
+        </PrivateRoute>
+        <PrivateRoute path="/sections/:id/edit">
+          <SectionView />
+        </PrivateRoute>
+        <PrivateRoute path="/sections/create">
+          <SectionView />
         </PrivateRoute>
         <PrivateRoute path="/sections">
-          <Sections />
+          <ManageSections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
-          <Gradesheets />
+          <ManageSheets />
         </PrivateRoute>
         <PrivateRoute path="/projects">
           <Projects />
@@ -95,7 +117,7 @@ function Admin(props: LoggedInViewProps) {
           <ManageTeam />
         </PrivateRoute>
         <PrivateRoute path="/teams">
-          <Teams />
+          <ManageTeams />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -121,10 +143,10 @@ function Mentor(props: LoggedInViewProps) {
           <HomePage />
         </PrivateRoute>
         <PrivateRoute path="/team">
-          <Teams />
+          <MyTeam />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
-          <Gradesheets />
+          <ManageSheets />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -149,7 +171,7 @@ function User(props: LoggedInViewProps) {
           <UserGrades />
         </PrivateRoute>
         <PrivateRoute path="/team">
-          <Teams />
+          <MyTeam />
         </PrivateRoute>
         <PrivateRoute path="/myprofile">
           <MyProfile />
@@ -161,27 +183,14 @@ function User(props: LoggedInViewProps) {
     </div>
   )
 }
-
-function Users() {
-  return <h2>Users</h2>
-}
-function Courses() {
-  return <h2>Courses</h2>;
-}
-function Sections() {
-  return <h2>Sections</h2>;
-}
-function Gradesheets() {
-  return <h2>Grade sheets</h2>;
-}
 function Projects() {
   return <h2>Projects</h2>;
 }
 function TeamProjects() {
-  return <h2>Team projects</h2>;
+  return <TeamProjectsComponent getFunction={getTeamProjects}/>;
 }
-function Teams() {
-  return <h2>Teams</h2>;
+function MyTeam() {
+  return <h2>My team</h2>;
 }
 function MyProfile() {
   return <h2>My profile</h2>;

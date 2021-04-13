@@ -34,4 +34,15 @@ export default class TeamProjectService {
         return projects;
     }
 
+    getTeamProject = async (id: string): Promise<TeamProject> => {
+        const response = await this.api.get('/team/projects/' + id);
+        const project: TeamProjectData = response.data;
+        return {
+            ...project,
+            id: project._id,
+            name: project.projectName,
+            url: project.projectUrl,
+        }
+    }
+
 }

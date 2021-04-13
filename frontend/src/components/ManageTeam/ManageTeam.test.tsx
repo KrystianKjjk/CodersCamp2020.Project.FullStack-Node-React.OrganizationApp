@@ -106,7 +106,7 @@ describe('ManageTeam', () => {
       const changeMentorBtn = screen.getByText('Change');
       changeMentorBtn.click();
       expect(getUsersOfTypeMock).toBeCalledTimes(1);
-      const mentorsTable = await screen.findByLabelText('Table - Find mentor');
+      await screen.findByLabelText('Table - Find mentor');
       const mentorCell = screen.getByText(mentorsDatabase[0].name);
       mentorCell.click();
       expect(setMentorMock).toBeCalledTimes(1);
@@ -114,7 +114,7 @@ describe('ManageTeam', () => {
       const addUserBtn = screen.getByText('Add');
       addUserBtn.click();
       expect(getParticipantsNotInTeamMock).toBeCalledTimes(1);
-      const usersTable = await screen.findByLabelText('Table - Find participant');
+      await screen.findByLabelText('Table - Find participant');
       const userCell = screen.getByText(usersDatabase[0].name);
       userCell.click();
       expect(addUserToTeamMock).toBeCalledTimes(1);

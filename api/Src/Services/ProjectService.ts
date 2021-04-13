@@ -38,10 +38,6 @@ class ProjectService {
             };
         };
 
-        if (projectData.sectionId && typeof projectData.sectionId !== "string") {
-            return null;
-        }
-
         if (projectData.projectName && typeof projectData.projectName !== "string") {
             return null;
         }

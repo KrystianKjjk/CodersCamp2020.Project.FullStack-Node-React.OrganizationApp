@@ -1,11 +1,12 @@
-import React, { ReactEventHandler, useEffect, useState } from 'react';
-import { FormControlLabel, Checkbox, Paper, CssBaseline } from '@material-ui/core';
+import React, { ReactEventHandler, useEffect, useRef, useState } from 'react';
+import { FormControlLabel, Checkbox, Paper, CssBaseline, Container } from '@material-ui/core';
 import styles from './ManageUsers.module.css';
 import SelectSortBy from '../SelectSortBy';
 import SearchInput from '../SearchInput';
 import Table from '../ReusableTable';
-import { filterData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
+import { UserService } from '../../api';
 
 
 interface CheckboxProps {
@@ -29,11 +30,11 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
   />
 );
 
-export interface ManageUsersProps {
-  getUsers: () => Promise<any[]>;
-}
+export interface ManageUsersProps { };
 
-const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
+const ManageUsers: React.FC< ManageUsersProps > = () => {
+  const api = useRef<UserService>(new UserService());
+  const tableName = 'Users';
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
     Active: false,
@@ -46,8 +47,6 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
     Mentor: false,
     Admin: false,
   });
-  const [sortBy, setSortBy] = useState('');
-  const [search, setSearch] = useState('');
 
   const changeStatusFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatusFilters({ ...statusFilters, [event.target.name]: event.target.checked });
@@ -56,12 +55,17 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
     setTypeFilters({ ...typeFilters, [event.target.name]: event.target.checked });
   };
   const changeSortBy = (value: string) => {
-    setSortBy(value);
+    dispatch(sortData({table: tableName, column: value }));
   };
   const changeSearch = (value: string) => {
-    setSearch(value);
+    const searchQuery = {
+      table: tableName,
+      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
+      search: value,
+    }
+    dispatch(searchData(searchQuery));
   }
-  
+
   useEffect(() => {
     const typeValues = Object.entries(typeFilters)
       .filter(([, value]) => value)
@@ -73,19 +77,10 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
       {column: 'type', values: typeValues},
       {column: 'status', values: statusValues}
     ];
-    dispatch(filterData({table: 'Users', filters }));
+    dispatch(filterData({table: tableName, filters }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeFilters, statusFilters]);
-  useEffect(() => {
-    dispatch(sortData({table: 'Users', column: sortBy }));
-  }, [sortBy]);
-  useEffect(() => {
-    const f = {
-      column: /^[0-9a-fA-F]{1,16}$/.test(search) ? 'id' : 'surname',
-      values: [ search ],
-    }
-    dispatch(filterData({table: 'Users', filters: [ f ]}));
-  }, [search]);
-
+  
   const sortByOptions = ['name', 'surname', 'type', 'status'];
   const columns = [
     {field: 'name', headerName: 'Name', width: 150, sortable: true},
@@ -95,7 +90,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
   ]
   
   return (
-    <div className={styles.container} aria-label='Manage Users'>
+    <Container className={styles.container} aria-label='Manage Users'>
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>Users</h2>
@@ -107,7 +102,7 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
           </span>
-          <h3 className={styles.checkboxesHeader}>Sorting options</h3>
+          <h3 className={styles.checkboxesHeader}>Filter options</h3>
           <div className={styles.checkboxContainer}>
             <span>
               <PrimaryCheckBox 
@@ -150,9 +145,9 @@ const ManageUsers: React.FC< ManageUsersProps > = ({ getUsers }) => {
             </span>
           </div>
         </div>
-        <Table name='Users' columns={columns} getData={getUsers}/>
+        {api.current && <Table name={tableName} columns={columns} getData={api.current.getUsers}/>}
       </Paper>
-    </div>
+    </Container>
   );
 };
 

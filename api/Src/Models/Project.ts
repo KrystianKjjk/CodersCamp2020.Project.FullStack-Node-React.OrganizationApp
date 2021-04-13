@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 export interface Project {
     _id: mongoose.ObjectId,
-    sectionId: string,
+    sectionId: mongoose.Types.ObjectId,
     projectName: string,
     projectUrl: string,
     description?: string
@@ -12,7 +12,8 @@ export interface Project {
 
 const ProjectSchema = new mongoose.Schema({
     sectionId: {
-        type: String, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Section',
         required: true,
     },
     projectName: {
