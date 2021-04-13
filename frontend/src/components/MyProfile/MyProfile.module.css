@@ -1,0 +1,78 @@
+.myProfileContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+}
+
+.teamProjectHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    border: 1px solid #666666;
+    padding: 10px;
+    background-color: #1C1C1C;
+    margin-bottom: 20px;    
+    border-radius: 0.3rem;
+}
+
+.teamProjectHeaderName {
+    width: 100%;
+    margin-left: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 5px 0;
+}
+.teamProjectDetailsContainer{
+    display: flex;
+    padding: 20px;
+    font-size: 18px;    
+    border: 1px solid #666666;
+    background-color: #1C1C1C;    
+    border-radius: 0.3rem;
+}
+
+.attributeNamesContainer {
+    width: 20%;
+    min-width: 200px;
+    font-weight: bold;
+}
+
+.attributeValuesContainer {
+    width: 80%;
+}
+
+.attributeValuesContainer>div, .attributeNamesContainer>div, .attributeValuesContainer>input {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+label{
+    flex-direction: column;
+    text-align: center;
+    padding: 0.3rem 1.1rem;
+    border-radius: 0.2rem;
+    width: 100px;
+}
+
+.status_radio_button__blue {
+    background: #1c1c1c;
+    border: rgba(26, 144, 255, 0.75) 1px solid;
+    color: #1a90ff;
+    
+  }
+  .status_radio_button__red {
+    background: #1c1c1c;
+    border: rgba(240, 55, 56, 0.75) 1px solid;
+    color: #F03738;
+  }
+  .status_radio_button__green {
+    background: #1c1c1c;
+    border: rgba(60, 193, 59, 0.75) 1px solid;
+    color: #3cc13b;
+  }
+
