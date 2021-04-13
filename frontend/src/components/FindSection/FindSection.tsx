@@ -10,6 +10,8 @@ import styles from './FindSection.module.css';
 import {mainTheme} from "../../theme/customMaterialTheme";
 
 export interface FindSectionProps {
+    isOpen: boolean,
+    handleClose: any,
     onSectionSelection: any,
 }
 
@@ -17,8 +19,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     const sectionsService = new SectionsService(new BaseService());
 
-    const [open, setOpen] = React.useState(false);
-    const [isUpdate, setIsUpdate] = React.useState(true);
+    const [isUpdate, setIsUpdate] = useState(false);
     const [search, setSearch] = useState('');
     const [sections, setSections] = useState<any>([]);
     const [filteredSections, setFilteredSections] = useState<any>([]);
@@ -38,6 +39,10 @@ const FindSection: React.FC< FindSectionProps > = props => {
     }, [search]);
 
     useEffect(() => {
+        setIsUpdate(false);
+    },[sections]);
+
+    useEffect(() => {
         setIsUpdate(true);
     },[filteredSections]);
 
@@ -45,36 +50,43 @@ const FindSection: React.FC< FindSectionProps > = props => {
         setSearch(name);
     }
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-    };
-
     function handleRowClick(params: any, e: any) {
         const sectionID = params.row.id;
         const sectionName = params.row.Name;
         props.onSectionSelection(sectionID, sectionName)
-        handleClose();
     }
 
     function getSections() {
-        sectionsService.getSections()
-            .then(res => {
-                if(res.status === 200) {
-                    setSections([...res.data]);
-                    setFilteredSections([...res.data]);
-                    handleOpen();
-                }
-                else throw Error;
-            })
-            .catch(err => {
-            })
+        const activeCourse = localStorage.getItem('activeCourse');
+        const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null;
+        if(courseID)
+        {
+            sectionsService.getSectionsByCourseId(courseID)
+                .then(res => {
+                    if(res.status === 200) {
+                        setSections([...res.data]);
+                        setFilteredSections([...res.data]);
+                    }
+                    else throw Error;
+                })
+                .catch(err => {
+                })
+        }
+        else {
+            sectionsService.getSections()
+                .then(res => {
+                    if(res.status === 200) {
+                        setSections([...res.data]);
+                        setFilteredSections([...res.data]);
+                    }
+                    else throw Error;
+                })
+                .catch(err => {
+                })
+        }
     }
 
     function getSectionsTable(): Promise<[]> {
-
         const sectionsTmp = filteredSections.map( (section: any) => (
             {
                 id: section._id,
@@ -94,19 +106,19 @@ const FindSection: React.FC< FindSectionProps > = props => {
 
     return (
             <MuiThemeProvider theme={mainTheme}>
-                    <Modal
+                <Modal
                         aria-labelledby="transition-modal-title"
                         aria-describedby="transition-modal-description"
                         className={styles.modal}
-                        open={open}
-                        onClose={handleClose}
+                        open={props.isOpen}
+                        onClose={props.handleClose}
                         closeAfterTransition
                         BackdropComponent={Backdrop}
                         BackdropProps={{
                             timeout: 500,
                         }}
                     >
-                        <Fade in={open}>
+                        <Fade in={props.isOpen}>
                             <div className={styles.container}>
                                 <div className={styles.container__header}>
                                     <span>Find Section</span>
@@ -120,14 +132,12 @@ const FindSection: React.FC< FindSectionProps > = props => {
                                         />
                                     </div>
                                     <div className={styles.container__body__table}>
-                                        {isUpdate &&
-                                            (<ReusableTable
-                                                name=""
+                                        {isUpdate && (<ReusableTable
+                                                name="Sections"
                                                 getData={getSectionsTable}
                                                 columns={columns}
                                                 onRowClick={handleRowClick}
-                                            />)
-                                        }
+                                            /> )}
                                     </div>
                                 </div>
                             </div>

@@ -30,12 +30,9 @@ interface referenceProjectButtonProps {
   teamProject: String;
 }
 
-interface sectionSelectionModalProps {
-  sectionSelectionMode: boolean
-}
 
 const TeamProject: React.FC<TeamProjectProps> = props => {
-  const { projectEditMode, projectDeleteMode, sectionSelectionMode, project } = useAppSelector(selectTeamProjects);
+  const { projectEditMode, projectDeleteMode, project } = useAppSelector(selectTeamProjects);
   let selectedTeamProject = project; 
 
   const dispatch = useAppDispatch();
@@ -44,6 +41,14 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
   const [projectDescription, setProjectDescription] = useState(project.description);
   const [referenceProjectName, setReferenceProjectName] = useState(project.referenceProjectName);
   const [sectionName, setSectionName] = useState(project.sectionName);
+
+  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false);
+  function closeSectionsModal() {
+    setIsOpenSectionsModal(false)
+  }
+  function openSectionsModal() {
+    setIsOpenSectionsModal(true)
+  }
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
@@ -71,21 +76,6 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
     return null
   }
 
-  const SectionSelectionModal = (props: sectionSelectionModalProps) => {
-
-    const sectionSelectionMode = props.sectionSelectionMode;
-    if (sectionSelectionMode) {
-      return (
-        <div className={styles.modal}>
-          <FindSection onSectionSelection={async (sectionID: string) => {
-            const [projectName, sectionName] = await dispatch(saveProjectSectionById(selectedTeamProject, sectionID));
-            setReferenceProjectName(projectName);
-            setSectionName(sectionName);
-         }}/>
-        </div>)
-    }
-    return null
-  }
 
   const handleSave = async () => {
     const newProjectData = {
@@ -137,7 +127,10 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
             <div>{selectedTeamProject!.mentor}</div>
             <div>
               {sectionName}
-              <Button id={styles.buttonEdit} onClick={() => dispatch(switchSectionSelectionMode())}>
+              <Button id={styles.buttonEdit} onClick={() => {
+                openSectionsModal();
+                switchSectionSelectionMode();
+              }}>
                   <ReferenceProjectButtonText teamProject={selectedTeamProject!.referenceProjectName}/>
                 </Button>
             </div>
@@ -158,7 +151,17 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
           </div>
         </div>
-        <SectionSelectionModal sectionSelectionMode={sectionSelectionMode}/>
+
+        <FindSection
+            onSectionSelection = {async (sectionID: string) => {
+              const [projectName, sectionName] = await dispatch(saveProjectSectionById(selectedTeamProject, sectionID));
+              setReferenceProjectName(projectName);
+              setSectionName(sectionName);
+              closeSectionsModal();
+            }}
+            isOpen={isOpenSectionsModal}
+            handleClose={closeSectionsModal}
+        />
       </div>)
       :
       (<div className={styles.teamProjectContainer}>
