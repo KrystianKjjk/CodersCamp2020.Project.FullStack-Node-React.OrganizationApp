@@ -27,7 +27,8 @@ interface Project {
 const api = new BaseService();
 
 async function getTeamProjects(): Promise<any[]> {
-    const courseId = localStorage.getItem('courseId');
+    const course = localStorage.getItem('activeCourse');
+    const courseId = course ? JSON.parse(course)._id : null;
 
     const response = await api.get('/teams/projects');
     const allProjects = await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));

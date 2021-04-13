@@ -14,8 +14,9 @@ export default class TeamService {
     ) { };
 
     getTeams = async (): Promise<Team[]> => {
-        const courseId = localStorage.getItem('courseId');
-        const courseRes = await this.api.get('/courses/' + courseId);
+        const activeCourse = localStorage.getItem('activeCourse');
+        const courseId: string = activeCourse ? JSON.parse(activeCourse)._id : null;
+        const courseRes = await this.api.get('/courses/' + (courseId ?? ''));
         const course = courseRes.data as CourseData;
         const teams = (await this.api.get(`courses/${course._id}/teams`)).data as TeamData[];
         return teams.map( team => ({
