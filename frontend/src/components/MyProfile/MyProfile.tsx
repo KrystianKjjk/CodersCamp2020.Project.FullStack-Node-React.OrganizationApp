@@ -89,7 +89,7 @@ const MyProfile = () => {
             <h4>Please provide old and new password to proceed:</h4>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Input
+                <StyledTextField
                   value={oldPassword}
                   onChange={e => setOldPassword(e.target.value)}
                   name="password"
