@@ -11,7 +11,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ListItemLink from '../ListItemLink';
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from "../../app/utils";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {selectUserData} from "../HomePage/HomePageSlice";
 
 export interface MenuProps { }

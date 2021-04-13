@@ -27,7 +27,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                         <p style={{marginTop: "2rem"}}>{course?.description}</p>
                     </div>
                 ) : (
-                    <h2>Java Script Section Test - 22.01.2021</h2>
+                    <h2>Information soon!</h2>
                 )
             }
         </div>
