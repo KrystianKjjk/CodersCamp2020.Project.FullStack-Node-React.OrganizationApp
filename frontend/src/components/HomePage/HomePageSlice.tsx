@@ -65,5 +65,4 @@ export const homePageSlice = createSlice({
 );
 export const selectUserData = (state: RootState) => state.userData;
 
-export const {  } = homePageSlice.actions;
 export default homePageSlice.reducer;

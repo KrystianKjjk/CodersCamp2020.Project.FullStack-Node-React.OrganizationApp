@@ -17,8 +17,7 @@ import {selectUserData} from "../HomePage/HomePageSlice";
 export interface MenuProps { }
 
 const Menu: React.FC<MenuProps> = (props) => {
-    const dispatch = useDispatch();
-    const {userData, loaded} = useSelector(selectUserData);
+    const {userData} = useSelector(selectUserData);
 
     const useStyles = makeStyles((theme: Theme) =>
     createStyles({

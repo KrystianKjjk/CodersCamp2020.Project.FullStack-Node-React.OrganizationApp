@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from "react-router-dom";
-import {Box, Breadcrumbs, CircularProgress, CssBaseline, Link, Snackbar, Typography} from "@material-ui/core";
-import theme, {mainTheme} from "../../theme/customMaterialTheme";
+import {Box, Breadcrumbs, CircularProgress, Link, Snackbar, Typography} from "@material-ui/core";
+import {mainTheme} from "../../theme/customMaterialTheme";
 import {ThemeProvider} from "@material-ui/styles";
 import MuiAlert from '@material-ui/lab/Alert';
 

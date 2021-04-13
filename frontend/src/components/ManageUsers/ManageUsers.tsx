@@ -8,7 +8,6 @@ import { filterData, searchData, sortData } from '../ReusableTable/ReusableTable
 import { useAppDispatch } from '../../app/hooks';
 import { UserService } from '../../api';
 import { useHistory } from "react-router-dom";
-import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
 interface CheckboxProps {
   name: string;

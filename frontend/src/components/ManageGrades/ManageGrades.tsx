@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, CircularProgress, CssBaseline, Snackbar} from "@material-ui/core";
+import {Box, CircularProgress, Snackbar} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import  {ThemeProvider} from "@material-ui/styles";
 
@@ -11,7 +11,7 @@ import UButton from "../UButton";
 import FindSection from "../FindSection";
 
 import styles from './ManageGrades.module.css';
-import theme, {mainTheme} from "../../theme/customMaterialTheme";
+import theme from "../../theme/customMaterialTheme";
 
 export interface ManageGradesProps {
     userID: string

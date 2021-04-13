@@ -46,6 +46,7 @@ const MainView: React.FC = () => {
       const userID = localStorage.getItem('id');
       dispatch(fetchUser(userID));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const MainContent = () => {
