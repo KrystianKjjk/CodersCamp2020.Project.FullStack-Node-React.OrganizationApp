@@ -54,7 +54,7 @@ async function getProjectDetailedData(project: TeamProject) {
             returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
         }
         catch(error){
-            console.log(error)
+            console.log(`Mentor with id ${project.teamId.mentor} not found!`)
         }      
         
     }
