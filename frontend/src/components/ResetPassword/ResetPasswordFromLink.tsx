@@ -5,7 +5,8 @@ import {
   Typography,
   Container,
   Snackbar,  
-  FormHelperText
+  FormHelperText,
+  Grid
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import StyledTextField from '../StyledTextField'
@@ -17,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 export interface ResetPasswordProps {
 
 };
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,23 +42,28 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function ResetPassword() {
+export default function ResetPasswordFromLink() {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');  
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [beenSent, setBeenSent] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [error, setError] = useState('');
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('id');
+  const token = urlParams.get('token');
+  console.log(userId, token)
+  
   const handleSubmit = async () => {
     const service = new BaseService();
     try {
-      await service.post('users/requestpasswordreset', { email })
+      await service.post('users/resetpassword', { userId, token, password })
       setBeenSent(true);
     }
     catch (error) {
-      setError("Incorrect email!");
+      setError("Incorrect password or the reset link expired!");
       setOpenError(true);
-      console.log(error);
     };
   };
 
@@ -82,20 +89,31 @@ export default function ResetPassword() {
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
               Reset Password
-        </Typography>
+            </Typography>
             <div className={classes.form}
             >
+         <Grid container spacing={2}>
+         <Grid item xs={12}>
               <StyledTextField
-                margin="normal"
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                data-testid="rp-email"
-                onChange={e => setEmail(e.target.value)}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                name="password"
+                label="New Password"
+                type="password"
+                data-testid="r-password"
               />
-
+            </Grid>
+            <Grid item xs={12}>
+              <StyledTextField
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                name="passwordconfirm"
+                label="Confirm New Password"
+                type="password"
+                data-testid="r-cpassword"
+              />
+            </Grid>
+         </Grid>      
               <Button
                 type="submit"
                 fullWidth
@@ -126,7 +144,7 @@ export default function ResetPassword() {
           <CssBaseline />
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
-              Email with reset link has been sent!
+              Your password has been changed!
         </Typography>
               <Button
                 type="submit"

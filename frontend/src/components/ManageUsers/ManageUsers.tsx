@@ -7,6 +7,7 @@ import Table from '../ReusableTable';
 import { filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { UserService } from '../../api';
+import { useHistory } from 'react-router-dom';
 
 
 interface CheckboxProps {
@@ -34,6 +35,7 @@ export interface ManageUsersProps { };
 
 const ManageUsers: React.FC< ManageUsersProps > = () => {
   const api = useRef<UserService>(new UserService());
+  const history = useHistory();
   const tableName = 'Users';
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
@@ -65,6 +67,10 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
     }
     dispatch(searchData(searchQuery));
   }
+
+  const handleRowClick = (data: {id: string | number}) => {
+    history.push(`/users/${data.id}`);
+  };
 
   useEffect(() => {
     const typeValues = Object.entries(typeFilters)
@@ -145,7 +151,7 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
             </span>
           </div>
         </div>
-        {api.current && <Table name={tableName} columns={columns} getData={api.current.getUsers}/>}
+        {api.current && <Table name={tableName} columns={columns} getData={api.current.getUsers} onRowClick={handleRowClick}/>}
       </Paper>
     </Container>
   );

@@ -63,6 +63,22 @@ export default class GradeSheetController {
         res.status(200).json({message: 'Mentor reviewers set'});
     }
 
+    setMentor = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
+        const sheet = await this.gradeSheetService.setMentor(id, mentorId);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        res.status(200).json({message: 'Mentor changed'});
+    }
+
+    setProject = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const projectId = new mongoose.Types.ObjectId(req.params.projectId);
+        const sheet = await this.gradeSheetService.setMentor(id, projectId);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        res.status(200).json({message: 'Project changed'});
+    }
+
     setMentorGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = req.body.mentorId ? new mongoose.Types.ObjectId(req.params.mentorId) : null;
@@ -73,6 +89,16 @@ export default class GradeSheetController {
         res.status(200).json({message: 'Mentor grade set'});
     }
 
+    patchMentorGrades = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const mentorId = req.body.mentorId ? new mongoose.Types.ObjectId(req.params.mentorId) : null;
+        const grades: {[gradeName: string]: Grade} = req.body.grades;
+        const sheet = await this.gradeSheetService.patchMentorGrades(id, grades, mentorId);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
+        if(sheet === 'FORBIDDEN') return res.status(403).json({message: 'FORBIDDEN'});
+        res.status(200).json({message: 'Mentor grade patched'});
+    }
+
     setMentorReviewerGrades = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
@@ -80,6 +106,15 @@ export default class GradeSheetController {
         const sheet = await this.gradeSheetService.setMentorReviewerGrades(id, mentorId, grades);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
         res.status(200).json({message: 'Mentor reviewer grade set'});
+    }
+
+    patchMentorReviewerGrades = async (req: Request, res: Response) => {
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const mentorId = new mongoose.Types.ObjectId(req.params.mentorId);
+        const grades: {[gradeName: string]: Grade} = req.body.grades;
+        const sheet = await this.gradeSheetService.patchMentorReviewerGrades(id, mentorId, grades);
+        if(sheet === null) return res.status(404).json({message: 'Grade sheet or mentor not found'});
+        res.status(200).json({message: 'Mentor reviewer grade patched'});
     }
 
     addParticipant = async (req: Request, res: Response) => {

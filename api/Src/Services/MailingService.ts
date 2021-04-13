@@ -14,10 +14,10 @@ interface Nodemailer {
 const handlebarsOptions = {
   viewEngine: {
     extName: ".hbs",
-    partialsDir: "./Api/Utils/",
-    layoutsDir: "./Api/Utils/"
+    partialsDir: "./api/Utils/",
+    layoutsDir: "./api/Utils/"
   },
-  viewPath: "./Api/Utils/",
+  viewPath: "./api/Utils/",
   extName: ".hbs"
 };
 
