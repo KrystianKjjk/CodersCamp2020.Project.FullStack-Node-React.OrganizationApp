@@ -30,11 +30,9 @@ interface referenceProjectButtonProps {
   teamProject: String;
 }
 
-interface sectionSelectionModalProps {
-}
 
 const TeamProject: React.FC<TeamProjectProps> = props => {
-  const { projectEditMode, projectDeleteMode, sectionSelectionMode, project } = useAppSelector(selectTeamProjects);
+  const { projectEditMode, projectDeleteMode, project } = useAppSelector(selectTeamProjects);
   let selectedTeamProject = project; 
 
   const dispatch = useAppDispatch();
