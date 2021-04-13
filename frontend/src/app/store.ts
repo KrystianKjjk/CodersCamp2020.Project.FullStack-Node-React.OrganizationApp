@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import teamProjectReducer from '../components/TeamProject/TeamProjectSlice'
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice';
 import homePageReducer from '../components/HomePage/HomePageSlice';
+import referenceProjectsReducer from "../components/ReferenceProjects/ReferenceProjectsSlice";
 import courseDetails from '../components/Course/CourseDetailsSlice';
 import courseList from '../components/CourseList/CourseListSlice';
 
@@ -11,6 +12,7 @@ export const store = configureStore({
     teamProjects: teamProjectReducer,
     tables: reusableTableReducer,
     userData: homePageReducer,
+    refProjects: referenceProjectsReducer,
     courseDetails,
     courseList
   },

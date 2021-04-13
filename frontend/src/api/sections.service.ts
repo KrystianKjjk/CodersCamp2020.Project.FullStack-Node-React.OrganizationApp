@@ -15,6 +15,11 @@ export default class SectionsService {
     return this.httpService.get(`${this.endpoint}/${sectionID}`);
   }
 
+
+  async getSectionsByCourseId(courseID: string) {
+      return this.httpService.get(`courses/${courseID}/${this.endpoint}`);
+  }
+
   async deleteSectionById(sectionId: string) {
     return this.httpService.delete(`${this.endpoint}/${sectionId}`);
   }

@@ -14,6 +14,7 @@ import ManageGrades from "../ManageGrades";
 import UButton from "../UButton";
 
 import styles from './ManageUser.module.css';
+import ConfirmationDialog from "../ConfirmationDialog";
 
 export interface ManageUserProps {
 }
@@ -32,6 +33,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     const [isEdit, setIsEdit] = useState(false);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
+    const [openDeleteError, setDeleteError] = React.useState(false);
 
     const [user, setUser] = useState<IUser | undefined>(undefined);
 
@@ -103,8 +105,9 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                 }
             })
             .catch(err => {
-                setError(err);
+                setDeleteError(true);
             })
+        handleCloseDeleteConfirmation();
     }
 
 
@@ -114,6 +117,18 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
         }
         setOpenSuccess(false);
         setOpenError(false);
+        setDeleteError(false);
+    };
+
+
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+    const handleOpenDeleteConfirmation = () => {
+        setIsOpenDelete(true);
+    };
+
+    const handleCloseDeleteConfirmation = () => {
+        setIsOpenDelete(false);
     };
 
     if (error) {
@@ -123,6 +138,15 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     } else {
         return (
             <ThemeProvider theme={mainTheme}>
+                <ConfirmationDialog
+                    title="Are you sure you want to delete the user?"
+                    content="This action is irreversible."
+                    isOpen={isOpenDelete}
+                    onClose={handleCloseDeleteConfirmation }
+                    handleConfirm={deleteUser}
+                    handleCancel={handleCloseDeleteConfirmation}
+                />
+
                 <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
                         User updated correctly!
@@ -133,7 +157,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                         User not updated!
                     </Alert>
                 </Snackbar>
-
+                <Snackbar open={openDeleteError} autoHideDuration={3500} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error">
+                        User not deleted!
+                    </Alert>
+                </Snackbar>
                 <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
                     <Link href="/users" color="primary">USERS </Link>
                     <Typography color="primary">{userID}</Typography>
@@ -146,7 +174,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                             <UButton
                                 text='DELETE'
                                 color='secondary'
-                                onClick={deleteUser} />
+                                onClick={handleOpenDeleteConfirmation} />
                             {isEdit ? (
                                 <UButton
                                     text='SAVE'

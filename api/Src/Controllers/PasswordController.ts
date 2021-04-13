@@ -16,9 +16,9 @@ export default class PasswordController{
     }
 
     requestPasswordReset = async (req:Request, res:Response) => {
-        const userId = new mongoose.Types.ObjectId(req.body.id);
+        const userEmail = req.body.email;
         try{
-            const passwordRequestOutput = await this.passwordService.requestPasswordReset(userId);
+            const passwordRequestOutput = await this.passwordService.requestPasswordReset(userEmail);
             this.mailingService.sendMail({
                 from: 'coderscamp@fastmail.com',
                 to: passwordRequestOutput.email,
@@ -37,7 +37,7 @@ export default class PasswordController{
     }
 
     resetPassword = async (req:Request, res:Response) => {
-        const userId = new mongoose.Types.ObjectId(req.body.id);
+        const userId = new mongoose.Types.ObjectId(req.body.userId);
         const token = req.body.token;
         const password = req.body.password;
         try{

@@ -7,7 +7,7 @@ import Table from '../ReusableTable';
 import { filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { UserService } from '../../api';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 interface CheckboxProps {
   name: string;
@@ -34,9 +34,8 @@ export interface ManageUsersProps { };
 
 const ManageUsers: React.FC< ManageUsersProps > = () => {
 
-  const history = useHistory();
-
   const api = useRef<UserService>(new UserService());
+  const history = useHistory();
   const tableName = 'Users';
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({

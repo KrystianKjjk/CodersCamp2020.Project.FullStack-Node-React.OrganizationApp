@@ -4,6 +4,7 @@ import Header from "../Header";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
+
 import CourseCreate from "../CourseCreate";
 import Course from '../Course';
 import CourseList from '../CourseList';
@@ -17,13 +18,17 @@ import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
-import { UserType } from '../../models/User.model'
 import UserGrades from "../UserGrades";
-import ManageUser from "../ManageUser";
-import ManageSections from "../ManageSections";
-import SectionView from "../SectionView";
 import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
 import {useDispatch, useSelector} from "react-redux";
+import ManageUser from '../ManageUser';
+import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
+import ManageSections from "../ManageSections";
+import SectionView from "../SectionView";
+import {UserType} from "../../models";
+
+import ReferenceProjects from "../ReferenceProjects";
+import ManageReferenceProject from "../ManageReferenceProject";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -32,7 +37,6 @@ interface LoggedInViewProps {
 interface LoggedOutViewProps {
   onLogin?: Function
 }
-
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
@@ -58,7 +62,7 @@ const MainView: React.FC = () => {
       case UserType.Mentor:
         return <Mentor onLogout={() => setIsLogged(false)} />
       default:
-        return <User onLogout={() => setIsLogged(false)} />
+        return <Participant onLogout={() => setIsLogged(false)} />
     }
   }
 
@@ -81,6 +85,9 @@ function LoggedOut(props: LoggedOutViewProps) {
         </Route>
         <Route path="/resetpassword">
           <ResetPassword />
+        </Route>
+        <Route path="/passwordReset">
+          <ResetPasswordFromLink />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />
@@ -119,14 +126,17 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/gradesheets">
           <ManageSheets />
         </PrivateRoute>
-        <PrivateRoute path="/projects">
+
+        <PrivateRoute exact path="/projects">
           <Projects />
         </PrivateRoute>
+        <PrivateRoute path="/projects/add" component={ManageReferenceProject} />
+        <PrivateRoute path="/projects/:projectID" component={ManageReferenceProject} />
+
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
-        <PrivateRoute path="/teams/:teamId">
-          <ManageTeam />
+        <PrivateRoute path="/teams/:teamId" component={ManageTeam}>
         </PrivateRoute>
         <PrivateRoute path="/teams">
           <ManageTeams />
@@ -171,7 +181,7 @@ function Mentor(props: LoggedInViewProps) {
   )
 }
 
-function User(props: LoggedInViewProps) {
+function Participant(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
       <Header onLogout={props.onLogout} />
@@ -196,11 +206,12 @@ function User(props: LoggedInViewProps) {
   )
 }
 function Projects() {
-  return <h2>Projects</h2>;
+  return <ReferenceProjects />
 }
 function TeamProjects() {
   return <TeamProjectsComponent getFunction={getTeamProjects}/>;
 }
+
 function MyTeam() {
   return <h2>My team</h2>;
 }

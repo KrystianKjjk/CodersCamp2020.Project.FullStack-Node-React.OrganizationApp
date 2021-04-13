@@ -3,13 +3,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
-import UButton from './UButton';
+import EditableField from './EditableField';
 
-describe('UButton', () => {
+describe('EditableField', () => {
    it('renders without error', () => {
       render(
          <Provider store={store}>
-            <UButton text='UButton' color='primary' onClick={()=>{}}/>
+            <EditableField name='EditableField'/>
          </Provider>
       );
    });
