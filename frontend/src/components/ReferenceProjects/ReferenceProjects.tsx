@@ -20,7 +20,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
   const {refProjects, loading, loaded, error} = useSelector(selectReferenceProjects);
   const history = useHistory();
 
-  const courseID = localStorage.getItem('courseId');
+  const courseID = localStorage.getItem('activeCourse');
 
   useEffect(() => {
     if(!loaded) dispatch(fetchRefProjects());
@@ -44,10 +44,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
                     'Section name': project["Section name"]
                 }));
         // @ts-ignore
-        return new Promise(
-            (resolve) => {
-                resolve(projects);
-            });
+        return Promise.resolve(projects);
     }
 
     function handleSelection(params: any, e: any) {

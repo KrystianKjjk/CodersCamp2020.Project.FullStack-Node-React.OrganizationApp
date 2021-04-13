@@ -57,7 +57,7 @@ const FindSection: React.FC< FindSectionProps > = props => {
     }
 
     function getSections() {
-        const courseID = localStorage.getItem('courseId');
+        const courseID = localStorage.getItem('activeCourse');
         if(courseID)
         {
             sectionsService.getSectionsByCourseId(courseID)

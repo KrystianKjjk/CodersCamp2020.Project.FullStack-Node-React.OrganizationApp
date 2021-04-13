@@ -60,10 +60,9 @@ const ManageReferenceProject = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[actionError, actionSuccess])
 
-  let tmp: any;
-  useSelector((state: any) => {
-    tmp = state.refProjects.refProjects.find((project: any) => project._id === projectID);
-  });
+  const tmp =  useSelector((state: any) =>
+    (state.refProjects.refProjects.find((project: any) => project._id === projectID))
+  );
 
   useEffect(()=> {
     setProject(tmp)
