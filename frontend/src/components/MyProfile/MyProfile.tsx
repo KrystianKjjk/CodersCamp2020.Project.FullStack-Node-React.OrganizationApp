@@ -86,8 +86,8 @@ const MyProfile = () => {
       return (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h4>Please provide old and new password to proceed:</h4>
-            <Grid container spacing={2}>
+            <h2>Please provide old and new password to proceed:</h2>
+            <Grid container spacing={2} className={styles.passwordInput}>
               <Grid item xs={12}>
                 <StyledTextField
                   value={oldPassword}
