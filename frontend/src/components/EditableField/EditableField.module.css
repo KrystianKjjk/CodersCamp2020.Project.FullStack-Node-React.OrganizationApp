@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+
+
+.manageForm__row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.manageForm__row__key {
+    flex: 2;
+    height: 3rem;
+    display: flex;
+}
+.manageForm__row__key__desc {
+    flex: 2;
+    display: flex;
+    min-height: 9rem;
+}
+.manageForm__row__key__desc label {
+    margin-top: 1rem;
+}
+.manageForm__row__key label {
+    align-self: center;
+}
+.manageForm__row__value {
+    margin: 0.3rem 0;
+    height: 3rem;
+    font-weight: 300;
+    flex: 5;
+    display: flex;
+}
+.manageForm__row__value p {
+    margin-left: 1rem;
+    align-self: center;
+}
+.manageForm__row__value__desc p {
+    margin-left: 1rem;
+    align-self: flex-start;
+}
+.manageForm__row__value__desc {
+    min-height: 9rem;
+    overflow: auto;
+}
+.manageForm__row__value input, .manageForm__row__value textarea, .manageForm__row__value select {
+    padding: 0.7rem 1rem;
+    width: 15rem;
+    background: #1c1c1c;
+    color: #fff;
+    border: rgba(255, 255, 255, 0.87) 1px solid;
+    border-radius: 0.4rem;
+}
+
+.manageForm__row__value__desc textarea {
+    width: 35rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+}
+
+.manageForm__row__value input:focus, .manageForm__row__value__desc textarea:focus, .manageForm__row__value select:focus {
+    outline: none;
+    border: #fff 1px solid;
+}
+.manageForm__row__value select {
+    width: 17.1rem;
+}
