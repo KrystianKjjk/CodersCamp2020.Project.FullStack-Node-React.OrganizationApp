@@ -1,3 +1,14 @@
+export interface ProjectDataForSection {
+    _id: string;
+    projectName: string;
+    sectionId: string;
+}
+
+export interface ProjectForSection {
+    id: string;
+    projectName: string;
+}
+
 export interface ProjectData {
     _id: string;
     sectionId: string;

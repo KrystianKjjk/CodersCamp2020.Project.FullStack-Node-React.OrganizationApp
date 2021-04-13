@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://krystiankjjk.github.io/CodersCamp2020.Project.FullStack-Node-React.OrganizationApp",
   "dependencies": {
-    "@date-io/date-fns": "v1",
+    "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.11.3",
     "@material-ui/data-grid": "^4.0.0-alpha.22",
     "@material-ui/icons": "^4.11.2",
@@ -21,6 +21,7 @@
     "@types/react-dom": "^16.9.11",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "axios": "^0.21.1",
     "date-fns": "^2.19.0",
     "gh-pages": "^3.1.0",
     "react": "^17.0.1",

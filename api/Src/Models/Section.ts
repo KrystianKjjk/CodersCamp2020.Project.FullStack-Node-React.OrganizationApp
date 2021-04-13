@@ -6,12 +6,10 @@ export interface Section {
     startDate: Date,
     endDate: Date,
     tests: Test[],
-    referenceProjectId?: string, //standard project proposed by the organisers (e.g. StarWars Quiz for Javascript)
     description?: string,
     materials?: mongoose.Types.ObjectId[] //materials reference
     course: mongoose.Types.ObjectId
 }
-
 
 export type TSection = Section & mongoose.Document;
 
@@ -63,10 +61,6 @@ const SectionSchema = new mongoose.Schema({
     },
     tests: {
         type: [TestSchema],
-    },
-    referenceProjectId: {
-        type: String,
-        ref: 'Project'
     },
     description:{
         type: String,

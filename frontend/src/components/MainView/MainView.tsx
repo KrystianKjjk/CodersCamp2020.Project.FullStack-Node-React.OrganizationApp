@@ -17,6 +17,8 @@ import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
 import { UserType } from '../../models/User.model'
+import ManageSections from "../ManageSections";
+import SectionView from "../SectionView";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -80,16 +82,22 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/users">
           <ManageUsers />
         </PrivateRoute>
-        <PrivateRoute exact path="/courses">
-          <CourseList/>
+        <PrivateRoute path="/courses/:id" component={Course}>
         </PrivateRoute>
         <PrivateRoute exact path="/coursecreate">
           <CourseCreate/>
         </PrivateRoute>
-        <PrivateRoute path="/courses/:id" component={Course}>
+        <PrivateRoute path="/courses">
+          <CourseList/>
+        </PrivateRoute>
+        <PrivateRoute path="/sections/:id/edit">
+          <SectionView />
+        </PrivateRoute>
+        <PrivateRoute path="/sections/create">
+          <SectionView />
         </PrivateRoute>
         <PrivateRoute path="/sections">
-          <Sections />
+          <ManageSections />
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <Gradesheets />
@@ -171,11 +179,8 @@ function User(props: LoggedInViewProps) {
   )
 }
 
-function Sections() {
-  return <h2>Sections</h2>;
-}
 function Gradesheets() {
-  return <h2>Grade sheets</h2>;
+  return <h2>Greadsheets</h2>
 }
 function Projects() {
   return <h2>Projects</h2>;
