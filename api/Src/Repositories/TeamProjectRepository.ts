@@ -3,6 +3,10 @@ import * as mongoose from 'mongoose'
 import { TeamProject } from "../Models/TeamProject";
 
 export default class TeamProjectRepository extends Repository {
+    async getAll(){
+      return this.model.find({}).populate('teamId').populate('parentProjectId');
+    }
+
     async findByTeamId(teamId: mongoose.Types.ObjectId){
         return this.model.find({teamId});
     }

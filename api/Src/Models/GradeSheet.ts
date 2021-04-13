@@ -9,18 +9,24 @@ export interface Participant {
     rolePoints?: number;
 };
 
+export interface Grade {
+    description?: string;
+    points: number;
+    comment?: string;
+}
+
 export interface GradeSheet {
     projectID: mongoose.Types.ObjectId;
     participants: Participant[];
     mentorID: mongoose.Types.ObjectId;
     reviewers: mongoose.Types.ObjectId[];
     mentorGrades: {
-        [prop: string]: number;
+        [prop: string]: Grade;
     };
     mentorReviewerGrades: Array< {
         mentorID: mongoose.Types.ObjectId;
         grades: {
-            [prop: string]: number;
+            [prop: string]: Grade;
         };
     } >;
 };
@@ -93,9 +99,9 @@ export function validateParticipants(participants: any) {
     return joiParticipants.validate(participants);
 }
 
-function validateGrade(grades: any) {
+function validateGrade(grades: {[quality: string]: Grade}) {
     const nameIsString = Object.keys(grades).every(name => typeof name === 'string');
-    const gradeIsNumber = Object.values(grades).every(grade => typeof grade === 'number');
+    const gradeIsNumber = Object.values(grades).every((grade: Grade) => typeof grade.points === 'number');
     if (nameIsString && gradeIsNumber) return grades;
     throw new Error("some grade is invalid");
 }

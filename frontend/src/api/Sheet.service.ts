@@ -72,13 +72,11 @@ export default class SheetService {
 
     getMentorSheets = async (mentorId?: string): Promise<GradeSheetData[] | null>  => {
         let gradeSheetsRes;
-        console.log({mentorId});
         try {
             gradeSheetsRes = await this.api.get(`/mentors/${mentorId}/grade/sheets`);
         } catch(err) {
             return null;
         }
-        console.log(gradeSheetsRes);
         return gradeSheetsRes.data as GradeSheetData[];
     }
 

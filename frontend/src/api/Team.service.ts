@@ -14,8 +14,9 @@ export default class TeamService {
     ) { };
 
     getTeams = async (): Promise<Team[]> => {
-        const courseId = localStorage.getItem('courseId');
-        const courseRes = await this.api.get('/courses/' + courseId);
+        const activeCourse = localStorage.getItem('activeCourse');
+        const courseId: string = activeCourse ? JSON.parse(activeCourse)._id : null;
+        const courseRes = await this.api.get('/courses/' + (courseId ?? ''));
         const course = courseRes.data as CourseData;
         const teams = (await this.api.get(`courses/${course._id}/teams`)).data as TeamData[];
         return teams.map( team => ({
@@ -30,7 +31,6 @@ export default class TeamService {
     getTeam = async (id: string): Promise<TeamInfo> => {
         const teamRes = await this.api.get('/teams/' + id);
         const team = teamRes.data as TeamData;
-        console.log(team);
         const projects = await this.teamProjectApi.getTeamProjects(id, team.mentor?._id);
         const sheets = await this.sheetApi.getMentorSheets(team.mentor?._id);
         const teamInfo: TeamInfo = {
@@ -71,7 +71,6 @@ export default class TeamService {
         });
         teamInfo.teamAvgGrade = teamInfo.users
             .reduce((acc, user) => user.averageGrade ?? 0 + acc, 0) / teamInfo.users.length;
-        console.log(teamInfo);
         return teamInfo;
     };
 
