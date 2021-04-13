@@ -1,0 +1,57 @@
+.manageSections {
+    margin: auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    border: gray 1px solid;
+}
+
+.mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 3rem;
+    border: gray 1px solid;
+}
+
+.mainHeader h2 {
+    margin: 0p
+    x;
+}
+.searchInput {
+    width: 350px;
+}
+
+.manageContainer {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-areas:    "mainHeader sortBy addBtn";
+    border-bottom: gray 1px solid;
+}
+
+.addButton {
+    grid-area: addBtn;
+    align-self: center;
+}
+
+.selectSortBy {
+    grid-area: sortBy;
+    justify-self: end;
+    align-self: center;
+}
+
+.manageHeader {
+    grid-area: mainHeader;
+    align-self: center;
+    padding: 1rem;
+}
+
+.table {
+    padding: 3rem;
+    max-width: 800;
+}

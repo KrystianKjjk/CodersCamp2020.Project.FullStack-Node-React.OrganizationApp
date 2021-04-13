@@ -49,6 +49,7 @@
 
 .attributeNamesContainer {
     width: 20%;
+    min-width: 200px;
     font-weight: bold;
 }
 
@@ -80,7 +81,7 @@
     height: 50px;
 }
 
-.deleteModal {
+.modal {
     color: #FFFFFF;
     position: absolute;
     top: 0;

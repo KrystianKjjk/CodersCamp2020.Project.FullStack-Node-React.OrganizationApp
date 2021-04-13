@@ -2,12 +2,17 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import teamProjectReducer from '../components/TeamProject/TeamProjectSlice'
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice';
 import homePageReducer from '../components/HomePage/HomePageSlice';
+import courseDetails from '../components/Course/CourseDetailsSlice';
+import courseList from '../components/CourseList/CourseListSlice';
+
 
 export const store = configureStore({
   reducer: {
     teamProjects: teamProjectReducer,
     tables: reusableTableReducer,
-    userData: homePageReducer
+    userData: homePageReducer,
+    courseDetails,
+    courseList
   },
 });
 

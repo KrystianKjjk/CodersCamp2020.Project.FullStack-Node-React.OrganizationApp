@@ -20,7 +20,7 @@ const MAX_ROLE_POINTS = 10;
 export function calcUserProjectGrade(sheet: GradeSheetData, userId: string) {
     const [projectPoints, maxPoints] = calcProjectGrade(sheet);
     const user = sheet.participants.find(user => user.participantID === userId);
-    if (!user) return null;
+    if ( !(user && user.engagement && user.rolePoints) ) return null;
     const points = projectPoints * user.engagement / 100 + user.rolePoints;
     const max = maxPoints + MAX_ROLE_POINTS;
     return [points, max];

@@ -3,7 +3,6 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import TeamProjects , { TeamProjectsProps } from './TeamProjects';
 import { store } from '../../app/store';
 import { Provider } from 'react-redux';
-import styles from './TeamProjects.module.css';
 import { ThemeProvider } from '@material-ui/styles';
 import darkTheme from '../../theme/customMaterialTheme';
 
@@ -30,12 +29,6 @@ const teamProjects = [{
 
 function mockGet():Promise<any[]> {return Promise.resolve(teamProjects)};
 
-const TestEdit = (selectedProjectId: Object) => {
-  return(
-    <div>Here you should be editing project with ID {selectedProjectId}</div>
-  )
-}
-
 const Template: Story<TeamProjectsProps> = (args) => (
   <Provider store={store}>
      <ThemeProvider theme={darkTheme}>
@@ -46,7 +39,5 @@ const Template: Story<TeamProjectsProps> = (args) => (
 
 export const SampleTeamProjects = Template.bind({});
 SampleTeamProjects.args = {
-  course: '', 
-  getFunction: mockGet, 
-  editComponent: TestEdit
+  getFunction: mockGet
 };
