@@ -31,7 +31,6 @@ interface referenceProjectButtonProps {
 }
 
 interface sectionSelectionModalProps {
-  sectionSelectionMode: boolean
 }
 
 const TeamProject: React.FC<TeamProjectProps> = props => {
@@ -44,6 +43,14 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
   const [projectDescription, setProjectDescription] = useState(project.description);
   const [referenceProjectName, setReferenceProjectName] = useState(project.referenceProjectName);
   const [sectionName, setSectionName] = useState(project.sectionName);
+
+  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false);
+  function closeSectionsModal() {
+    setIsOpenSectionsModal(false)
+  }
+  function openSectionsModal() {
+    setIsOpenSectionsModal(true)
+  }
 
   useEffect(() => {
     dispatch(getProjectById(props._id));
@@ -122,7 +129,10 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
             <div>{selectedTeamProject!.mentor}</div>
             <div>
               {sectionName}
-              <Button id={styles.buttonEdit} onClick={() => dispatch(switchSectionSelectionMode())}>
+              <Button id={styles.buttonEdit} onClick={() => {
+                openSectionsModal();
+                switchSectionSelectionMode();
+              }}>
                   <ReferenceProjectButtonText teamProject={selectedTeamProject!.referenceProjectName}/>
                 </Button>
             </div>
@@ -143,13 +153,16 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
 
           </div>
         </div>
+
         <FindSection
-            onSectionSelection={async (sectionID: string) => {
+            onSectionSelection = {async (sectionID: string) => {
               const [projectName, sectionName] = await dispatch(saveProjectSectionById(selectedTeamProject, sectionID));
               setReferenceProjectName(projectName);
-              setSectionName(sectionName);}}
-            isOpen={sectionSelectionMode}
-            handleClose={dispatch(switchSectionSelectionMode())}
+              setSectionName(sectionName);
+              closeSectionsModal();
+            }}
+            isOpen={isOpenSectionsModal}
+            handleClose={closeSectionsModal}
         />
       </div>)
       :

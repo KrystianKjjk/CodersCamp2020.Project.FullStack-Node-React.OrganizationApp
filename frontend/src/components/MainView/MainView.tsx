@@ -22,6 +22,7 @@ import ManageUser from '../ManageUser';
 import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
 import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
+import {UserType} from "../../models";
 
 import ReferenceProjects from "../ReferenceProjects";
 import ManageReferenceProject from "../ManageReferenceProject";
