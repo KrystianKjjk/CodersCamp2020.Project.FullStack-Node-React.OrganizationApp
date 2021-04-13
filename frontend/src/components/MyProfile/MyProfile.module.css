@@ -76,3 +76,44 @@ label{
     color: #3cc13b;
   }
 
+  #buttonEdit, #buttonEditPassword, #buttonAbort, #buttonConfirm {
+    background-color: #2196F3;
+    margin: 0 10px;
+    width: 100px;    
+    color: #FFFFFF;
+}
+
+#buttonEditPassword, #buttonAbort, #buttonConfirm{
+    margin-top: 20px;
+}
+
+#buttonAbort {
+    background-color: #FF384A;
+}
+
+#buttonConfirm{
+    width: 200px;
+}
+
+.modal {
+    color: #FFFFFF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modalContent{
+    width: 60%;
+}
+
+
+
