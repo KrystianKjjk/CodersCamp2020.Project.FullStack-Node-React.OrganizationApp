@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ManageSheet.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
@@ -22,6 +22,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const [project, setProject] = useState<TeamProject>();
   const [reviewers, setReviewers] = useState<User[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
   // const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openProjectsModal, setOpenProjectsModal] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   // const selectedUsers = useRef<string[]>([]);
 
   let { sheetId } = useParams<{sheetId: string}>();
+  console.log(sheetId);
 
   useEffect(() => {
     api.getSheet(sheetId)
@@ -69,10 +71,21 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
 
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
-    api.addParticipantToSheet(sheetId, row.id);
+    api.addParticipant(sheetId, row.id);
     setParticipants([...participants, {...row, participantID: row.id}]);
     getParticipants = () => Promise.resolve(participants as Participant[]);
   };
+
+  const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
+    setSelectedParticipants(row.selectionModel as string[]);
+  }
+
+  const deleteSelectedUsers = () => {
+    selectedParticipants.forEach(user => {
+      api.deleteParticipant(sheetId, user);
+    })
+    setSelectedParticipants([]);
+  }
 
   // const columns = [
   //   {field: 'surname', headerName: 'Last name', width: 150, sortable: true},
@@ -102,12 +115,6 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     {field: 'name', headerName: 'Participant name', width: 270},
     {field: 'surname', headerName: 'Participant surname', width: 250},
   ];
-
-  // const projectColumns = [
-  //   {field: 'name', headerName: 'Name', width: 270},
-  //   {field: 'overallGrade', headerName: 'Overall grade', width: 270},
-  //   {field: 'sectionName', headerName: 'Section', width: 270},
-  // ];
 
   return (
     <>
@@ -193,22 +200,12 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
             </div>
             <div className={styles.table}>
               <Table 
-                aria-label='Team members table'
-                name='Team' 
-                columns={columns} 
-                getData={getTeamMemebers} 
+                aria-label='Participants table'
+                name='Participants' 
+                columns={participantColumns} 
+                getData={getParticipants} 
                 checkboxSelection={true}
-                onSelectionModelChange={handleUserSelection}
-              />
-            </div>
-            <div className={styles.manageContainer}>
-              <h2 className={styles.manageHeader}>Projects</h2>
-            </div>
-            <div className={styles.table}>
-              <Table 
-                name='TeamProjects' 
-                columns={projectColumns} 
-                getData={() => Promise.resolve(projects)} 
+                onSelectionModelChange={handleParticipantSelection}
               />
             </div>
           </Paper>
