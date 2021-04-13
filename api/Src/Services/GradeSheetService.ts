@@ -1,5 +1,5 @@
 import GradeSheetRepository from '../Repositories/GradeSheetRepository';
-import { GradeSheet, Participant } from '../Models/GradeSheet';
+import { GradeSheet, Participant, Grade } from '../Models/GradeSheet';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
@@ -72,7 +72,7 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
-    async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}, mentorId: mongoose.Types.ObjectId | null = null) {
+    async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}, mentorId: mongoose.Types.ObjectId | null = null) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if( sheet === null) return null;
         if( mentorId && !(sheet.mentorID.equals(mentorId)) ) return 'FORBIDDEN';
@@ -81,7 +81,7 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
-    async setMentorReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, grades: {[gradeName: string]: number}) {
+    async setMentorReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if( sheet === null || !(sheet.reviewers.includes(mentorId)) ) return null;
         const index = sheet.mentorReviewerGrades.findIndex(grade => `${grade.mentorID}` === `${mentorId}`);

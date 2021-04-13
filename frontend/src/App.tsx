@@ -7,13 +7,13 @@ function App() {
 
   useEffect(() => {
     document.title = "Coders Camp Organization App"
-  }, [])
+  }, []);
 
   return (
     <div className="App">
-    <Router>
-      <MainView/>
-    </Router>
+      <Router>
+        <MainView/>
+      </Router>
     </div>
   );
 }

@@ -93,7 +93,8 @@ describe('Test Password Service', () => {
 
     test('password reset token created', async () => {
         const testId = users[0]._id;
-        await service.requestPasswordReset(testId);
+        const testEmail = users[0].email
+        await service.requestPasswordReset(testEmail);
         const token = await service.passwordTokenRepository.getById(testId);        
         expect(token).toBeTruthy();
     });
