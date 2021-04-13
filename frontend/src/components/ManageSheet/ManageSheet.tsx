@@ -70,7 +70,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
     api.addParticipantToSheet(sheetId, row.id);
-    setParticipants([...participants, row]);
+    setParticipants([...participants, {...row, participantID: row.id}]);
     getParticipants = () => Promise.resolve(participants as Participant[]);
   };
 

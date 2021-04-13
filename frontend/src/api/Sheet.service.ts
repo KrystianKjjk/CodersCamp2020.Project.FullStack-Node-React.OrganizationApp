@@ -80,4 +80,28 @@ export default class SheetService {
         return gradeSheetsRes.data as GradeSheetData[];
     }
 
+    setMentor = async (id: string, mentorId: string) => {
+        console.log('Error: Change mentor endpoint is not implemented!');
+    }
+
+    addParticipant = async (id: string, participantId: string) => {
+        await this.api.post(`/grade/sheets/${id}/participants/${participantId}`, {});
+    }
+
+    deleteParticipant = async (id: string, participantId: string) => {
+        await this.api.delete(`/grade/sheets/${id}/participants/${participantId}`);
+    }
+
+    addReviewer = async (id: string, mentorId: string) => {
+        await this.api.post(`/grade/sheets/${id}/reviewer/${mentorId}`, {});
+    }
+
+    setMentorReviewerGrade = async (id: string, mentorId: string, grade: any) => {
+        await this.api.patch(`grade/sheets/${id}/reviewer/${mentorId}/grades`, grade)
+    }
+
+    setMentorGrade = async (id: string, grade: any) => {
+        await this.api.patch(`grade/sheets/${id}/reviewer/mentor/grades`, grade)
+    }
+
 }
