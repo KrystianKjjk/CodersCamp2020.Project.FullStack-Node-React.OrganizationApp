@@ -20,7 +20,8 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
   const {refProjects, loading, loaded, error} = useSelector(selectReferenceProjects);
   const history = useHistory();
 
-  const courseID = localStorage.getItem('activeCourse');
+    const activeCourse = localStorage.getItem('activeCourse');
+    const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null;
 
   useEffect(() => {
     if(!loaded) dispatch(fetchRefProjects());
