@@ -101,10 +101,10 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/sections">
           <ManageSections />
         </PrivateRoute>
+        <PrivateRoute path="/gradesheets/:sheetId" component={ManageSheet}>
+        </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <ManageSheets />
-        </PrivateRoute>
-        <PrivateRoute path="/gradesheets/:sheetId" component={ManageSheet}>
         </PrivateRoute>
         <PrivateRoute path="/projects">
           <Projects />
