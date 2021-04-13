@@ -1,5 +1,11 @@
+export interface SheetGrade {
+    points: number;
+    description?: string;
+    comment?: string;
+};
+
 export interface Grades {
-    [grade: string]: number;
+    [grade: string]: SheetGrade;
 };
 
 export interface Participant {

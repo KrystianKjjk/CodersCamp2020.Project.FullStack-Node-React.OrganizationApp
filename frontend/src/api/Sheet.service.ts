@@ -1,5 +1,5 @@
 import BaseService from '../app/baseService';
-import { GradeSheet, GradeSheetData, TeamProjectData, UserData } from '../models';
+import { GradeSheet, GradeSheetData, TeamProjectData, UserData, SheetGrade, Grades, Participant } from '../models';
 import _ from 'lodash';
 
 
@@ -80,12 +80,30 @@ export default class SheetService {
         return gradeSheetsRes.data as GradeSheetData[];
     }
 
+    getParticipants = async (id: string): Promise<(Participant & {id: string})[]> => {
+        const sheet = await this.getSheet(id);
+        return sheet.participants.map(p => ({
+            ...p,
+            id: p.participantID,
+        }));
+    }
+
+    getMentorGrades = async (id: string): Promise<Grades> => {
+        const sheet = await this.getSheet(id);
+        return sheet.mentorGrades;
+    }
+
+
     setMentor = async (id: string, mentorId: string) => {
         console.log('Error: Change mentor endpoint is not implemented!');
     }
 
+    setProject = async (id: string, projectId: string) => {
+        console.log('Error: Change project endpoint is not implemented!');
+    }
+
     addParticipant = async (id: string, participantId: string) => {
-        await this.api.post(`/grade/sheets/${id}/participants/${participantId}`, {});
+        await this.api.post(`/grade/sheets/${id}/add/participant/${participantId}`, {});
     }
 
     deleteParticipant = async (id: string, participantId: string) => {
@@ -93,15 +111,15 @@ export default class SheetService {
     }
 
     addReviewer = async (id: string, mentorId: string) => {
-        await this.api.post(`/grade/sheets/${id}/reviewer/${mentorId}`, {});
+        await this.api.post(`/grade/sheets/${id}/add/reviewer/${mentorId}`, {});
     }
 
-    setMentorReviewerGrade = async (id: string, mentorId: string, grade: any) => {
-        await this.api.patch(`grade/sheets/${id}/reviewer/${mentorId}/grades`, grade)
+    setMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
+        await this.api.patch(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
     }
 
-    setMentorGrade = async (id: string, grade: any) => {
-        await this.api.patch(`grade/sheets/${id}/reviewer/mentor/grades`, grade)
+    setMentorGrade = async (id: string, grades: Grades) => {
+        await this.api.patch(`/grade/sheets/${id}/mentor/grades`, { grades })
     }
 
 }

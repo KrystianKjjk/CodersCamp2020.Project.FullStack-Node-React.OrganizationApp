@@ -1,32 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './ManageSheet.module.css';
 import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
 import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
-import { TeamProject, User, Participant } from '../../models';
+import { TeamProject, User, Participant, Grades, SheetGrade } from '../../models';
+import _ from 'lodash';
 import { SheetService, UserService } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import { useParams } from "react-router-dom";
+import { fetchData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
+import { useAppDispatch } from '../../app/hooks';
 
+type Grade = (SheetGrade) & {quality: string};
+
+function gradesObjectToArray(grades: Grades): Grade[] {
+  return Object.entries(grades).map(([quality, grade]) => ({
+    ...grade,
+    quality,
+    id: quality,
+  }) )
+};
+
+function gradesArrayToObject(grades: Grade[]): Grades {
+  return grades.reduce((obj, grade) => ({
+      ...obj,
+      [grade.quality]: _.omit(grade, 'quality'),
+  }), {});
+}
 
 export interface ManageSheetProps { };
 
 const ManageSheet: React.FC< ManageSheetProps > = () => {
   const api = new SheetService();
   const usersApi = new UserService();
+  const mentorGradesTableName = 'Mentor Grades';
+  const participantsTableName = 'Participants';
+  const dispatch = useAppDispatch();
   
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
   const [project, setProject] = useState<TeamProject>();
   const [reviewers, setReviewers] = useState<User[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
-  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+  const [mentorGrades, setMentorGrades] = useState<Grade[]>([]);
+  
+  const selectedParticipants = useRef<string[]>([]);
+  const selectedGrades = useRef<string[]>([]);
   // const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openProjectsModal, setOpenProjectsModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
+  const [openMentorGradesModal, setOpenMentorGradesModal] = useState<boolean>(false);
 
   // const selectedUsers = useRef<string[]>([]);
 
@@ -52,7 +78,12 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
           id: rev._id,
         }))
         setReviewers(reviewersArr);
-        setParticipants(sheet.participants);
+        const participantsArr = sheet.participants.map(p => ({
+          ...p,
+          id: p.participantID,
+        }))
+        setParticipants(participantsArr);
+        setMentorGrades( gradesObjectToArray(sheet.mentorGrades ?? {}) );
         setLoading('idle');
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,44 +98,49 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
       surname: row.surname });
   };
 
-  let getParticipants = () => Promise.resolve(participants as Participant[]);
+  let getParticipants = async () => api.getParticipants(sheetId);
+  let getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
 
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
     api.addParticipant(sheetId, row.id);
     setParticipants([...participants, {...row, participantID: row.id}]);
-    getParticipants = () => Promise.resolve(participants as Participant[]);
+    setTimeout(() => dispatch(fetchData(participantsTableName, getParticipants)), 300);
   };
 
   const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
-    setSelectedParticipants(row.selectionModel as string[]);
+    selectedParticipants.current = row.selectionModel as string[];
   }
 
   const deleteSelectedUsers = () => {
-    selectedParticipants.forEach(user => {
+    selectedParticipants.current.forEach(user => {
       api.deleteParticipant(sheetId, user);
     })
-    setSelectedParticipants([]);
+    selectedParticipants.current = [];
+    setTimeout(() => dispatch(fetchData(participantsTableName, getParticipants)), 300);
   }
 
-  // const columns = [
-  //   {field: 'surname', headerName: 'Last name', width: 150, sortable: true},
-  //   {field: 'name', headerName: 'First name', width: 150, sortable: true},
-  //   {field: 'averageGrade', headerName: 'Average grade', width: 150, sortable: true},
-  //   {field: 'status', headerName: 'Status', width: 150, sortable: true},
-  // ]
+  const handleGradeSelection = (row: GridSelectionModelChangeParams) => {
+    selectedGrades.current = row.selectionModel as string[];
+  }
 
-  // const handleUserSelection = (params: GridSelectionModelChangeParams) => {
-  //   selectedUsers.current = params.selectionModel as string[];
-  // }
+  const deleteSelectedGrades = () => {
+    const grades = gradesArrayToObject(mentorGrades);
+    const newMentorGrades = _.omit(grades, selectedGrades.current)
+    api.setMentorGrade(sheetId, newMentorGrades);
+    selectedGrades.current = [];
+    setMentorGrades( gradesObjectToArray(newMentorGrades) );
+    setTimeout(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)), 300);
+  }
 
-  // const deleteSelectedUsers = () => {
-  //   selectedUsers.current.forEach((user) => {
-  //     api.deleteUserFromTeam(sheetId, user);
-  //   })
-  //   setTeamMembers( teamMembers.filter( (user) => !( selectedUsers.current.includes(user.id) ) ) )
-  //   selectedUsers.current = [];
-  // }
+  const addMentorGrade = (id: string, grade: Grade) => {
+    const newGrades = {
+      [grade.quality]: _.omit(grade, 'quality')
+    }
+    api.setMentorGrade(id, newGrades);
+    setMentorGrades( gradesObjectToArray(newGrades) );
+    setTimeout(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)), 300);
+  }
 
   const mentorColumns = [
     {field: 'name', headerName: 'Mentor name', width: 270},
@@ -114,6 +150,12 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const participantColumns = [
     {field: 'name', headerName: 'Participant name', width: 270},
     {field: 'surname', headerName: 'Participant surname', width: 250},
+  ];
+
+  const gradeColumns = [
+    {field: 'quality', headerName: 'Quality', width: 270},
+    {field: 'points', headerName: 'Points', width: 250},
+    {field: 'comment', headerName: 'Comment', width: 250},
   ];
 
   return (
@@ -201,11 +243,49 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
             <div className={styles.table}>
               <Table 
                 aria-label='Participants table'
-                name='Participants' 
+                name={participantsTableName} 
                 columns={participantColumns} 
                 getData={getParticipants} 
                 checkboxSelection={true}
                 onSelectionModelChange={handleParticipantSelection}
+              />
+            </div>
+          </Paper>
+          <Paper className={styles.container}>
+            <div className={styles.manageContainer}>
+              { 
+                openMentorGradesModal && 
+                <FindModal<Grade> 
+                  onRowSelection={handleAddUserSelection} 
+                  getData={() => Promise.resolve(mentorGrades)} 
+                  columns={participantColumns}
+                  searchPlaceholder='Search by surname'
+                  searchBy='quality'
+                  name="Add Grade"
+                  open={openMentorGradesModal}
+                  handleClose={() => setOpenMentorGradesModal(false)}
+                  handleOpen={() => setOpenMentorGradesModal(true)}
+                />
+              }
+              <h2 className={styles.manageHeader}>Mentor grades</h2>
+              <div className={styles.buttons}>
+                <AddButton 
+                  aria-label='Add grade' 
+                  text='Add'
+                  onClick={() => addMentorGrade(sheetId, {quality: '---', points: 0})}
+                  /*onClick={() => setOpenMentorGradesModal(true)*/
+                />
+                <UButton text="Delete" color="secondary" onClick={deleteSelectedGrades}/>
+              </div>
+            </div>
+            <div className={styles.table}>
+              <Table 
+                aria-label='Grades table'
+                name={mentorGradesTableName}
+                columns={gradeColumns} 
+                getData={getMentorGrades} 
+                onSelectionModelChange={handleGradeSelection}
+                checkboxSelection
               />
             </div>
           </Paper>

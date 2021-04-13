@@ -2,7 +2,7 @@ import { UserData, Grades, GradeSheetData, Grade } from '../models';
 
 
 const sum = (numbers: number[]) => numbers.reduce((acc, x) => acc + x, 0);
-const sumPoints = (grades: Grades) => [sum( Object.values(grades) ), (Object.values(grades).length - 1) * 10];
+const sumPoints = (grades: Grades) => [sum( Object.values(grades).map(grade => grade.points) ), (Object.values(grades).length - 1) * 10];
 
 export function calcProjectGrade(sheet: GradeSheetData) {
     const mentorPoints = sumPoints(sheet.mentorGrades);
