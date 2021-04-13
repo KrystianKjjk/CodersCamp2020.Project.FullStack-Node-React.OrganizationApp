@@ -103,10 +103,20 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
+    async patchMentorReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}) {
+        const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
+        if( sheet === null || !(sheet.reviewers.includes(mentorId)) ) return null;
+        const index = sheet.mentorReviewerGrades.findIndex(grade => `${grade.mentorID}` === `${mentorId}`);
+        Object.assign(sheet.mentorReviewerGrades[index].grades, grades);
+        sheet.markModified('mentorReviewerGrades');
+        return await this.repository.save(sheet);
+    }
+
     async setMentorReviewerGrades(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if( sheet === null || !(sheet.reviewers.includes(mentorId)) ) return null;
         const index = sheet.mentorReviewerGrades.findIndex(grade => `${grade.mentorID}` === `${mentorId}`);
+        sheet.mentorReviewerGrades[index].grades = {};
         Object.assign(sheet.mentorReviewerGrades[index].grades, grades);
         sheet.markModified('mentorReviewerGrades');
         return await this.repository.save(sheet);

@@ -40,7 +40,8 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
         // Mentor reviewer routes
         router.get('/reviewers/me/:id/grade/sheets', HasId('id'), idValidation, c.getReviewerGradeSheets);
         router.get('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), idsValidation(), c.getReviewerGrades);
-        router.patch('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), propValid(validateGrades, 'grades'), idsValidation(), c.setMentorReviewerGrades);
+        router.patch('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), propValid(validateGrades, 'grades'), idsValidation(), c.patchMentorReviewerGrades);
+        router.put('/reviewers/me/:mentorId/grade/sheets/:id/grades', HasId('mentorId'), propValid(validateGrades, 'grades'), idsValidation(), c.setMentorReviewerGrades);
         
         return router;
     }
