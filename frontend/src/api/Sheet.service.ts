@@ -21,7 +21,7 @@ export default class SheetService {
         return sheets;
     }
 
-    getSheetInfo = async (sheet: GradeSheetData) => {
+    getSheetInfo = async (sheet: GradeSheetData): Promise<GradeSheet> => {
         let mentorName: string, mentorSurname: string;
         try {
             const mentorRes = await this.api.get('/users/' + sheet.mentorID);
@@ -43,9 +43,27 @@ export default class SheetService {
             [projectName, projectUrl, projectDescription] = ['---', '---', '---'];
         }
         
+        const participants = sheet.participants ?? [];
+        for(let i in participants) {
+            const user = participants[i];
+            try {
+                const userRes = await this.api.get('/users/' + user.participantID);
+                const userData = userRes.data as UserData;
+                participants[i].name = userData.name;
+                participants[i].surname = userData.surname;
+            } catch(err) {
+                participants[i].name = '---';
+                participants[i].surname = '---';
+            }    
+        };
+
         return {
             ..._.omit(sheet, '_id'),
             id: sheet._id,
+            projectID: sheet.projectID ?? '',
+            mentorID: sheet.mentorID ?? '',
+            participants,
+            mentorGrades: sheet.mentorGrades ?? {},
             mentorName,
             mentorSurname,
             projectName,

@@ -105,7 +105,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     setOpenUsersModal(false);
     api.addParticipant(sheetId, row.id);
     setParticipants([...participants, {...row, participantID: row.id}]);
-    setTimeout(() => dispatch(fetchData(participantsTableName, getParticipants)), 300);
+    getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   };
 
   const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
@@ -117,7 +117,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
       api.deleteParticipant(sheetId, user);
     })
     selectedParticipants.current = [];
-    setTimeout(() => dispatch(fetchData(participantsTableName, getParticipants)), 300);
+    getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   }
 
   const handleGradeSelection = (row: GridSelectionModelChangeParams) => {
@@ -137,8 +137,8 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     const newGrades = {
       [grade.quality]: _.omit(grade, 'quality')
     }
-    api.setMentorGrade(id, newGrades);
-    setMentorGrades( gradesObjectToArray(newGrades) );
+    api.patchMentorGrade(id, newGrades);
+    setMentorGrades( mentorGrades.concat([grade]) );
     setTimeout(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)), 300);
   }
 
