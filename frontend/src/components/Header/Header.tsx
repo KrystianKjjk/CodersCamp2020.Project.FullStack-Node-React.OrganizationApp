@@ -22,12 +22,15 @@ const Header = (props: HeaderProps) => {
     history.push(path);
   };
 
+    const takeHome = () => {
+        let path = `/home`;
+        history.push(path);
+    };
+
   return (
     <div className={styles.header}>
-      <div className={styles.logo}>
-        <Link to="/home" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+      <div className={styles.logo} onClick={takeHome}>
             <span>.</span>Coders<span>Camp</span>
-        </Link>
       </div>
       <div className={styles.activeCourseBox}>
         <p className={styles.activeCourse}>{activeCourse?.name}</p>
