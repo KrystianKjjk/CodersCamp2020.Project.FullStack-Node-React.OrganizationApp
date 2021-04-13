@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useParams } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 
@@ -18,7 +18,7 @@ import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
-import { UserType } from '../../models/User.model';
+import ManageUser from '../ManageUser';
 import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
 import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
@@ -48,7 +48,7 @@ const MainView: React.FC = () => {
       case UserType.Mentor:
         return <Mentor onLogout={() => setIsLogged(false)} />
       default:
-        return <User onLogout={() => setIsLogged(false)} />
+        return <Participant onLogout={() => setIsLogged(false)} />
     }
   }
 
@@ -88,6 +88,8 @@ function Admin(props: LoggedInViewProps) {
     <div className={styles.mainContainer} >
       <Header onLogout={props.onLogout} />
       <Switch>
+        <PrivateRoute path="/users/:userId" component={User}>
+        </PrivateRoute>
         <PrivateRoute path="/users">
           <ManageUsers />
         </PrivateRoute>
@@ -121,8 +123,7 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
-        <PrivateRoute path="/teams/:teamId">
-          <ManageTeam />
+        <PrivateRoute path="/teams/:teamId" component={ManageTeam}>
         </PrivateRoute>
         <PrivateRoute path="/teams">
           <ManageTeams />
@@ -167,7 +168,7 @@ function Mentor(props: LoggedInViewProps) {
   )
 }
 
-function User(props: LoggedInViewProps) {
+function Participant(props: LoggedInViewProps) {
   return (
     <div className={styles.mainContainer}>
       <Header onLogout={props.onLogout} />
@@ -196,6 +197,10 @@ function Projects() {
 }
 function TeamProjects() {
   return <TeamProjectsComponent getFunction={getTeamProjects}/>;
+}
+const User: React.FC< { } > = () => {
+  let { userId } = useParams<{userId: string}>();
+  return <ManageUser userID={userId} />
 }
 function MyTeam() {
   return <h2>My team</h2>;
