@@ -28,6 +28,7 @@ export interface UserData {
     status: UserStatus;
     type: UserType;
     grades: Grade[];
+    email?: string
 }
 
 export interface User {
@@ -39,6 +40,7 @@ export interface User {
     grades?: Grade[];
     averageGrade?: number;
     maxGrade?: number;
+    email?: string;
 }
 
 export interface IUser {
