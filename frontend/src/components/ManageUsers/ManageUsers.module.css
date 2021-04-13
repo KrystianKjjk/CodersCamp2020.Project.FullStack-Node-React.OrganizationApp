@@ -1,8 +1,8 @@
 .container {
     margin: auto;
-    max-width: 800px;
     display: flex;
     flex-direction: column;
+    text-align: left;
     font-family: Arial, Helvetica, sans-serif;
 }
 .mainHeader {
@@ -43,9 +43,10 @@
 }
 .checkboxesHeader {
     grid-area: header;
+    text-align: center;
 }
 .checkboxContainer {
     grid-area: checkboxes;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { List} from "@material-ui/core";
+import { List } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AppsIcon from "@material-ui/icons/Apps";
@@ -9,8 +9,10 @@ import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ListItemLink from '../ListItemLink';
+import { UserType } from '../../models/User.model'
+import { getUserFromLocalStorage } from "../../app/utils";
 
-export interface MenuProps {}
+export interface MenuProps { }
 
 const Menu: React.FC<MenuProps> = (props) => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -46,46 +48,128 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   const classes = useStyles();
 
+  const userData = getUserFromLocalStorage();
+
+  const VisibleOptions = () => {
+    //@ts-ignore
+    switch (parseInt(userData.userType)) {
+      case UserType.Admin:
+        return (
+          <List component="nav">
+            <div className={classes.userDiv}>
+              <AccountCircleIcon
+                style={{ paddingTop: 20, fontSize: 40 }}
+              ></AccountCircleIcon>
+              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p>Admin</p>
+            </div>
+            <ListItemLink
+              path="/users"
+              icon={<PeopleIcon />}
+              text="Users"
+            />
+            <ListItemLink
+              path="/courses"
+              icon={<NotificationsIcon />}
+              text="Courses"
+            />
+            <ListItemLink
+              path="/sections"
+              icon={<AppsIcon />}
+              text="Sections"
+            />
+            <ListItemLink
+              path="/gradesheets"
+              icon={<AssignmentIcon />}
+              text="Grade sheets"
+            />
+            <ListItemLink
+              path="/projects"
+              icon={<EmojiObjectsIcon />}
+              text="Projects"
+            />
+            <ListItemLink
+              path="/teamprojects"
+              icon={<EmojiObjectsIcon />}
+              text="Team projects"
+            />
+            <ListItemLink
+              path="/teams"
+              icon={<PeopleIcon />}
+              text="Teams"
+            />
+            <span className={classes.span}>Settings</span>
+            <ListItemLink
+              path="/myprofile"
+              icon={<SettingsIcon />}
+              text="My profile"
+            />
+          </List>
+        )
+
+      case UserType.Mentor:
+        return (
+          <List component="nav">
+            <div className={classes.userDiv}>
+              <AccountCircleIcon
+                style={{ paddingTop: 20, fontSize: 40 }}
+              ></AccountCircleIcon>
+              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p>Mentor</p>
+            </div>
+            <ListItemLink
+              path="/gradesheets"
+              icon={<AssignmentIcon />}
+              text="Grade sheets"
+            />
+            <ListItemLink 
+              path="/team" 
+              icon={<PeopleIcon />} 
+              text="Team" 
+            />
+            <span className={classes.span}>Settings</span>
+            <ListItemLink
+              path="/myprofile"
+              icon={<SettingsIcon />}
+              text="My profile"
+            />
+          </List>
+        )
+
+      default:
+        return (
+          <List component="nav">
+            <div className={classes.userDiv}>
+              <AccountCircleIcon
+                style={{ paddingTop: 20, fontSize: 40 }}
+              ></AccountCircleIcon>
+              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p>Participant</p>
+            </div>
+            <ListItemLink
+              path="/grades"
+              icon={<AssignmentIcon />}
+              text="Grades"
+            />
+            <ListItemLink 
+              path="/team" 
+              icon={<PeopleIcon />} 
+              text="Team" 
+            />
+            <span className={classes.span}>Settings</span>
+            <ListItemLink
+              path="/myprofile"
+              icon={<SettingsIcon />}
+              text="My profile"
+            />
+          </List>
+        )
+    }
+  }
+
   return (
     <div className={classes.root}>
-      <List component="nav">
-        <div className={classes.userDiv}>
-          <AccountCircleIcon
-            style={{ paddingTop: 20, fontSize: 40 }}
-          ></AccountCircleIcon>
-          <p style={{ fontWeight: 500 }}>Name Surname</p>
-          <p>Admin</p>
-        </div>
-        <ListItemLink path="/users" icon={<PeopleIcon />} text="Users" />
-        <ListItemLink
-          path="/courses"
-          icon={<NotificationsIcon />}
-          text="Courses"
-        />
-        <ListItemLink path="/sections" icon={<AppsIcon />} text="Sections" />
-        <ListItemLink
-          path="/gradesheets"
-          icon={<AssignmentIcon />}
-          text="Grade sheets"
-        />
-        <ListItemLink
-          path="/projects"
-          icon={<EmojiObjectsIcon />}
-          text="Projects"
-        />
-        <ListItemLink
-          path="/teamprojects"
-          icon={<EmojiObjectsIcon />}
-          text="Team projects"
-        />
-        <ListItemLink path="/teams" icon={<PeopleIcon />} text="Teams" />
-        <span className={classes.span}>Settings</span>
-        <ListItemLink
-          path="/myprofile"
-          icon={<SettingsIcon />}
-          text="My profile"
-        />
-      </List>
+      <VisibleOptions />
     </div>
   );
 };

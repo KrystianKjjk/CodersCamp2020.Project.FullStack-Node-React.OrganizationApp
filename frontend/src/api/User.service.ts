@@ -53,7 +53,6 @@ export default class UserService {
                 return u._id !== user.id;
             }) );
         });
-        console.log({result});
         return result;
     }
 

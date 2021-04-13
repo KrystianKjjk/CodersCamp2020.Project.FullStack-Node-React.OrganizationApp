@@ -18,27 +18,31 @@ export interface TeamProjectState {
 interface initialstate {
   projectEditMode: boolean,
   projectDeleteMode: boolean,
+  sectionSelectionMode: boolean,
   loading: boolean,
   hasErrors: boolean,
   project: TeamProjectState 
 }
 
+export const initialProjectState = {
+  _id: "loading...",
+  teamId: "loading...",
+  parentProjectId: "loading...",
+  projectName: "loading...",
+  projectUrl: "loading...",
+  description: "loading...",
+  mentor: "loading...",
+  referenceProjectName: "loading...",
+  sectionName: "loading..."
+}
+
 const initialState: initialstate = {
   projectEditMode: false,
   projectDeleteMode: false,
+  sectionSelectionMode: false,
   loading: false,
   hasErrors: false,
-  project: {
-    _id: "loading...",
-    teamId: "loading...",
-    parentProjectId: "loading...",
-    projectName: "loading...",
-    projectUrl: "loading...",
-    description: "loading...",
-    mentor: "loading...",
-    referenceProjectName: "loading...",
-    sectionName: "loading..."
-  }
+  project: initialProjectState
 };
 
 export const teamProjectSlice = createSlice({
@@ -66,6 +70,9 @@ export const teamProjectSlice = createSlice({
     },
     switchDeleteMode: state => {
       if (!state.loading || state.projectDeleteMode === true) state.projectDeleteMode = !state.projectDeleteMode;
+    },
+    switchSectionSelectionMode: state => {
+      if (!state.loading || state.projectDeleteMode === true) state.sectionSelectionMode = !state.sectionSelectionMode;
     }
   }
 });
@@ -76,7 +83,8 @@ export const {
   projectDeleteSuccess,
   projectOperationFailure, 
   switchEditMode, 
-  switchDeleteMode 
+  switchDeleteMode,
+  switchSectionSelectionMode
 } = teamProjectSlice.actions;
 
 // if you want, add selectors here, change the one below, remember to register reducer in store.ts
@@ -93,25 +101,34 @@ export function getProjectById(id: string) {
       const responseProject = await api.get(`/teams/projects/${id}`);
       const data = await responseProject.data;
 
-      const responseTeam = await api.get(`teams/${data.teamId}`)
-      const dataTeam = await responseTeam.data;
-      data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
-
-      const responseParentProject = await api.get(`/projects/${data.parentProjectId}`);
-      const dataParentProject = await responseParentProject.data;
-      data.referenceProjectName = dataParentProject.projectName;
+      try {
+        const responseTeam = await api.get(`teams/${data.teamId}`)
+        const dataTeam = await responseTeam.data;
+        data.mentor = `${dataTeam.mentor.name} ${dataTeam.mentor.surname}`;
+      }
+      catch (error) {
+        console.log('Team', error.message)
+      }
 
       try {
-        const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
-        const dataSection = await responseSection.data;
-        data.sectionName = dataSection.name;
+        const responseParentProject = await api.get(`/projects/${data.parentProjectId}`);
+        const dataParentProject = await responseParentProject.data;
+        data.referenceProjectName = dataParentProject.projectName;
+
+        try {
+          const responseSection = await api.get(`/sections/${dataParentProject.sectionId}`);
+          const dataSection = await responseSection.data;
+          data.sectionName = dataSection.name;
+        }
+        catch (error) {
+          console.log('Section', error.message)
+        }
       }
-      catch (error){
-        console.log('Section',error.message)
+      catch (error) {
+        console.log('Parent Project', error.message)
       }
 
       dispatch(projectOperationSuccess(data));
-      dispatch(switchEditMode);
     } catch (error) {
       dispatch(projectOperationFailure());
     }
@@ -126,7 +143,7 @@ export function saveProjectById(project: Object, id: string) {
       await api.put(`/teams/projects/${id}`, JSON.stringify(project));
     } catch (error) {
       dispatch(projectOperationFailure());
-    }
+    }    
     dispatch(switchEditMode());
   }
 }
@@ -143,4 +160,31 @@ export function deleteProjectById(id: string) {
     }
     dispatch(switchDeleteMode());
   }
+}
+
+export function saveProjectSectionById(project: TeamProjectState, sectionId: string) {
+  let responseParentProjectName: string, responseSectionName: string;
+
+  return async (dispatch: Dispatch) => {
+    dispatch(projectOperation());
+    let newProject = {
+      ...project, 
+      parentProjectId: ''};
+
+    try {
+      const allReferenceProjects = await api.get(`/projects`);
+      //@ts-ignore      
+      const referenceProject = allReferenceProjects.data.find(project => project.sectionId === sectionId);
+      newProject.parentProjectId = referenceProject._id;      
+      await dispatch(projectOperationSuccess(newProject));    
+      dispatch(switchSectionSelectionMode());       
+      responseParentProjectName = (await api.get(`/projects/${newProject.parentProjectId}`)).data.projectName;
+      responseSectionName = (await api.get(`/sections/${referenceProject.sectionId}`)).data.name;
+    } catch (error) {
+      dispatch(projectOperationFailure());
+      console.log(error);
+      dispatch(switchSectionSelectionMode());  
+    }        
+    return [responseParentProjectName, responseSectionName]  
+  }  
 }
