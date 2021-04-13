@@ -81,83 +81,77 @@ const MyProfile = () => {
     };
   };
 
-  const PasswordChangeModal = () => {
-    if (isPasswordChange && !passwordChanged) {
-      return (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Please provide old and new password to proceed:</h2>
-            <Grid container spacing={2} className={styles.passwordInput}>
-              <Grid item xs={12}>
-                <StyledTextField
-                  value={oldPassword}
-                  onChange={e => setOldPassword(e.target.value)}
-                  name="password"
-                  label="Old Password"
-                  type="password"
-                  data-testid="r-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <StyledTextField
-                  value={newPassword}
-                  onChange={e => setNewPassword(e.target.value)}
-                  name="passwordconfirm"
-                  label="New Password"
-                  type="password"
-                  data-testid="r-cpassword"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              id={styles.buttonEditPassword}
-              data-testid="rp-button"
-              onClick={handleSubmit}
-            >
-              Send
-          </Button>
-
-            <div>
-              <Button id={styles.buttonAbort} onClick={() => setIsPasswordChange(!isPasswordChange)}>Cancel</Button>
-            </div>
-          </div>
-
-          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError} data-testid='li-snack'>
-            <Alert onClose={handleCloseError} severity="error">
-              <FormHelperText >Something went wrong :( Please try again</FormHelperText>
-            </Alert>
-          </Snackbar>
-        </div>)
-    }
-    else if (isPasswordChange && passwordChanged) {
-      return (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h3>Your password had been changed :)</h3>
-            <div>
-              <Button id={styles.buttonConfirm} onClick={() => {
-                setIsPasswordChange(!isPasswordChange);
-                setPasswordChanged(false);
-              }
-              }>Cool, thank you!</Button>
-            </div>
-          </div>
-        </div>
-      )
-    }
-    else return null
-  }
-
-
   if (error) {
     return <div className={styles.error}>Something went wrong :(</div>;
   } else if (!isLoaded || !user) {
     return <CircularProgress className={styles.loading} />
-  } else {
+  } if (isPasswordChange && !passwordChanged) {
+    return (
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <h2>Please provide old and new password to proceed:</h2>
+          <Grid container spacing={2} className={styles.passwordInput}>
+            <Grid item xs={12}>
+              <StyledTextField
+                value={oldPassword}
+                onChange={e => setOldPassword(e.target.value)}
+                name="password"
+                label="Old Password"
+                type="password"
+                data-testid="r-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <StyledTextField
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                name="passwordconfirm"
+                label="New Password"
+                type="password"
+                data-testid="r-cpassword"
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            id={styles.buttonEditPassword}
+            data-testid="rp-button"
+            onClick={handleSubmit}
+          >
+            Send
+        </Button>
+          <div>
+            <Button id={styles.buttonAbort} onClick={() => setIsPasswordChange(!isPasswordChange)}>Cancel</Button>
+          </div>
+        </div>
+
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError} data-testid='li-snack'>
+          <Alert onClose={handleCloseError} severity="error">
+            <FormHelperText >Something went wrong :( Please try again</FormHelperText>
+          </Alert>
+        </Snackbar>
+      </div>)
+  }
+  else if (isPasswordChange && passwordChanged) {
+    return (
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <h2>Your password had been changed :)</h2>
+          <div>
+            <Button id={styles.buttonConfirm} onClick={() => {
+              setIsPasswordChange(!isPasswordChange);
+              setPasswordChanged(false);
+            }
+            }>Cool, thank you!</Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  else {
     return (
       <div className={styles.myProfileContainer}>
         <div className={styles.teamProjectHeader}>
@@ -189,8 +183,7 @@ const MyProfile = () => {
               <Button id={styles.buttonEdit} onClick={() => { setIsPasswordChange(!isPasswordChange) }}>Change</Button>
             </div>
           </div>
-        </div>
-        <PasswordChangeModal />
+        </div>       
       </div>
     )
   }
