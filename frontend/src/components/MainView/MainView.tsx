@@ -18,7 +18,7 @@ import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
 import ManageUser from '../ManageUser';
-import { UserType } from '../../models/User.model'
+import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
 import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
 
@@ -67,6 +67,9 @@ function LoggedOut(props: LoggedOutViewProps) {
         </Route>
         <Route path="/resetpassword">
           <ResetPassword />
+        </Route>
+        <Route path="/passwordReset">
+          <ResetPasswordFromLink />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />
