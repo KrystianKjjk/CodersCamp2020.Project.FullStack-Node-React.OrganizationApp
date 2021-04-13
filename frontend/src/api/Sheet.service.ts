@@ -95,11 +95,11 @@ export default class SheetService {
 
 
     setMentor = async (id: string, mentorId: string) => {
-        console.log('Error: Change mentor endpoint is not implemented!');
+        await this.api.put(`/grade/sheets/${id}/set/mentor/${mentorId}`, {});
     }
 
     setProject = async (id: string, projectId: string) => {
-        console.log('Error: Change project endpoint is not implemented!');
+        await this.api.put(`/grade/sheets/${id}/set/project/${projectId}`, {});
     }
 
     addParticipant = async (id: string, participantId: string) => {
@@ -115,10 +115,18 @@ export default class SheetService {
     }
 
     setMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
+        await this.api.put(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
+    }
+
+    patchMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
         await this.api.patch(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
     }
 
     setMentorGrade = async (id: string, grades: Grades) => {
+        await this.api.put(`/grade/sheets/${id}/mentor/grades`, { grades })
+    }
+
+    patchMentorGrade = async (id: string, grades: Grades) => {
         await this.api.patch(`/grade/sheets/${id}/mentor/grades`, { grades })
     }
 

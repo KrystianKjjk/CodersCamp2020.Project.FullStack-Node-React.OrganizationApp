@@ -190,6 +190,20 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                 handleOpen={() => setOpenMentorsModal(true)}
               />
             }
+            { 
+              // openProjectsModal && 
+              // <FindModal<User> 
+              //   onRowSelection={handleProjectSelection} 
+              //   getData={() => usersApi.} 
+              //   columns={mentorColumns}
+              //   searchPlaceholder='Search by surname'
+              //   searchBy='surname'
+              //   name='Find mentor'
+              //   open={openMentorsModal}
+              //   handleClose={() => setOpenMentorsModal(false)}
+              //   handleOpen={() => setOpenMentorsModal(true)}
+              // />
+            }
               <ul className={styles.teamInfo}>
               <li className={styles.teamInfoRow}>
                   <span>Project:</span>
@@ -220,7 +234,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                 openUsersModal && 
                 <FindModal<User> 
                   onRowSelection={handleAddUserSelection} 
-                  getData={() => usersApi.getParticipantsNotInTeam()} 
+                  getData={() => usersApi.getUsersOfType('Participant')} 
                   columns={participantColumns}
                   searchPlaceholder='Search by surname'
                   searchBy='surname'
