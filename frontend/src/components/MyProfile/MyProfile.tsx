@@ -1,88 +1,85 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './MyProfile.module.css';
 import UserService from "../../api/users.service";
 import BaseService from "../../app/baseService";
 import {
-  CircularProgress, 
-  Button, 
+  CircularProgress,
+  Button,
   Grid,
-  Snackbar,  
+  Snackbar,
   FormHelperText
 } from "@material-ui/core";
-import {IUser} from "../../models/User.model";
+import { IUser } from "../../models/User.model";
 import StyledTextField from '../StyledTextField'
-import { Error } from 'mongoose';
-import MuiAlert, { AlertProps }  from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 export interface MyProfileProps {
 }
 
 const MyProfile = () => {
-  const userService = new UserService(new BaseService());
-
+  
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [user, setUser] = useState<IUser | undefined>(undefined);
   const [error, setError] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isPasswordChange, setIsPasswordChange] = useState(false);
-
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [isPasswordChange, setIsPasswordChange] = useState(false);  
   const [passwordChanged, setPasswordChanged] = useState(false);
-  
   const [openError, setOpenError] = useState(false);
 
+  const userService = new UserService(new BaseService());
   useEffect(() => {
     getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
+  }, []);
 
   function getUser() {
     const userId = localStorage.getItem('id');
     if (!userId) return null
     userService.getUser(userId)
-        .then(res => {
-            if (res.status === 200) {
-                setUser(
-                    {
-                        name: res.data.name,
-                        surname: res.data.surname,
-                        type: res.data.type,
-                        status: res.data.status,
-                        email: res.data.email,
-                    })
-                    setIsLoaded(true);
-            } else {
-                throw Error;
-            }
-        }).catch(err => {
+      .then(res => {
+        if (res.status === 200) {
+          setUser(
+            {
+              name: res.data.name,
+              surname: res.data.surname,
+              type: res.data.type,
+              status: res.data.status,
+              email: res.data.email,
+            })
+          setIsLoaded(true);
+        } else {
+          throw Error;
+        }
+      }).catch(err => {
         setError(err);
         setIsLoaded(true);
-    })
-}
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
-  if (reason === 'clickaway') {
-    return;
+      })
   }
-  setOpenError(false);
-};
 
-const handleSubmit = async () => {
-  const service = new BaseService();
-  const id = localStorage.getItem('id');
-  try {
-    await service.post('users/changepassword', { id, oldPassword, newPassword })
-    setPasswordChanged(true);
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-  catch (error) {
-    console.log(error)
-    setOpenError(true);
+
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenError(false);
   };
-};
+
+  const handleSubmit = async () => {
+    const service = new BaseService();
+    const id = localStorage.getItem('id');
+    try {
+      await service.post('users/changepassword', { id, oldPassword, newPassword })
+      setPasswordChanged(true);
+    }
+    catch (error) {
+      console.log(error)
+      setOpenError(true);
+    };
+  };
 
   const PasswordChangeModal = () => {
     if (isPasswordChange && !passwordChanged) {
@@ -92,7 +89,7 @@ const handleSubmit = async () => {
             <h4>Please provide old and new password to proceed:</h4>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <StyledTextField
+                <Input
                   value={oldPassword}
                   onChange={e => setOldPassword(e.target.value)}
                   name="password"
@@ -139,30 +136,30 @@ const handleSubmit = async () => {
     else if (isPasswordChange && passwordChanged) {
       return (
         <div className={styles.modal}>
-           <div className={styles.modalContent}>
-               <h3>Your password had been changed :)</h3>
-               <div>
-                <Button id={styles.buttonConfirm} onClick={() => {
-                  setIsPasswordChange(!isPasswordChange);
-                  setPasswordChanged(false);
-                }                
-                }>Cool, thank you!</Button>
+          <div className={styles.modalContent}>
+            <h3>Your password had been changed :)</h3>
+            <div>
+              <Button id={styles.buttonConfirm} onClick={() => {
+                setIsPasswordChange(!isPasswordChange);
+                setPasswordChanged(false);
+              }
+              }>Cool, thank you!</Button>
             </div>
-           </div>
-        </div>       
+          </div>
+        </div>
       )
     }
     else return null
   }
 
 
-if (error) {
-  return <div className={styles.error}>Something went wrong :(</div>;
-} else if (!isLoaded || !user) {
-  return <CircularProgress className={styles.loading}/>
-} else {
-  return (
-    <div className={styles.myProfileContainer}>
+  if (error) {
+    return <div className={styles.error}>Something went wrong :(</div>;
+  } else if (!isLoaded || !user) {
+    return <CircularProgress className={styles.loading} />
+  } else {
+    return (
+      <div className={styles.myProfileContainer}>
         <div className={styles.teamProjectHeader}>
           <span className={styles.teamProjectHeaderName}>My Profile</span>
         </div>
@@ -174,29 +171,29 @@ if (error) {
             <div>Permission Level:</div>
             <div>Status:</div>
             <div>Email:</div>
-            <br/><br/>
+            <br /><br />
             <div>Change password</div>
           </div>
           <div className={styles.attributeValuesContainer}>
             <div>{user.name}</div>
             <div>{user.surname}</div>
             <div>
-                <PermissionLabel type={user.type}/>
+              <PermissionLabel type={user.type} />
             </div>
             <div>
-              <StatusLabel status={user.status}/>
-              </div>
+              <StatusLabel status={user.status} />
+            </div>
             <div>{user.email}</div>
-            <br/><br/>
+            <br /><br />
             <div>
-              <Button id={styles.buttonEdit} onClick= {() => {setIsPasswordChange(!isPasswordChange)}}>Change</Button>
+              <Button id={styles.buttonEdit} onClick={() => { setIsPasswordChange(!isPasswordChange) }}>Change</Button>
             </div>
           </div>
         </div>
-        <PasswordChangeModal/>
-      </div>      
-  )
-}
+        <PasswordChangeModal />
+      </div>
+    )
+  }
 };
 
 export default MyProfile;
@@ -205,10 +202,10 @@ const StatusLabel = (props: any) => {
   if (props.status === 0) return (
     <label className={styles.status_radio_button__blue}>Active</label>
   )
-  else if (props.status === 1) return (    
+  else if (props.status === 1) return (
     <label className={styles.status_radio_button__red}>Resigned</label>
   )
-  else return (    
+  else return (
     <label className={styles.status_radio_button__green}>Archived</label>
   )
 }
@@ -217,10 +214,10 @@ const PermissionLabel = (props: any) => {
   if (props.type === 1) return (
     <label className={styles.status_radio_button__blue}>Participant</label>
   )
-  else if (props.type === 2) return (    
+  else if (props.type === 2) return (
     <label className={styles.status_radio_button__red}>Mentor</label>
   )
-  else return (    
+  else return (
     <label className={styles.status_radio_button__green}>Admin</label>
   )
 }
