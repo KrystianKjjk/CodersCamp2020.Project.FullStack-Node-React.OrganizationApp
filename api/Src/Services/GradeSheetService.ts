@@ -72,6 +72,28 @@ export default class GradeSheetService {
         return await this.repository.save(sheet);
     }
 
+    async setMentor(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
+        const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
+        sheet.mentorID = mentorId;
+        return await this.repository.save(sheet);
+    }
+
+    async setProject(gradeSheetId: mongoose.Types.ObjectId, projectId: mongoose.Types.ObjectId) {
+        const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
+        sheet.projectID = projectId;
+        return await this.repository.save(sheet);
+    }
+
+    async patchMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}, mentorId: mongoose.Types.ObjectId | null = null) {
+        const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
+        if( sheet === null) return null;
+        if( mentorId && !(sheet.mentorID.equals(mentorId)) ) return 'FORBIDDEN';
+        sheet.mentorGrades = {};
+        Object.assign(sheet.mentorGrades, grades);
+        sheet.markModified('mentorGrades');
+        return await this.repository.save(sheet);
+    }
+
     async setMentorGrades(gradeSheetId: mongoose.Types.ObjectId, grades: {[gradeName: string]: Grade}, mentorId: mongoose.Types.ObjectId | null = null) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         if( sheet === null) return null;
