@@ -49,8 +49,14 @@ async function getProjectDetailedData(project: TeamProject) {
     }
 
     if (project.teamId.mentor) {
-        const mentor = await api.get(`/users/${project.teamId.mentor}`);
-        returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
+        try{
+            const mentor = await api.get(`/users/${project.teamId.mentor}`);
+            returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
+        }
+        catch(error){
+            console.log(error)
+        }      
+        
     }
     if (project.parentProjectId) {
         returnProject.ReferenceProject = project.parentProjectId.projectName;
