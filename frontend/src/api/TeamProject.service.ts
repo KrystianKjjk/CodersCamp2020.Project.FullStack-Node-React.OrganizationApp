@@ -35,7 +35,7 @@ export default class TeamProjectService {
     }
 
     getTeamProject = async (id: string): Promise<TeamProject> => {
-        const response = await this.api.get('/team/projects/' + id);
+        const response = await this.api.get('/teams/projects/' + id);
         const project: TeamProjectData = response.data;
         return {
             ...project,

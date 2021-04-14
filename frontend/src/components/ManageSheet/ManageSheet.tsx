@@ -35,7 +35,13 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
-  const [project, setProject] = useState<TeamProject>();
+  const [project, setProject] = useState({
+    id: '',
+    Name: '---',
+    Mentor: '--- ---',
+    projectUrl: '---',
+    description: '---',
+  });
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);
   const [mentorGrades, setMentorGrades] = useState<Grades>({});
   
@@ -53,12 +59,10 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   });
 
   let { sheetId } = useParams<{sheetId: string}>();
-  console.log(sheetId);
 
   const loadSheet = () => {
     api.getSheet(sheetId)
       .then(sheet => {
-        console.log(sheet)
         setMentor({
           id: sheet.mentorID,
           name: sheet.mentorName,
@@ -66,8 +70,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
         });
         setProject({
           id: sheet.projectID,
-          name: sheet.projectName,
-          url: sheet.projectUrl,
+          Name: sheet.projectName,
+          Mentor: `${sheet.mentorName} ${sheet.mentorSurname}`,
+          projectUrl: sheet.projectUrl,
           description: sheet.projectDescription,
         });
         const reviewersArr = sheet.reviewers.map((rev) => ({
@@ -109,10 +114,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   };
 
   const handleProjectSelection = (row: any) => {
-    console.log(row);
     setOpenProjectsModal(false);
     api.setProject(sheetId, row.id)
-      .then(() => setProject(row.Name))
+      .then(() => setProject(row))
       .catch((error) => console.log(error));
   }
 
@@ -265,7 +269,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
               <ul className={styles.teamInfo}>
               <li className={styles.teamInfoRow}>
                   <span>Project:</span>
-                  <span>{project?.name ?? '---'}</span>
+                  <span>{project.Name}</span>
                   <UButton test-id='change-mentor' text="Change" color="primary" onClick={() => setOpenProjectsModal(true)}/>
                 </li>
                 <li className={styles.teamInfoRow}>
@@ -292,11 +296,11 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
               <ul className={styles.teamInfo}>
               <li className={styles.teamInfoRow}>
                   <span>Url:</span>
-                  <span>{project?.url ?? '---'}</span>
+                  <span>{project.projectUrl}</span>
                 </li>
                 <li className={styles.teamInfoRow}>
                   <span>Description:</span>
-                  <span>{project?.description ?? '---'}</span>
+                  <span>{project.description}</span>
                 </li>
               </ul>
             </div>
