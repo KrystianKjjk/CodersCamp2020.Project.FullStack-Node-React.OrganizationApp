@@ -38,21 +38,22 @@ The project repository is split into two parts:
 - **Api** folder containing all the backend functionalities
 - **Frontend** folder containing the client-side part of the application
 
-## Application functionalities
+## Application functionalities 
+Functionalities marked in **bold** are available in the frontend application, not-bolded ones have only backend functionalities.
 - For Coders Camp organizers
-    - managing the course participants
-    - grouping the users with mentors
-    - having an overview of users progress
-    - sharing the learning materials with the participants
+    - **managing the course participants**
+    - **grouping the users with mentors**
+    - **having an overview of users progress**
+    - **sharing the learning materials with the participants** 
 - For Coders Camp mentors
-    - having an overview of group progress
-    - private sharing the grades with group members
-    - grading the projects (for own group and the group where the mentor is a reviewer)
-- For Coders Camp participants      
-    - checking the course timeline
-    - overview of the grades
+    - having an overview of group progress 
+    - **private sharing the grades with group members**
+    - **grading the projects (for own group and the group where the mentor is a reviewer)**
+- For Coders Camp participants   
+    - **overview of the grades**  
+    - checking the course timeline 
     - access to the learning materials
-    - submitting a project
+    - submitting a project 
 
 # Frontend application description
 ![Interface screenshot](https://i.imgur.com/z6UJbO7.png)
