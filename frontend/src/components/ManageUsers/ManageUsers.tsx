@@ -7,7 +7,7 @@ import Table from '../ReusableTable';
 import { filterData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { UserService } from '../../api';
-
+import { useHistory } from 'react-router-dom';
 
 interface CheckboxProps {
   name: string;
@@ -33,7 +33,9 @@ const PrimaryCheckBox: React.FC<CheckboxProps> = ({ name, checked, onChange }) =
 export interface ManageUsersProps { };
 
 const ManageUsers: React.FC< ManageUsersProps > = () => {
+
   const api = useRef<UserService>(new UserService());
+  const history = useHistory();
   const tableName = 'Users';
   const dispatch = useAppDispatch();
   const [statusFilters, setStatusFilters] = useState({
@@ -87,67 +89,80 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
     {field: 'surname', headerName: 'Surname', width: 150, sortable: true},
     {field: 'type', headerName: 'Type', width: 150, sortable: true},
     {field: 'status', headerName: 'Status', width: 150, sortable: true},
-  ]
+  ];
+
+  function handleSelection(params: any, e: any) {
+    const userID = params.row.id;
+    const path = `users/${userID}`;
+    history.push(path);
+  }
   
   return (
-    <Container className={styles.container} aria-label='Manage Users'>
-      <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Users</h2>
-        <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
-      </Paper>
-      <Paper className={styles.tableContainer}>
-        <div className={styles.manageContainer}>
-          <h2 className={styles.manageHeader}>Manage Users</h2>
-          <span className={styles.selectSortBy}>
-            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
-          </span>
-          <h3 className={styles.checkboxesHeader}>Filter options</h3>
-          <div className={styles.checkboxContainer}>
-            <span>
-              <PrimaryCheckBox 
-                name='Active'
-                checked={statusFilters.Active}
-                onChange={changeStatusFilter}
-              />
-              <PrimaryCheckBox 
-                name='Archived'
-                checked={statusFilters.Archived}
-                onChange={changeStatusFilter}
-              />
-              <PrimaryCheckBox 
-                name='Resigned'
-                checked={statusFilters.Resigned}
-                onChange={changeStatusFilter}
-              />
+      <Container className={styles.container} aria-label='Manage Users'>
+        <CssBaseline />
+        <Paper className={styles.mainHeader}>
+          <h2>Users</h2>
+          <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
+        </Paper>
+        <Paper className={styles.tableContainer}>
+          <div className={styles.manageContainer}>
+            <h2 className={styles.manageHeader}>Manage Users</h2>
+            <span className={styles.selectSortBy}>
+              <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
             </span>
-            <span>
-              <PrimaryCheckBox 
-                name='Candidate'
-                checked={typeFilters.Candidate}
-                onChange={changeTypeFilter}
-              />
-              <PrimaryCheckBox 
-                name='Participant'
-                checked={typeFilters.Participant}
-                onChange={changeTypeFilter}
-              />
-              <PrimaryCheckBox 
-                name='Mentor'
-                checked={typeFilters.Mentor}
-                onChange={changeTypeFilter}
-              />
-              <PrimaryCheckBox 
-                name='Admin'
-                checked={typeFilters.Admin}
-                onChange={changeTypeFilter}
-              />
-            </span>
+            <h3 className={styles.checkboxesHeader}>Filter options</h3>
+            <div className={styles.checkboxContainer}>
+              <span>
+                <PrimaryCheckBox
+                  name='Active'
+                  checked={statusFilters.Active}
+                  onChange={changeStatusFilter}
+                />
+                <PrimaryCheckBox
+                  name='Archived'
+                  checked={statusFilters.Archived}
+                  onChange={changeStatusFilter}
+                />
+                <PrimaryCheckBox
+                  name='Resigned'
+                  checked={statusFilters.Resigned}
+                  onChange={changeStatusFilter}
+                />
+              </span>
+              <span>
+                <PrimaryCheckBox
+                  name='Candidate'
+                  checked={typeFilters.Candidate}
+                  onChange={changeTypeFilter}
+                />
+                <PrimaryCheckBox
+                  name='Participant'
+                  checked={typeFilters.Participant}
+                  onChange={changeTypeFilter}
+                />
+                <PrimaryCheckBox
+                  name='Mentor'
+                  checked={typeFilters.Mentor}
+                  onChange={changeTypeFilter}
+                />
+                <PrimaryCheckBox
+                  name='Admin'
+                  checked={typeFilters.Admin}
+                  onChange={changeTypeFilter}
+                />
+              </span>
+            </div>
           </div>
-        </div>
-        {api.current && <Table name={tableName} columns={columns} getData={api.current.getUsers}/>}
-      </Paper>
-    </Container>
+          {api.current &&
+            <Table
+                name={tableName}
+                columns={columns}
+                getData={api.current.getUsers}
+                onRowClick={handleSelection}
+            />
+          }
+        </Paper>
+      </Container>
   );
 };
 

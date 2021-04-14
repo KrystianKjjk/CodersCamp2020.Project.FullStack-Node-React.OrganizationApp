@@ -14,9 +14,11 @@ export default class PasswordService{
         this.passwordTokenRepository = passwordTokenRepository
     }
 
-    async requestPasswordReset(userId: mongoose.Types.ObjectId) {
-        const user = await this.userRepository.getById(userId);
+    async requestPasswordReset(email: string) {
+        const users = await this.userRepository.getAll();
+        const user = users.find((user) => user.email === email);
         if (!user) throw new Error ("User does not exist!");
+        const userId = user._id
         let token = await this.passwordTokenRepository.getById(userId);
         if (token) await this.passwordTokenRepository.deleteById(userId);
         
@@ -39,7 +41,6 @@ export default class PasswordService{
 
     async resetPassword(userId:mongoose.Types.ObjectId, token: string, password: string){
         let resetToken = await this.passwordTokenRepository.getById(userId);
-        console.log(resetToken);
         if (!resetToken) throw new Error("Invalid or expired password reset token");
         const isValid = await bcrypt.compare(token, resetToken.token);
         if (!isValid) throw new Error("Invalid or expired password reset token");

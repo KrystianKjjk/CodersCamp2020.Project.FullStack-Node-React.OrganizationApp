@@ -14,10 +14,11 @@ import ManageGrades from "../ManageGrades";
 import UButton from "../UButton";
 
 import styles from './ManageUser.module.css';
+import ConfirmationDialog from "../ConfirmationDialog";
 
 export interface ManageUserProps {
-    userID: string;
 }
+
 function Alert(props: any) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -32,10 +33,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     const [isEdit, setIsEdit] = useState(false);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
+    const [openDeleteError, setDeleteError] = React.useState(false);
 
     const [user, setUser] = useState<IUser | undefined>(undefined);
 
-    let userID = props.userID;
+    let userID = props?.match?.params?.userID;
 
     useEffect(() => {
         getUser();
@@ -103,8 +105,9 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                 }
             })
             .catch(err => {
-                setError(err);
+                setDeleteError(true);
             })
+        handleCloseDeleteConfirmation();
     }
 
 
@@ -114,6 +117,18 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
         }
         setOpenSuccess(false);
         setOpenError(false);
+        setDeleteError(false);
+    };
+
+
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+    const handleOpenDeleteConfirmation = () => {
+        setIsOpenDelete(true);
+    };
+
+    const handleCloseDeleteConfirmation = () => {
+        setIsOpenDelete(false);
     };
 
     if (error) {
@@ -123,6 +138,14 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
     } else {
         return (
             <ThemeProvider theme={mainTheme}>
+                <ConfirmationDialog
+                    title="Are you sure you want to delete the user?"
+                    content="This action is irreversible."
+                    isOpen={isOpenDelete}
+                    onClose={handleCloseDeleteConfirmation }
+                    handleConfirm={deleteUser}
+                    handleCancel={handleCloseDeleteConfirmation}
+                />
 
                 <Snackbar open={openSuccess} autoHideDuration={3500} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
@@ -134,7 +157,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                         User not updated!
                     </Alert>
                 </Snackbar>
-
+                <Snackbar open={openDeleteError} autoHideDuration={3500} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error">
+                        User not deleted!
+                    </Alert>
+                </Snackbar>
                 <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
                     <Link href="/users" color="primary">USERS </Link>
                     <Typography color="primary">{userID}</Typography>
@@ -147,7 +174,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                             <UButton
                                 text='DELETE'
                                 color='secondary'
-                                onClick={deleteUser} />
+                                onClick={handleOpenDeleteConfirmation} />
                             {isEdit ? (
                                 <UButton
                                     text='SAVE'
@@ -176,7 +203,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                 ${isEdit && styles.status_radio_button__edit}
                             `}>
                                 {(isEdit || user?.status as Status === Status.Active) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Active"
                                                name="status"
@@ -185,11 +212,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__blue}`} htmlFor="Active">Active</label>
-                                    </div>
+                                    </>
                                 )}
 
                                 {(isEdit || user?.status as Status === Status.Resigned) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Resigned"
                                                name="status"
@@ -198,11 +225,11 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__red}`} htmlFor="Resigned">Resigned</label>
-                                    </div>
+                                    </>
                                 )}
 
                                 {(isEdit || user?.status as Status === Status.Archived) && (
-                                    <div>
+                                    <>
                                         <input type="radio"
                                                id="Archived"
                                                name="status"
@@ -211,7 +238,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                                                onChange={handleInputChange}
                                         />
                                         <label className={`${styles.status_radio_button__green}`} htmlFor="Archived">Archived</label>
-                                    </div>
+                                    </>
                                 )}
                             </div>
                         </div>

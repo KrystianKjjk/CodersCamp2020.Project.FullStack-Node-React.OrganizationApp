@@ -1,6 +1,7 @@
 //Jest to propozycja projektu tworzona przez administratora CodersCamp. 
 //Przy rozpoczynaniu konkretnego projektu mentor musi utworzyc TeamProject.
 import * as mongoose from 'mongoose';
+import {SchemaTypes} from "mongoose";
 
 export interface Project {
     _id: mongoose.ObjectId,

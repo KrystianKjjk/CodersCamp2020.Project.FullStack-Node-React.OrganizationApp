@@ -11,11 +11,15 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ListItemLink from '../ListItemLink';
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from "../../app/utils";
+import {useSelector} from "react-redux";
+import {selectUserData} from "../HomePage/HomePageSlice";
 
 export interface MenuProps { }
 
 const Menu: React.FC<MenuProps> = (props) => {
-  const useStyles = makeStyles((theme: Theme) =>
+    const {userData} = useSelector(selectUserData);
+
+    const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
         width: "23%",
@@ -48,11 +52,11 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   const classes = useStyles();
 
-  const userData = getUserFromLocalStorage();
+  const userInfo = getUserFromLocalStorage();
 
   const VisibleOptions = () => {
     //@ts-ignore
-    switch (parseInt(userData.userType)) {
+    switch (parseInt(userInfo.userType)) {
       case UserType.Admin:
         return (
           <List component="nav">
@@ -60,7 +64,7 @@ const Menu: React.FC<MenuProps> = (props) => {
               <AccountCircleIcon
                 style={{ paddingTop: 20, fontSize: 40 }}
               ></AccountCircleIcon>
-              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p style={{ fontWeight: 500 }}>{`${userData?.name} ${userData?.surname}`}</p>
               <p>Admin</p>
             </div>
             <ListItemLink
@@ -114,7 +118,7 @@ const Menu: React.FC<MenuProps> = (props) => {
               <AccountCircleIcon
                 style={{ paddingTop: 20, fontSize: 40 }}
               ></AccountCircleIcon>
-              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p style={{ fontWeight: 500 }}>{`${userData?.name} ${userData?.surname}`}</p>
               <p>Mentor</p>
             </div>
             <ListItemLink
@@ -143,7 +147,7 @@ const Menu: React.FC<MenuProps> = (props) => {
               <AccountCircleIcon
                 style={{ paddingTop: 20, fontSize: 40 }}
               ></AccountCircleIcon>
-              <p style={{ fontWeight: 500 }}>Name Surname</p>
+              <p style={{ fontWeight: 500 }}>{`${userData?.name} ${userData?.surname}`}</p>
               <p>Participant</p>
             </div>
             <ListItemLink
