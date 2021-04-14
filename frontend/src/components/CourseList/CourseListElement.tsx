@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { deleteCourseAsync, setActiveCourse, CourseListElementModel } from "./CourseListSlice";
 import { useAppDispatch } from "../../app/hooks";
 import UButton from "../UButton";
-
+import {format} from "date-fns";
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
@@ -86,11 +86,11 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>Start date:</div>
-          <div>{course.startDate.toISOString().split("T")[0]}</div>
+          <div>{format(new Date(course.startDate), "dd/MM/yyyy")}</div>
         </Box>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>End date:</div>
-          <div>{course.endDate.toISOString().split("T")[0]}</div>
+          <div>{format(new Date(course.endDate), "dd/MM/yyyy")}</div>
         </Box>
         <Box display="flex" justifyContent="center" padding="7% 0%">
           <UButton

@@ -13,8 +13,8 @@ const courseListElement: CourseListSlice.CourseListElementModel = {
   _id: "dummyId",
   name: "dummyName",
   description: "dummyDescription",
-  endDate: new Date(),
-  startDate: new Date(),
+  endDate: new Date().toISOString(),
+  startDate: new Date().toISOString(),
 };
 
 const initialState = {
