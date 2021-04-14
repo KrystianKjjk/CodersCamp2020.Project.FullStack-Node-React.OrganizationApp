@@ -23,7 +23,7 @@ import UButton from "../UButton";
 
 import DateFnsUtils from "@date-io/date-fns";
 import {format} from "date-fns";
-import { MuiPickersUtilsProvider, DatePicker, KeyboardDatePicker } from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
 import { mainTheme } from "../../theme/customMaterialTheme";
