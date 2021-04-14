@@ -29,7 +29,7 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
     if (!date) return '';
     const dateObject = new Date(date * 1000);
 
-    return `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
+    return `${dateObject.toLocaleDateString()}`;
   }
 
   const changeSortBy = (value: string) => {
