@@ -1,5 +1,5 @@
 import BaseService from '../app/baseService';
-import { GradeSheet, GradeSheetData, TeamProjectData, UserData, SheetGrade, Grades, Participant, Reviewer } from '../models';
+import { GradeSheet, GradeSheetData, TeamProjectData, UserData, Grades, Participant, Reviewer } from '../models';
 import _ from 'lodash';
 
 
