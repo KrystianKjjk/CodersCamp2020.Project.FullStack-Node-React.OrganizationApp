@@ -1,5 +1,5 @@
 
-# <img src="https://i.imgur.com/mJiTwEV.png" alt="drawing" width="250"/> Organization App
+# <img src="https://i.imgur.com/qWn7jjC.png" alt="drawing" width="250"/> Organization App
 ***The app built to help fellow CodersCampers learn happily :)***
 
 ## Table of contents
