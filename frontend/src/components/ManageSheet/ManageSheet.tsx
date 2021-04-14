@@ -7,7 +7,7 @@ import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
 import { TeamProject, User, Participant, Grades, SheetGrade } from '../../models';
 import _ from 'lodash';
-import { SheetService, UserService } from '../../api';
+import { SheetService, UserService, getTeamProjects } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import { useParams } from "react-router-dom";
 import { fetchData, searchData, sortData } from '../ReusableTable/ReusableTableSlice';
@@ -51,6 +51,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   // const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false);
   const [openProjectsModal, setOpenProjectsModal] = useState<boolean>(false);
+  const [openReviewersModal, setOpenReviewersModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
   const [openMentorGradesModal, setOpenMentorGradesModal] = useState<boolean>(false);
 
@@ -103,21 +104,35 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
 
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
-    api.addParticipant(sheetId, row.id);
+    api.addParticipant(sheetId, row.id)
+      .then( () => dispatch(fetchData(participantsTableName, getParticipants)) );
     setParticipants([...participants, {...row, participantID: row.id}]);
-    getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   };
+
+  const handleProjectSelection = (row: any) => {
+    console.log(row);
+    setOpenProjectsModal(false);
+    api.setProject(sheetId, row.id)
+      .then(() => setProject(row.Name))
+      .catch((error) => console.log(error));
+  }
+
+  const handleReviewerSelection = (id: string) => {
+    setOpenReviewersModal(false);
+    api.addReviewer(sheetId, id)
+      .then(() => sheetId = sheetId + '')
+      .catch(error => console.log(error));
+  }
 
   const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
     selectedParticipants.current = row.selectionModel as string[];
   }
 
   const deleteSelectedUsers = () => {
-    selectedParticipants.current.forEach(user => {
-      api.deleteParticipant(sheetId, user);
-    })
+    Promise.all( selectedParticipants.current.map(user => api.deleteParticipant(sheetId, user) ) )
+      .then( () => dispatch(fetchData(participantsTableName, getParticipants)) );
     selectedParticipants.current = [];
-    getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
+    //getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   }
 
   const handleGradeSelection = (row: GridSelectionModelChangeParams) => {
@@ -127,19 +142,21 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const deleteSelectedGrades = () => {
     const grades = gradesArrayToObject(mentorGrades);
     const newMentorGrades = _.omit(grades, selectedGrades.current)
-    api.setMentorGrade(sheetId, newMentorGrades);
+    console.log(newMentorGrades);
+    api.setMentorGrade(sheetId, newMentorGrades)
+      .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) );
     selectedGrades.current = [];
     setMentorGrades( gradesObjectToArray(newMentorGrades) );
-    setTimeout(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)), 300);
   }
 
   const addMentorGrade = (id: string, grade: Grade) => {
     const newGrades = {
       [grade.quality]: _.omit(grade, 'quality')
     }
-    api.patchMentorGrade(id, newGrades);
+    api.patchMentorGrade(id, newGrades)
+      .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) )
+      .catch( error => console.log(error) );
     setMentorGrades( mentorGrades.concat([grade]) );
-    setTimeout(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)), 300);
   }
 
   const mentorColumns = [
@@ -156,6 +173,13 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     {field: 'quality', headerName: 'Quality', width: 270},
     {field: 'points', headerName: 'Points', width: 250},
     {field: 'comment', headerName: 'Comment', width: 250},
+  ];
+
+  const projectColumns = [
+    {field: 'Name', headerName: 'Name', width: 250},
+    {field: 'Mentor', headerName: 'Mentor', width: 250},
+    {field: 'projectUrl', headerName: 'Url', width: 250},
+    {field: 'Section', headerName: 'Mentor', width: 250},
   ];
 
   return (
@@ -191,18 +215,32 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
               />
             }
             { 
-              // openProjectsModal && 
-              // <FindModal<User> 
-              //   onRowSelection={handleProjectSelection} 
-              //   getData={() => usersApi.} 
-              //   columns={mentorColumns}
-              //   searchPlaceholder='Search by surname'
-              //   searchBy='surname'
-              //   name='Find mentor'
-              //   open={openMentorsModal}
-              //   handleClose={() => setOpenMentorsModal(false)}
-              //   handleOpen={() => setOpenMentorsModal(true)}
-              // />
+              openProjectsModal && 
+              <FindModal<User> 
+                onRowSelection={handleProjectSelection} 
+                getData={getTeamProjects} 
+                columns={projectColumns}
+                searchPlaceholder='Search by name'
+                searchBy='name'
+                name='Find project'
+                open={openProjectsModal}
+                handleClose={() => setOpenProjectsModal(false)}
+                handleOpen={() => setOpenProjectsModal(true)}
+              />
+            }
+            { 
+              openReviewersModal && 
+              <FindModal<User> 
+                onRowSelection={handleReviewerSelection} 
+                getData={() => usersApi.getUsersOfType('Mentor')} 
+                columns={mentorColumns}
+                searchPlaceholder='Search by surname'
+                searchBy='surname'
+                name='Find mentor reviewer'
+                open={openReviewersModal}
+                handleClose={() => setOpenReviewersModal(false)}
+                handleOpen={() => setOpenReviewersModal(true)}
+              />
             }
               <ul className={styles.teamInfo}>
               <li className={styles.teamInfoRow}>
@@ -215,7 +253,21 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                   <span>{mentor?.name ?? '---'} {mentor?.surname ?? '---'}</span>
                   <UButton test-id='change-mentor' text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
+                <li className={styles.teamInfoRow}>
+                  <span>Reviewers:</span>
+                  <ul className={styles.teamInfo}>
+                    {reviewers.map(reviewer => (
+                      <li>
+                        <span>{reviewer.name} {reviewer.surname}</span>
+                      </li>  
+                    ))}
+                    <li>
+                      <AddButton text="Add reviewer" />
+                    </li>
+                  </ul>
+                </li>
               </ul>
+              
               <ul className={styles.teamInfo}>
               <li className={styles.teamInfoRow}>
                   <span>Url:</span>
