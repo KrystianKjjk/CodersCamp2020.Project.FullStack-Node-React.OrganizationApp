@@ -140,6 +140,7 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
           <div className={classes.inputs}>
             <TextField
               label="Points"
+              value={points}
               className={classes.nameInput}
               onChange={handlePointsChange}
               variant="outlined"
@@ -147,12 +148,14 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
             <TextField
               label="Grade description"
               variant="outlined"
+              value={description}
               multiline
               onChange={handleDescriptionChange}
             ></TextField>
             <TextField
               label="Grade comment"
               variant="outlined"
+              value={comment}
               multiline
               onChange={handleCommentChange}
             ></TextField>

@@ -47,7 +47,10 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const [openReviewersModal, setOpenReviewersModal] = useState<boolean>(false);
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false);
 
-  const [editedGrade, setEditedGrade] = useState('');
+  const [editedGrade, setEditedGrade] = useState<Grade>({
+    quality: '',
+    points: 0,
+  });
 
   let { sheetId } = useParams<{sheetId: string}>();
   console.log(sheetId);
@@ -150,17 +153,17 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
       ...grade,
     }
     console.log(Object.keys(grade))
-    if (editedGrade !== Object.keys(grade)[0])
-      delete newGrades[editedGrade];
-    api.setMentorGrade(sheetId, newGrades)
-      .then(loadSheet)
+    if (editedGrade.quality !== Object.keys(grade)[0])
+      delete newGrades[editedGrade.quality];
+    api.patchMentorGrade(sheetId, newGrades)
+      .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) )
       .catch(error => console.log(error));
   }
 
   const deleteSelectedGrades = () => {
     const newMentorGrades = _.omit(mentorGrades, selectedGrades.current)
     console.log(newMentorGrades);
-    api.setMentorGrade(sheetId, newMentorGrades)
+    api.patchMentorGrade(sheetId, newMentorGrades)
       .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) );
     selectedGrades.current = [];
     setMentorGrades(newMentorGrades);
@@ -170,7 +173,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     const newGrades = {
       [grade.quality]: _.omit(grade, 'quality')
     }
-    api.patchMentorGrade(id, newGrades)
+    api.setMentorGrade(id, newGrades)
       .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) )
       .catch( error => console.log(error) );
     setMentorGrades( { ...mentorGrades, ...newGrades } );
@@ -338,12 +341,15 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
           <Paper className={styles.container}>
             <div className={styles.manageContainer}>
               { 
-                editedGrade && 
+                editedGrade.quality && 
                 <EditGradeModal
-                  quality={editedGrade}
+                  quality={editedGrade.quality}
+                  initPoints={editedGrade.points}
+                  initComment={editedGrade.comment}
+                  initDescription={editedGrade.description}
                   onClickSave={handleEditGrade}
-                  open={!!editedGrade}
-                  handleClose={() => setEditedGrade('')}
+                  open={!!editedGrade.quality}
+                  handleClose={() => setEditedGrade({quality: '', points: 0})}
                   handleOpen={() => 0}
                 />
               }
@@ -365,7 +371,12 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                 columns={gradeColumns} 
                 getData={getMentorGrades} 
                 onSelectionModelChange={handleGradeSelection}
-                onRowClick={params => setEditedGrade(params.row.quality)}
+                onRowClick={params => setEditedGrade({
+                  quality: params.row.quality, 
+                  points: params.row.points,
+                  comment: params.row.comment,
+                  description: params.row.description,
+                })}
                 checkboxSelection
               />
             </div>
