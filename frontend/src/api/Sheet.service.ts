@@ -33,7 +33,9 @@ export default class SheetService {
         
         let projectName: string, projectUrl: string, projectDescription: string;
         try {
+            console.log(sheet.projectID);
             const projectRes = await this.api.get('/team/projects/' + sheet.projectID);
+            console.log(projectRes);
             const project: TeamProjectData = projectRes.data;
             projectName = project.projectName;
             projectUrl = project.projectUrl;
