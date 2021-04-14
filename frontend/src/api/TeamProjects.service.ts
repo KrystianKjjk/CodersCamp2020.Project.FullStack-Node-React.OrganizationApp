@@ -53,7 +53,6 @@ async function getProjectDetailedData(project: TeamProject) {
         returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
     }
     catch(error) {
-        //console.log(error)
         returnProject.Mentor = `--- ---`
     }      
     

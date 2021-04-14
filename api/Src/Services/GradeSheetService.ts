@@ -75,12 +75,14 @@ export default class GradeSheetService {
     async setMentor(gradeSheetId: mongoose.Types.ObjectId, mentorId: mongoose.Types.ObjectId) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         sheet.mentorID = mentorId;
+        sheet.markModified('mentorID');
         return await this.repository.save(sheet);
     }
 
     async setProject(gradeSheetId: mongoose.Types.ObjectId, projectId: mongoose.Types.ObjectId) {
         const sheet = await this.repository.getById(gradeSheetId) as GradeSheet & mongoose.Document | null;
         sheet.projectID = projectId;
+        sheet.markModified('projectID');
         return await this.repository.save(sheet);
     }
 
