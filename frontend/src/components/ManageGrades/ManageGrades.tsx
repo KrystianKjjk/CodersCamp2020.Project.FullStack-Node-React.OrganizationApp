@@ -156,32 +156,32 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
     function saveGrade(index: number) {
         if('_id' in grades![index]) {
-               gradeService.updateGrade(grades![index]._id, grades![index])
-                   .then( res => {
-                       if(res.status === 201) setOpenSuccessAlert(true);
-                       else throw Error;
-                       toggleEdit(index);
-                   })
-                   .catch(err => {
-                       setOpenErrorAlert(true);
-                   })
+            gradeService.updateGrade(grades![index]._id, grades![index])
+                .then( res => {
+                    if(res.status === 201) setOpenSuccessAlert(true);
+                    else throw Error;
+                    toggleEdit(index);
+                })
+                .catch(err => {
+                    setOpenErrorAlert(true);
+                })
         }
         else {
-               gradeService.createGrade(props.userID, grades![index])
-                   .then( res => {
-                       if(res.status === 201) {
-                           let tmp = [...grades];
-                           tmp[index]._id = res.data._id;
-                           setGrades([...tmp]);
-                           setOpenSuccessAlert(true);
-                           toggleEdit(index);
-                       }
-                       else throw Error;
-                   })
-                   .catch(err => {
-                       if(err?.response?.data?.message.match('sectionId')) setOpenWarningAlert(true);
-                       else setOpenErrorAlert(true);
-                   })
+            gradeService.createGrade(props.userID, grades![index])
+                .then( res => {
+                    if(res.status === 201) {
+                        let tmp = [...grades];
+                        tmp[index]._id = res.data._id;
+                        setGrades([...tmp]);
+                        setOpenSuccessAlert(true);
+                        toggleEdit(index);
+                    }
+                    else throw Error;
+                })
+                .catch(err => {
+                    if(err?.response?.data?.message.match('sectionId')) setOpenWarningAlert(true);
+                    else setOpenErrorAlert(true);
+                })
         }
     }
 
@@ -257,10 +257,10 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
 
                 <Box display="flex" className={styles.container__header}>
                     <span>Manage Grades</span>
-                        <UButton
-                            text='ADD'
-                            color='primary'
-                            onClick={addGrade} />
+                    <UButton
+                        text='ADD'
+                        color='primary'
+                        onClick={addGrade} />
                 </Box>
                 <Box display="flex" flexWrap="wrap">
                     {grades?.map((grade, index) => (
@@ -271,20 +271,20 @@ const ManageGrades: React.FC< ManageGradesProps > = props => {
                                 handleClose={closeSectionsModal}
                                 onSectionSelection={handleSectionSelection(index)}/>)}
 
-                                <div className={styles.gradeContainer__header}>
+                            <div className={styles.gradeContainer__header}>
                                 <span>{sections[index]?.name ?? 'Section Name'}</span>
                                 { isEdit[index] && grades[index]?.sectionId === '' && (
-                                <UButton
-                                    text='SELECT'
-                                    color='primary'
-                                    onClick={openSectionsModal} />
-                                    ) }
-                                    { isEdit[index] && grades[index]?.sectionId !== '' && (
-                                <UButton
-                                    text='CHANGE'
-                                    color='primary'
-                                    onClick={openSectionsModal} />
-                            ) }
+                                    <UButton
+                                        text='SELECT'
+                                        color='primary'
+                                        onClick={openSectionsModal} />
+                                ) }
+                                { isEdit[index] && grades[index]?.sectionId !== '' && (
+                                    <UButton
+                                        text='CHANGE'
+                                        color='primary'
+                                        onClick={openSectionsModal} />
+                                ) }
                             </div>
 
                             <form className={`${styles.gradeContainer__body}`}>

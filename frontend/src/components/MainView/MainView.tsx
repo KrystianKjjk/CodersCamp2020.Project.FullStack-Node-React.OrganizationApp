@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./MainView.module.css";
 import Header from "../Header";
-import { Switch, Route, Redirect, useParams } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
 import HomePage from "../HomePage";
 
@@ -19,12 +19,15 @@ import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
 import ManageUsers from '../ManageUsers';
+import UserGrades from "../UserGrades";
+import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
+import {useDispatch, useSelector} from "react-redux";
 import ManageUser from '../ManageUser';
 import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
 import ManageSections from "../ManageSections";
 import SectionView from "../SectionView";
-import {UserType} from "../../models";
-
+import MyProfileView from '../MyProfile/index'
+import {UserType as Role} from "../../models/User.model";
 import ReferenceProjects from "../ReferenceProjects";
 import ManageReferenceProject from "../ManageReferenceProject";
 
@@ -36,18 +39,28 @@ interface LoggedOutViewProps {
   onLogin?: Function
 }
 
-
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
+
+  const dispatch = useDispatch();
+  const {loaded} = useSelector(selectUserData);
+
+  useEffect(() => {
+    if(!loaded && isLogged) {
+      const userID = localStorage.getItem('id');
+      dispatch(fetchUser(userID));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged, loaded]);
 
   const MainContent = () => {
     if (!(isLogged)) return <LoggedOut onLogin={() => setIsLogged(true)} />;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
-      case UserType.Admin:
+      case Role.Admin:
         return <Admin onLogout={() => setIsLogged(false)} />
-      case UserType.Mentor:
+      case Role.Mentor:
         return <Mentor onLogout={() => setIsLogged(false)} />
       default:
         return <Participant onLogout={() => setIsLogged(false)} />
@@ -90,8 +103,7 @@ function Admin(props: LoggedInViewProps) {
     <div className={styles.mainContainer} >
       <Header onLogout={props.onLogout} />
       <Switch>
-        <PrivateRoute path="/users/:userId" component={User}>
-        </PrivateRoute>
+        <PrivateRoute path="/users/:userID" component={ManageUser} />
         <PrivateRoute path="/users">
           <ManageUsers />
         </PrivateRoute>
@@ -202,18 +214,12 @@ function Projects() {
 function TeamProjects() {
   return <TeamProjectsComponent getFunction={getTeamProjects}/>;
 }
-const User: React.FC< { } > = () => {
-  let { userId } = useParams<{userId: string}>();
-  return <ManageUser userID={userId} />
-}
+
 function MyTeam() {
   return <h2>My team</h2>;
 }
 function MyProfile() {
-  return <h2>My profile</h2>;
-}
-function UserGrades() {
-  return <h2>My grades</h2>;
+  return <MyProfileView/>;
 }
 
 export default MainView;
