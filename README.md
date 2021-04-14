@@ -1,6 +1,6 @@
 
 <p align="center"><img src="https://i.imgur.com/jLDrLBI.png" alt="drawing" width="700"/></p>
-<p align="center">***The app built to help fellow CodersCampers learn happily :)***</p>
+<p align="center"><i>The app built to help fellow CodersCampers learn happily :)</i></p>
 
 ## Table of contents
   * [About the project](#about-the-project)
