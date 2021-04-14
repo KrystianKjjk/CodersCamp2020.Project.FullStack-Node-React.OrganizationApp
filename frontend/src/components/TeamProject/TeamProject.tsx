@@ -34,6 +34,7 @@ interface referenceProjectButtonProps {
 const TeamProject: React.FC<TeamProjectProps> = props => {
   const { projectEditMode, projectDeleteMode, project } = useAppSelector(selectTeamProjects);
   let selectedTeamProject = project; 
+  const changeView = props.changeViewFn;
 
   const dispatch = useAppDispatch();
   const [projectName, setProjectName] = useState(project.projectName);
@@ -70,7 +71,10 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
         <div className={styles.modal} onClick={() => dispatch(switchDeleteMode())}>
           Do you really want to delete this project?
           <br /><br />
-          <Button id={styles.buttonDelete} onClick={() => dispatch(deleteProjectById(props._id))}>Delete</Button>
+          <Button id={styles.buttonDelete} onClick={() => {
+            dispatch(deleteProjectById(props._id));
+            changeView();
+            }}>Delete</Button>
         </div>)
     }
     return null
@@ -159,6 +163,7 @@ const TeamProject: React.FC<TeamProjectProps> = props => {
               setSectionName(sectionName);
               closeSectionsModal();
             }}
+            //@ts-ignore
             isOpen={isOpenSectionsModal}
             handleClose={closeSectionsModal}
         />
