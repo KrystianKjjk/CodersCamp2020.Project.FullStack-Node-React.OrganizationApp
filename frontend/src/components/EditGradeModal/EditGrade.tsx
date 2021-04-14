@@ -74,6 +74,7 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
 
   const classes = useStyles();
 
+  const [quality, changeQualty] = useState('');
   const [points, changePoints] = useState(props.initPoints ?? 0);
   const [description, changeDescription] = useState(props.initDescription ?? '');
   const [comment, changeComment] = useState(props.initComment ?? '');
@@ -92,12 +93,14 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
 
   const handleSaveButtonClick = async () => {
     const grade = {
-      [props.quality]: {
+      [!!quality ? quality : props.quality]: {
         points,
         description,
         comment,
       }
     };
+
+    console.log(grade);
     props.onClickSave(grade);
     props.handleClose();
   };
@@ -129,7 +132,7 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
             <TextField
                 label={props.quality}
                 className={classes.nameInput}
-                onChange={handlePointsChange}
+                onChange={(e) => changeQualty(e.target.value)}
                 variant="outlined"
                 placeholder="Quality"
               ></TextField>

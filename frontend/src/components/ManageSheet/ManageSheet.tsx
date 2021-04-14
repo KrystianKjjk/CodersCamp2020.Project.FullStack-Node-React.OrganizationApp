@@ -133,8 +133,15 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   }
 
   const handleEditGrade = (grade: Grades) => {
-    api.patchMentorGrade(sheetId, grade)
-      .then(() => setMentorGrades({...mentorGrades, ...grade}))
+    const newGrades = {
+      ...mentorGrades,
+      ...grade,
+    }
+    console.log(Object.keys(grade))
+    if (editedGrade !== Object.keys(grade)[0])
+      delete newGrades[editedGrade];
+    api.patchMentorGrade(sheetId, newGrades)
+      .then(() => setMentorGrades(newGrades))
       .catch(error => console.log(error));
   }
 
