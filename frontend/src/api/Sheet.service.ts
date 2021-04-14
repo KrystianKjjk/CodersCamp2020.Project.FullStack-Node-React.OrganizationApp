@@ -1,5 +1,5 @@
 import BaseService from '../app/baseService';
-import { GradeSheet, GradeSheetData, TeamProjectData, UserData } from '../models';
+import { GradeSheet, GradeSheetData, TeamProjectData, UserData, Grades, Participant, Reviewer } from '../models';
 import _ from 'lodash';
 
 
@@ -14,35 +14,89 @@ export default class SheetService {
         const sheetsData = response.data as GradeSheetData[];
         const sheets: GradeSheet[] = [];
         for(let i in sheetsData) {
-            const sheet = sheetsData[i];
-            let mentorName: string, mentorSurname: string;
-            try {
-                const mentorRes = await this.api.get('/users/' + sheet.mentorID);
-                const mentor = mentorRes.data as UserData;
-                [mentorName, mentorSurname] = [mentor.name, mentor.surname];
-            } catch(err) {
-                [mentorName, mentorSurname] = ['---', '---'];
-            }
-            
-            let projectName: string;
-            try {
-                const projectRes = await this.api.get('/team/projects/' + sheet.projectID);
-                const project: TeamProjectData = projectRes.data;
-                projectName = project.projectName;
-            } catch (err) {
-                projectName = '---';
-            }
-            
-            sheets.push({
-                ..._.omit(sheet, '_id'),
-                id: sheet._id,
-                mentorName,
-                mentorSurname,
-                projectName,
-            });
+            const sheet = await this.getSheetInfo(sheetsData[i]);
+            sheets.push(sheet);
         }
 
         return sheets;
+    }
+
+    getSheetInfo = async (sheet: GradeSheetData): Promise<GradeSheet> => {
+        let mentorName: string, mentorSurname: string;
+        try {
+            const mentorRes = await this.api.get('/users/' + sheet.mentorID);
+            const mentor = mentorRes.data as UserData;
+            [mentorName, mentorSurname] = [mentor.name, mentor.surname];
+        } catch(err) {
+            [mentorName, mentorSurname] = ['---', '---'];
+        }
+        
+        let projectName: string, projectUrl: string, projectDescription: string;
+        try {
+            const projectRes = await this.api.get('/teams/projects/' + sheet.projectID);
+            const project: TeamProjectData = projectRes.data;
+            projectName = project.projectName;
+            projectUrl = project.projectUrl;
+            projectDescription = project.description;
+        } catch (err) {
+            projectName = '---';
+            [projectName, projectUrl, projectDescription] = ['---', '---', '---'];
+        }
+        
+        const participants = sheet.participants ?? [];
+        for(let i in participants) {
+            const user = participants[i];
+            try {
+                const userRes = await this.api.get('/users/' + user.participantID);
+                const userData = userRes.data as UserData;
+                participants[i].name = userData.name;
+                participants[i].surname = userData.surname;
+            } catch(err) {
+                participants[i].name = '---';
+                participants[i].surname = '---';
+            }    
+        };
+
+        const reviewers = sheet.reviewers ?? [];
+        const reviewersInfo = await Promise.all( reviewers.map( async userId => {
+            const reviewer: Reviewer = {
+                _id: userId,
+                name: '---',
+                surname: '---',
+                email: '---',
+            }
+            try {
+                const userRes = await this.api.get('/users/' + userId);
+                const userData = userRes.data as UserData;
+                reviewer._id = userId;
+                reviewer.name = userData.name;
+                reviewer.surname = userData.surname;
+                reviewer.email = userData.surname;
+            } catch(err) {
+                
+            }
+            return reviewer;
+        } ) );
+
+        return {
+            ..._.omit(sheet, '_id'),
+            id: sheet._id,
+            projectID: sheet.projectID ?? '',
+            mentorID: sheet.mentorID ?? '',
+            participants,
+            mentorGrades: sheet.mentorGrades ?? {},
+            mentorName,
+            mentorSurname,
+            projectName,
+            projectUrl,
+            projectDescription,
+            reviewers: reviewersInfo,
+        };
+    }
+
+    getSheet = async (id: string) => {
+        const response = await this.api.get('/grade/sheets/' + id);
+        return this.getSheetInfo(response.data);
     }
 
     createSheet = async () => {
@@ -64,6 +118,60 @@ export default class SheetService {
             return null;
         }
         return gradeSheetsRes.data as GradeSheetData[];
+    }
+
+    getParticipants = async (id: string): Promise<(Participant & {id: string})[]> => {
+        const sheet = await this.getSheet(id);
+        return sheet.participants.map(p => ({
+            ...p,
+            id: p.participantID,
+        }));
+    }
+
+    getMentorGrades = async (id: string): Promise<Grades> => {
+        const sheet = await this.getSheet(id);
+        return sheet.mentorGrades;
+    }
+
+
+    setMentor = async (id: string, mentorId: string) => {
+        await this.api.put(`/grade/sheets/${id}/set/mentor/${mentorId}`, {});
+    }
+
+    setProject = async (id: string, projectId: string) => {
+        await this.api.put(`/grade/sheets/${id}/set/project/${projectId}`, {});
+    }
+
+    addParticipant = async (id: string, participantId: string) => {
+        await this.api.post(`/grade/sheets/${id}/add/participant/${participantId}`, {});
+    }
+
+    deleteParticipant = async (id: string, participantId: string) => {
+        await this.api.delete(`/grade/sheets/${id}/participants/${participantId}`);
+    }
+
+    addReviewer = async (id: string, mentorId: string) => {
+        await this.api.post(`/grade/sheets/${id}/add/reviewer/${mentorId}`, {});
+    }
+
+    setReviewers = async (id: string, reviewers: string[]) => {
+        await this.api.put(`/grade/sheets/${id}/reviewers`, {reviewers})
+    }
+
+    setMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
+        await this.api.put(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
+    }
+
+    patchMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
+        await this.api.patch(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
+    }
+
+    setMentorGrade = async (id: string, grades: Grades) => {
+        await this.api.put(`/grade/sheets/${id}/mentor/grades`, { grades })
+    }
+
+    patchMentorGrade = async (id: string, grades: Grades) => {
+        await this.api.patch(`/grade/sheets/${id}/mentor/grades`, { grades })
     }
 
 }

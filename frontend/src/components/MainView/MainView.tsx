@@ -14,6 +14,7 @@ import ResetPassword from "../ResetPassword";
 import ManageTeam from "../ManageTeam";
 import { getUserFromLocalStorage } from "../../app/utils";
 import ManageSheets from '../ManageSheets';
+import ManageSheet from '../ManageSheet';
 import TeamProjectsComponent from '../TeamProjects/index';
 import { getTeamProjects } from '../../api/TeamProjects.service';
 import ManageTeams from '../ManageTeams';
@@ -122,6 +123,8 @@ function Admin(props: LoggedInViewProps) {
         </PrivateRoute>
         <PrivateRoute path="/sections">
           <ManageSections />
+        </PrivateRoute>
+        <PrivateRoute path="/gradesheets/:sheetId" component={ManageSheet}>
         </PrivateRoute>
         <PrivateRoute path="/gradesheets">
           <ManageSheets />

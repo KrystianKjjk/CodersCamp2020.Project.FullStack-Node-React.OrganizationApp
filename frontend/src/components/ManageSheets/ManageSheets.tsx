@@ -10,12 +10,14 @@ import { Container, CssBaseline, Paper } from '@material-ui/core';
 import SheetService from '../../api/Sheet.service';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import UButton from '../UButton';
+import { useHistory } from 'react-router-dom';
 
 
 export interface ManageSheetsProps { };
 
 const ManageSheets: React.FC< ManageSheetsProps > = () => {
   const api = new SheetService();
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const selectedSheets = useRef([] as string[]);
 
@@ -62,6 +64,10 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
     setTimeout(() => dispatch(fetchData(tableName, api.getSheets)), 300);
     selectedSheets.current = [];
   }
+
+  const handleRowClick = (data: {id: string | number}) => {
+    history.push(`/gradesheets/${data.id}`);
+  };
   
   return (
     <Container className={styles.manageSheets} aria-label='Manage Sheets'>
@@ -90,6 +96,7 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
             getData={api.getSheets} 
             onSelectionModelChange={handleSheetSelection}
             checkboxSelection
+            onRowClick={handleRowClick}
           />
         </div>
       </Paper>
