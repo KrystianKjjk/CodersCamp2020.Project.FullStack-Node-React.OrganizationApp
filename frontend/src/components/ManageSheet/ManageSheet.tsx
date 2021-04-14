@@ -141,7 +141,6 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   }
 
   const deleteSelectedUsers = () => {
-    console.log(selectedParticipants.current);
     Promise.all( selectedParticipants.current.map(user => api.deleteParticipant(sheetId, user) ) )
       .then( () => loadSheet() );
     selectedParticipants.current = [];
@@ -156,9 +155,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
       ...mentorGrades,
       ...grade,
     }
-    console.log(Object.keys(grade))
     if (editedGrade.quality !== Object.keys(grade)[0])
       delete newGrades[editedGrade.quality];
+    
     api.patchMentorGrade(sheetId, newGrades)
       .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) )
       .catch(error => console.log(error));
@@ -166,7 +165,6 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
 
   const deleteSelectedGrades = () => {
     const newMentorGrades = _.omit(mentorGrades, selectedGrades.current)
-    console.log(newMentorGrades);
     api.patchMentorGrade(sheetId, newMentorGrades)
       .then( () => dispatch(fetchData(mentorGradesTableName, getMentorGrades)) );
     selectedGrades.current = [];
