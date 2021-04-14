@@ -1,5 +1,5 @@
 import BaseService from '../app/baseService';
-import { GradeSheet, GradeSheetData, TeamProjectData, UserData, SheetGrade, Grades, Participant } from '../models';
+import { GradeSheet, GradeSheetData, TeamProjectData, UserData, SheetGrade, Grades, Participant, Reviewer } from '../models';
 import _ from 'lodash';
 
 
@@ -57,6 +57,27 @@ export default class SheetService {
             }    
         };
 
+        const reviewers = sheet.reviewers ?? [];
+        const reviewersInfo = await Promise.all( reviewers.map( async userId => {
+            const reviewer: Reviewer = {
+                _id: userId,
+                name: '---',
+                surname: '---',
+                email: '---',
+            }
+            try {
+                const userRes = await this.api.get('/users/' + userId);
+                const userData = userRes.data as UserData;
+                reviewer._id = userId;
+                reviewer.name = userData.name;
+                reviewer.surname = userData.surname;
+                reviewer.email = userData.surname;
+            } catch(err) {
+                
+            }
+            return reviewer;
+        } ) );
+
         return {
             ..._.omit(sheet, '_id'),
             id: sheet._id,
@@ -69,6 +90,7 @@ export default class SheetService {
             projectName,
             projectUrl,
             projectDescription,
+            reviewers: reviewersInfo,
         };
     }
 

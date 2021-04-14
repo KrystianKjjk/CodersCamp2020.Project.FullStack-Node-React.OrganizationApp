@@ -5,7 +5,7 @@ import UButton from '../UButton';
 import Table from '../ReusableTable';
 import FindModal from '../FindModal';
 import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
-import { TeamProject, User, Participant, Grades, SheetGrade } from '../../models';
+import { TeamProject, User, Participant, Grades, SheetGrade, Reviewer } from '../../models';
 import _ from 'lodash';
 import { SheetService, UserService, getTeamProjects } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
@@ -36,7 +36,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading');
   const [mentor, setMentor] = useState<User>();
   const [project, setProject] = useState<TeamProject>();
-  const [reviewers, setReviewers] = useState<User[]>([]);
+  const [reviewers, setReviewers] = useState<Reviewer[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [mentorGrades, setMentorGrades] = useState<Grades>({});
   
@@ -56,6 +56,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   useEffect(() => {
     api.getSheet(sheetId)
       .then(sheet => {
+        console.log(sheet)
         setMentor({
           id: sheet.mentorID,
           name: sheet.mentorName,
@@ -94,7 +95,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
 
   let getParticipants = async () => api.getParticipants(sheetId);
   let getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
-
+  
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false);
     api.addParticipant(sheetId, row.id)
@@ -110,9 +111,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
       .catch((error) => console.log(error));
   }
 
-  const handleReviewerSelection = (id: string) => {
+  const handleReviewerSelection = (row: any) => {
     setOpenReviewersModal(false);
-    api.addReviewer(sheetId, id)
+    api.addReviewer(sheetId, row.id)
       .then(() => sheetId = sheetId + '')
       .catch(error => console.log(error));
   }
@@ -258,16 +259,17 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                   <span>{mentor?.name ?? '---'} {mentor?.surname ?? '---'}</span>
                   <UButton test-id='change-mentor' text="Change" color="primary" onClick={() => setOpenMentorsModal(true)}/>
                 </li>
-                <li className={styles.teamInfoRow}>
+                <li className={styles.reviewersInfo}>
                   <span>Reviewers:</span>
-                  <ul className={styles.teamInfo}>
+                  <ul className={styles.reviewers}>
                     {reviewers.map(reviewer => (
-                      <li>
+                      <li className={styles.reviewerInfoRow} key={reviewer._id}>
                         <span>{reviewer.name} {reviewer.surname}</span>
+                        <UButton color="secondary" text="Delete" onClick={console.log('Delete reviewer')} />
                       </li>  
                     ))}
                     <li>
-                      <AddButton text="Add reviewer" />
+                      <AddButton text="Add reviewer" onClick={() => setOpenReviewersModal(true)}/>
                     </li>
                   </ul>
                 </li>

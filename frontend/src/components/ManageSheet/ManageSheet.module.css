@@ -37,6 +37,21 @@
     justify-items: left;
     align-items: center;
 }
+.reviewersInfo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-items: left;
+    align-items: center;
+}
+.reviewerInfoRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: left;
+    align-items: center;
+}
+.reviewers {
+    list-style-type: none;
+}
 .manageContainer {
     margin-bottom: 3rem;
     display: grid;

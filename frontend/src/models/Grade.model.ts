@@ -17,17 +17,19 @@ export interface Participant {
     surname?: string;
 }
 
+export interface Reviewer {
+    _id: string;
+    email: string;
+    name: string;
+    surname: string;
+}
+
 export interface GradeSheetData {
     _id: string;
     projectID: string;
     mentorID: string;
     participants: Participant[];
-    reviewers: {
-        _id: string;
-        email: string;
-        name: string;
-        surname: string;
-    }[];
+    reviewers: string[];
     mentorGrades: Grades;
     mentorReviewerGrades: {
         mentorID: string;
@@ -45,12 +47,7 @@ export interface GradeSheet {
     mentorName: string;
     mentorSurname: string;
     participants: Participant[];
-    reviewers: {
-        _id: string;
-        email: string;
-        name: string;
-        surname: string;
-    }[];
+    reviewers: Reviewer[];
     mentorGrades: Grades;
     mentorReviewerGrades: {
         mentorID: string;
