@@ -22,6 +22,7 @@ import PageHeader from "../PageHeader";
 import UButton from "../UButton";
 
 import DateFnsUtils from "@date-io/date-fns";
+import {format} from "date-fns";
 import { MuiPickersUtilsProvider, DatePicker, KeyboardDatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
@@ -155,8 +156,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     }
     changeCourseName(course.name);
     changeDescription(course.description ?? "");
-    changeStartDate(new Date(course.startDate));
-    changeEndDate(new Date(course.endDate));
+    changeStartDate(new Date(Date.parse(course.startDate)));
+    changeEndDate(new Date(Date.parse(course.endDate)));
   }, [course]);
 
   if (!course) {
@@ -276,8 +277,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                     <p>End date:</p>
                   </Box>
                   <Box display="flex" flexDirection="column">
-                    <p>{startDate?.toISOString().split("T")[0]}</p>
-                    <p>{endDate?.toISOString().split("T")[0]}</p>
+                    <p>{startDate? format(startDate, "dd/MM/yyyy"):""}</p>
+                    <p>{endDate? format(endDate, "dd/MM/yyyy"):""}</p>
                   </Box>
                 </Box>
               )}
