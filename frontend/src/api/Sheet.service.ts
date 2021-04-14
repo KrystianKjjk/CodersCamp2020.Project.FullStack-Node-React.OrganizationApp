@@ -154,6 +154,10 @@ export default class SheetService {
         await this.api.post(`/grade/sheets/${id}/add/reviewer/${mentorId}`, {});
     }
 
+    setReviewers = async (id: string, reviewers: string[]) => {
+        await this.api.put(`/grade/sheets/${id}/reviewers`, {reviewers})
+    }
+
     setMentorReviewerGrade = async (id: string, mentorId: string, grades: Grades) => {
         await this.api.put(`/grade/sheets/${id}/reviewers/${mentorId}/grades`, { grades })
     }

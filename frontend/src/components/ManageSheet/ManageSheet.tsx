@@ -37,7 +37,6 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const [mentor, setMentor] = useState<User>();
   const [project, setProject] = useState<TeamProject>();
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);
-  const [participants, setParticipants] = useState<Participant[]>([]);
   const [mentorGrades, setMentorGrades] = useState<Grades>({});
   
   const selectedParticipants = useRef<string[]>([]);
@@ -53,7 +52,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   let { sheetId } = useParams<{sheetId: string}>();
   console.log(sheetId);
 
-  useEffect(() => {
+  const loadSheet = () => {
     api.getSheet(sheetId)
       .then(sheet => {
         console.log(sheet)
@@ -73,34 +72,37 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
           id: rev._id,
         }))
         setReviewers(reviewersArr);
-        const participantsArr = sheet.participants.map(p => ({
-          ...p,
-          id: p.participantID,
-        }))
-        setParticipants(participantsArr);
         setMentorGrades(sheet.mentorGrades);
         setLoading('idle');
+        setOpenUsersModal(false);
       });
+  }
+  
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sheetId]);
+  useEffect(loadSheet, []);
 
   const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false);
-    api.setMentor(sheetId, row.id);
-    setMentor({ 
-      id: row.id, 
-      name: row.name, 
-      surname: row.surname });
+    api.setMentor(sheetId, row.id)
+      .then(() => {
+        setMentor({ 
+          id: row.id, 
+          name: row.name, 
+          surname: row.surname });
+      })
+      .catch(error => console.log(error));
+    
   };
 
   let getParticipants = async () => api.getParticipants(sheetId);
   let getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   
   const handleAddUserSelection = (row: User) => {
-    setOpenUsersModal(false);
     api.addParticipant(sheetId, row.id)
-      .then( () => dispatch(fetchData(participantsTableName, getParticipants)) );
-    setParticipants([...participants, {...row, participantID: row.id}]);
+      .then(() => {
+        loadSheet();
+      })
+      .catch(error => console.log(error));
   };
 
   const handleProjectSelection = (row: any) => {
@@ -114,7 +116,16 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   const handleReviewerSelection = (row: any) => {
     setOpenReviewersModal(false);
     api.addReviewer(sheetId, row.id)
-      .then(() => sheetId = sheetId + '')
+      .then(loadSheet)
+      .catch(error => console.log(error));
+  }
+
+  const deleteReviewer = (id: string) => {
+    const newReviewers = reviewers
+      .map(rev => rev._id)
+      .filter(rev => rev !== id);
+    api.setReviewers(sheetId, newReviewers)
+      .then(loadSheet)
       .catch(error => console.log(error));
   }
 
@@ -123,10 +134,10 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
   }
 
   const deleteSelectedUsers = () => {
+    console.log(selectedParticipants.current);
     Promise.all( selectedParticipants.current.map(user => api.deleteParticipant(sheetId, user) ) )
-      .then( () => dispatch(fetchData(participantsTableName, getParticipants)) );
+      .then( () => loadSheet() );
     selectedParticipants.current = [];
-    //getMentorGrades = async () => gradesObjectToArray( await api.getMentorGrades(sheetId) );
   }
 
   const handleGradeSelection = (row: GridSelectionModelChangeParams) => {
@@ -141,8 +152,8 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
     console.log(Object.keys(grade))
     if (editedGrade !== Object.keys(grade)[0])
       delete newGrades[editedGrade];
-    api.patchMentorGrade(sheetId, newGrades)
-      .then(() => setMentorGrades(newGrades))
+    api.setMentorGrade(sheetId, newGrades)
+      .then(loadSheet)
       .catch(error => console.log(error));
   }
 
@@ -265,7 +276,7 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
                     {reviewers.map(reviewer => (
                       <li className={styles.reviewerInfoRow} key={reviewer._id}>
                         <span>{reviewer.name} {reviewer.surname}</span>
-                        <UButton color="secondary" text="Delete" onClick={console.log('Delete reviewer')} />
+                        <UButton color="secondary" text="Delete" onClick={() => deleteReviewer(reviewer._id)} />
                       </li>  
                     ))}
                     <li>
