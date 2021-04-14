@@ -11,9 +11,9 @@ import { Grades } from "../../models";
 
 export interface EditGradeProps {
   quality: string;
-  initPoints: number;
-  initComment: string;
-  initDescription: string;
+  initPoints?: number;
+  initComment?: string;
+  initDescription?: string;
   open: boolean;
   handleClose: () => void;
   handleOpen: () => void;
@@ -26,17 +26,18 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
       root: {
         "& .MuiTextField-root": {
           margin: theme.spacing(1),
-          width: "90%",
+          width: "70vw",
         },
       },
       nameInput: {
         "&.MuiTextField-root": {
-          width: "50%",
+          width: "100px",
           paddingBottom: "2%",
+          textAlign: "center",
         },
       },
       container: {
-        textAlign: "left",
+        textAlign: "center",
         fontFamily: "Montserrat",
         backgroundColor: "#1C1C1C",
         border: "1px solid #666666",
@@ -47,19 +48,14 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
         alignItems: "center",
         borderTop: "1px solid #666666",
         paddingTop: "2%",
+        paddingRight: "5rem",
+        paddingLeft: "5rem",
       },
       header: {
-        paddingLeft: "3%",
-      },
-      dateContainer: {
+        width: "100%",
         display: "flex",
-        justifyContent: "space-between",
-        margin: "2% 15%",
-      },
-      datePicker: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: "50px",
+        alignItems: "baseline",
+        justifyContent: "center",
       },
       button: {
         backgroundColor: "#1a90ff",
@@ -78,9 +74,9 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
 
   const classes = useStyles();
 
-  const [points, changePoints] = useState(props.initPoints);
-  const [description, changeDescription] = useState(props.initDescription);
-  const [comment, changeComment] = useState(props.initComment);
+  const [points, changePoints] = useState(props.initPoints ?? 0);
+  const [description, changeDescription] = useState(props.initDescription ?? '');
+  const [comment, changeComment] = useState(props.initComment ?? '');
 
   const handlePointsChange = (e: any) => {
     changePoints( +(e.target.value) );
@@ -127,10 +123,16 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
       
     <Fade in={props.open}>
       <div className={classes.root}>
-        <PageHeader name={"CREATE COURSE"}></PageHeader>
         <div className={classes.container}>
           <div className={classes.header}>
-            <h3>Edit grade: {props.quality}</h3>
+            <h3>Edit grade:</h3>
+            <TextField
+                label={props.quality}
+                className={classes.nameInput}
+                onChange={handlePointsChange}
+                variant="outlined"
+                placeholder="Quality"
+              ></TextField>
           </div>
           <div className={classes.inputs}>
             <TextField

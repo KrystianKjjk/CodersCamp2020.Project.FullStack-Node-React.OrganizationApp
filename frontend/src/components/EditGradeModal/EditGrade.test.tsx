@@ -4,16 +4,15 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import EditGrade from '.';
-import { SheetService } from '../../api';
 
-jest.mock('../../api/Sheet.service.ts', () => jest.fn());
 
 describe('EditGrade', () => {
    it('should disable submit when grade name is empty', () => {
+      const onSave = jest.fn();
       const props = {
          quality: 'Extra',
          open: true,
-         onClickSave: jest.fn(),
+         onClickSave: onSave,
          handleOpen: jest.fn(),
          handleClose: jest.fn(),
       }
@@ -25,7 +24,7 @@ describe('EditGrade', () => {
       
       userEvent.click(screen.getByText("SAVE"));
       
-      expect(patchMentorGradeMock).not.toHaveBeenCalled();
+      expect(onSave).not.toHaveBeenCalled();
    });
 
 });
