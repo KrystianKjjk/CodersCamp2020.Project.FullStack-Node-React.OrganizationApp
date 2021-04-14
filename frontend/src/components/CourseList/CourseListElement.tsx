@@ -86,11 +86,11 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>Start date:</div>
-          <div>{course.startDate.toISOString().split("T")[0]}</div>
+          <div>{course.startDate.split("T")[0]}</div>
         </Box>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
           <div className={classes.date}>End date:</div>
-          <div>{course.endDate.toISOString().split("T")[0]}</div>
+          <div>{course.endDate.split("T")[0]}</div>
         </Box>
         <Box display="flex" justifyContent="center" padding="7% 0%">
           <UButton

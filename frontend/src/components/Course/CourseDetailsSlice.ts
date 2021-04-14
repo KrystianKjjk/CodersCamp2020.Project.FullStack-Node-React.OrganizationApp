@@ -5,9 +5,13 @@ import BaseService from "../../app/baseService";
 import { AppThunk} from "../../app/store";
 
 
-export interface Course extends CourseCreateObject {
+export interface Course {
   _id: string;
   sections: SectionListElement[];
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface CourseCreateObject {
@@ -47,8 +51,6 @@ export const fetchCourseAsync = (courseId: string): AppThunk => async (
   const sections: SectionListElement[] = sectionsResponse.data;
   const course: Course = {
     ...courseDto,
-    startDate: new Date(Date.parse(courseDto.startDate)),
-    endDate: new Date(Date.parse(courseDto.endDate)),
     sections: sections
   };
   dispatch(setCourse(course));

@@ -5,8 +5,12 @@ import CoursesService, { CourseListElementDto } from "../../api/courses.service"
 import * as ActiveCourse  from '../../app/utils';
 
 
-export interface CourseListElementModel extends CourseCreateObject {
+export interface CourseListElementModel  {
   _id: string;
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate: string;
 }
 
 interface CourseListState {
@@ -27,23 +31,32 @@ export const fetchCoursesAsync = (): AppThunk => async (dispatch) => {
 export const fetchCoursesAndSort = async () => {
   const courseService = new CoursesService();
   const response = await courseService.fetchCourses();
-  const coursesDto: CourseListElementDto[] = response.data;
-  const courses: CourseListElementModel[] = coursesDto.map((courseDto) => {
-    const courseListElement: CourseListElementModel = {
-      _id: courseDto._id,
-      name: courseDto.name,
-      description: courseDto.description,
-      endDate: new Date(Date.parse(courseDto.endDate)), 
-      startDate: new Date(Date.parse(courseDto.startDate)),
-    };
-    return courseListElement;
-  });
+  const courses: CourseListElementModel[] = response.data;
+  // const coursesDto: CourseListElementDto[] = response.data;
+  // const courses: CourseListElementModel[] = coursesDto.map((courseDto) => {
+  //   const courseListElement: CourseListElementModel = {
+  //     _id: courseDto._id,
+  //     name: courseDto.name,
+  //     description: courseDto.description,
+  //     endDate: new Date(courseDto.endDate), 
+  //     startDate: new Date(courseDto.startDate),
+  //     // new Date(data.startDate * 1000)
+  //   };
+  //   return courseListElement;
+  // });
   courses.sort(function (courseListElement1, courseListElement2) {
-    const courseListElementStartDate1 = courseListElement1.startDate.getTime();
-    const courseListElementStartDate2 = courseListElement2.startDate.getTime();
+    // const courseListElementStartDate1 = new Date(courseListElement1.startDate).getTime();
+    const courseListElementStartDate1 = new Date (courseListElement1.startDate).getTime();
+
+    // new Date((+(courseListElement1.startDate))*100).getTime();
+    // (new Date(+(course.startDate)*1000));
+    const courseListElementStartDate2 = new Date (courseListElement2.startDate).getTime();
     return courseListElementStartDate2 - courseListElementStartDate1;
   });
-  return courses;
+  
+
+ return courses;
+  // return courses;
 };
 
 export const deleteCourseAsync = (courseId: string): AppThunk => async (
@@ -57,7 +70,7 @@ export const courseListSlice = createSlice({
   name: "courseList",
   initialState,
   reducers: {
-    setCourses: (state, action: PayloadAction<CourseListElementModel[]>) => {
+    setCourses: (state, action: PayloadAction<CourseListElementDto[]>) => {
       state.courseList = action.payload;
     },
     removeCourse: (state, action: PayloadAction<string>) => {

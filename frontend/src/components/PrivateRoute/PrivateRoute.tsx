@@ -7,8 +7,6 @@ export interface PrivateRouteProps extends RouteProps {}
 
 const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
 
-//To do - check if user is logged in 
-
   return (
     <div className={styles.container}>
       <Menu />
