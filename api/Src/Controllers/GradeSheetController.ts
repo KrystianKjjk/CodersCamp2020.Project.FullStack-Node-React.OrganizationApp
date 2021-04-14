@@ -74,7 +74,7 @@ export default class GradeSheetController {
     setProject = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const projectId = new mongoose.Types.ObjectId(req.params.projectId);
-        const sheet = await this.gradeSheetService.setMentor(id, projectId);
+        const sheet = await this.gradeSheetService.setProject(id, projectId);
         if(sheet === null) return res.status(404).json({message: 'Grade sheet not found'});
         res.status(200).json({message: 'Project changed'});
     }
