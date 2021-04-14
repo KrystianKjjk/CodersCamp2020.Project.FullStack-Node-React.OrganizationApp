@@ -153,12 +153,10 @@ export function deleteProjectById(id: string) {
     dispatch(projectOperation())
     try {
       await axios.delete(`/teams/projects/${id}`);
-
       dispatch(projectDeleteSuccess());
     } catch (error) {
       dispatch(projectOperationFailure());
     }
-    dispatch(switchDeleteMode());
   }
 }
 
