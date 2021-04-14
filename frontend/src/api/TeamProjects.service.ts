@@ -48,7 +48,7 @@ async function getProjectDetailedData(project: TeamProject) {
         CourseId: ''
     }
 
-    if (project.teamId.mentor) {
+    if (project.teamId) {
         try{
             const mentor = await api.get(`/users/${project.teamId.mentor}`);
             returnProject.Mentor = `${mentor.data.name} ${mentor.data.surname}`;
