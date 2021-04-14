@@ -39,12 +39,12 @@ The project repository is split into two parts:
 - **Frontend** folder containing the client-side part of the application
 
 ## Application functionalities 
-Functionalities marked in **bold** are available in the frontend application, not-bolded ones have only backend functionalities.
+Functionalities marked in **bold** are available in the frontend application, not-bolded exist as backend functionalities.
 - For Coders Camp organizers
     - **managing the course participants**
     - **grouping the users with mentors**
     - **having an overview of users progress**
-    - **sharing the learning materials with the participants** 
+    - sharing the learning materials with the participants
 - For Coders Camp mentors
     - having an overview of group progress 
     - **private sharing the grades with group members**
