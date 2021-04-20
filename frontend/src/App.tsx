@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import MainView from './components/MainView';
+import MainView from './pages/Common/MainView';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
