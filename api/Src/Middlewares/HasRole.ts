@@ -3,7 +3,7 @@ import * as express from 'express';
 const jwt = require('jsonwebtoken');
 
 export const HasRole = (roles: UserType[]) => (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const token: string = req.header('x-auth-token');
+    const token: string = req.cookies.token || '';
     if(!token) return res.status(401).json({message: 'UNAUTHORIZED'});
     try {
         const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
@@ -15,7 +15,7 @@ export const HasRole = (roles: UserType[]) => (req: express.Request, res: expres
 }
 
 export const HasId = (idParam: string, reqProp: 'body' | 'params' = 'params') => (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const token: string = req.header('x-auth-token');
+    const token: string = req.cookies.token || '';
     if(!token) return res.status(401).json({message: 'UNAUTHORIZED'});
     try {
         const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY);

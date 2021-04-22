@@ -7,6 +7,7 @@ import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import 'express-async-errors';
 import * as cors from 'cors';
+import * as cookieParser from 'cookie-parser';
 
 import ProjectController from './Src/Controllers/ProjectController';
 import projectRoutes from './Src/Routes/ProjectRoutes';
@@ -96,8 +97,8 @@ const middlewares = [
     bodyParser.json(),
     cors({
       origin: '*',
-      exposedHeaders: 'x-auth-token',
-    })
+    }),
+    cookieParser()
 ];
 appContainer.declare("Middlewares", (c) => middlewares);
 

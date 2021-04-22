@@ -1,5 +1,4 @@
 import * as express from "express";
-import { valid } from "joi";
 
 export default (validator) => ( req: express.Request, res: express.Response, next: express.NextFunction ) => {
         const result = validator(req.body);
