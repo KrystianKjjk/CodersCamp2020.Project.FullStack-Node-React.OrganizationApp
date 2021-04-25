@@ -13,7 +13,6 @@ import { useParams } from "react-router-dom";
 import { fetchData } from "../ReusableTable/ReusableTableSlice";
 import { useAppDispatch } from "../../app/hooks";
 import EditGradeModal from "../EditGradeModal";
-import { SettingsOutlined } from "@material-ui/icons";
 import ConfirmationDialog from "../ConfirmationDialog";
 
 type Grade = SheetGrade & { quality: string };
