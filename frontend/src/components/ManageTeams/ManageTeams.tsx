@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './ManageTeams.module.css';
 import AddButton from '../AddButton';
 import SelectSortBy from '../SelectSortBy';
@@ -11,6 +11,7 @@ import { TeamService } from '../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import UButton from '../UButton';
 import { useHistory } from 'react-router-dom';
+import ConfirmationDialog from '../ConfirmationDialog';
 
 
 export interface ManageTeamsProps { };
@@ -20,6 +21,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const selectedTeams = useRef([] as string[]);
+  const [isOpen, setIsOpen]=useState(false);
 
   const tableName = 'Teams';
 
@@ -58,14 +60,31 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
     })
     dispatch(fetchData(tableName, api.getTeams));
     selectedTeams.current = [];
+    setIsOpen(false);
   }
 
   const handleRowClick = (data: {id: string | number}) => {
     history.push(`/teams/${data.id}`);
   };
+
+  const handleOpenDeleteConfirmation = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setIsOpen(false);
+  };
   
   return (
     <Container className={styles.manageTeams} aria-label='Manage Teams'>
+      <ConfirmationDialog
+            title="Are you sure you want to delete this team?"
+            content="This action is irreversible."
+            isOpen={isOpen}
+            onClose={handleCloseDeleteConfirmation }
+            handleConfirm={deleteSelectedTeams}
+            handleCancel={handleCloseDeleteConfirmation}
+        />
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>Teams</h2>
@@ -78,7 +97,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
           <h2 className={styles.manageHeader}>Manage Teams</h2>
           <div className={styles.buttons}>
             <AddButton text='Add' onClick={handleAddClick} aria-label='Add team'/>
-            <UButton text="Delete" color="secondary" onClick={deleteSelectedTeams}/>
+            <UButton text="Delete" color="secondary" onClick={handleOpenDeleteConfirmation}/>
           </div>
           <span className={styles.selectSortBy}>
             <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
