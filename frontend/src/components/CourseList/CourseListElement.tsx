@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box} from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
@@ -6,6 +6,7 @@ import { deleteCourseAsync, setActiveCourse, CourseListElementModel } from "./Co
 import { useAppDispatch } from "../../app/hooks";
 import UButton from "../UButton";
 import {format} from "date-fns";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 export interface CourseListElementProps {
   course: CourseListElementModel;
@@ -60,9 +61,10 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const [isOpen, setIsOpen]=useState(false);
 
 
-  const handleDeleteButtonClick = (event:any) => {
+  const handleConfirmButtonClick = (event:any) => {
     dispatch(deleteCourseAsync(course._id))
     event.stopPropagation();
   };
@@ -76,12 +78,28 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
     dispatch(setActiveCourse(course));
   };
 
+  const handleOpenDeleteConfirmation = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setIsOpen(false);
+  };
+
   const boxClasses = isActive
     ? `${classes.box} ${classes.boxActive}`
     : classes.box;
 
   return (
     <div className={boxClasses} onClick={handleCourseClick} data-testid="course-list-element">
+        <ConfirmationDialog
+            title="Are you sure you want to delete this course?"
+            content="This action is irreversible."
+            isOpen={isOpen}
+            onClose={handleCloseDeleteConfirmation }
+            handleConfirm={handleConfirmButtonClick}
+            handleCancel={handleCloseDeleteConfirmation}
+        />
       <div className={classes.name}>{course.name}</div>
       <div>
         <Box display="flex" justifyContent="space-between" padding="4% 8%">
@@ -96,7 +114,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
           <UButton
             text="DELETE"
             color="secondary"
-            onClick={handleDeleteButtonClick}
+            onClick={handleOpenDeleteConfirmation}
           >
           </UButton>
 
