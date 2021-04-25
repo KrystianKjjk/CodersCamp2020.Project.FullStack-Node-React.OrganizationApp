@@ -96,7 +96,8 @@ appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware());
 const middlewares = [
     bodyParser.json(),
     cors({
-      origin: '*',
+        origin: process.env.CLIENT_URL,
+        credentials: true
     }),
     cookieParser()
 ];

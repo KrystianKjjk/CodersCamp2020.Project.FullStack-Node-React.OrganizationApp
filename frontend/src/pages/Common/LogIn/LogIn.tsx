@@ -54,11 +54,9 @@ export default function SignIn(props: LogInProps) {
   };
 
   const setResponseDataToLocalStorage = (response: AxiosResponse) => {
-    const token = response.headers?.["x-auth-token"];
     const userId = response.data?.["_id"];
     const userType = response.data?.["type"];
 
-    localStorage.setItem("token", token);
     localStorage.setItem("id", userId);
     localStorage.setItem("type", userType);
   };

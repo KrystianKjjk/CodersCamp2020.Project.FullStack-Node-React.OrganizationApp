@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { CookiesProvider } from 'react-cookie';
+
 import './index.css';
 import App from './App';
 import { store } from './app/store';
@@ -10,11 +12,13 @@ import theme from "./theme/customMaterialTheme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </Provider>
+      <CookiesProvider>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </Provider>
+      </CookiesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

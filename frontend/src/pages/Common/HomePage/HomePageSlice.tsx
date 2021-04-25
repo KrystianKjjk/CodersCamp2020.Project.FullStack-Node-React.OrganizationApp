@@ -11,7 +11,10 @@ const initialState: any = {
     loading: false,
     loaded: false,
     error: false,
-    userData: {},
+    userData: {
+        name: '',
+        surname: ''
+    },
 };
 
 export const fetchUser: any = createAsyncThunk('fetchUserData', async (userID: string) => {

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { useCookies } from 'react-cookie';
 import styles from "./MainView.module.css";
 import Header from "../../../components/Header";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -43,27 +44,35 @@ const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
 
+  // eslint-disable-next-line
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
   const dispatch = useDispatch();
   const {loaded} = useSelector(selectUserData);
 
   useEffect(() => {
-    if(!loaded && isLogged) {
+    if(isLogged) {
       const userID = localStorage.getItem('id');
       dispatch(fetchUser(userID));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged, loaded]);
 
+  const handleLogout = () => {
+    setIsLogged(false);
+    removeCookie('token');
+  }
+
   const MainContent = () => {
     if (!(isLogged)) return <LoggedOut onLogin={() => setIsLogged(true)} />;
     //@ts-ignore
     switch (parseInt(userData.userType)) {
       case Role.Admin:
-        return <Admin onLogout={() => setIsLogged(false)} />
+        return <Admin onLogout={handleLogout} />
       case Role.Mentor:
-        return <Mentor onLogout={() => setIsLogged(false)} />
+        return <Mentor onLogout={handleLogout} />
       default:
-        return <Participant onLogout={() => setIsLogged(false)} />
+        return <Participant onLogout={handleLogout} />
     }
   }
 

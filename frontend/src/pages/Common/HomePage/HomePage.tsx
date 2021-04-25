@@ -17,7 +17,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     <div className={styles.container}>
       <PageHeader name="HOMEPAGE"/>
       <div className={styles.description}> 
-        <div><NotificationsIcon fontSize="large" style={{paddingRight:"20px"}}></NotificationsIcon><h2> Next event</h2></div>
+        <div><NotificationsIcon fontSize="large" style={{paddingRight:"20px"}}></NotificationsIcon><h2> Current event</h2></div>
         <div>
             {
                 course ? (
