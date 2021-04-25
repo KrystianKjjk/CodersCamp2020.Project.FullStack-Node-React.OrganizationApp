@@ -65,7 +65,7 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
 
 
   const handleConfirmButtonClick = (event:any) => {
-    dispatch(deleteCourseAsync(course._id))
+    dispatch(deleteCourseAsync(course._id));
     event.stopPropagation();
   };
 
@@ -74,16 +74,19 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
     event.stopPropagation();
   };
 
-  const handleCourseClick = () => {
+  const handleCourseClick = (event: any) => {
     dispatch(setActiveCourse(course));
+    event.stopPropagation();
   };
 
-  const handleOpenDeleteConfirmation = () => {
+  const handleOpenDeleteConfirmation = (event:any) => {
     setIsOpen(true);
+    event.stopPropagation();
   };
 
-  const handleCloseDeleteConfirmation = () => {
+  const handleCloseDeleteConfirmation = (event:any) => {
     setIsOpen(false);
+    event.stopPropagation();
   };
 
   const boxClasses = isActive
