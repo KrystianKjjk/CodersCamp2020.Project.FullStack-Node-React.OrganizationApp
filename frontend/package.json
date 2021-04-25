@@ -43,8 +43,9 @@
   "jest": {
     "collectCoverageFrom": [
       "./src/components/**",
-      "!./src/components/**/*.stories.tsx",
-      "!./src/components/**/index.ts"
+      "./src/pages/**",
+      "!./src/**/*.stories.tsx",
+      "!./src/**/index.ts"
     ]
   },
   "eslintConfig": {
