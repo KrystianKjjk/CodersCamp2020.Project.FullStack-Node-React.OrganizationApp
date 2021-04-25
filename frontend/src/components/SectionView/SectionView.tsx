@@ -12,6 +12,7 @@ import { NewSectionData } from '../../models/Section.model';
 import { CourseForSection } from '../../models/Course.model';
 import StyledTextField from '../StyledTextField';
 import UButton from "../UButton";
+import ConfirmationDialog from '../ConfirmationDialog';
 
 const SectionView = () => {
   const sectionService = useMemo(() => new SectionService(), []);
@@ -26,6 +27,8 @@ const SectionView = () => {
   const [isInEditMode, setIsInEditMode] = useState(false);
   const { id } = useParams<Record<'id', string>>()
   const history = useHistory();
+  const [isOpen, setIsOpen]=useState(false);
+
   
   useEffect(() => {
     const getCourseData = async () => {
@@ -72,6 +75,14 @@ const SectionView = () => {
     await sectionService.deleteSection(id);
     history.push('/sections');
   }
+
+  const handleOpenDeleteConfirmation = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setIsOpen(false);
+  };
 
   const renderButtonEditSave = () => {
     return isInEditMode 
@@ -149,7 +160,7 @@ const SectionView = () => {
   const renderButtonDelete = () => {
     return id 
     ? (
-      <div><UButton text='DELETE' color='secondary' onClick={handleDeleteClick}/></div>) 
+      <div><UButton text='DELETE' color='secondary' onClick={handleOpenDeleteConfirmation}/></div>) 
     : (
       null
       )
@@ -157,6 +168,14 @@ const SectionView = () => {
     
   return (
     <Container className={styles.manageSections} aria-label='Manage Section'>
+      <ConfirmationDialog
+            title="Are you sure you want to delete this section?"
+            content="This action is irreversible."
+            isOpen={isOpen}
+            onClose={handleCloseDeleteConfirmation }
+            handleConfirm={handleDeleteClick}
+            handleCancel={handleCloseDeleteConfirmation}
+        />
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>SECTION/{sectionName} </h2>
@@ -171,7 +190,7 @@ const SectionView = () => {
               {renderButtonEditSave()}
           </div>
         </div>
-        <div className={styles.manageDescription}>
+        <div className={styles.manageDescription}>  
           {renderSectionName()}
           {renderCourse()}
           {renderDescription()}
