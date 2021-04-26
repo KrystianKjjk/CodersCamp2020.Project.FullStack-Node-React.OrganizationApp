@@ -8,7 +8,7 @@ exports[`HomePage should render home page 1`] = `
     <div
       class="headerContainer"
     >
-      HOMEPAGE
+      Homepage
     </div>
     <div
       class="description"
