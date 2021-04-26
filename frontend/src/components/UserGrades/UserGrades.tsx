@@ -6,6 +6,7 @@ import {mainTheme} from "../../theme/customMaterialTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
 import {MAX_PROJECT, PROJECT_WEIGHT, QUIZ_WEIGHT, TASK_WEIGHT} from "../../app/constants";
+import PageHeader from '../PageHeader';
 
 export interface UserGradesProps {
 }
@@ -39,10 +40,7 @@ const UserGrades: React.FC< UserGradesProps > = props => {
   } else {
     return (
         <ThemeProvider theme={mainTheme}>
-            {console.log(userData)}
-          <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
-            <Typography color="primary">MY GRADES</Typography>
-          </Breadcrumbs>
+          <PageHeader name="My Grades"/>
 
           <Box className={styles.container}>
             <Box display="flex" className={styles.container__header}>

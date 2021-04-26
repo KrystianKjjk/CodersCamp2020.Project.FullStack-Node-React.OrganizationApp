@@ -12,6 +12,7 @@ import {
 import { IUser } from "../../models/User.model";
 import StyledTextField from '../StyledTextField'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import PageHeader from '../PageHeader';
 
 export interface MyProfileProps {
 }
@@ -154,9 +155,7 @@ const MyProfile = () => {
   else {
     return (
       <div className={styles.myProfileContainer}>
-        <div className={styles.teamProjectHeader}>
-          <span className={styles.teamProjectHeaderName}>My Profile</span>
-        </div>
+        <PageHeader name="My Profile"/>
 
         <div className={styles.teamProjectDetailsContainer}>
           <div className={styles.attributeNamesContainer}>

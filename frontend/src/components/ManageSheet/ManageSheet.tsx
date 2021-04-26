@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { fetchData } from '../ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../app/hooks';
 import EditGradeModal from '../EditGradeModal';
+import PageHeader from '../PageHeader';
 
 type Grade = (SheetGrade) & {quality: string};
 
@@ -212,13 +213,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
         loading === 'loading' ? <p>...Loading</p> :
         (<Container className={styles.manageSheet} aria-label='Manage Sheet'>
           <CssBaseline />
-          <Paper className={styles.mainHeader}>
-            <h2>
-              <Link href="/teams" color="inherit">Sheets</Link>
-              <span> / </span>
-              <span className={styles.sheetId}>{mentor ? `${mentor.name} ${mentor.surname}` : sheetId}</span>
-            </h2>
-          </Paper>
+          
+          <PageHeader name={`Sheets ${"/"+ (mentor ? `${mentor.name} ${mentor.surname}` : sheetId)}`}/>
+          
           <Paper className={styles.container}>
             <Container className={styles.manageHeader}>
               <h2>Manage Sheet</h2>

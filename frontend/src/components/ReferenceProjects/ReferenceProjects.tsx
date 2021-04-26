@@ -10,6 +10,7 @@ import ReusableTable from "../ReusableTable";
 
 import styles from './ReferenceProjects.module.css';
 import {mainTheme} from "../../theme/customMaterialTheme";
+import PageHeader from '../PageHeader';
 
 export interface ReferenceProjectsProps {
 }
@@ -67,9 +68,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
   } else {
     return (
         <ThemeProvider theme={mainTheme}>
-          <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
-            <Typography color="primary">PROJECTS</Typography>
-          </Breadcrumbs>
+           <PageHeader name="Projects"></PageHeader>
           <Box className={styles.container}>
             <Box display="flex" className={styles.container__header}>
               <span>Manage Reference Projects</span>
@@ -79,7 +78,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
                     color='primary'
                     onClick={handleAddButton} />
               </div>
-            </Box>
+            </Box>u
               <div className={styles.projectsTable}>
                   <ReusableTable
                       name=""

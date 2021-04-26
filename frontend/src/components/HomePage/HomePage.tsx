@@ -15,7 +15,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
     return (
     <div className={styles.container}>
-      <PageHeader name="HOMEPAGE"/>
+      <PageHeader name="Homepage"/>
       <div className={styles.description}> 
         <div><NotificationsIcon fontSize="large" style={{paddingRight:"20px"}}></NotificationsIcon><h2> Next event</h2></div>
         <div>
