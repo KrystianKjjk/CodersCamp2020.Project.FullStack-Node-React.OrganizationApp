@@ -19,7 +19,7 @@ import TeamProjectsComponent from "../../Admin/TeamProjects";
 import { getTeamProjects } from "../../../api/TeamProjects.service";
 import ManageTeams from "../../Admin/ManageTeams";
 import ManageUsers from "../../Admin/ManageUsers";
-import UserGrades from "../../../components/UserGrades";
+import UserGrades from "../../Participant/UserGrades";
 import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
 import {useDispatch, useSelector} from "react-redux";
 import ManageUser from "../../Admin/ManageUser";

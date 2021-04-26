@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import styles from './UserGrades.module.css';
 import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
-import {mainTheme} from "../../theme/customMaterialTheme";
+import {mainTheme} from "../../../theme/customMaterialTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUser, selectUserData} from "../../pages/Common/HomePage/HomePageSlice";
-import {MAX_PROJECT, PROJECT_WEIGHT, QUIZ_WEIGHT, TASK_WEIGHT} from "../../app/constants";
+import {fetchUser, selectUserData} from "../../Common/HomePage/HomePageSlice";
+import {MAX_PROJECT, PROJECT_WEIGHT, QUIZ_WEIGHT, TASK_WEIGHT} from "../../../app/constants";
 
 export interface UserGradesProps {
 }
