@@ -68,6 +68,7 @@ describe('ManageSheets', () => {
       
       const deleteSheetBtn = screen.getByText('Delete');
       deleteSheetBtn.click();
+      userEvent.click(screen.getByText("CONFIRM"));
       await wait(() => expect(deleteSheetMock).toBeCalledTimes(1));
    });
 

@@ -70,6 +70,7 @@ describe('ManageTeams', () => {
       
       const deleteTeamBtn = screen.getByText('Delete');
       deleteTeamBtn.click();
+      userEvent.click(screen.getByText("CONFIRM"));
       await wait(() => expect(deleteTeamMock).toBeCalledTimes(1));
    });
 
