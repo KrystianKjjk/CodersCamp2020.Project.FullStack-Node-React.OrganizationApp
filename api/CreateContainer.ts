@@ -143,7 +143,7 @@ appContainer.declare("TestService", (c) => new TestService(c.SectionRepository))
 
 
 // Controllers
-appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService));
+appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService, c.TeamService));
 appContainer.declare("PasswordController", (c) => new PasswordController(c.MailingService, c.PasswordService));
 appContainer.declare("CourseController",(c)=> new CourseController(c.CourseService));
 appContainer.declare("TeamProjectController",(c)=> new TeamProjectController(c.TeamProjectService));
