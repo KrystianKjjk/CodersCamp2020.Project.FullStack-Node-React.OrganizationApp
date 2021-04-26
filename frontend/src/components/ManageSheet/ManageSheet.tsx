@@ -4,7 +4,7 @@ import AddButton from '../AddButton';
 import UButton from '../UButton';
 import Table from '../ReusableTable';
 import FindModal from '../FindModal';
-import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
+import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { User, Grades, SheetGrade, Reviewer } from '../../models';
 import _ from 'lodash';
 import { SheetService, UserService, getTeamProjects } from '../../api';

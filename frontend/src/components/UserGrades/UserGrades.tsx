@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import styles from './UserGrades.module.css';
-import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
+import {Box, CircularProgress} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 import {mainTheme} from "../../theme/customMaterialTheme";
 import {useDispatch, useSelector} from "react-redux";

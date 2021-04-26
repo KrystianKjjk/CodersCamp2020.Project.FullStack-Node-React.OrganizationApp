@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchRefProjects, selectReferenceProjects} from "./ReferenceProjectsSlice";
-import {Box, Breadcrumbs, CircularProgress, Typography} from "@material-ui/core";
+import {Box, CircularProgress} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 import { useHistory } from "react-router-dom";
 
