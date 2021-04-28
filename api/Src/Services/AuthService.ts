@@ -10,19 +10,50 @@ type User = UserModel & mongoose.Document;
 
 export default class AuthService {
     private saltRounds: number = 10;
-    private tokenName: string = 'token';
 
-    constructor(private repository: UserRepository, private jwtPrivateKey: string, private jwtTokenExpiresIn) { }
+    constructor(private repository: UserRepository,
+                private jwtPrivateKey: string,
+                private jwtTokenExpiresIn: string,
+                private jwtRefreshPrivateKey: string,
+                private jwtRefreshExpiresIn: string,
+                ){}
 
     generateToken = (user: User): string => {
         return jwt.sign(
             { _id: user._id, type: user.type },
             this.jwtPrivateKey,
-            { expiresIn: this.jwtTokenExpiresIn });
+            { expiresIn: this.getTokenExp() });
     };
+
+    generateRefreshToken = (user: User): string => {
+        return jwt.sign(
+            { _id: user._id },
+            this.jwtRefreshPrivateKey,
+            { expiresIn: this.getRefreshTokenExp() });
+    };
+
+    isRefreshTokenValid = (req: express.Request) => {
+        const refreshToken: string = req.cookies.refreshToken || '';
+        if(!refreshToken) return false;
+
+        try {
+            return jwt.verify(refreshToken, this.jwtRefreshPrivateKey);
+        }
+        catch {
+            return false;
+        }
+    }
+
+    getTokenExp = () => parseInt(this.jwtTokenExpiresIn, 10);
+    getRefreshTokenExp = () => parseInt(this.jwtRefreshExpiresIn, 10);
 
     findUser = async (email: string) => {
         return this.repository.getByEmail(email);
+    }
+
+    findUserById = async (id: string) => {
+        const userId = new mongoose.Types.ObjectId(id);
+        return this.repository.getUserInfoById(userId);
     }
 
     hashPassword = async (user: User) => {
@@ -74,7 +105,4 @@ export default class AuthService {
         return this.isUserWithID(token, _id) && this.isMentor(token);
     };
 
-    isMentorReviewer = (token, projectID: string) => {
-        //WILL BE IMPLEMENTED
-    };
 }

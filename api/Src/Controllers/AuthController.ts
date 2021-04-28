@@ -49,10 +49,33 @@ export default class AuthController {
             const result = await this.service.checkPassword(req.body.password, user);
             if (!result) return res.status(401).json({message: 'Invalid email or password.'});
             const token = this.service.generateToken(user);
+            const refreshToken = this.service.generateRefreshToken(user);
 
-            return res.cookie('token', token).status(200).json({_id: user._id, type: user.type});
+            return res.cookie('token', token, {maxAge: this.service.getTokenExp() * 1000})
+                .cookie('refreshToken', refreshToken,
+                    { httpOnly: true, maxAge: this.service.getRefreshTokenExp() * 1000 })
+                .status(200).json({_id: user._id, type: user.type});
         } catch {
             return res.status(500).json({message: 'Internal server error.'});
+        }
+    }
+
+    refreshToken = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+        const result = this.service.isRefreshTokenValid(req);
+        if(result) {
+            const user = await this.service.findUserById(result._id);
+            user._id = result._id;
+
+            const token = this.service.generateToken(user);
+            const refreshToken = this.service.generateRefreshToken(user);
+
+            return res.cookie('token', token, {maxAge: this.service.getTokenExp() * 1000})
+                .cookie('refreshToken', refreshToken,
+                    { httpOnly: true, maxAge: this.service.getRefreshTokenExp() * 1000 })
+                .status(200).json({_id: user._id, type: user.type});
+        }
+        else {
+            return res.status(400).json({message: 'REFRESH TOKEN IS INVALID'});
         }
     }
 };

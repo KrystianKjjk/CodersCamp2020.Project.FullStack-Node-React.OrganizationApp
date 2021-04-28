@@ -85,6 +85,9 @@ const appContainer = new Container();
 appContainer.declare("jwtKey", (c) => process.env.JWT_PRIVATE_KEY);
 appContainer.declare("jwtExpiresIn", (c) => process.env.JWT_TOKEN_EXPIRESIN);
 
+appContainer.declare("jwtRefreshKey", (c) => process.env.JWT_REFRESH_PRIVATE_KEY);
+appContainer.declare("jwtRefreshExpiresIn", (c) => process.env.JWT_REFRESH_EXPIRESIN);
+
 // Mongo config
 appContainer.declare("Port", (c) => process.env.PORT);
 appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL);
@@ -138,7 +141,7 @@ appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectReposi
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository));
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository));
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository));
-appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn));
+appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn, c.jwtRefreshKey, c.jwtRefreshExpiresIn));
 appContainer.declare("GradeService", (c) => new GradeService(c.UserService));
 appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService));
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository));
