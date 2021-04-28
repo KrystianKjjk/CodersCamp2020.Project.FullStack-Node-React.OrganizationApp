@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./index";
 import { render} from "@testing-library/react";
 import * as Hooks from "../../app/hooks";
-import { CourseListElementModel } from "../CourseList/CourseListSlice";
+import { CourseListElementModel } from "../../pages/Admin/CourseList/CourseListSlice";
 
 const courseListElement: CourseListElementModel = {
   _id: "dummyId",
