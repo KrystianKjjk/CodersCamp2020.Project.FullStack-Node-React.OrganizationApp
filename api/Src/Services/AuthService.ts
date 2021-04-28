@@ -10,7 +10,7 @@ type User = UserModel & mongoose.Document;
 
 export default class AuthService {
     private saltRounds: number = 10;
-    private tokenName: string = 'x-auth-token';
+    private tokenName: string = 'token';
 
     constructor(private repository: UserRepository, private jwtPrivateKey: string, private jwtTokenExpiresIn) { }
 
@@ -43,7 +43,7 @@ export default class AuthService {
     }
 
     getToken = (req: express.Request) => {
-        return req.header(this.tokenName);
+        return req.cookies.token;
     }
 
     getTokenData = (token: string) => {
