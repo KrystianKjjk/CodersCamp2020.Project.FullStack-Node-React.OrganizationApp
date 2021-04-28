@@ -1,7 +1,32 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
-//axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')};
+
+axios.interceptors.response.use( response => response,
+    async function (error) {
+        if (error.response) {
+            const { status, data } = error.response;
+            switch (status) {
+                case 401:
+                    if (data.message === "UNAUTHORIZED") {
+                        try {
+                            const config = error.config;
+                            await new BaseService().get('/refresh-token');
+                            return await axios({method: config.method, url: config.url, data: config.data, withCredentials: true});
+                        } catch (e) {
+                            return window.location.href = "/login";
+                        }
+                    } else {
+                        return window.location.href = "/login";
+                    }
+                default:
+                    return Promise.reject(error);
+            }
+        } else {
+            return Promise.reject(error);
+        }
+    }
+);
 
 export default class BaseService {
     post = (path: string, data: any, config?: AxiosRequestConfig) => {
