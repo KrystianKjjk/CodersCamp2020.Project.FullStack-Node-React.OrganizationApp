@@ -19,7 +19,6 @@ import StyledTextField from "../../../components/StyledTextField";
 import useStyles from "./LogIn.style";
 import BaseService from "../../../app/baseService";
 import HeaderRegistration from '../../../components/HeaderRegistration';
-import axios from 'axios';
 import { useAppDispatch } from "../../../app/hooks";
 
 export interface LogInProps {
@@ -67,7 +66,6 @@ export default function SignIn(props: LogInProps) {
       const response = await service.post("login", { email, password });
       setFormError("");
       setResponseDataToLocalStorage(response);
-      axios.defaults.headers.common = {'x-auth-token': localStorage.getItem('token')};
       const courses = await fetchCoursesAndSort();
       const mostRecentCourse = courses[0];
       appDispatch(setActiveCourse(mostRecentCourse));

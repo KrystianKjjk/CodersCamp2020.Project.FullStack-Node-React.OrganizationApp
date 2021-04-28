@@ -50,8 +50,7 @@ export default class AuthController {
             if (!result) return res.status(401).json({message: 'Invalid email or password.'});
             const token = this.service.generateToken(user);
 
-            return res.cookie('token', token)
-                .status(200).json({_id: user._id, type: user.type});
+            return res.cookie('token', token).status(200).json({_id: user._id, type: user.type});
         } catch {
             return res.status(500).json({message: 'Internal server error.'});
         }
