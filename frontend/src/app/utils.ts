@@ -1,4 +1,4 @@
-import { CourseListElementModel } from "../components/CourseList/CourseListSlice";
+import { CourseListElementModel } from "../pages/Admin/CourseList/CourseListSlice";
 
 export const getUserFromLocalStorage = () => {
   const userId = localStorage.getItem("id");
