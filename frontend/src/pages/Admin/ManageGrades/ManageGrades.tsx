@@ -10,7 +10,7 @@ import UButton from '../../../components/UButton'
 import FindSection from '../../../components/FindSection'
 
 import styles from './ManageGrades.module.css'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageGradesProps {
   userID: string
@@ -40,7 +40,6 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
   const [sections, setSections] = useState<ISectionsUtility[]>([])
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     getGrades(props.userID)
@@ -51,14 +50,6 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
     let edits = [...isEdit]
     edits[index] = !edits[index]
     setIsEdit([...edits])
-  }
-
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpen(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
   }
 
   function openSectionsModal() {
@@ -136,7 +127,6 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
             tmpSections.splice(index, 1)
             setSections([...tmpSections])
             setOpenSuccessAlert(true)
-            setIsOpen(false)
           } else throw Error
         })
         .catch((err) => {
@@ -387,19 +377,10 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
                   </div>
                 </div>
               </form>
-              <ConfirmationDialog
-                title="Are you sure you want to delete this grade?"
-                content="This action is irreversible."
-                isOpen={isOpen}
-                onClose={handleCloseDeleteConfirmation}
-                handleConfirm={() => deleteGrade(index)}
-                handleCancel={handleCloseDeleteConfirmation}
-              />
               <Box display="flex" justifyContent="center">
-                <UButton
-                  text="DELETE"
-                  color="secondary"
-                  onClick={handleOpenDeleteConfirmation}
+                <DeleteButton
+                  confirmTitle="Are you sure you want to delete this grade? XX"
+                  onConfirm={() => deleteGrade(index)}
                 />
 
                 {isEdit[index] ? (

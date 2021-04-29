@@ -16,6 +16,7 @@ import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import UButton from '../../../components/UButton'
 import { useHistory } from 'react-router-dom'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageTeamsProps {}
 
@@ -73,31 +74,14 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
     })
     dispatch(fetchData(tableName, api.getTeams))
     selectedTeams.current = []
-    setIsOpen(false)
   }
 
   const handleRowClick = (data: { id: string | number }) => {
     history.push(`/teams/${data.id}`)
   }
 
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpen(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
-  }
-
   return (
     <Container className={styles.manageTeams} aria-label="Manage Teams">
-      <ConfirmationDialog
-        title="Are you sure you want to delete this team?"
-        content="This action is irreversible."
-        isOpen={isOpen}
-        onClose={handleCloseDeleteConfirmation}
-        handleConfirm={deleteSelectedTeams}
-        handleCancel={handleCloseDeleteConfirmation}
-      />
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>Teams</h2>
@@ -117,10 +101,9 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
               onClick={handleAddClick}
               aria-label="Add team"
             />
-            <UButton
-              text="Delete"
-              color="secondary"
-              onClick={handleOpenDeleteConfirmation}
+            <DeleteButton
+              confirmTitle={`Are you sure you want to delete selected (${selectedTeams.current.length}) teams?`}
+              onConfirm={deleteSelectedTeams}
             />
           </div>
           <span className={styles.selectSortBy}>

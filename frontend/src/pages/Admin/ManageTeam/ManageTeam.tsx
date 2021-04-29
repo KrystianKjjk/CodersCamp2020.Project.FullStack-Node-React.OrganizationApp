@@ -10,6 +10,7 @@ import { TeamService, UserService } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageTeamProps {}
 
@@ -24,7 +25,6 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
   const [teamMembers, setTeamMembers] = useState<User[]>([])
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false)
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false)
-  const [isOpen, setIsOpen] = useState(false)
 
   const selectedUsers = useRef<string[]>([])
 
@@ -93,15 +93,6 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
       teamMembers.filter((user) => !selectedUsers.current.includes(user.id)),
     )
     selectedUsers.current = []
-    setIsOpen(false)
-  }
-
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpen(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
   }
 
   const mentorColumns = [
@@ -120,123 +111,109 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
     { field: 'sectionName', headerName: 'Section', width: 270 },
   ]
 
+  if (loading === 'loading') return <p>...Loading</p>
   return (
-    <>
-      {loading === 'loading' ? (
-        <p>...Loading</p>
-      ) : (
-        <Container className={styles.manageTeams} aria-label="Manage Teams">
-          <CssBaseline />
-          <Paper className={styles.mainHeader}>
-            <h2>
-              <Link href="/teams" color="inherit">
-                Teams
-              </Link>
-              <span> / </span>
-              <span className={styles.teamId}>
-                {mentor ? `${mentor.name} ${mentor.surname}` : teamId}
-              </span>
-            </h2>
-          </Paper>
-          <Paper className={styles.container}>
-            <Container className={styles.manageHeader}>
-              <h2>Manage Team</h2>
-            </Container>
-            <div>
-              {openMentorsModal && (
-                <FindModal<User>
-                  onRowSelection={handleMentorSelection}
-                  getData={() => usersApi.getUsersOfType('Mentor')}
-                  columns={mentorColumns}
-                  searchPlaceholder="Search by surname"
-                  searchBy="surname"
-                  name="Find mentor"
-                  open={openMentorsModal}
-                  handleClose={() => setOpenMentorsModal(false)}
-                  handleOpen={() => setOpenMentorsModal(true)}
-                />
-              )}
-              <ul className={styles.teamInfo}>
-                <li className={styles.teamInfoRow}>
-                  <span>Mentor:</span>
-                  <span>
-                    {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
-                  </span>
-                  <UButton
-                    test-id="change-mentor"
-                    text="Change"
-                    color="primary"
-                    onClick={() => setOpenMentorsModal(true)}
-                  />
-                </li>
-                <li className={styles.teamInfoRow}>
-                  <span>Average grade:</span>
-                  <span>{avgGrade}%</span>
-                </li>
-              </ul>
-            </div>
-          </Paper>
-          <Paper className={styles.container}>
-            <div className={styles.manageContainer}>
-              <ConfirmationDialog
-                title="Are you sure you want to delete this user?"
-                content="This action is irreversible."
-                isOpen={isOpen}
-                onClose={handleCloseDeleteConfirmation}
-                handleConfirm={deleteSelectedUsers}
-                handleCancel={handleCloseDeleteConfirmation}
-              />
-              {openUsersModal && (
-                <FindModal<User>
-                  onRowSelection={handleAddUserSelection}
-                  getData={() => usersApi.getParticipantsNotInTeam()}
-                  columns={participantColumns}
-                  searchPlaceholder="Search by surname"
-                  searchBy="surname"
-                  name="Find participant"
-                  open={openUsersModal}
-                  handleClose={() => setOpenUsersModal(false)}
-                  handleOpen={() => setOpenUsersModal(true)}
-                />
-              )}
-              <h2 className={styles.manageHeader}>Users</h2>
-              <div className={styles.buttons}>
-                <AddButton
-                  aria-label="Add user"
-                  text="Add"
-                  onClick={() => setOpenUsersModal(true)}
-                />
-                <UButton
-                  text="Delete"
-                  color="secondary"
-                  onClick={handleOpenDeleteConfirmation}
-                />
-              </div>
-            </div>
-            <div className={styles.table}>
-              <Table
-                aria-label="Team members table"
-                name="Team"
-                columns={columns}
-                getData={getTeamMemebers}
-                checkboxSelection={true}
-                onSelectionModelChange={handleUserSelection}
-              />
-            </div>
-            <div className={styles.manageContainer}>
-              <h2 className={styles.manageHeader}>Projects</h2>
-            </div>
-            <div className={styles.table}>
-              <Table
-                name="TeamProjects"
-                columns={projectColumns}
-                getData={() => Promise.resolve(projects)}
-              />
-            </div>
-          </Paper>
+    <Container className={styles.manageTeams} aria-label="Manage Teams">
+      <CssBaseline />
+      <Paper className={styles.mainHeader}>
+        <h2>
+          <Link href="/teams" color="inherit">
+            Teams
+          </Link>
+          <span> / </span>
+          <span className={styles.teamId}>
+            {mentor ? `${mentor.name} ${mentor.surname}` : teamId}
+          </span>
+        </h2>
+      </Paper>
+      <Paper className={styles.container}>
+        <Container className={styles.manageHeader}>
+          <h2>Manage Team</h2>
         </Container>
-      )}
-    </>
+        <div>
+          {openMentorsModal && (
+            <FindModal<User>
+              onRowSelection={handleMentorSelection}
+              getData={() => usersApi.getUsersOfType('Mentor')}
+              columns={mentorColumns}
+              searchPlaceholder="Search by surname"
+              searchBy="surname"
+              name="Find mentor"
+              open={openMentorsModal}
+              handleClose={() => setOpenMentorsModal(false)}
+              handleOpen={() => setOpenMentorsModal(true)}
+            />
+          )}
+          <ul className={styles.teamInfo}>
+            <li className={styles.teamInfoRow}>
+              <span>Mentor:</span>
+              <span>
+                {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
+              </span>
+              <UButton
+                test-id="change-mentor"
+                text="Change"
+                color="primary"
+                onClick={() => setOpenMentorsModal(true)}
+              />
+            </li>
+            <li className={styles.teamInfoRow}>
+              <span>Average grade:</span>
+              <span>{avgGrade}%</span>
+            </li>
+          </ul>
+        </div>
+      </Paper>
+      <Paper className={styles.container}>
+        <div className={styles.manageContainer}>
+          {openUsersModal && (
+            <FindModal<User>
+              onRowSelection={handleAddUserSelection}
+              getData={() => usersApi.getParticipantsNotInTeam()}
+              columns={participantColumns}
+              searchPlaceholder="Search by surname"
+              searchBy="surname"
+              name="Find participant"
+              open={openUsersModal}
+              handleClose={() => setOpenUsersModal(false)}
+              handleOpen={() => setOpenUsersModal(true)}
+            />
+          )}
+          <h2 className={styles.manageHeader}>Users</h2>
+          <div className={styles.buttons}>
+            <AddButton
+              aria-label="Add user"
+              text="Add"
+              onClick={() => setOpenUsersModal(true)}
+            />
+            <DeleteButton
+              confirmTitle={`Are you sure you want to delete selected (${selectedUsers.current.length}) users?`}
+              onConfirm={deleteSelectedUsers}
+            />
+          </div>
+        </div>
+        <div className={styles.table}>
+          <Table
+            aria-label="Team members table"
+            name="Team"
+            columns={columns}
+            getData={getTeamMemebers}
+            checkboxSelection={true}
+            onSelectionModelChange={handleUserSelection}
+          />
+        </div>
+        <div className={styles.manageContainer}>
+          <h2 className={styles.manageHeader}>Projects</h2>
+        </div>
+        <div className={styles.table}>
+          <Table
+            name="TeamProjects"
+            columns={projectColumns}
+            getData={() => Promise.resolve(projects)}
+          />
+        </div>
+      </Paper>
+    </Container>
   )
 }
 

@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom'
 import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
 import { useAppDispatch } from '../../../app/hooks'
 import EditGradeModal from '../../../components/EditGradeModal'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 type Grade = SheetGrade & { quality: string }
 
@@ -26,11 +26,6 @@ function gradesObjectToArray(grades: Grades): Grade[] {
 }
 
 export interface ManageSheetProps {}
-
-interface deleteModal {
-  title: string
-  confirmFunction: () => void
-}
 
 const ManageSheet: React.FC<ManageSheetProps> = () => {
   const api = new SheetService()
@@ -58,8 +53,6 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   const [openProjectsModal, setOpenProjectsModal] = useState<boolean>(false)
   const [openReviewersModal, setOpenReviewersModal] = useState<boolean>(false)
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const [deleteModalInfo, setDeleteModalInfo] = useState<deleteModal>()
 
   const [editedGrade, setEditedGrade] = useState<Grade>({
     quality: '',
@@ -147,7 +140,6 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
       .setReviewers(sheetId, newReviewers)
       .then(loadSheet)
       .catch((error) => console.log(error))
-    setIsOpen(false)
   }
 
   const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
@@ -161,7 +153,6 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
       ),
     ).then(() => loadSheet())
     selectedParticipants.current = []
-    setIsOpen(false)
   }
 
   const handleGradeSelection = (row: GridSelectionModelChangeParams) => {
@@ -189,7 +180,6 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
       .then(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)))
     selectedGrades.current = []
     setMentorGrades(newMentorGrades)
-    setIsOpen(false)
   }
 
   const addMentorGrade = (id: string, grade: Grade) => {
@@ -226,260 +216,213 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
     { field: 'Section', headerName: 'Mentor', width: 250 },
   ]
 
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
-  }
-
-  const openRemoveUserModal = () => {
-    const deleteUserModalInfo: deleteModal = {
-      title: 'Are you sure you want to delete this user?',
-      confirmFunction: deleteSelectedUsers,
-    }
-    setIsOpen(true)
-    setDeleteModalInfo(deleteUserModalInfo)
-  }
-
-  const openRemoveReviewerModal = (id: string) => {
-    setIsOpen(true)
-    const deleteReviewerModalInfo: deleteModal = {
-      title: 'Are you sure you want to delete this reviewer?',
-      confirmFunction: () => deleteReviewer(id),
-    }
-    setDeleteModalInfo(deleteReviewerModalInfo)
-  }
-
-  const openRemoveGradeModal = () => {
-    const deleteGradeModalInfo: deleteModal = {
-      title: 'Are you sure you want to delete this grade?',
-      confirmFunction: deleteSelectedGrades,
-    }
-    setIsOpen(true)
-    setDeleteModalInfo(deleteGradeModalInfo)
-  }
+  if (loading === 'loading') return <p>...Loading</p>
 
   return (
-    <>
-      {loading === 'loading' ? (
-        <p>...Loading</p>
-      ) : (
-        <Container className={styles.manageSheet} aria-label="Manage Sheet">
-          {/* <ConfirmationDialog
-            title={deleteModalInfo?.title}
-            content="This action is irreversible."
-            isOpen={isOpen}
-            onClose={handleCloseDeleteConfirmation}
-            handleConfirm={deleteModalInfo?.confirmFunction}
-            handleCancel={handleCloseDeleteConfirmation}
-          /> */}
-          <CssBaseline />
-          <Paper className={styles.mainHeader}>
-            <h2>
-              <Link href="/teams" color="inherit">
-                Sheets
-              </Link>
-              <span> / </span>
-              <span className={styles.sheetId}>
-                {mentor ? `${mentor.name} ${mentor.surname}` : sheetId}
-              </span>
-            </h2>
-          </Paper>
-          <Paper className={styles.container}>
-            <Container className={styles.manageHeader}>
-              <h2>Manage Sheet</h2>
-            </Container>
-            <div>
-              {openMentorsModal && (
-                <FindModal<User>
-                  onRowSelection={handleMentorSelection}
-                  getData={() => usersApi.getUsersOfType('Mentor')}
-                  columns={mentorColumns}
-                  searchPlaceholder="Search by surname"
-                  searchBy="surname"
-                  name="Find mentor"
-                  open={openMentorsModal}
-                  handleClose={() => setOpenMentorsModal(false)}
-                  handleOpen={() => setOpenMentorsModal(true)}
-                />
-              )}
-              {openProjectsModal && (
-                <FindModal<User>
-                  onRowSelection={handleProjectSelection}
-                  getData={getTeamProjects}
-                  columns={projectColumns}
-                  searchPlaceholder="Search by name"
-                  searchBy="name"
-                  name="Find project"
-                  open={openProjectsModal}
-                  handleClose={() => setOpenProjectsModal(false)}
-                  handleOpen={() => setOpenProjectsModal(true)}
-                />
-              )}
-              {openReviewersModal && (
-                <FindModal<User>
-                  onRowSelection={handleReviewerSelection}
-                  getData={() => usersApi.getUsersOfType('Mentor')}
-                  columns={mentorColumns}
-                  searchPlaceholder="Search by surname"
-                  searchBy="surname"
-                  name="Find mentor reviewer"
-                  open={openReviewersModal}
-                  handleClose={() => setOpenReviewersModal(false)}
-                  handleOpen={() => setOpenReviewersModal(true)}
-                />
-              )}
-              <ul className={styles.teamInfo}>
-                <li className={styles.teamInfoRow}>
-                  <span>Project:</span>
-                  <span>{project.Name}</span>
-                  <UButton
-                    test-id="change-mentor"
-                    text="Change"
-                    color="primary"
-                    onClick={() => setOpenProjectsModal(true)}
-                  />
-                </li>
-                <li className={styles.teamInfoRow}>
-                  <span>Mentor:</span>
-                  <span>
-                    {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
-                  </span>
-                  <UButton
-                    test-id="change-mentor"
-                    text="Change"
-                    color="primary"
-                    onClick={() => setOpenMentorsModal(true)}
-                  />
-                </li>
-                <li className={styles.reviewersInfo}>
-                  <span>Reviewers:</span>
-                  <ul className={styles.reviewers}>
-                    {reviewers.map((reviewer) => (
-                      <li className={styles.reviewerInfoRow} key={reviewer._id}>
-                        <span>
-                          {reviewer.name} {reviewer.surname}
-                        </span>
-                        <UButton
-                          color="secondary"
-                          text="Delete"
-                          onClick={() => openRemoveReviewerModal(reviewer._id)}
-                        />
-                      </li>
-                    ))}
-                    <li>
-                      <AddButton
-                        text="Add reviewer"
-                        onClick={() => setOpenReviewersModal(true)}
-                      />
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-
-              <ul className={styles.teamInfo}>
-                <li className={styles.teamInfoRow}>
-                  <span>Url:</span>
-                  <span>{project.projectUrl}</span>
-                </li>
-                <li className={styles.teamInfoRow}>
-                  <span>Description:</span>
-                  <span>{project.description}</span>
-                </li>
-              </ul>
-            </div>
-          </Paper>
-          <Paper className={styles.container}>
-            <div className={styles.manageContainer}>
-              {openUsersModal && (
-                <FindModal<User>
-                  onRowSelection={handleAddUserSelection}
-                  getData={() => usersApi.getUsersOfType('Participant')}
-                  columns={participantColumns}
-                  searchPlaceholder="Search by surname"
-                  searchBy="surname"
-                  name="Find participant"
-                  open={openUsersModal}
-                  handleClose={() => setOpenUsersModal(false)}
-                  handleOpen={() => setOpenUsersModal(true)}
-                />
-              )}
-              <h2 className={styles.manageHeader}>Users</h2>
-              <div className={styles.buttons}>
-                <AddButton
-                  aria-label="Add participant"
-                  text="Add"
-                  onClick={() => setOpenUsersModal(true)}
-                />
-                <UButton
-                  text="Delete"
-                  color="secondary"
-                  onClick={openRemoveUserModal}
-                />
-              </div>
-            </div>
-            <div className={styles.table}>
-              <Table
-                aria-label="Participants table"
-                name={participantsTableName}
-                columns={participantColumns}
-                getData={getParticipants}
-                checkboxSelection={true}
-                onSelectionModelChange={handleParticipantSelection}
-              />
-            </div>
-          </Paper>
-          <Paper className={styles.container}>
-            <div className={styles.manageContainer}>
-              {editedGrade.quality && (
-                <EditGradeModal
-                  quality={editedGrade.quality}
-                  initPoints={editedGrade.points}
-                  initComment={editedGrade.comment}
-                  initDescription={editedGrade.description}
-                  onClickSave={handleEditGrade}
-                  open={!!editedGrade.quality}
-                  handleClose={() => setEditedGrade({ quality: '', points: 0 })}
-                  handleOpen={() => 0}
-                />
-              )}
-              <h2 className={styles.manageHeader}>Mentor grades</h2>
-              <div className={styles.buttons}>
-                <AddButton
-                  aria-label="Add grade"
-                  text="Add"
-                  onClick={() =>
-                    addMentorGrade(sheetId, { quality: '---', points: 0 })
-                  }
-                  /*onClick={() => setOpenMentorGradesModal(true)*/
-                />
-                <UButton
-                  text="Delete"
-                  color="secondary"
-                  onClick={openRemoveGradeModal}
-                />
-              </div>
-            </div>
-            <div className={styles.table}>
-              <Table
-                aria-label="Grades table"
-                name={mentorGradesTableName}
-                columns={gradeColumns}
-                getData={getMentorGrades}
-                onSelectionModelChange={handleGradeSelection}
-                onRowClick={(params) =>
-                  setEditedGrade({
-                    quality: params.row.quality,
-                    points: params.row.points,
-                    comment: params.row.comment,
-                    description: params.row.description,
-                  })
-                }
-                checkboxSelection
-              />
-            </div>
-          </Paper>
+    <Container className={styles.manageSheet} aria-label="Manage Sheet">
+      <CssBaseline />
+      <Paper className={styles.mainHeader}>
+        <h2>
+          <Link href="/teams" color="inherit">
+            Sheets
+          </Link>
+          <span> / </span>
+          <span className={styles.sheetId}>
+            {mentor ? `${mentor.name} ${mentor.surname}` : sheetId}
+          </span>
+        </h2>
+      </Paper>
+      <Paper className={styles.container}>
+        <Container className={styles.manageHeader}>
+          <h2>Manage Sheet</h2>
         </Container>
-      )}
-    </>
+        <div>
+          {openMentorsModal && (
+            <FindModal<User>
+              onRowSelection={handleMentorSelection}
+              getData={() => usersApi.getUsersOfType('Mentor')}
+              columns={mentorColumns}
+              searchPlaceholder="Search by surname"
+              searchBy="surname"
+              name="Find mentor"
+              open={openMentorsModal}
+              handleClose={() => setOpenMentorsModal(false)}
+              handleOpen={() => setOpenMentorsModal(true)}
+            />
+          )}
+          {openProjectsModal && (
+            <FindModal<User>
+              onRowSelection={handleProjectSelection}
+              getData={getTeamProjects}
+              columns={projectColumns}
+              searchPlaceholder="Search by name"
+              searchBy="name"
+              name="Find project"
+              open={openProjectsModal}
+              handleClose={() => setOpenProjectsModal(false)}
+              handleOpen={() => setOpenProjectsModal(true)}
+            />
+          )}
+          {openReviewersModal && (
+            <FindModal<User>
+              onRowSelection={handleReviewerSelection}
+              getData={() => usersApi.getUsersOfType('Mentor')}
+              columns={mentorColumns}
+              searchPlaceholder="Search by surname"
+              searchBy="surname"
+              name="Find mentor reviewer"
+              open={openReviewersModal}
+              handleClose={() => setOpenReviewersModal(false)}
+              handleOpen={() => setOpenReviewersModal(true)}
+            />
+          )}
+          <ul className={styles.teamInfo}>
+            <li className={styles.teamInfoRow}>
+              <span>Project:</span>
+              <span>{project.Name}</span>
+              <UButton
+                test-id="change-mentor"
+                text="Change"
+                color="primary"
+                onClick={() => setOpenProjectsModal(true)}
+              />
+            </li>
+            <li className={styles.teamInfoRow}>
+              <span>Mentor:</span>
+              <span>
+                {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
+              </span>
+              <UButton
+                test-id="change-mentor"
+                text="Change"
+                color="primary"
+                onClick={() => setOpenMentorsModal(true)}
+              />
+            </li>
+            <li className={styles.reviewersInfo}>
+              <span>Reviewers:</span>
+              <ul className={styles.reviewers}>
+                {reviewers.map((reviewer) => (
+                  <li className={styles.reviewerInfoRow} key={reviewer._id}>
+                    <span>
+                      {reviewer.name} {reviewer.surname}
+                    </span>
+                    <DeleteButton
+                      confirmTitle={`Are you sure you want to delete reviewer ${reviewer.name} ${reviewer.surname}?`}
+                      onConfirm={() => deleteReviewer(reviewer._id)}
+                    />
+                  </li>
+                ))}
+                <li>
+                  <AddButton
+                    text="Add reviewer"
+                    onClick={() => setOpenReviewersModal(true)}
+                  />
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul className={styles.teamInfo}>
+            <li className={styles.teamInfoRow}>
+              <span>Url:</span>
+              <span>{project.projectUrl}</span>
+            </li>
+            <li className={styles.teamInfoRow}>
+              <span>Description:</span>
+              <span>{project.description}</span>
+            </li>
+          </ul>
+        </div>
+      </Paper>
+      <Paper className={styles.container}>
+        <div className={styles.manageContainer}>
+          {openUsersModal && (
+            <FindModal<User>
+              onRowSelection={handleAddUserSelection}
+              getData={() => usersApi.getUsersOfType('Participant')}
+              columns={participantColumns}
+              searchPlaceholder="Search by surname"
+              searchBy="surname"
+              name="Find participant"
+              open={openUsersModal}
+              handleClose={() => setOpenUsersModal(false)}
+              handleOpen={() => setOpenUsersModal(true)}
+            />
+          )}
+          <h2 className={styles.manageHeader}>Users</h2>
+          <div className={styles.buttons}>
+            <AddButton
+              aria-label="Add participant"
+              text="Add"
+              onClick={() => setOpenUsersModal(true)}
+            />
+            <DeleteButton
+              confirmTitle="Are you sure you want to delete this user?"
+              onConfirm={deleteSelectedUsers}
+            />
+          </div>
+        </div>
+        <div className={styles.table}>
+          <Table
+            aria-label="Participants table"
+            name={participantsTableName}
+            columns={participantColumns}
+            getData={getParticipants}
+            checkboxSelection={true}
+            onSelectionModelChange={handleParticipantSelection}
+          />
+        </div>
+      </Paper>
+      <Paper className={styles.container}>
+        <div className={styles.manageContainer}>
+          {editedGrade.quality && (
+            <EditGradeModal
+              quality={editedGrade.quality}
+              initPoints={editedGrade.points}
+              initComment={editedGrade.comment}
+              initDescription={editedGrade.description}
+              onClickSave={handleEditGrade}
+              open={!!editedGrade.quality}
+              handleClose={() => setEditedGrade({ quality: '', points: 0 })}
+              handleOpen={() => 0}
+            />
+          )}
+          <h2 className={styles.manageHeader}>Mentor grades</h2>
+          <div className={styles.buttons}>
+            <AddButton
+              aria-label="Add grade"
+              text="Add"
+              onClick={() =>
+                addMentorGrade(sheetId, { quality: '---', points: 0 })
+              }
+            />
+            <DeleteButton
+              confirmTitle="Are you sure you want to delete this grade?"
+              onConfirm={deleteSelectedGrades}
+            />
+          </div>
+        </div>
+        <div className={styles.table}>
+          <Table
+            aria-label="Grades table"
+            name={mentorGradesTableName}
+            columns={gradeColumns}
+            getData={getMentorGrades}
+            onSelectionModelChange={handleGradeSelection}
+            onRowClick={(params) =>
+              setEditedGrade({
+                quality: params.row.quality,
+                points: params.row.points,
+                comment: params.row.comment,
+                description: params.row.description,
+              })
+            }
+            checkboxSelection
+          />
+        </div>
+      </Paper>
+    </Container>
   )
 }
 

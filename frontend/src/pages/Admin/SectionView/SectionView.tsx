@@ -20,6 +20,7 @@ import { CourseForSection } from '../../../models/Course.model'
 import StyledTextField from '../../../components/StyledTextField'
 import UButton from '../../../components/UButton'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 const SectionView = () => {
   const sectionService = useMemo(() => new SectionService(), [])
@@ -34,7 +35,6 @@ const SectionView = () => {
   const [isInEditMode, setIsInEditMode] = useState(false)
   const { id } = useParams<Record<'id', string>>()
   const history = useHistory()
-  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const getCourseData = async () => {
@@ -82,14 +82,6 @@ const SectionView = () => {
   const handleDeleteClick = async () => {
     await sectionService.deleteSection(id)
     history.push('/sections')
-  }
-
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpen(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
   }
 
   const renderButtonEditSave = () => {
@@ -178,27 +170,18 @@ const SectionView = () => {
   }
 
   const renderButtonDelete = () => {
-    return id ? (
-      <div>
-        <UButton
-          text="DELETE"
-          color="secondary"
-          onClick={handleOpenDeleteConfirmation}
+    return (
+      id && (
+        <DeleteButton
+          confirmTitle="Are you sure you want to delete this section?"
+          onConfirm={handleDeleteClick}
         />
-      </div>
-    ) : null
+      )
+    )
   }
 
   return (
     <Container className={styles.manageSections} aria-label="Manage Section">
-      <ConfirmationDialog
-        title="Are you sure you want to delete this section?"
-        content="This action is irreversible."
-        isOpen={isOpen}
-        onClose={handleCloseDeleteConfirmation}
-        handleConfirm={handleDeleteClick}
-        handleCancel={handleCloseDeleteConfirmation}
-      />
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>SECTION/{sectionName} </h2>

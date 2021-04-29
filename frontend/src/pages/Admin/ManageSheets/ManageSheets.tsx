@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styles from './ManageSheets.module.css'
 import AddButton from '../../../components/AddButton'
 import SelectSortBy from '../../../components/SelectSortBy'
@@ -13,9 +13,8 @@ import { useAppDispatch } from '../../../app/hooks'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import SheetService from '../../../api/Sheet.service'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
-import UButton from '../../../components/UButton'
 import { useHistory } from 'react-router-dom'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageSheetsProps {}
 
@@ -24,7 +23,6 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const selectedSheets = useRef([] as string[])
-  const [isOpen, setIsOpen] = useState(false)
 
   const tableName = 'Sheets'
 
@@ -83,31 +81,14 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
     })
     setTimeout(() => dispatch(fetchData(tableName, api.getSheets)), 300)
     selectedSheets.current = []
-    setIsOpen(false)
   }
 
   const handleRowClick = (data: { id: string | number }) => {
     history.push(`/gradesheets/${data.id}`)
   }
 
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpen(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpen(false)
-  }
-
   return (
     <Container className={styles.manageSheets} aria-label="Manage Sheets">
-      <ConfirmationDialog
-        title="Are you sure you want to delete this grade sheet?"
-        content="This action is irreversible."
-        isOpen={isOpen}
-        onClose={handleCloseDeleteConfirmation}
-        handleConfirm={deleteSelectedSheets}
-        handleCancel={handleCloseDeleteConfirmation}
-      />
       <CssBaseline />
       <Paper className={styles.mainHeader}>
         <h2>Sheets</h2>
@@ -127,10 +108,9 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
               onClick={handleAddClick}
               aria-label="Add sheet"
             />
-            <UButton
-              text="Delete"
-              color="secondary"
-              onClick={handleOpenDeleteConfirmation}
+            <DeleteButton
+              confirmTitle="Are you sure you want to delete this grade sheet?"
+              onConfirm={deleteSelectedSheets}
             />
           </div>
           <span className={styles.selectSortBy}>

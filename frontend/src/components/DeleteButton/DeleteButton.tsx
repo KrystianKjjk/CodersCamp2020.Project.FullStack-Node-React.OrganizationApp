@@ -6,21 +6,25 @@ type EventType = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
 export interface DeleteButtonProps {
   confirmTitle: string
-  confirmContent: string
+  confirmContent?: string
   onConfirm: (event?: EventType) => void
   onClose?: (event?: EventType) => void
 }
 const DeleteButton: React.FC<DeleteButtonProps> = ({
   confirmTitle,
-  confirmContent,
+  confirmContent = 'This action is irreversible.',
   onConfirm,
   onClose,
 }) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
-  const handleCancelConfirm = () => {
+  const handleCancelConfirm = (e?: EventType) => {
     setIsConfirmOpen(false)
-    onClose && onClose()
+    onClose && onClose(e)
+  }
+  const handleConfirm = (e?: EventType) => {
+    onConfirm(e)
+    setIsConfirmOpen(false)
   }
   return (
     <>
@@ -29,7 +33,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
         content={confirmContent}
         isOpen={isConfirmOpen}
         onClose={handleCancelConfirm}
-        handleConfirm={onConfirm}
+        handleConfirm={handleConfirm}
         handleCancel={handleCancelConfirm}
       />
       <UButton
