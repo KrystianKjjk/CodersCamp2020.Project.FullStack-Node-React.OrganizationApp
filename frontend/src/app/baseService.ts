@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import {removeUserFromLocalStorage} from "./utils";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
 
@@ -14,9 +15,11 @@ axios.interceptors.response.use( response => response,
                             await new BaseService().get('/refresh-token');
                             return await axios({method: config.method, url: config.url, data: config.data, withCredentials: true});
                         } catch (e) {
+                            removeUserFromLocalStorage();
                             return window.location.href = "/login";
                         }
                     } else {
+                        removeUserFromLocalStorage();
                         return window.location.href = "/login";
                     }
                 default:

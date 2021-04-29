@@ -28,7 +28,7 @@ exports[`PrivateRoute renders properly 1`] = `
           <p
             style="font-weight: 500;"
           >
-            undefined undefined
+             
           </p>
           <p>
             Participant
