@@ -2,6 +2,8 @@ import axios, { AxiosRequestConfig } from 'axios';
 import {removeUserFromLocalStorage} from "./utils";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
+axios.defaults.withCredentials = true;
+axios.defaults.adapter = require('axios/lib/adapters/http');
 
 axios.interceptors.response.use( response => response,
     async function (error) {
@@ -33,16 +35,16 @@ axios.interceptors.response.use( response => response,
 
 export default class BaseService {
     post = (path: string, data: any, config?: AxiosRequestConfig) => {
-        return axios.post(path, data, {...config, withCredentials: true })
+        return axios.post(path, data, config)
     }
     get = (path: string, config?: AxiosRequestConfig) => {
-        return axios.get(path, {...config, withCredentials: true })
+        return axios.get(path, config)
     }
     delete = (path: string, config?: AxiosRequestConfig) => {
-        return axios.delete(path, {...config, withCredentials: true })
+        return axios.delete(path, config)
     }
     patch = (path: string, data: any, config?: AxiosRequestConfig) => {
-        return axios.patch(path, data, {...config, withCredentials: true })
+        return axios.patch(path, data, config)
     }
     put = (path: string, data: any) => {
         const putConfig = {
