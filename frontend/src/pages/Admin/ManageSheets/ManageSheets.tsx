@@ -109,7 +109,7 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
               aria-label="Add sheet"
             />
             <DeleteButton
-              confirmTitle="Are you sure you want to delete this grade sheet?"
+              confirmTitle="Are you sure you want to delete selected grade sheets?"
               onConfirm={deleteSelectedSheets}
             />
           </div>
