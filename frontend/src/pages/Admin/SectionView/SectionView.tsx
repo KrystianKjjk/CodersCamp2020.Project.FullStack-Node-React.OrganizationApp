@@ -11,6 +11,7 @@ import SectionService from '../../../api/ManageSection.service';
 import { NewSectionData } from '../../../models/Section.model';
 import { CourseForSection } from '../../../models/Course.model';
 import StyledTextField from '../../../components/StyledTextField';
+import ReusableGoBack from '../../../components/ReusableGoBack';
 import UButton from "../../../components/UButton";
 
 const SectionView = () => {
@@ -159,7 +160,7 @@ const SectionView = () => {
     <Container className={styles.manageSections} aria-label='Manage Section'>
       <CssBaseline />
       <Paper className={styles.mainHeader}>
-        <h2>SECTION/{sectionName} </h2>
+        <ReusableGoBack pageName="Sections" pageLink="/sections" elementName={sectionName} />
       </Paper>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
