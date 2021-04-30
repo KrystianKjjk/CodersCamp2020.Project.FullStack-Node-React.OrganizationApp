@@ -12,7 +12,6 @@ import {
 import { useHistory } from 'react-router-dom'
 
 import FindSection from '../../../components/FindSection'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
 import {
@@ -103,20 +102,8 @@ const ManageReferenceProject = (props: any) => {
     if (!isAdding) {
       dispatch(deleteRefProject(project._id))
     }
-    if (isEdit) toggleEdit()
-    handleCloseDeleteConfirmation()
 
     history.push('/projects')
-  }
-
-  const [isOpenDelete, setIsOpenDelete] = useState(false)
-
-  const handleOpenDeleteConfirmation = () => {
-    setIsOpenDelete(true)
-  }
-
-  const handleCloseDeleteConfirmation = () => {
-    setIsOpenDelete(false)
   }
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
@@ -172,7 +159,7 @@ const ManageReferenceProject = (props: any) => {
         className={styles.breadcrumbs}
       >
         <Link href="/projects" color="primary">
-          PROJECTS{' '}
+          PROJECTS
         </Link>
         <Typography color="primary">{projectID}</Typography>
       </Breadcrumbs>

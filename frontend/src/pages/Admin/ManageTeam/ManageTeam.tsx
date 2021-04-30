@@ -9,7 +9,6 @@ import { TeamProject, User } from '../../../models'
 import { TeamService, UserService } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
 import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageTeamProps {}

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styles from './ManageTeams.module.css'
 import AddButton from '../../../components/AddButton'
 import SelectSortBy from '../../../components/SelectSortBy'
@@ -13,9 +13,7 @@ import { useAppDispatch } from '../../../app/hooks'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { TeamService } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
-import UButton from '../../../components/UButton'
 import { useHistory } from 'react-router-dom'
-import ConfirmationDialog from '../../../components/ConfirmationDialog'
 import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageTeamsProps {}
@@ -25,7 +23,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const selectedTeams = useRef([] as string[])
-  const [isOpen, setIsOpen] = useState(false)
 
   const tableName = 'Teams'
 
