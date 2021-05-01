@@ -99,7 +99,6 @@ const EditGrade: React.FC<EditGradeProps> = (props) => {
       }
     };
 
-    console.log(grade);
     props.onClickSave(grade);
     props.handleClose();
   };

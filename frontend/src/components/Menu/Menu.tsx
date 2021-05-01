@@ -12,7 +12,7 @@ import ListItemLink from '../ListItemLink';
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from "../../app/utils";
 import {useSelector} from "react-redux";
-import {selectUserData} from "../HomePage/HomePageSlice";
+import {selectUserData} from "../../pages/Common/HomePage/HomePageSlice";
 
 export interface MenuProps { }
 

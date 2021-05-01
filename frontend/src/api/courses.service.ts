@@ -3,7 +3,7 @@ import BaseService from "../app/baseService";
 import {
   Course,
   CourseCreateObject,
-} from "../components/Course/CourseDetailsSlice";
+} from "../pages/Admin/Course/CourseDetailsSlice";
 
 export interface CourseListElementDto {
   _id: string;
