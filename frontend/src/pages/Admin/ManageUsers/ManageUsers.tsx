@@ -8,7 +8,7 @@ import { filterData, searchData, sortData } from '../../../components/ReusableTa
 import { useAppDispatch } from '../../../app/hooks';
 import { UserService } from '../../../api';
 import { useHistory } from 'react-router-dom';
-import PageHeader from '../PageHeader';
+import PageHeader from '../../../components/PageHeader';
 
 interface CheckboxProps {
   name: string;

@@ -11,7 +11,7 @@ import SheetService from '../../../api/Sheet.service';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import UButton from '../../../components/UButton';
 import { useHistory } from 'react-router-dom';
-import PageHeader from '../PageHeader';
+import PageHeader from '../../../components/PageHeader';
 
 
 export interface ManageSheetsProps { };

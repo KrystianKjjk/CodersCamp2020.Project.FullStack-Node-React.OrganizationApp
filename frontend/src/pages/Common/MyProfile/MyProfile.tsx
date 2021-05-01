@@ -12,7 +12,7 @@ import {
 import { IUser } from "../../../models/User.model";
 import StyledTextField from '../../../components/StyledTextField'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import PageHeader from '../PageHeader';
+import PageHeader from '../../../components/PageHeader';
 
 export interface MyProfileProps {
 }
