@@ -68,7 +68,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
   } else {
     return (
         <ThemeProvider theme={mainTheme}>
-           <PageHeader name="Projects"></PageHeader>
+           <PageHeader name="Projects"/>
           <Box className={styles.container}>
             <Box display="flex" className={styles.container__header}>
               <span>Manage Reference Projects</span>
@@ -78,7 +78,7 @@ const ReferenceProjects: React.FC< ReferenceProjectsProps > = props => {
                     color='primary'
                     onClick={handleAddButton} />
               </div>
-            </Box>u
+            </Box>
               <div className={styles.projectsTable}>
                   <ReusableTable
                       name=""

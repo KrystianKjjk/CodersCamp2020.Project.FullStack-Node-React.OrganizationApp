@@ -168,7 +168,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   }
   return (
     <div className={classes.root}>
-      <PageHeader name={"EDIT COURSE"}></PageHeader>
+      <PageHeader name={"Edit Course"}></PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <Box
