@@ -19,7 +19,7 @@ import {clearActionError, clearActionSuccess} from "../ReferenceProjects/Referen
 
 import {mainTheme} from "../../../theme/customMaterialTheme";
 import styles from './ManageReferenceProject.module.css';
-import PageHeader from '../PageHeader';
+import PageHeader from '../../../components/PageHeader';
 
 export interface ManageReferenceProjectProps {
 }
