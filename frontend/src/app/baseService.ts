@@ -14,7 +14,7 @@ axios.interceptors.response.use( response => response,
                     if (data.message === "UNAUTHORIZED") {
                         try {
                             const config = error.config;
-                            await new BaseService().get('/refresh-token');
+                            await axios.get('/refresh-token');
                             return await axios({method: config.method, url: config.url, data: config.data, withCredentials: true});
                         } catch (e) {
                            return _redirect();
@@ -30,7 +30,8 @@ axios.interceptors.response.use( response => response,
         }
 
         function _redirect() {
-            if(window?.localStorage) removeUserFromLocalStorage();
+            const {userId}: any = getUserFromLocalStorage;
+            if(userId) removeUserFromLocalStorage();
             if(window?.location) window.location.href = "/login";
         }
     }
