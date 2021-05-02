@@ -32,8 +32,15 @@ axios.interceptors.response.use( response => response,
         function _redirect() {
             const {userId}: any = getUserFromLocalStorage;
             if(userId) removeUserFromLocalStorage();
-            if(window?.location) window.location.href = "/login";
+            try {
+                return window.location.href = "/login";
+            }
+            catch {
+                return;
+            }
         }
+
+
     }
 );
 
