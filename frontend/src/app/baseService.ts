@@ -1,12 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import {removeUserFromLocalStorage} from "./utils";
+import {getUserFromLocalStorage, removeUserFromLocalStorage} from "./utils";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
 axios.defaults.withCredentials = true;
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
 axios.interceptors.response.use( response => response,
-    async function (error) {
+    async error => {
         if (error.response) {
             const { status, data } = error.response;
             switch (status) {
@@ -17,18 +17,22 @@ axios.interceptors.response.use( response => response,
                             await new BaseService().get('/refresh-token');
                             return await axios({method: config.method, url: config.url, data: config.data, withCredentials: true});
                         } catch (e) {
-                            removeUserFromLocalStorage();
-                            return window.location.href = "/login";
+                           return _redirect();
                         }
                     } else {
-                        removeUserFromLocalStorage();
-                        return window.location.href = "/login";
+                        return _redirect();
                     }
                 default:
                     return Promise.reject(error);
             }
         } else {
             return Promise.reject(error);
+        }
+
+        function _redirect() {
+            const {userId}: any = getUserFromLocalStorage;
+            if(userId) removeUserFromLocalStorage();
+            window.location.href = "/login";
         }
     }
 );
