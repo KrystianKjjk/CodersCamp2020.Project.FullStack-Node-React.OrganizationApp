@@ -1,9 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-//
 import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { GridValueFormatterParams } from '@material-ui/data-grid';
-//
 import styles from './ManageSections.module.css';
 import SelectSortBy from '../../../components/SelectSortBy';
 import SearchInput from '../../../components/SearchInput';
@@ -13,6 +11,7 @@ import { useAppDispatch } from '../../../app/hooks';
 import SectionService from '../../../api/ManageSection.service';
 import UButton from "../../../components/UButton";
 import { getActiveCourse } from '../../../app/utils';
+import PageHeader from '../../../components/PageHeader'
 
 export interface ManageSectionsProps {
 
@@ -64,12 +63,9 @@ const ManageSections: React.FC< ManageSectionsProps > = () => {
   return (
     <Container className={styles.manageSections} aria-label='Manage Sections'>
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Sections</h2>
-        <span className={styles.searchInput}>
+      <PageHeader name="Sections">
           <SearchInput onSubmit={changeSearch} placeholder='Search by ID or section name' />
-        </span>
-      </Paper>
+      </PageHeader>    
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sections</h2>

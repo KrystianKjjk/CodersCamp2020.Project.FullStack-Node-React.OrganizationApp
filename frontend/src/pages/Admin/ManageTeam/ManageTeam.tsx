@@ -4,11 +4,12 @@ import AddButton from '../../../components/AddButton';
 import UButton from '../../../components/UButton';
 import Table from '../../../components/ReusableTable';
 import FindModal from '../../../components/FindModal';
-import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
+import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { TeamProject, User } from '../../../models';
 import { TeamService, UserService } from '../../../api';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import { useParams } from "react-router-dom";
+import PageHeader from '../../../components/PageHeader';
 
 
 export interface ManageTeamProps { };
@@ -106,13 +107,7 @@ const ManageTeam: React.FC< ManageTeamProps > = () => {
         loading === 'loading' ? <p>...Loading</p> :
         (<Container className={styles.manageTeams} aria-label='Manage Teams'>
           <CssBaseline />
-          <Paper className={styles.mainHeader}>
-            <h2>
-              <Link href="/teams" color="inherit">Teams</Link>
-              <span> / </span>
-              <span className={styles.teamId}>{mentor ? `${mentor.name} ${mentor.surname}` : teamId}</span>
-            </h2>
-          </Paper>
+          <PageHeader name={`Teams ${"/ "+ (mentor ? `${mentor?.name} ${mentor?.surname}` : teamId)}`}/>
           <Paper className={styles.container}>
             <Container className={styles.manageHeader}>
               <h2>Manage Team</h2>

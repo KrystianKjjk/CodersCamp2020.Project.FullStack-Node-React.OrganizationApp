@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Breadcrumbs, Link, Snackbar, Typography} from "@material-ui/core";
+import {Box, Snackbar} from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { ThemeProvider } from "@material-ui/styles";
 import {
@@ -19,6 +19,7 @@ import {clearActionError, clearActionSuccess} from "../ReferenceProjects/Referen
 
 import {mainTheme} from "../../../theme/customMaterialTheme";
 import styles from './ManageReferenceProject.module.css';
+import PageHeader from '../../../components/PageHeader';
 
 export interface ManageReferenceProjectProps {
 }
@@ -165,10 +166,7 @@ const ManageReferenceProject = (props: any) => {
             handleCancel={handleCloseDeleteConfirmation}
         />
 
-        <Breadcrumbs aria-label="breadcrumb" color="primary" className={styles.breadcrumbs}>
-          <Link href="/projects" color="primary">PROJECTS </Link>
-          <Typography color="primary">{projectID}</Typography>
-        </Breadcrumbs>
+        <PageHeader name={`Projects ${"/"+ projectID}`}></PageHeader> 
 
         <Box className={styles.container}>
           <Box display="flex" className={styles.container__header}>
