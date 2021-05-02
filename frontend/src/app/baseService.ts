@@ -23,7 +23,7 @@ axios.interceptors.response.use( response => response,
                         return _redirect();
                     }
                 default:
-                    return Promise.reject(error);
+                    return;
             }
         } else {
             return Promise.reject(error);
