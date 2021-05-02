@@ -27,6 +27,18 @@ export default class UserController {
         res.status(200).json(users);
     }
 
+    getByTypeAndStatus = async (req: Request, res: Response) => {
+        try {
+            const users = await this.userService.getByTypeAndStatus(req.body);
+            return res.status(200).json(users);
+        }
+        catch(err) {
+            if(err.name === 'ValidationError')
+                return res.status(400).json({message: err.message})
+            res.status(500).json({message: err.message});
+        }
+    }
+
     updateUser = async (req: Request, res: Response) => {
         const id = new mongoose.Types.ObjectId(req.params.id);
         const user = await this.userService.updateUser(id, req.body);
