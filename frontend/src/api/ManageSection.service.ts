@@ -16,8 +16,8 @@ export default class SectionService {
             return ({
                 id: section._id,
                 name: section.name,
-                startDate: section?.startDate ? new Date(section.startDate).getTime() / 1000 : undefined,
-                endDate: section?.endDate ? new Date(section.endDate).getTime() / 1000 : undefined,
+                startDate: section?.startDate ? new Date(section?.startDate).getTime() / 1000 : undefined,
+                endDate: section?.endDate ? new Date(section?.endDate).getTime() / 1000 : undefined,
                 courseName: course ? course.name : '',
                 courseId: course?._id || '',
             })
