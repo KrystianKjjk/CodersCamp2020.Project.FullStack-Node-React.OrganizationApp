@@ -11,6 +11,7 @@ import SheetService from '../../../api/Sheet.service';
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
 import UButton from '../../../components/UButton';
 import { useHistory } from 'react-router-dom';
+import PageHeader from '../../../components/PageHeader';
 
 
 export interface ManageSheetsProps { };
@@ -72,12 +73,9 @@ const ManageSheets: React.FC< ManageSheetsProps > = () => {
   return (
     <Container className={styles.manageSheets} aria-label='Manage Sheets'>
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Sheets</h2>
-        <span className={styles.searchInput}>
-          <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
-        </span>
-      </Paper>
+      <PageHeader name="Sheets">
+         <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
+      </PageHeader>  
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Sheets</h2>

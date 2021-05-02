@@ -34,7 +34,7 @@ const CourseList: React.FC<CourseListProps> = (props) => {
 
   return (
     <div>
-      <PageHeader name="COURSES"></PageHeader>
+      <PageHeader name="Courses"></PageHeader>
       <div>
         <div className={styles.manageCourseBar}>
           <h3>Manage courses</h3>

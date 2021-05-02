@@ -4,7 +4,7 @@ import AddButton from '../../../components/AddButton';
 import UButton from '../../../components/UButton';
 import Table from '../../../components/ReusableTable';
 import FindModal from '../../../components/FindModal';
-import { Container, CssBaseline, Link, Paper } from '@material-ui/core';
+import { Container, CssBaseline, Paper } from '@material-ui/core';
 import { User, Grades, SheetGrade, Reviewer } from '../../../models';
 import _ from 'lodash';
 import { SheetService, UserService, getTeamProjects } from '../../../api';
@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import EditGradeModal from '../../../components/EditGradeModal';
+import PageHeader from '../../../components/PageHeader';
 
 type Grade = (SheetGrade) & {quality: string};
 
@@ -210,13 +211,9 @@ const ManageSheet: React.FC< ManageSheetProps > = () => {
         loading === 'loading' ? <p>...Loading</p> :
         (<Container className={styles.manageSheet} aria-label='Manage Sheet'>
           <CssBaseline />
-          <Paper className={styles.mainHeader}>
-            <h2>
-              <Link href="/teams" color="inherit">Sheets</Link>
-              <span> / </span>
-              <span className={styles.sheetId}>{mentor ? `${mentor.name} ${mentor.surname}` : sheetId}</span>
-            </h2>
-          </Paper>
+          
+          <PageHeader name={`Sheets ${"/"+ (mentor ? `${mentor.name} ${mentor.surname}` : sheetId)}`}/>
+          
           <Paper className={styles.container}>
             <Container className={styles.manageHeader}>
               <h2>Manage Sheet</h2>
