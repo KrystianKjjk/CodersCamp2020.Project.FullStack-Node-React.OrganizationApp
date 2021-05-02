@@ -14,6 +14,7 @@ import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { TeamService } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useHistory } from 'react-router-dom'
+import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageTeamsProps {}
@@ -80,15 +81,12 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
   return (
     <Container className={styles.manageTeams} aria-label="Manage Teams">
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Teams</h2>
-        <span className={styles.searchInput}>
-          <SearchInput
-            onSubmit={changeSearch}
-            placeholder="Search by ID or mentor surname"
-          />
-        </span>
-      </Paper>
+      <PageHeader name="Teams">
+        <SearchInput
+          onSubmit={changeSearch}
+          placeholder="Search by ID or mentor surname"
+        />
+      </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Teams</h2>

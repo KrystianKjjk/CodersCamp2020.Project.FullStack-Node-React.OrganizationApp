@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './PageHeader.module.css';
 
 export interface PageHeaderProps {
-name:string
+  name: string,
+  children?: ReactNode
 }
 
-const PageHeader: React.FC< PageHeaderProps > = ({name}:PageHeaderProps) => {
+const PageHeader: React.FC< PageHeaderProps > = (props:PageHeaderProps) => {
   return (
-    <div className={styles.header}>{name}</div>
+  <div className={styles.headerContainer}>
+    {props.name}
+    {props.children}
+  </div>
+    
   );
 };
 

@@ -4,12 +4,7 @@ import {
   fetchRefProjects,
   selectReferenceProjects,
 } from './ReferenceProjectsSlice'
-import {
-  Box,
-  Breadcrumbs,
-  CircularProgress,
-  Typography,
-} from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
@@ -18,6 +13,7 @@ import ReusableTable from '../../../components/ReusableTable'
 
 import styles from './ReferenceProjects.module.css'
 import { mainTheme } from '../../../theme/customMaterialTheme'
+import PageHeader from '../../../components/PageHeader'
 
 export interface ReferenceProjectsProps {}
 
@@ -73,13 +69,7 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = (props) => {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Breadcrumbs
-        aria-label="breadcrumb"
-        color="primary"
-        className={styles.breadcrumbs}
-      >
-        <Typography color="primary">PROJECTS</Typography>
-      </Breadcrumbs>
+      <PageHeader name="Projects" />
       <Box className={styles.container}>
         <Box display="flex" className={styles.container__header}>
           <span>Manage Reference Projects</span>

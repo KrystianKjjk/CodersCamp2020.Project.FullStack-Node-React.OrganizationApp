@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  Box,
-  Breadcrumbs,
-  CircularProgress,
-  Link,
-  Snackbar,
-  Typography,
-} from '@material-ui/core'
+import { Box, CircularProgress, Snackbar } from '@material-ui/core'
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import { ThemeProvider } from '@material-ui/styles'
 import MuiAlert from '@material-ui/lab/Alert'
@@ -19,8 +12,8 @@ import { UserStatus as Status } from '../../../models/User.model'
 import { UserType as Role } from '../../../models/User.model'
 import ManageGrades from '../ManageGrades'
 import UButton from '../../../components/UButton'
-
 import styles from './ManageUser.module.css'
+import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 
 export interface ManageUserProps {}
@@ -153,16 +146,7 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
           User not deleted!
         </Alert>
       </Snackbar>
-      <Breadcrumbs
-        aria-label="breadcrumb"
-        color="primary"
-        className={styles.breadcrumbs}
-      >
-        <Link href="/users" color="primary">
-          USERS{' '}
-        </Link>
-        <Typography color="primary">{userID}</Typography>
-      </Breadcrumbs>
+      <PageHeader name={`Users${'/' + userID}`} />
 
       <Box className={styles.container}>
         <Box display="flex" className={styles.container__header}>

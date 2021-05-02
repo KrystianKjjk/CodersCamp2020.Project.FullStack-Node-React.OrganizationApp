@@ -9,6 +9,7 @@ import TeamProject from '../TeamProject/index'
 import {
   fetchData
 } from '../../../components/ReusableTable/ReusableTableSlice';
+import PageHeader from '../../../components/PageHeader';
 
 export interface TeamProjectsProps {
   getFunction: () => Promise<any[]>
@@ -19,8 +20,8 @@ interface MainViewProps {
 }
 
 enum HeaderText {
-  MAIN = "TEAM PROJECTS",
-  EDIT = `EDIT TEAM PROJECT`
+  MAIN = "Team Projects",
+  EDIT = `Edit Team Project`
 }
 
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
@@ -35,7 +36,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   const changeSearch = (value: string) => {
     setSearch(value);
   }
-
+        
   useEffect(() => {
     const f = {
       column: 'Name',
@@ -52,12 +53,11 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   ];
 
   const Header = (detailedView: boolean) => {
-    return detailedView ? <><h2>{HeaderText.EDIT}</h2></> :
+    return detailedView ? <PageHeader name={HeaderText.EDIT}/> :
       (
-        <>
-          <h2>{HeaderText.MAIN}</h2>
+        <PageHeader name={HeaderText.MAIN}>
           <SearchInput onSubmit={changeSearch} placeholder='Search for project name' />
-        </>
+        </PageHeader>
       )
   }
 
@@ -77,9 +77,7 @@ const MainView = (props: MainViewProps) => {
 
   return (
     <CssBaseline>
-      <Paper className={styles.header} aria-label='TeamProjectsHeader'>
-        {Header(detailedView)}
-      </Paper>
+      <div>{Header(detailedView)}</div>
 
       <Paper className={styles.main}>
         <MainView detailedView={detailedView} />

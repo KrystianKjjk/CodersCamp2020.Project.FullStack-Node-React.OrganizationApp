@@ -23,9 +23,6 @@ describe('TeamProjects', () => {
             <TeamProjects getFunction={mockGet}/>
          </Provider>
       );
-      const header = await screen.findByLabelText(`TeamProjectsHeader`);
-      //@ts-ignore
-      expect(header).toBeInTheDocument();
 
       const table = await screen.findByLabelText(`Table - Manage Team Projects`);
       //@ts-ignore

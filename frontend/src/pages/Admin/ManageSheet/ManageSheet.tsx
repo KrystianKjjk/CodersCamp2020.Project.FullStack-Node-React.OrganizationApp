@@ -14,6 +14,7 @@ import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
 import { useAppDispatch } from '../../../app/hooks'
 import EditGradeModal from '../../../components/EditGradeModal'
 import DeleteButton from '../../../components/DeleteButton'
+import PageHeader from '../../../components/PageHeader'
 
 type Grade = SheetGrade & { quality: string }
 
@@ -221,17 +222,11 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   return (
     <Container className={styles.manageSheet} aria-label="Manage Sheet">
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>
-          <Link href="/teams" color="inherit">
-            Sheets
-          </Link>
-          <span> / </span>
-          <span className={styles.sheetId}>
-            {mentor ? `${mentor.name} ${mentor.surname}` : sheetId}
-          </span>
-        </h2>
-      </Paper>
+      <PageHeader
+        name={`Sheets ${
+          '/' + (mentor ? `${mentor.name} ${mentor.surname}` : sheetId)
+        }`}
+      />
       <Paper className={styles.container}>
         <Container className={styles.manageHeader}>
           <h2>Manage Sheet</h2>
