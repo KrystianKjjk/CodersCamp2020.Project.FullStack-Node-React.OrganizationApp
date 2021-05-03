@@ -1,5 +1,5 @@
 import UserRepository from '../Repositories/UserRepository';
-import { UserModel as User } from '../Models/User';
+import { UserModel as User, UserStatus, UserType } from '../Models/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {GradeType} from "../Models/Grade";
@@ -18,6 +18,20 @@ export default class UserService {
         const same = await bcrypt.compare(password, user.password)
         if(!same) return null;
         return user;
+    }
+
+    async getByTypeAndStatus(reqBody: any) {
+        let type: UserType[], status: UserStatus[];
+        const typeError = {
+            name: 'ValidationError',
+            message: 'User type and status should be arrays of enums',
+        };
+        type = reqBody.type ?? [];
+        status = reqBody.status ?? [];
+        if ( !(type instanceof Array) || !(status instanceof Array) ) throw(typeError);
+        
+        return this.repository.getByTypeAndStatus(type, status);
+        
     }
 
     async findUserById(id: mongoose.Types.ObjectId) {

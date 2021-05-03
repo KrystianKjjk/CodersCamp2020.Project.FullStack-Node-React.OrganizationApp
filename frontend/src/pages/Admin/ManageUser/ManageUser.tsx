@@ -12,7 +12,6 @@ import {UserStatus as Status} from "../../../models/User.model";
 import {UserType as Role} from "../../../models/User.model";
 import ManageGrades from "../ManageGrades";
 import UButton from "../../../components/UButton";
-
 import styles from './ManageUser.module.css';
 import ConfirmationDialog from "../../../components/ConfirmationDialog";
 import ReusableGoBack from '../../../components/ReusableGoBack';
@@ -164,7 +163,7 @@ const ManageUser: React.FC< ManageUserProps > = (props: any) => {
                         User not deleted!
                     </Alert>
                 </Snackbar>
-                    <PageHeader name={<ReusableGoBack pageName="Users" pageLink="/users" elementName={user?.name as string + ' ' + user?.surname as string} />}></PageHeader>
+                    <PageHeader><ReusableGoBack pageName="Users" pageLink="/users" elementName={user?.name as string + ' ' + user?.surname as string} /></PageHeader>
                 <Box className={styles.container}>
                     <Box display="flex" className={styles.container__header}>
                         <span>Manage user</span>

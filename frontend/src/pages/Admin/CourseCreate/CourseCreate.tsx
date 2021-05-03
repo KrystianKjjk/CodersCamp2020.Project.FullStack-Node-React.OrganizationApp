@@ -111,7 +111,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
 
   return (
     <div className={classes.root}>
-      <PageHeader name={"CREATE COURSE"}></PageHeader>
+      <PageHeader name={"Create Course"}></PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <h3>Manage course</h3>

@@ -1,11 +1,22 @@
 import { Repository } from './Repository';
-import { UserModel } from '../Models/User';
+import { UserModel, UserStatus, UserType } from '../Models/User';
 import * as mongoose from 'mongoose';
 import {GradeType} from "../Models/Grade";
 
 export default class UserRepository extends Repository {
     async getByEmail(email: string) {
         return this.model.findOne({ email });
+    }
+
+    async getByTypeAndStatus(type: UserType[], status: UserStatus[]): Promise< mongoose.Document<UserModel>[] > {
+        const query: {type?: any, status?: any} = { };
+        if (type.length) 
+            query.type = {$in: type};
+        
+        if (status.length)
+            query.status = {$in: status};
+        
+        return this.model.find(query);
     }
     
     async getUserInfoById(id: mongoose.Types.ObjectId): Promise<mongoose.Document<UserModel> & UserModel | null> {
