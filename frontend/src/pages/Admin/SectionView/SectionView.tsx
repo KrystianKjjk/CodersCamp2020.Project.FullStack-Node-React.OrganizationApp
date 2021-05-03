@@ -13,6 +13,7 @@ import { CourseForSection } from '../../../models/Course.model';
 import StyledTextField from '../../../components/StyledTextField';
 import ReusableGoBack from '../../../components/ReusableGoBack';
 import UButton from "../../../components/UButton";
+import PageHeader from '../../../components/PageHeader';
 
 const SectionView = () => {
   const sectionService = useMemo(() => new SectionService(), []);
@@ -159,9 +160,9 @@ const SectionView = () => {
   return (
     <Container className={styles.manageSections} aria-label='Manage Section'>
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
+      <PageHeader>
         <ReusableGoBack pageName="Sections" pageLink="/sections" elementName={sectionName} />
-      </Paper>
+      </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Section</h2>
