@@ -86,6 +86,7 @@ describe("CourseList", () => {
       </Provider>
     );
     userEvent.click(screen.getByText("DELETE"));
+    userEvent.click(screen.getByText("CONFIRM"));
 
     expect(CourseListSlice.deleteCourseAsync).toBeCalled();
   });

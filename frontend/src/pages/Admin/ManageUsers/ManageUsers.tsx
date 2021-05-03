@@ -14,6 +14,7 @@ import { UserService } from '../../../api'
 import { useHistory } from 'react-router-dom'
 import useMultipleSelect from '../../../hooks/useMultipleSelect'
 import { userStatusDict, userTypeDict } from '../../../models'
+import PageHeader from '../../../components/PageHeader'
 
 export interface ManageUsersProps {}
 
@@ -70,13 +71,9 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
   return (
     <Container className={styles.container} aria-label="Manage Users">
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Users</h2>
-        <SearchInput
-          onSubmit={changeSearch}
-          placeholder="User last name or ID"
-        />
-      </Paper>
+        <PageHeader name="Users">
+          <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
+        </PageHeader>
       <Paper className={styles.tableContainer}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Users</h2>

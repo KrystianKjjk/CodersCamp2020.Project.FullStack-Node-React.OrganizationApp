@@ -1,31 +1,35 @@
-import React, { useRef } from 'react';
-import styles from './ManageTeams.module.css';
-import AddButton from '../../../components/AddButton';
-import SelectSortBy from '../../../components/SelectSortBy';
-import SearchInput from '../../../components/SearchInput';
-import Table from '../../../components/ReusableTable';
-import { fetchData, searchData, sortData } from '../../../components/ReusableTable/ReusableTableSlice';
-import { useAppDispatch } from '../../../app/hooks';
-import { Container, CssBaseline, Paper } from '@material-ui/core';
-import { TeamService } from '../../../api';
-import { GridSelectionModelChangeParams } from '@material-ui/data-grid';
-import UButton from '../../../components/UButton';
-import { useHistory } from 'react-router-dom';
+import React, { useRef } from 'react'
+import styles from './ManageTeams.module.css'
+import AddButton from '../../../components/AddButton'
+import SelectSortBy from '../../../components/SelectSortBy'
+import SearchInput from '../../../components/SearchInput'
+import Table from '../../../components/ReusableTable'
+import {
+  fetchData,
+  searchData,
+  sortData,
+} from '../../../components/ReusableTable/ReusableTableSlice'
+import { useAppDispatch } from '../../../app/hooks'
+import { Container, CssBaseline, Paper } from '@material-ui/core'
+import { TeamService } from '../../../api'
+import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
+import { useHistory } from 'react-router-dom'
+import PageHeader from '../../../components/PageHeader'
+import DeleteButton from '../../../components/DeleteButton'
 
+export interface ManageTeamsProps {}
 
-export interface ManageTeamsProps { };
+const ManageTeams: React.FC<ManageTeamsProps> = () => {
+  const api = new TeamService()
+  const dispatch = useAppDispatch()
+  const history = useHistory()
+  const selectedTeams = useRef([] as string[])
 
-const ManageTeams: React.FC< ManageTeamsProps > = () => {
-  const api = new TeamService();
-  const dispatch = useAppDispatch();
-  const history = useHistory();
-  const selectedTeams = useRef([] as string[]);
-
-  const tableName = 'Teams';
+  const tableName = 'Teams'
 
   const changeSortBy = (value: string) => {
-    dispatch(sortData({table: tableName, column: value }));
-  };
+    dispatch(sortData({ table: tableName, column: value }))
+  }
 
   const changeSearch = (value: string) => {
     const searchQuery = {
@@ -33,62 +37,83 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
       column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
       search: value,
     }
-    dispatch(searchData(searchQuery));
+    dispatch(searchData(searchQuery))
   }
 
-  const sortByOptions = ['name', 'surname', 'courseName'];
+  const sortByOptions = ['name', 'surname', 'courseName']
   const columns = [
-    {field: 'surname', headerName: 'Mentor surname', width: 200, sortable: true},
-    {field: 'name', headerName: 'Mentor name', width: 150, sortable: true},
-    {field: 'courseName', headerName: 'Course name', width: 250, sortable: true},
+    {
+      field: 'surname',
+      headerName: 'Mentor surname',
+      width: 200,
+      sortable: true,
+    },
+    { field: 'name', headerName: 'Mentor name', width: 150, sortable: true },
+    {
+      field: 'courseName',
+      headerName: 'Course name',
+      width: 250,
+      sortable: true,
+    },
   ]
 
   const handleAddClick = async () => {
-    await api.createTeam();
-    dispatch(fetchData(tableName, api.getTeams));
+    await api.createTeam()
+    dispatch(fetchData(tableName, api.getTeams))
   }
 
   const handleTeamSelection = (params: GridSelectionModelChangeParams) => {
-    selectedTeams.current = params.selectionModel as string[];
+    selectedTeams.current = params.selectionModel as string[]
   }
 
   const deleteSelectedTeams = () => {
     selectedTeams.current.forEach((teamId) => {
-      api.deleteTeam(teamId);
+      api.deleteTeam(teamId)
     })
-    dispatch(fetchData(tableName, api.getTeams));
-    selectedTeams.current = [];
+    dispatch(fetchData(tableName, api.getTeams))
+    selectedTeams.current = []
   }
 
-  const handleRowClick = (data: {id: string | number}) => {
-    history.push(`/teams/${data.id}`);
-  };
-  
+  const handleRowClick = (data: { id: string | number }) => {
+    history.push(`/teams/${data.id}`)
+  }
+
   return (
-    <Container className={styles.manageTeams} aria-label='Manage Teams'>
+    <Container className={styles.manageTeams} aria-label="Manage Teams">
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>Teams</h2>
-        <span className={styles.searchInput}>
-          <SearchInput onSubmit={changeSearch} placeholder='Search by ID or mentor surname' />
-        </span>
-      </Paper>
+      <PageHeader name="Teams">
+        <SearchInput
+          onSubmit={changeSearch}
+          placeholder="Search by ID or mentor surname"
+        />
+      </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Teams</h2>
           <div className={styles.buttons}>
-            <AddButton text='Add' onClick={handleAddClick} aria-label='Add team'/>
-            <UButton text="Delete" color="secondary" onClick={deleteSelectedTeams}/>
+            <AddButton
+              text="Add"
+              onClick={handleAddClick}
+              aria-label="Add team"
+            />
+            <DeleteButton
+              confirmTitle={`Are you sure you want to delete selected (${selectedTeams.current.length}) teams?`}
+              onConfirm={deleteSelectedTeams}
+            />
           </div>
           <span className={styles.selectSortBy}>
-            <SelectSortBy onChange={changeSortBy} initialValue='' options={sortByOptions}/>
+            <SelectSortBy
+              onChange={changeSortBy}
+              initialValue=""
+              options={sortByOptions}
+            />
           </span>
         </div>
         <div className={styles.table}>
-          <Table 
-            name={tableName} 
-            columns={columns} 
-            getData={api.getTeams} 
+          <Table
+            name={tableName}
+            columns={columns}
+            getData={api.getTeams}
             onSelectionModelChange={handleTeamSelection}
             onRowClick={handleRowClick}
             checkboxSelection
@@ -96,7 +121,7 @@ const ManageTeams: React.FC< ManageTeamsProps > = () => {
         </div>
       </Paper>
     </Container>
-  );
-};
+  )
+}
 
-export default ManageTeams;
+export default ManageTeams
