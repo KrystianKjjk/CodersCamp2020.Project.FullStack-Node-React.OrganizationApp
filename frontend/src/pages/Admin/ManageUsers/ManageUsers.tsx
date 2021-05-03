@@ -43,14 +43,6 @@ const ManageUsers: React.FC< ManageUsersProps > = () => {
   }
 
   useEffect(() => {
-    // const typeValues = Object.entries(typeFilters)
-    //   .filter(([, value]) => value)
-    //   .map(([key, value]) => key);
-    console.log({typeSelect});
-    console.log({statusFilters});
-    // const statusValues = Object.entries(statusFilters)
-    //   .filter(([, value]) => value)
-    //   .map(([key, value]) => key);
     const filters = [
       {column: 'type', values: typeFilters},
       {column: 'status', values: statusFilters}
