@@ -53,7 +53,6 @@ describe('ManageUsers', () => {
         filters: [{ column: 'type', values: ['Admin'] }],
       }),
     )
-    console.log(store.getState().tables['Users'].displayedRows)
     await wait(() =>
       expect(store.getState().tables['Users'].displayedRows).toHaveLength(1),
     )
@@ -66,7 +65,6 @@ describe('ManageUsers', () => {
         ],
       }),
     )
-    console.log(store.getState().tables['Users'].displayedRows)
     await wait(() =>
       expect(store.getState().tables['Users'].displayedRows).toHaveLength(0),
     )
