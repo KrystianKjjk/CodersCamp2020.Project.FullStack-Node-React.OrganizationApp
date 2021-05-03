@@ -27,6 +27,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
 import { mainTheme } from "../../../theme/customMaterialTheme";
+import ReusableGoBack from '../../../components/ReusableGoBack';
 
 export interface CourseProps {
   id: string;
@@ -169,7 +170,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   }
   return (
     <div className={classes.root}>
-      <PageHeader name={"EDIT COURSE"}></PageHeader>
+      <PageHeader><ReusableGoBack pageName="Users" pageLink="/users" elementName={courseName}/> </PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <Box
