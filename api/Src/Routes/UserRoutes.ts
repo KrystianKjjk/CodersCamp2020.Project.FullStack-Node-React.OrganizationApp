@@ -13,6 +13,8 @@ export default function UserRoutes(c: UserController) {
         router.post('/users/register', HasRole([UserType.Admin]), c.register);
         router.patch('/users/:id', HasRole([UserType.Admin]), idValidation, c.updateUser);
         router.delete('/users/:id', HasRole([UserType.Admin]), idValidation, c.deleteUser);
+
+        router.get('/courses/:courseId/users', c.getUsersByCourseId);
         return router;
     }
 }
