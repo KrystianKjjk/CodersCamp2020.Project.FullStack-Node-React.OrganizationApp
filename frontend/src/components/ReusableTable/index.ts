@@ -1,1 +1,2 @@
-export { default } from './ReusableTable';
+export { default } from './ReusableTable'
+export * from './ReusableTable'
