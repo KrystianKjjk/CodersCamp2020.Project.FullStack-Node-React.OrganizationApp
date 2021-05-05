@@ -10,6 +10,7 @@ import {
   fetchData
 } from '../../../components/ReusableTable/ReusableTableSlice';
 import PageHeader from '../../../components/PageHeader';
+import ReusableGoBack from '../../../components/ReusableGoBack';
 
 export interface TeamProjectsProps {
   getFunction: () => Promise<any[]>
@@ -25,10 +26,11 @@ enum HeaderText {
 }
 
 const TeamProjects: React.FC<TeamProjectsProps> = props => {
-  
+
   const dispatch = useAppDispatch();
   const [detailedView, setDetailedView] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState({});  
+  const [selectedProjectName, setSelectedProjectName] = useState('');
   const [search, setSearch] = useState('');
   const [tableDisplay, setTableDisplay] = useState('initial');
   const getFunction = props.getFunction;
@@ -53,7 +55,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = props => {
   ];
 
   const Header = (detailedView: boolean) => {
-    return detailedView ? <PageHeader name={HeaderText.EDIT}/> :
+    return detailedView ? <PageHeader><ReusableGoBack pageName="Team Projects" pageLink="/teamprojects" elementName={selectedProjectName}/></PageHeader> :
       (
         <PageHeader name={HeaderText.MAIN}>
           <SearchInput onSubmit={changeSearch} placeholder='Search for project name' />
@@ -89,6 +91,7 @@ const MainView = (props: MainViewProps) => {
             onRowClick={(params, e) => {
               setDetailedView(true);
               setSelectedProjectId(params.row.id);
+              setSelectedProjectName(params.row.projectName);
               setTableDisplay('none');
             }}
           />
