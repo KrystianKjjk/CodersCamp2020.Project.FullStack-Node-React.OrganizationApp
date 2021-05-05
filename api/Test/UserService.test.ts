@@ -53,6 +53,7 @@ describe('Test UserService ', () => {
     beforeEach(async () => {
         for (let i = 0; i < nUsers; i++) {
             await service.createUser({
+                _id: new Types.ObjectId(),
                 username: `User${i}`,
                 email: `user${i}@app.com`,
                 name: `UserName${i}`,

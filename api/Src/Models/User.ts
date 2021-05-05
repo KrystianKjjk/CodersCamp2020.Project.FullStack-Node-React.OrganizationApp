@@ -17,6 +17,7 @@ export enum UserStatus {
 };
 
 export interface UserModel {
+    _id: mongoose.Types.ObjectId,
     name: string,
     surname: string,
     email: string,
