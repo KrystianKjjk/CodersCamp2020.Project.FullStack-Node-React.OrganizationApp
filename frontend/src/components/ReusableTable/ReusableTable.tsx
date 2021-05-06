@@ -82,6 +82,7 @@ export const ReusableTableReactQuery: React.FC<ReusableTableReactQueryProps> = (
 
   if (isLoading) return <CircularProgress />
   if (isFetching) return <LinearProgress />
+  if (error) return <div>{error.message}</div>
   if (data === undefined) return <div>Error</div>
   return (
     <div className={styles.container} aria-label={'Table - ' + tableName}>

@@ -24,6 +24,7 @@
 }
 .tableContainer {
     border: gray 1px solid;
+    text-align: center;
 }
 .tableContainer > * {
     padding-inline: 1rem;
