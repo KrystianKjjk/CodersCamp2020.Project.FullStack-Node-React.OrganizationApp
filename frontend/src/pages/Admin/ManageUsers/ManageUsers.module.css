@@ -16,11 +16,16 @@
 .manageContainer {
     margin-bottom: 3rem;
     display: grid;
-    grid-template-areas:    "mainHeader empty sortBy"
-                            "header header header"
-                            "checkboxes checkboxes checkboxes";
+    grid-template-areas:    "mainHeader filters sortBy";
+    grid-template-columns: 1fr 2fr 1fr;
     border-bottom: gray 1px solid;
     padding: 1rem;
+}
+.filtersContainer {
+    grid-area: filters;
+    display: flex;
+    justify-content: center;
+    align-self: center;
 }
 .tableContainer {
     border: gray 1px solid;
@@ -30,9 +35,6 @@
     padding-inline: 1rem;
 }
 
-.checkbox {
-    text-transform: capitalize;
-}
 .selectSortBy {
     grid-area: sortBy;
     justify-self: center;
@@ -41,13 +43,4 @@
 .manageHeader {
     grid-area: mainHeader;
     align-self: center;
-}
-.checkboxesHeader {
-    grid-area: header;
-    text-align: center;
-}
-.checkboxContainer {
-    grid-area: checkboxes;
-    display: flex;
-    justify-content: center;
 }
