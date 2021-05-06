@@ -170,7 +170,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   }
   return (
     <div className={classes.root}>
-      <PageHeader><ReusableGoBack pageName="Course" pageLink="/course" elementName={courseName}/></PageHeader>
+      <PageHeader><ReusableGoBack pageName="Course" pageLink="/courses" elementName={courseName}/></PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <Box
