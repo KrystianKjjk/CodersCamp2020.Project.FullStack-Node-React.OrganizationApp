@@ -70,6 +70,7 @@ describe('Test Password Service', () => {
     
     beforeEach(async () => {
             await userService.createUser({
+                _id: new Types.ObjectId(),
                 username: `User1`,
                 email: `user1@app.com`,
                 name: `UserName1`,

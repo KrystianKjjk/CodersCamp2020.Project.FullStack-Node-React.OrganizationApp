@@ -3,6 +3,7 @@ import { UserModel as User, UserStatus, UserType } from '../Models/User';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {GradeType} from "../Models/Grade";
+import {Team} from '../Models/Team';
 
 
 export default class UserService {
@@ -76,6 +77,25 @@ export default class UserService {
 
     async getUserByGradeId(gradeId: mongoose.Types.ObjectId) {
         return this.repository.getByGradeId(gradeId);
+    }
+
+    async getUsersByCourseId(courseId: mongoose.Types.ObjectId) {
+        return this.repository.getUsersByCourseId(courseId);
+    }
+
+    getUsersFromTeams(teams: Array<Team>): Array<User> {
+        let usersFromTeams = [];
+        teams.forEach((team) => {
+            usersFromTeams.push(...team.users);
+        }) 
+        return usersFromTeams;
+    }
+
+    getUsersWithoutTeams(teams: Array<Team>, users: Array<User>) {
+        const usersFromTeams = this.getUsersFromTeams(teams);
+
+        return users.filter(user => !usersFromTeams.find((userFromTeam) => userFromTeam._id === user._id));
+
     }
 
 }
