@@ -49,4 +49,8 @@ export default class UserRepository extends Repository {
         return this.model.findOne({"grades._id": gradeId});
     };
 
+    async getUsersByCourseId(courseId: mongoose.Types.ObjectId) {
+        return this.model.find({course:courseId});
+    };
+
 };

@@ -2,6 +2,7 @@ import UserModel from '../Models/User';
 import UserService from '../Services/UserService';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
+import TeamsService from '../Services/TeamService';
 
 interface MailingService{
     sendMail: Function
@@ -10,9 +11,11 @@ interface MailingService{
 export default class UserController {
     userService: UserService;
     mailingService: MailingService;
-    constructor(userService: UserService, mailingService: MailingService) {
+    teamService: TeamsService;
+    constructor(userService: UserService, mailingService: MailingService, teamService: TeamsService) {
         this.userService = userService;        
         this.mailingService = mailingService;
+        this.teamService = teamService;
     }
 
     getUser = async (req: Request, res: Response) => {
@@ -84,5 +87,18 @@ export default class UserController {
         const user = await this.userService.getUserInfoById(id);
         if(!user) return res.status(404).json({message: 'User not found'});
         res.status(200).json(user);
+    }
+
+    getUsersByCourseId = async (req: Request, res: Response) => {
+        const courseId = new mongoose.Types.ObjectId(req.params.courseId);
+        const allTeams = await this.teamService.getTeams();
+        const allUsers = await this.userService.getUsers();
+
+        const teams = await this.teamService.getTeamsByCourseId(courseId);
+        const users = this.userService.getUsersFromTeams(teams);
+        const usersWithoutTeams = this.userService.getUsersWithoutTeams(allTeams, allUsers);
+        // const usersByCourse = await this.userService.getUsersByCourseId(courseId);
+        if(!users) return res.status(404).json({message: 'User not found'});
+        res.status(200).json({users, usersWithoutTeams});
     }
 }
