@@ -14,9 +14,13 @@ const Snackbar: React.FC<SnackbarProps> = () => {
   const dispatch = useDispatch()
   const { isOpen, message, severity } = useSelector(selectSnackbarInfo)
 
-  const close = () => dispatch(hideSnackbar())
+  const close = (_event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') return
+
+    dispatch(hideSnackbar())
+  }
   return (
-    <MaterialSnackbar open={isOpen} autoHideDuration={2500} onClose={close}>
+    <MaterialSnackbar open={isOpen} autoHideDuration={2800} onClose={close}>
       <Alert onClose={close} severity={severity}>
         {message}
       </Alert>

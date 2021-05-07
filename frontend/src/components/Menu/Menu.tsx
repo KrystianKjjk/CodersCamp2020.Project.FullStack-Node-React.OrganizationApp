@@ -13,14 +13,10 @@ import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
 import { useSelector } from 'react-redux'
 import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
-import useSnackbar from '../../hooks/useSnackbar'
-
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
   const { userData } = useSelector(selectUserData)
-  const { showSuccess, showError, showInfo, showWarning } = useSnackbar()
-
   const classes = useStyles()
 
   const userInfo = getUserFromLocalStorage()
@@ -31,7 +27,6 @@ const Menu: React.FC<MenuProps> = (props) => {
       case UserType.Admin:
         return (
           <List component="nav">
-            <button onClick={() => showWarning('example message')}>show</button>
             <div className={classes.userDiv}>
               <AccountCircleIcon
                 style={{ paddingTop: 20, fontSize: 40 }}

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Box, CircularProgress, Snackbar } from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import { ThemeProvider } from '@material-ui/styles'
-import MuiAlert from '@material-ui/lab/Alert'
 
 import UserService from '../../../api/users.service'
 import BaseService from '../../../app/baseService'
@@ -15,12 +14,9 @@ import UButton from '../../../components/UButton'
 import styles from './ManageUser.module.css'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface ManageUserProps {}
-
-function Alert(props: any) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 const ManageUser: React.FC<ManageUserProps> = (props: any) => {
   const userService = new UserService(new BaseService())
@@ -29,12 +25,9 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
   const [error, setError] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
-  const [openSuccess, setOpenSuccess] = React.useState(false)
-  const [openError, setOpenError] = React.useState(false)
-  const [openDeleteError, setDeleteError] = React.useState(false)
 
   const [user, setUser] = useState<IUser | undefined>(undefined)
-
+  const { showSuccess, showError } = useSnackbar()
   let userID = props?.match?.params?.userID
 
   useEffect(() => {
@@ -87,12 +80,12 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
       .then((res) => {
         if (res.status === 200) {
           toggleEdit()
-          setOpenSuccess(true)
+          showSuccess('User updated correctly!')
         }
       })
       .catch((err) => {
         setError(err)
-        setOpenError(true)
+        showError('User not updated!')
       })
   }
 
@@ -105,16 +98,8 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
         }
       })
       .catch((err) => {
-        setDeleteError(true)
+        showError('User not deleted!')
       })
-  }
-
-  const handleClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSuccess(false)
-    setOpenError(false)
   }
 
   if (error) return <div className={styles.error}>Error</div>
@@ -123,29 +108,6 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Snackbar
-        open={openSuccess}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="success">
-          User updated correctly!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={openError} autoHideDuration={3500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          User not updated!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openDeleteError}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="error">
-          User not deleted!
-        </Alert>
-      </Snackbar>
       <PageHeader name={`Users${'/' + userID}`} />
 
       <Box className={styles.container}>
@@ -171,10 +133,10 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
             </div>
             <div
               className={`
-                                ${styles.manageUserForm__row__value}
-                                ${styles.status_radio_button}
-                                ${isEdit && styles.status_radio_button__edit}
-                            `}
+                          ${styles.manageUserForm__row__value}
+                          ${styles.status_radio_button}
+                          ${isEdit && styles.status_radio_button__edit}
+                      `}
             >
               {(isEdit || (user?.status as Status) === Status.Active) && (
                 <>

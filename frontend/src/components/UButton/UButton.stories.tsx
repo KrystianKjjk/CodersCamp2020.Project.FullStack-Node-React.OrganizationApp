@@ -1,23 +1,19 @@
-import React from 'react';
-import { Story, Meta } from '@storybook/react/types-6-0';
-import UButton , { UButtonProps } from './UButton';
-import { store } from '../../app/store';
-import { Provider } from 'react-redux';
+import React from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import UButton, { UButtonProps } from './UButton'
 
 export default {
   title: 'UButton component',
   component: UButton,
-} as Meta;
+} as Meta
 
-const Template: Story<UButtonProps> = (args) => (
-  <Provider store={store}>
-    <UButton {...args} />
-  </Provider>
-);
+const Template: Story<UButtonProps> = (args) => <UButton {...args} />
 
-export const SampleUButton = Template.bind({});
+export const SampleUButton = Template.bind({})
 SampleUButton.args = {
-    text: 'ADD',
-    color: 'primary',
-    onClick: ()=>{},
-};
+  text: 'ADD',
+  color: 'primary',
+  onClick: () => {
+    console.log('Clicked')
+  },
+}

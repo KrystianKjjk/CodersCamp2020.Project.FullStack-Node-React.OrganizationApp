@@ -13,10 +13,7 @@ import {
   Grid,
   Typography,
   Container,
-  FormHelperText,
-  Snackbar,
 } from '@material-ui/core'
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 
 import StyledTextField from '../../../components/StyledTextField'
 import useStyles from './LogIn.style'
@@ -24,36 +21,23 @@ import BaseService from '../../../app/baseService'
 import HeaderRegistration from '../../../components/HeaderRegistration'
 import axios from 'axios'
 import { useAppDispatch } from '../../../hooks/hooks'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface LogInProps {
   onLogin?: Function
 }
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
 export default function SignIn(props: LogInProps) {
   const classes = useStyles()
   const appDispatch = useAppDispatch()
-
+  const { showError } = useSnackbar()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [formError, setFormError] = useState('')
-
-  const [openError, setOpenError] = useState(false)
 
   const history = useHistory()
   const routeChange = () => {
     let path = `/home`
     history.push(path)
-  }
-
-  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenError(false)
   }
 
   const setResponseDataToLocalStorage = (response: AxiosResponse) => {
@@ -70,7 +54,6 @@ export default function SignIn(props: LogInProps) {
     const service = new BaseService()
     try {
       const response = await service.post('login', { email, password })
-      setFormError('')
       setResponseDataToLocalStorage(response)
       axios.defaults.headers.common = {
         'x-auth-token': localStorage.getItem('token'),
@@ -81,8 +64,9 @@ export default function SignIn(props: LogInProps) {
       routeChange()
       if (props.onLogin) props.onLogin()
     } catch (error) {
-      setFormError(error?.response?.data?.message)
-      setOpenError(true)
+      showError(
+        error?.response?.data?.message ?? 'Error while trying to sign in',
+      )
     }
   }
 
@@ -127,20 +111,6 @@ export default function SignIn(props: LogInProps) {
             >
               Sign In
             </Button>
-            <Snackbar
-              open={openError}
-              autoHideDuration={6000}
-              onClose={handleCloseError}
-              data-testid="li-snack"
-            >
-              <Alert onClose={handleCloseError} severity="error">
-                {formError && (
-                  <FormHelperText className={classes.errorStyle}>
-                    {formError}
-                  </FormHelperText>
-                )}
-              </Alert>
-            </Snackbar>
             <Grid container>
               <Grid item xs>
                 <Link href="/resetpassword" variant="body2" color="inherit">

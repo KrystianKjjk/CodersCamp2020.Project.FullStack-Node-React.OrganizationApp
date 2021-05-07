@@ -34,52 +34,6 @@ export interface CourseProps {
   id: string
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '90%',
-      },
-    },
-    nameInput: {
-      '&.MuiTextField-root': {
-        width: '100%',
-        paddingBottom: '2%',
-      },
-    },
-    container: {
-      textAlign: 'left',
-      fontFamily: 'Montserrat',
-      backgroundColor: '#1C1C1C',
-      border: '1px solid #666666',
-    },
-    inputs: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      borderTop: '1px solid #666666',
-      paddingTop: '2%',
-    },
-    header: {
-      paddingLeft: '3%',
-    },
-    datePicker: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: '50px',
-    },
-    button: {
-      backgroundColor: '#1a90ff',
-      margin: '2% 0',
-      width: '120px',
-      '&:hover': {
-        backgroundColor: '#2272bd',
-      },
-    },
-  }),
-)
-
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const dispatch = useAppDispatch()
   const history = useHistory()
@@ -107,7 +61,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     changeDescription(e.target.value)
   }
 
-  const handleAddButtonClick = (e: React.SyntheticEvent) => {
+  const handleAddButtonClick = () => {
     history.push('/sections/')
   }
 
@@ -152,13 +106,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     changeEndDate(new Date(Date.parse(course.endDate)))
   }, [course])
 
-  if (!course) {
-    return (
-      <div>
-        <CircularProgress />
-      </div>
-    )
-  }
+  if (!course) return <CircularProgress />
+
   return (
     <div className={classes.root}>
       <PageHeader name={'Edit Course'}></PageHeader>
@@ -301,3 +250,49 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
 }
 
 export default CourseComponent
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '90%',
+      },
+    },
+    nameInput: {
+      '&.MuiTextField-root': {
+        width: '100%',
+        paddingBottom: '2%',
+      },
+    },
+    container: {
+      textAlign: 'left',
+      fontFamily: 'Montserrat',
+      backgroundColor: '#1C1C1C',
+      border: '1px solid #666666',
+    },
+    inputs: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      borderTop: '1px solid #666666',
+      paddingTop: '2%',
+    },
+    header: {
+      paddingLeft: '3%',
+    },
+    datePicker: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: '50px',
+    },
+    button: {
+      backgroundColor: '#1a90ff',
+      margin: '2% 0',
+      width: '120px',
+      '&:hover': {
+        backgroundColor: '#2272bd',
+      },
+    },
+  }),
+)
