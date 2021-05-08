@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Container,
   FormControl,
@@ -7,6 +7,7 @@ import {
   Select,
 } from '@material-ui/core'
 import styles from './SelectSortBy.module.css'
+import { useDidUpdateEffect } from '../../hooks'
 
 export interface SelectSortByProps {
   onChange: (value: string) => void
@@ -25,7 +26,7 @@ const SelectSortBy: React.FC<SelectSortByProps> = ({
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setValue(e.target.value as string)
   }
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     onChange(value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
@@ -51,4 +52,4 @@ const SelectSortBy: React.FC<SelectSortByProps> = ({
   )
 }
 
-export default SelectSortBy
+export default React.memo(SelectSortBy)

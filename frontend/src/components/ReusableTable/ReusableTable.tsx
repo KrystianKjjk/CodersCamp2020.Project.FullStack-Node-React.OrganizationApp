@@ -69,7 +69,7 @@ export type ReusableTableReactQueryProps = {
   isFetching: boolean
 } & Omit<DataGridProps, 'rows'>
 
-export const ReusableTableReactQuery: React.FC<ReusableTableReactQueryProps> = ({
+const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
   name,
   columns = [],
   isLoading,
@@ -97,3 +97,5 @@ export const ReusableTableReactQuery: React.FC<ReusableTableReactQueryProps> = (
     </div>
   )
 }
+
+export const ReusableTableReactQuery = React.memo(ReusableTableReactQueryFC)
