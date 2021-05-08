@@ -35,6 +35,7 @@ const SelectSortBy: React.FC<SelectSortByProps> = ({
       <FormControl variant="outlined">
         <InputLabel>Sort by</InputLabel>
         <Select
+          data-testid="sort-by"
           className={styles.select}
           onChange={handleChange}
           value={value}
