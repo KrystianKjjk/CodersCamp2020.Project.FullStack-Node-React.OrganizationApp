@@ -41,15 +41,6 @@ describe('ManageUsers', () => {
     await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(1))
 
     // await screen.findByLabelText('Table - Users')
-    // store.dispatch(
-    //   filterData({
-    //     table: 'Users',
-    //     filters: [{ column: 'surname', values: ['CSurname'] }],
-    //   }),
-    // )
-    // expect(store.getState().tables['Users'].displayedRows).toHaveLength(1)
-
-    // await screen.findByLabelText('Table - Users')
     // store.dispatch(sortData({ table: 'Users', column: 'name' }))
     // expect(store.getState().tables['Users'].displayedRows[0].name).toBe('CName')
 
