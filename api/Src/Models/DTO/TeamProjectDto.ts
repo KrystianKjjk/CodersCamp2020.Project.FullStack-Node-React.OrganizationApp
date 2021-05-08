@@ -1,4 +1,4 @@
-interface TeamProjectDto {
+export interface TeamProjectDto {
   id: string
   teamProjectName: string
   mentor: {

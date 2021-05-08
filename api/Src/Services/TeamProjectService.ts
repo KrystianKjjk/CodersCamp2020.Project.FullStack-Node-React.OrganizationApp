@@ -10,6 +10,7 @@ import ProjectRepository from '../Repositories/ProjectRepository'
 import { Project } from '../Models/Project'
 import SectionRepository from '../Repositories/SectionRepository'
 import { Section } from '../Models/Section'
+import { TeamProjectDto } from '../Models/DTO/TeamProjectDto'
 
 export default class TeamProjectService {
   constructor(
@@ -18,7 +19,7 @@ export default class TeamProjectService {
     private userRepository: UserRepository,
     private referenceProjectRepository: ProjectRepository,
     private sectionRepository: SectionRepository,
-  ) {}
+  ) { }
 
   getTeamProjectsByTeamId = async (
     teamId: mongoose.Types.ObjectId,
