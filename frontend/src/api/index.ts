@@ -1,4 +1,5 @@
 export { default as UserService } from './User.service';
+export * from './User.api';
 export { default as TeamService } from './Team.service';
 export { default as ProjectService } from './Project.service';
 export { default as SheetService } from './Sheet.service';

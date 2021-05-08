@@ -7,35 +7,28 @@ import {
   sortData,
   filterData,
 } from '../../../components/ReusableTable/ReusableTableSlice'
-import UserService from '../../../api/User.service'
+import * as api from '../../../api/User.api'
 import ManageUsers, { usersDatabase } from '.'
 import { QueryClientProvider } from 'react-query'
 import queryClient from '../../../QueryClient'
 
-jest.mock('../../../api/User.service.ts', () => jest.fn())
-
 describe('ManageUsers', () => {
   jest.setTimeout(10000)
   it('renders without error, search input works, sort list works and filters work', async () => {
-    const getUsersMock = jest.fn(() => Promise.resolve(usersDatabase))
-    const UserServiceMock = {
-      getUsers: getUsersMock,
-    }
-    // @ts-ignore
-    UserService.mockImplementation(() => UserServiceMock)
-
+    const getUsersMock = jest
+      .spyOn(api, 'getUsers')
+      .mockImplementation(() => Promise.resolve(usersDatabase))
     render(
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ManageUsers />
-        </QueryClientProvider>,
-      </Provider>
+        </QueryClientProvider>
+        ,
+      </Provider>,
     )
     expect(getUsersMock).toBeCalledTimes(1)
     await screen.findByLabelText('Table - Users')
-    expect( queryClient.getQueryData('users') ).toHaveLength(
-      usersDatabase.length,
-    )
+    expect(queryClient.getQueryData('users')).toHaveLength(usersDatabase.length)
 
     // await screen.findByLabelText('Table - Users')
     // store.dispatch(

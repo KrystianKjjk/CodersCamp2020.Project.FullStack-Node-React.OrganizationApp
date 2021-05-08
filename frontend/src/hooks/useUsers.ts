@@ -1,10 +1,9 @@
-import { UserService } from '../api'
+import * as api from '../api/User.api'
 import { useQuery } from 'react-query'
 import queryClient from '../QueryClient'
 import { User, UserFilters } from '../models'
 
 const useUsers = () => {
-  const api = new UserService()
   const { isLoading, error, data, isFetching } = useQuery(
     'users',
     () => api.getUsers(),
@@ -45,7 +44,6 @@ export const sortUsers = (column: keyof User) => {
 }
 
 export const filterUsers = async (filters: UserFilters) => {
-  const api = new UserService()
   const data = await queryClient.fetchQuery(['users', filters], () => {
     return api.filterUsers(filters)
   })
