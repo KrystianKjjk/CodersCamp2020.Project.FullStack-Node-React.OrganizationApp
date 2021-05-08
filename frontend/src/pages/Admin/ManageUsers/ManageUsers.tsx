@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react'
-import {
-  Paper,
-  CssBaseline,
-  Container,
-} from '@material-ui/core'
+import React from 'react'
+import { Paper, CssBaseline, Container } from '@material-ui/core'
 import styles from './ManageUsers.module.css'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import Table, {
-  ReusableTableReactQuery,
-} from '../../../components/ReusableTable'
-import {
-  filterData,
-  searchData,
-  sortData,
-} from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../app/hooks'
+import { ReusableTableReactQuery } from '../../../components/ReusableTable'
 import { useHistory } from 'react-router-dom'
 import useMultipleSelect from '../../../hooks/useMultipleSelect'
-import { userStatusDict, userTypeDict } from '../../../models'
+import {
+  User,
+  UserType,
+  UserStatus,
+  UserTypeName,
+  UserStatusName,
+  UserFilters,
+  invUserStatusDict,
+  invUserTypeDict,
+} from '../../../models'
 import PageHeader from '../../../components/PageHeader'
-import useUsers from '../../../hooks/useUsers'
+import {
+  useUsers,
+  searchUser,
+  sortUsers,
+  filterUsers,
+  useDidUpdateEffect,
+} from '../../../hooks'
 
 export interface ManageUsersProps {}
 
@@ -28,36 +31,34 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
   const { isLoading, error, data, isFetching } = useUsers()
   const history = useHistory()
   const tableName = 'Users'
-  const dispatch = useAppDispatch()
-  
 
-  const [statusSelect, statusFilters] = useMultipleSelect({
-    options: Object.values(userStatusDict),
+  const [statusSelect, statusFilters] = useMultipleSelect<UserStatusName>({
+    options: Object.keys(invUserStatusDict),
     label: 'Filter by status',
   })
-  const [typeSelect, typeFilters] = useMultipleSelect({
-    options: Object.values(userTypeDict),
+  const [typeSelect, typeFilters] = useMultipleSelect<UserTypeName>({
+    options: Object.keys(invUserTypeDict),
     label: 'Filter by type',
   })
 
   const changeSortBy = (value: string) => {
-    dispatch(sortData({ table: tableName, column: value }))
+    sortUsers(value as keyof User)
   }
   const changeSearch = (value: string) => {
-    const searchQuery = {
-      table: tableName,
-      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname',
-      search: value,
-    }
-    dispatch(searchData(searchQuery))
+    const column = /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'surname'
+    searchUser(column as keyof User, value)
   }
 
-  useEffect(() => {
-    const filters = [
-      { column: 'type', values: typeFilters },
-      { column: 'status', values: statusFilters },
-    ]
-    dispatch(filterData({ table: tableName, filters }))
+  useDidUpdateEffect(() => {
+    const filters: UserFilters = {
+      type: typeFilters.map(
+        (type) => invUserTypeDict[type] as UserType,
+      ) as UserType[],
+      status: statusFilters.map(
+        (status) => invUserStatusDict[status] as UserStatus,
+      ) as UserStatus[],
+    }
+    filterUsers(filters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeFilters, statusFilters])
 
@@ -78,9 +79,12 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
   return (
     <Container className={styles.container} aria-label="Manage Users">
       <CssBaseline />
-        <PageHeader name="Users">
-          <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
-        </PageHeader>
+      <PageHeader name="Users">
+        <SearchInput
+          onSubmit={changeSearch}
+          placeholder="User last name or ID"
+        />
+      </PageHeader>
       <Paper className={styles.tableContainer}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Users</h2>
