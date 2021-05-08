@@ -31,6 +31,7 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
   const { isLoading, error, data, isFetching } = useUsers()
   const history = useHistory()
   const tableName = 'Users'
+  console.log('Rendering ManageUsers')
 
   const [statusSelect, statusFilters] = useMultipleSelect<UserStatusName>({
     options: Object.keys(invUserStatusDict),

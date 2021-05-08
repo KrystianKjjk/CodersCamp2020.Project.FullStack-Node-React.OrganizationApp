@@ -5,8 +5,13 @@ import { User, UserFilters } from '../models'
 
 const useUsers = () => {
   const api = new UserService()
-  const { isLoading, error, data, isFetching } = useQuery('users', () =>
-    api.getUsers(),
+  const { isLoading, error, data, isFetching } = useQuery(
+    'users',
+    () => api.getUsers(),
+    {
+      retryOnMount: false,
+      notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
+    },
   )
   return { isLoading, error, data, isFetching }
 }
@@ -15,8 +20,7 @@ export default useUsers
 
 // TODO: this function may be transformed into generic function
 export const searchUser = (column: keyof User, search: string) => {
-  if (search === '')
-    return queryClient.refetchQueries(['users'], { active: true })
+  if (search === '') return // queryClient.refetchQueries(['users'], { active: true })
 
   queryClient.setQueryData('users', (users) => {
     if (!users) return users

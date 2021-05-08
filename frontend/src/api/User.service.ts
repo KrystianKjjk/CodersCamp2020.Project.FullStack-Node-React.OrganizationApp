@@ -29,6 +29,8 @@ export default class UserService {
   ) {}
 
   getUsers = async (): Promise<User[]> => {
+    console.log('UserService.getUsers')
+    console.trace();
     const response = await this.api.get('/users')
     return response.data.map(transformUserData)
   }
@@ -45,6 +47,7 @@ export default class UserService {
   }
 
   filterUsers = async (filters: UserFilters): Promise<User[]> => {
+    console.log('UserService.filterUsers')
     const response = await this.api.get('/users/', { data: filters })
     const users = response.data.map(transformUserData)
     if (filters.type && filters.type.length > 0) return [users[0]]
