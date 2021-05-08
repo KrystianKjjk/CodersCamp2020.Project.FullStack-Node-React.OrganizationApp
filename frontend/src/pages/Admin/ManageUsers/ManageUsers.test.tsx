@@ -1,12 +1,6 @@
 import React from 'react'
 import { fireEvent, render, screen, wait } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Provider } from 'react-redux'
-import { store } from '../../../app/store'
-import {
-  sortData,
-  filterData,
-} from '../../../components/ReusableTable/ReusableTableSlice'
 import * as api from '../../../api/User.api'
 import ManageUsers, { usersDatabase } from '.'
 import { QueryClientProvider } from 'react-query'
@@ -19,12 +13,9 @@ describe('ManageUsers', () => {
       .spyOn(api, 'getUsers')
       .mockImplementation(() => Promise.resolve(usersDatabase))
     render(
-      <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ManageUsers />
         </QueryClientProvider>
-        ,
-      </Provider>,
     )
     expect(getUsersMock).toBeCalledTimes(1)
     await screen.findByLabelText('Table - Users')
