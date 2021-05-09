@@ -1,12 +1,13 @@
 import React from 'react'
-import { fireEvent, render, screen, wait } from '@testing-library/react'
+import { render, screen, wait } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as api from '../../../api/User.api'
 import ManageUsers, { usersDatabase } from '.'
 import { QueryClientProvider } from 'react-query'
 import queryClient from '../../../QueryClient'
 import ReactTestUtils from 'react-dom/test-utils'
-import { User } from '../../../models'
+import { invUserStatusDict, invUserTypeDict, User } from '../../../models'
+import { sortUsers, filterUsers } from '../../../hooks'
 
 describe('ManageUsers', () => {
   jest.setTimeout(10000)
@@ -23,15 +24,12 @@ describe('ManageUsers', () => {
     await screen.findByLabelText('Table - Users')
     expect(queryClient.getQueryData('users')).toHaveLength(usersDatabase.length)
 
-    // const selectSortBy = screen.get('sort-by')
-    // userEvent.click(selectSortBy)
-    // const nameOption = await screen.findByText('Surname')
-    // fireEvent.change(selectSortBy, {target: { value: 'Surname'}})
-    // await wait(() =>
-    //   expect((queryClient.getQueryData('users') as User[])[0].name).toBe(
-    //     'CName',
-    //   ),
-    // )
+    sortUsers('name')
+    await wait(() =>
+      expect((queryClient.getQueryData('users') as User[])[0].name).toBe(
+        'CName',
+      ),
+    )
 
     const searchInput = screen.getByPlaceholderText('User last name or ID')
     expect(searchInput).toBeDefined()
@@ -40,31 +38,14 @@ describe('ManageUsers', () => {
     ReactTestUtils.Simulate.keyPress(searchInput, { key: 'Enter' })
     await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(1))
 
-    // await screen.findByLabelText('Table - Users')
-    // store.dispatch(sortData({ table: 'Users', column: 'name' }))
-    // expect(store.getState().tables['Users'].displayedRows[0].name).toBe('CName')
+    await filterUsers({ type: [], status: [] })
+    await filterUsers({ type: [invUserTypeDict['Admin']], status: [] })
+    await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(1))
 
-    // await screen.findByLabelText('Table - Users')
-    // store.dispatch(
-    //   filterData({
-    //     table: 'Users',
-    //     filters: [{ column: 'type', values: ['Admin'] }],
-    //   }),
-    // )
-    // await wait(() =>
-    //   expect(store.getState().tables['Users'].displayedRows).toHaveLength(1),
-    // )
-    // store.dispatch(
-    //   filterData({
-    //     table: 'Users',
-    //     filters: [
-    //       { column: 'status', values: ['Resigned'] },
-    //       { column: 'type', values: ['Admin'] },
-    //     ],
-    //   }),
-    // )
-    // await wait(() =>
-    //   expect(store.getState().tables['Users'].displayedRows).toHaveLength(0),
-    // )
+    await filterUsers({
+      status: [invUserStatusDict['Resigned']],
+      type: [invUserTypeDict['Admin']],
+    })
+    await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(0))
   })
 })

@@ -92,6 +92,6 @@ export const invUserTypeDict = {
 }
 
 export interface UserFilters {
-  type?: UserType[]
-  status?: UserStatus[]
+  type: UserType[]
+  status: UserStatus[]
 }

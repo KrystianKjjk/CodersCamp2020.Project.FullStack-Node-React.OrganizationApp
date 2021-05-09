@@ -1,7 +1,7 @@
 import * as api from '../api/User.api'
 import { useQuery } from 'react-query'
 import queryClient from '../QueryClient'
-import { User, UserFilters } from '../models'
+import { User, UserFilters, userStatusDict, userTypeDict } from '../models'
 
 const useUsers = () => {
   const { isLoading, error, data, isFetching } = useQuery(
@@ -19,7 +19,8 @@ export default useUsers
 
 // TODO: this function may be transformed into generic function
 export const searchUser = (column: keyof User, search: string) => {
-  if (search === '') return // queryClient.refetchQueries(['users'], { active: true })
+  if (search === '')
+    return queryClient.refetchQueries(['users'], { active: true })
 
   queryClient.setQueryData('users', (users) => {
     if (!users) return users
@@ -44,8 +45,18 @@ export const sortUsers = (column: keyof User) => {
 }
 
 export const filterUsers = async (filters: UserFilters) => {
-  const data = await queryClient.fetchQuery(['users', filters], () => {
-    return api.filterUsers(filters)
+  await queryClient.refetchQueries(['users'], { active: true })
+  queryClient.setQueryData('users', (users) => {
+    if (!users) return users
+
+    return (users as User[]).filter(
+      (user) =>
+        (filters.type.length === 0 ||
+          filters.type.some((type) => user.type === userTypeDict[type])) &&
+        (filters.status.length === 0 ||
+          filters.status.some(
+            (status) => user.status === userStatusDict[status],
+          )),
+    )
   })
-  queryClient.setQueryData('users', () => data)
 }
