@@ -1,7 +1,7 @@
-import * as api from '../api/User.api'
+import * as api from '../../api/User.api'
 import { useQuery } from 'react-query'
-import queryClient from '../QueryClient'
-import { User, UserFilters, userStatusDict, userTypeDict } from '../models'
+import queryClient from '../../QueryClient'
+import { User, UserFilters, userStatusDict, userTypeDict } from '../../models'
 
 const useUsers = () => {
   const { isLoading, error, data, isFetching } = useQuery(
