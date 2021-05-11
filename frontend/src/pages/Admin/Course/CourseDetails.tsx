@@ -29,6 +29,7 @@ import {
 import { useHistory } from 'react-router-dom'
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import useSnackbar from '../../../hooks/useSnackbar'
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 export interface CourseProps {
   id: string
@@ -110,7 +111,13 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
 
   return (
     <div className={classes.root}>
-      <PageHeader name={'Edit Course'}></PageHeader>
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Course"
+          pageLink="/courses"
+          elementName={courseName}
+        />
+      </PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <Box

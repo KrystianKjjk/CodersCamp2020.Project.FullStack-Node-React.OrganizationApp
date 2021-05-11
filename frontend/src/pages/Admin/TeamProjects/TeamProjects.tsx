@@ -8,6 +8,7 @@ import { filterData } from '../../../components/ReusableTable/ReusableTableSlice
 import TeamProject from '../TeamProject/index'
 import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
 import PageHeader from '../../../components/PageHeader'
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 export interface TeamProjectsProps {
   getFunction: () => Promise<any[]>
@@ -22,13 +23,13 @@ enum HeaderText {
   EDIT = `Edit Team Project`,
 }
 
-const TeamProjects: React.FC<TeamProjectsProps> = (props) => {
+const TeamProjects: React.FC<TeamProjectsProps> = ({ getFunction }) => {
   const dispatch = useAppDispatch()
   const [detailedView, setDetailedView] = useState(false)
   const [selectedProjectId, setSelectedProjectId] = useState({})
+  const [selectedProjectName, setSelectedProjectName] = useState('')
   const [search, setSearch] = useState('')
   const [tableDisplay, setTableDisplay] = useState('initial')
-  const getFunction = props.getFunction
 
   const changeSearch = (value: string) => {
     setSearch(value)
@@ -51,7 +52,13 @@ const TeamProjects: React.FC<TeamProjectsProps> = (props) => {
 
   const Header = (detailedView: boolean) => {
     return detailedView ? (
-      <PageHeader name={HeaderText.EDIT} />
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Team Projects"
+          pageLink="/teamprojects"
+          elementName={selectedProjectName}
+        />
+      </PageHeader>
     ) : (
       <PageHeader name={HeaderText.MAIN}>
         <SearchInput
@@ -98,6 +105,7 @@ const TeamProjects: React.FC<TeamProjectsProps> = (props) => {
             onRowClick={(params, e) => {
               setDetailedView(true)
               setSelectedProjectId(params.row.id)
+              setSelectedProjectName(params.row.projectName)
               setTableDisplay('none')
             }}
           />

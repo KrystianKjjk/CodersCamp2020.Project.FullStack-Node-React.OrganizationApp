@@ -12,9 +12,10 @@ import { UserType as Role } from '../../../models/User.model'
 import ManageGrades from '../ManageGrades'
 import UButton from '../../../components/UButton'
 import styles from './ManageUser.module.css'
-import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
+import ReusableGoBack from '../../../components/ReusableGoBack'
+import PageHeader from '../../../components/PageHeader'
 
 export interface ManageUserProps {}
 
@@ -108,7 +109,13 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <PageHeader name={`Users${'/' + userID}`} />
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Users"
+          pageLink="/users"
+          elementName={`${user?.name} ${user?.surname}`}
+        />
+      </PageHeader>
 
       <Box className={styles.container}>
         <Box display="flex" className={styles.container__header}>
