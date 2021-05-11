@@ -1,115 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 import {
   fetchCourseAsync,
   Course,
   updateCourseAsync,
-} from "./CourseDetailsSlice";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
-import CourseSectionElement from "./CourseSectionListElement";
+} from './CourseDetailsSlice'
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import TextField from '@material-ui/core/TextField'
+import CourseSectionElement from './CourseSectionListElement'
 import {
   Button,
   makeStyles,
   Theme,
   createStyles,
   Box,
-  Snackbar,
   ThemeProvider,
-} from "@material-ui/core";
-import PageHeader from "../../../components/PageHeader";
-import UButton from "../../../components/UButton";
+} from '@material-ui/core'
+import PageHeader from '../../../components/PageHeader'
+import UButton from '../../../components/UButton'
 
-import DateFnsUtils from "@date-io/date-fns";
-import {format} from "date-fns";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
-import { Alert } from "@material-ui/lab";
-import { useHistory } from "react-router-dom";
-import { mainTheme } from "../../../theme/customMaterialTheme";
-import ReusableGoBack from '../../../components/ReusableGoBack';
+import DateFnsUtils from '@date-io/date-fns'
+import { format } from 'date-fns'
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers'
+import { useHistory } from 'react-router-dom'
+import { mainTheme } from '../../../theme/customMaterialTheme'
+import useSnackbar from '../../../hooks/useSnackbar'
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 export interface CourseProps {
-  id: string;
+  id: string
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "& .MuiTextField-root": {
-        margin: theme.spacing(1),
-        width: "90%",
-      },
-    },
-    nameInput: {
-      "&.MuiTextField-root": {
-        width: "100%",
-        paddingBottom: "2%",
-      },
-    },
-    container: {
-      textAlign: "left",
-      fontFamily: "Montserrat",
-      backgroundColor: "#1C1C1C",
-      border: "1px solid #666666",
-    },
-    inputs: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      borderTop: "1px solid #666666",
-      paddingTop: "2%",
-    },
-    header: {
-      paddingLeft: "3%",
-    },
-    datePicker: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: "50px",
-    },
-    button: {
-      backgroundColor: "#1a90ff",
-      margin: "2% 0",
-      width: "120px",
-      "&:hover": {
-        backgroundColor: "#2272bd",
-      },
-    },
-  })
-);
-
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
-  const dispatch = useAppDispatch();
-  const history = useHistory();
+  const dispatch = useAppDispatch()
+  const history = useHistory()
   const { course, sectionsIdToDelete } = useAppSelector(
-    (state) => state.courseDetails
-  );
-  const [courseName, changeCourseName] = useState("");
-  const [description, changeDescription] = useState("");
-  const [startDate, changeStartDate] = useState<Date | null>(new Date());
-  const [endDate, changeEndDate] = useState<Date | null>(new Date());
-  const [isEdit, setIsEdit] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
+    (state) => state.courseDetails,
+  )
+  const [courseName, changeCourseName] = useState('')
+  const [description, changeDescription] = useState('')
+  const [startDate, changeStartDate] = useState<Date | null>(new Date())
+  const [endDate, changeEndDate] = useState<Date | null>(new Date())
+  const [isEdit, setIsEdit] = useState(false)
+  const { showSuccess, showError } = useSnackbar()
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const toggleEdit = () => {
-    setIsEdit(!isEdit);
-  };
+    setIsEdit(!isEdit)
+  }
 
   const handleCourseNameChange = (e: any) => {
-    changeCourseName(e.target.value);
-  };
+    changeCourseName(e.target.value)
+  }
 
   const handleDescriptionChange = (e: any) => {
-    changeDescription(e.target.value);
-  };
+    changeDescription(e.target.value)
+  }
 
-  const handleAddButtonClick = (e: React.SyntheticEvent) => {
-    history.push("/sections/");
-  };
+  const handleAddButtonClick = () => {
+    history.push('/sections/')
+  }
 
   const handleSaveButtonClick = () => {
     const courseToSave: Course = {
@@ -118,59 +73,51 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       description: description,
       startDate: startDate!.toISOString(),
       endDate: endDate!.toISOString(),
-    };
+    }
 
     dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete))
       .then((response) => {
-        setMessage("Course was updated");
-        setIsOpen(true);
+        showSuccess('Course was updated')
       })
       .catch((exception) => {
-        setMessage("Sorry, something went wrong");
-        setIsOpen(true);
-      });
-  };
+        showError('Sorry, something went wrong')
+      })
+  }
 
   const handleStartDateChange = (date: Date | null) => {
-    changeStartDate(date);
-  };
+    changeStartDate(date)
+  }
 
   const handleEndDateChange = (date: Date | null) => {
-    changeEndDate(date);
-  };
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpen(false);
-  };
+    changeEndDate(date)
+  }
 
   useEffect(() => {
-    const courseId = match.params.id;
-    dispatch(fetchCourseAsync(courseId));
-  }, [match.params.id, dispatch]);
+    const courseId = match.params.id
+    dispatch(fetchCourseAsync(courseId))
+  }, [match.params.id, dispatch])
 
   useEffect(() => {
     if (!course) {
-      return;
+      return
     }
-    changeCourseName(course.name);
-    changeDescription(course.description ?? "");
-    changeStartDate(new Date(Date.parse(course.startDate)));
-    changeEndDate(new Date(Date.parse(course.endDate)));
-  }, [course]);
+    changeCourseName(course.name)
+    changeDescription(course.description ?? '')
+    changeStartDate(new Date(Date.parse(course.startDate)))
+    changeEndDate(new Date(Date.parse(course.endDate)))
+  }, [course])
 
-  if (!course) {
-    return (
-      <div>
-        <CircularProgress />
-      </div>
-    );
-  }
+  if (!course) return <CircularProgress />
+
   return (
     <div className={classes.root}>
-      <PageHeader><ReusableGoBack pageName="Course" pageLink="/courses" elementName={courseName}/></PageHeader>
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Course"
+          pageLink="/courses"
+          elementName={courseName}
+        />
+      </PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <Box
@@ -278,8 +225,8 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                     <p>End date:</p>
                   </Box>
                   <Box display="flex" flexDirection="column">
-                    <p>{startDate? format(startDate, "dd/MM/yyyy"):""}</p>
-                    <p>{endDate? format(endDate, "dd/MM/yyyy"):""}</p>
+                    <p>{startDate ? format(startDate, 'dd/MM/yyyy') : ''}</p>
+                    <p>{endDate ? format(endDate, 'dd/MM/yyyy') : ''}</p>
                   </Box>
                 </Box>
               )}
@@ -291,34 +238,68 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
           justifyContent="center"
           borderTop="1px solid #666666"
         >
-          
           {isEdit ? (
-          <ThemeProvider theme={mainTheme}>
-            <Button
-              className={classes.button}
-              onClick={handleSaveButtonClick}
-              variant="text"
-              disabled={!courseName || !startDate || !endDate}
-            >
-              <Snackbar
-                open={isOpen}
-                autoHideDuration={1000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            <ThemeProvider theme={mainTheme}>
+              <Button
+                className={classes.button}
+                onClick={handleSaveButtonClick}
+                variant="text"
+                disabled={!courseName || !startDate || !endDate}
               >
-                <Alert onClose={handleClose} severity="info">
-                  {message}
-                </Alert>
-              </Snackbar>
-              SAVE
-            </Button>
+                SAVE
+              </Button>
             </ThemeProvider>
           ) : null}
-
         </Box>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CourseComponent;
+export default CourseComponent
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '90%',
+      },
+    },
+    nameInput: {
+      '&.MuiTextField-root': {
+        width: '100%',
+        paddingBottom: '2%',
+      },
+    },
+    container: {
+      textAlign: 'left',
+      fontFamily: 'Montserrat',
+      backgroundColor: '#1C1C1C',
+      border: '1px solid #666666',
+    },
+    inputs: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      borderTop: '1px solid #666666',
+      paddingTop: '2%',
+    },
+    header: {
+      paddingLeft: '3%',
+    },
+    datePicker: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: '50px',
+    },
+    button: {
+      backgroundColor: '#1a90ff',
+      margin: '2% 0',
+      width: '120px',
+      '&:hover': {
+        backgroundColor: '#2272bd',
+      },
+    },
+  }),
+)

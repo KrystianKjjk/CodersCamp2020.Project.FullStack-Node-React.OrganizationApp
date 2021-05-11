@@ -9,7 +9,7 @@ import {
   searchData,
   sortData,
 } from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../app/hooks'
+import { useAppDispatch } from '../../../hooks/hooks'
 import { UserService } from '../../../api'
 import { useHistory } from 'react-router-dom'
 import useMultipleSelect from '../../../hooks/useMultipleSelect'
@@ -62,7 +62,7 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
     { field: 'status', headerName: 'Status', width: 150, sortable: true },
   ]
 
-  function handleSelection(params: any, e: any) {
+  function handleSelection(params: any) {
     const userID = params.row.id
     const path = `users/${userID}`
     history.push(path)
@@ -71,9 +71,12 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
   return (
     <Container className={styles.container} aria-label="Manage Users">
       <CssBaseline />
-        <PageHeader name="Users">
-          <SearchInput onSubmit={changeSearch} placeholder='User last name or ID' />
-        </PageHeader>
+      <PageHeader name="Users">
+        <SearchInput
+          onSubmit={changeSearch}
+          placeholder="User last name or ID"
+        />
+      </PageHeader>
       <Paper className={styles.tableContainer}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Users</h2>
