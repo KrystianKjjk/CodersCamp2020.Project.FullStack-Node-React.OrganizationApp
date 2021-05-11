@@ -3,17 +3,13 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { store } from '../../app/store'
-import FindSection from './FindSection'
+import Snackbar from './Snackbar'
 
-describe('FindSection', () => {
+describe('Snackbar', () => {
   it('renders without error', () => {
     render(
       <Provider store={store}>
-        <FindSection
-          isOpen={false}
-          handleClose={() => {}}
-          onSectionSelection={() => {}}
-        />
+        <Snackbar />
       </Provider>,
     )
   })

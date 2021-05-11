@@ -23,6 +23,7 @@ import { mainTheme } from '../../../theme/customMaterialTheme'
 import styles from './ManageReferenceProject.module.css'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
+import ReusableGoBack from '../../../components/ReusableGoBack';
 
 export interface ManageReferenceProjectProps {}
 
@@ -154,7 +155,7 @@ const ManageReferenceProject = (props: any) => {
         </Alert>
       </Snackbar>
 
-      <PageHeader name={`Projects ${'/' + projectID}`}></PageHeader>
+      <PageHeader><ReusableGoBack pageName="Projects" pageLink="/projects" elementName={project?.projectName}/></PageHeader>
 
       <Box className={styles.container}>
         <Box display="flex" className={styles.container__header}>

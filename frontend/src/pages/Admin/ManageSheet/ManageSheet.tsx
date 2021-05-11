@@ -11,10 +11,11 @@ import { SheetService, UserService, getTeamProjects } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
 import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../app/hooks'
+import { useAppDispatch } from '../../../hooks/hooks'
 import EditGradeModal from '../../../components/EditGradeModal'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
+import ReusableGoBack from '../../../components/ReusableGoBack';
 
 type Grade = SheetGrade & { quality: string }
 
@@ -222,11 +223,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   return (
     <Container className={styles.manageSheet} aria-label="Manage Sheet">
       <CssBaseline />
-      <PageHeader
-        name={`Sheets ${
-          '/' + (mentor ? `${mentor.name} ${mentor.surname}` : sheetId)
-        }`}
-      />
+      <PageHeader><ReusableGoBack pageName="Sheets" pageLink="/gradesheets" elementName={mentor ? `${mentor.name} ${mentor.surname}` : sheetId}/></PageHeader>
+
       <Paper className={styles.container}>
         <Container className={styles.manageHeader}>
           <h2>Manage Sheet</h2>

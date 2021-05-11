@@ -19,6 +19,8 @@ import { CourseForSection } from '../../../models/Course.model'
 import StyledTextField from '../../../components/StyledTextField'
 import UButton from '../../../components/UButton'
 import DeleteButton from '../../../components/DeleteButton'
+import PageHeader from '../../../components/PageHeader';
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 const SectionView = () => {
   const sectionService = useMemo(() => new SectionService(), [])
@@ -181,9 +183,9 @@ const SectionView = () => {
   return (
     <Container className={styles.manageSections} aria-label="Manage Section">
       <CssBaseline />
-      <Paper className={styles.mainHeader}>
-        <h2>SECTION/{sectionName} </h2>
-      </Paper>
+      <PageHeader>
+        <ReusableGoBack pageName="Sections" pageLink="/sections" elementName={sectionName} />
+      </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           <h2 className={styles.manageHeader}>Manage Section</h2>

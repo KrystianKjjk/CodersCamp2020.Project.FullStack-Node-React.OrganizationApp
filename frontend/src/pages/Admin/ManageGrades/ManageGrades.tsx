@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, CircularProgress, Snackbar } from '@material-ui/core'
-import MuiAlert from '@material-ui/lab/Alert'
+import { Box, CircularProgress } from '@material-ui/core'
 
 import SectionsService from '../../../api/sections.service'
 import BaseService from '../../../app/baseService'
@@ -11,6 +10,7 @@ import FindSection from '../../../components/FindSection'
 
 import styles from './ManageGrades.module.css'
 import DeleteButton from '../../../components/DeleteButton'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface ManageGradesProps {
   userID: string
@@ -21,10 +21,6 @@ export interface ISectionsUtility {
   name?: string
 }
 
-function Alert(props: any) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
 const ManageGrades: React.FC<ManageGradesProps> = (props) => {
   const gradeService = new GradeService(new BaseService())
   const sectionService = new SectionsService(new BaseService())
@@ -32,14 +28,12 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
   const [error, setError] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState<Array<boolean>>([])
-  const [openSuccessAlert, setOpenSuccessAlert] = useState(false)
-  const [openErrorAlert, setOpenErrorAlert] = useState(false)
-  const [openWarningAlert, setOpenWarningAlert] = React.useState(false)
 
   const [grades, setGrades] = useState<IGrade[]>([])
   const [sections, setSections] = useState<ISectionsUtility[]>([])
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
+  const { showSuccess, showError, showWarning } = useSnackbar()
 
   useEffect(() => {
     getGrades(props.userID)
@@ -126,22 +120,22 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
             const tmpSections = [...sections]
             tmpSections.splice(index, 1)
             setSections([...tmpSections])
-            setOpenSuccessAlert(true)
+            showSuccess('action finished successfully')
           } else throw Error
         })
         .catch((err) => {
-          setOpenErrorAlert(true)
+          showError('Action failed')
         })
-    } else {
-      const tmpGrades = grades
-      tmpGrades.splice(index, 1)
-      setGrades([...tmpGrades])
-      const tmpSections = [...sections]
-      tmpSections.splice(index, 1)
-      setSections([...tmpSections])
-      toggleEdit(index)
-      setOpenSuccessAlert(true)
+      return
     }
+    const tmpGrades = grades
+    tmpGrades.splice(index, 1)
+    setGrades([...tmpGrades])
+    const tmpSections = [...sections]
+    tmpSections.splice(index, 1)
+    setSections([...tmpSections])
+    toggleEdit(index)
+    showSuccess('action finished successfully')
   }
 
   function saveGrade(index: number) {
@@ -149,12 +143,12 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
       gradeService
         .updateGrade(grades![index]._id, grades![index])
         .then((res) => {
-          if (res.status === 201) setOpenSuccessAlert(true)
+          if (res.status === 201) showSuccess('Update finished successfully')
           else throw Error
           toggleEdit(index)
         })
         .catch((err) => {
-          setOpenErrorAlert(true)
+          showError('Action failed')
         })
     } else {
       gradeService
@@ -164,14 +158,16 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
             let tmp = [...grades]
             tmp[index]._id = res.data._id
             setGrades([...tmp])
-            setOpenSuccessAlert(true)
+            showSuccess('grade added successfully')
             toggleEdit(index)
           } else throw Error
         })
         .catch((err) => {
-          if (err?.response?.data?.message.match('sectionId'))
-            setOpenWarningAlert(true)
-          else setOpenErrorAlert(true)
+          if (err?.response?.data?.message.match('sectionId')) {
+            showWarning('Section must be selected.')
+            return
+          }
+          showError('Action failed')
         })
     }
   }
@@ -195,15 +191,6 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
 
     toggleEdit(tmpGrades.length - 1)
   }
-
-  const handleClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSuccessAlert(false)
-    setOpenErrorAlert(false)
-    setOpenWarningAlert(false)
-  }
   function handleSectionSelection(index: number) {
     return function onSectionSelection(sectionID: string, sectionName: string) {
       closeSectionsModal()
@@ -217,192 +204,154 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
     }
   }
 
-  if (error) {
-    return <div className={styles.error}>Error</div>
-  } else if (!isLoaded) {
-    return <CircularProgress className={styles.loading} />
-  } else {
-    return (
-      <Box className={styles.container}>
-        <Snackbar
-          open={openSuccessAlert}
-          autoHideDuration={3500}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={openErrorAlert}
-          autoHideDuration={3500}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="error">
-            Fail!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={openWarningAlert}
-          autoHideDuration={3500}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="warning">
-            Section must be selected.
-          </Alert>
-        </Snackbar>
+  if (error) return <div className={styles.error}>Something went wrong :(</div>
 
-        <Box display="flex" className={styles.container__header}>
-          <span>Manage Grades</span>
-          <UButton text="ADD" color="primary" onClick={addGrade} />
-        </Box>
-        <Box display="flex" flexWrap="wrap">
-          {grades?.map((grade, index) => (
-            <div className={styles.gradeContainer} key={index}>
-              {isOpenSectionsModal && isEdit[index] && (
-                <FindSection
-                  isOpen={isOpenSectionsModal}
-                  handleClose={closeSectionsModal}
-                  onSectionSelection={handleSectionSelection(index)}
+  if (!isLoaded) return <CircularProgress className={styles.loading} />
+
+  return (
+    <Box className={styles.container}>
+      <Box display="flex" className={styles.container__header}>
+        <span>Manage Grades</span>
+        <UButton text="ADD" color="primary" onClick={addGrade} />
+      </Box>
+      <Box display="flex" flexWrap="wrap">
+        {grades?.map((grade, index) => (
+          <div className={styles.gradeContainer} key={index}>
+            {isOpenSectionsModal && isEdit[index] && (
+              <FindSection
+                isOpen={isOpenSectionsModal}
+                handleClose={closeSectionsModal}
+                onSectionSelection={handleSectionSelection(index)}
+              />
+            )}
+
+            <div className={styles.gradeContainer__header}>
+              <span>{sections[index]?.name ?? 'Section Name'}</span>
+              {isEdit[index] && grades[index]?.sectionId === '' && (
+                <UButton
+                  text="SELECT"
+                  color="primary"
+                  onClick={openSectionsModal}
                 />
               )}
+              {isEdit[index] && grades[index]?.sectionId !== '' && (
+                <UButton
+                  text="CHANGE"
+                  color="primary"
+                  onClick={openSectionsModal}
+                />
+              )}
+            </div>
 
-              <div className={styles.gradeContainer__header}>
-                <span>{sections[index]?.name ?? 'Section Name'}</span>
-                {isEdit[index] && grades[index]?.sectionId === '' && (
-                  <UButton
-                    text="SELECT"
-                    color="primary"
-                    onClick={openSectionsModal}
-                  />
-                )}
-                {isEdit[index] && grades[index]?.sectionId !== '' && (
-                  <UButton
-                    text="CHANGE"
-                    color="primary"
-                    onClick={openSectionsModal}
-                  />
-                )}
+            <form className={`${styles.gradeContainer__body}`}>
+              <div className={styles.gradeContainer__body__row}>
+                <div className={styles.gradeContainer__body__row__key}>
+                  <label htmlFor="test">Test</label>
+                </div>
+                <div className={`${styles.gradeContainer__body__row__value}`}>
+                  {isEdit[index] ? (
+                    <div>
+                      <input
+                        type="text"
+                        tabIndex={index}
+                        name="testPoints"
+                        placeholder={grade?.testPoints?.toString()}
+                        onChange={handleInputChangeGrade}
+                      />
+                      <input
+                        type="text"
+                        tabIndex={index}
+                        name="testMaxPoints"
+                        placeholder={grade?.testMaxPoints?.toString()}
+                        onChange={handleInputChangeGrade}
+                      />
+                    </div>
+                  ) : (
+                    <p>
+                      {Math.round(
+                        grade?.testMaxPoints === 0
+                          ? 0
+                          : (grade.testPoints / grade.testMaxPoints) * 100,
+                      )}
+                      %
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <form className={`${styles.gradeContainer__body}`}>
-                <div className={styles.gradeContainer__body__row}>
-                  <div className={styles.gradeContainer__body__row__key}>
-                    <label htmlFor="test">Test</label>
-                  </div>
-                  <div className={`${styles.gradeContainer__body__row__value}`}>
-                    {isEdit[index] ? (
-                      <div>
-                        <input
-                          type="text"
-                          tabIndex={index}
-                          name="testPoints"
-                          placeholder={grade?.testPoints?.toString()}
-                          onChange={handleInputChangeGrade}
-                        />
-                        <input
-                          type="text"
-                          tabIndex={index}
-                          name="testMaxPoints"
-                          placeholder={grade?.testMaxPoints?.toString()}
-                          onChange={handleInputChangeGrade}
-                        />
-                      </div>
-                    ) : (
-                      <p>
-                        {Math.round(
-                          grade?.testMaxPoints === 0
-                            ? 0
-                            : (grade.testPoints / grade.testMaxPoints) * 100,
-                        )}
-                        %
-                      </p>
-                    )}
-                  </div>
+              <div className={styles.gradeContainer__body__row}>
+                <div className={styles.gradeContainer__body__row__key}>
+                  <label htmlFor="test">Task</label>
                 </div>
-
-                <div className={styles.gradeContainer__body__row}>
-                  <div className={styles.gradeContainer__body__row__key}>
-                    <label htmlFor="test">Task</label>
-                  </div>
-                  <div className={`${styles.gradeContainer__body__row__value}`}>
-                    {isEdit[index] ? (
-                      <div>
-                        <input
-                          type="text"
-                          tabIndex={index}
-                          name="taskPoints"
-                          placeholder={grade?.taskPoints?.toString()}
-                          onChange={handleInputChangeGrade}
-                        />
-                        <input
-                          type="text"
-                          tabIndex={index}
-                          name="taskMaxPoints"
-                          placeholder={grade?.taskMaxPoints?.toString()}
-                          onChange={handleInputChangeGrade}
-                        />
-                      </div>
-                    ) : (
-                      <p>
-                        {Math.round(
-                          grade.taskMaxPoints === 0
-                            ? 0
-                            : (grade.taskPoints / grade.taskMaxPoints) * 100,
-                        )}
-                        %
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className={styles.gradeContainer__body__row}>
-                  <div className={styles.gradeContainer__body__row__key}>
-                    <label htmlFor="test">Project</label>
-                  </div>
-                  <div className={`${styles.gradeContainer__body__row__value}`}>
+                <div className={`${styles.gradeContainer__body__row__value}`}>
+                  {isEdit[index] ? (
                     <div>
-                      {isEdit[index] ? (
-                        <input
-                          type="text"
-                          tabIndex={index}
-                          name="projectPoints"
-                          placeholder={grade?.projectPoints?.toString()}
-                          onChange={handleInputChangeGrade}
-                        />
-                      ) : (
-                        <p>{grade?.projectPoints}pkt</p>
-                      )}
+                      <input
+                        type="text"
+                        tabIndex={index}
+                        name="taskPoints"
+                        placeholder={grade?.taskPoints?.toString()}
+                        onChange={handleInputChangeGrade}
+                      />
+                      <input
+                        type="text"
+                        tabIndex={index}
+                        name="taskMaxPoints"
+                        placeholder={grade?.taskMaxPoints?.toString()}
+                        onChange={handleInputChangeGrade}
+                      />
                     </div>
+                  ) : (
+                    <p>
+                      {Math.round(
+                        grade.taskMaxPoints === 0
+                          ? 0
+                          : (grade.taskPoints / grade.taskMaxPoints) * 100,
+                      )}
+                      %
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.gradeContainer__body__row}>
+                <div className={styles.gradeContainer__body__row__key}>
+                  <label htmlFor="test">Project</label>
+                </div>
+                <div className={`${styles.gradeContainer__body__row__value}`}>
+                  <div>
+                    {isEdit[index] ? (
+                      <input
+                        type="text"
+                        tabIndex={index}
+                        name="projectPoints"
+                        placeholder={grade?.projectPoints?.toString()}
+                        onChange={handleInputChangeGrade}
+                      />
+                    ) : (
+                      <p>{grade?.projectPoints}pkt</p>
+                    )}
                   </div>
                 </div>
-              </form>
-              <Box display="flex" justifyContent="center">
-                <DeleteButton
-                  confirmTitle="Are you sure you want to delete this grade? XX"
-                  onConfirm={() => deleteGrade(index)}
-                />
+              </div>
+            </form>
+            <Box display="flex" justifyContent="center">
+              <DeleteButton
+                confirmTitle="Are you sure you want to delete this grade? XX"
+                onConfirm={() => deleteGrade(index)}
+              />
 
-                {isEdit[index] ? (
-                  <UButton
-                    text="SAVE"
-                    color="primary"
-                    onClick={() => saveGrade(index)}
-                  />
-                ) : (
-                  <UButton
-                    text="EDIT"
-                    color="primary"
-                    onClick={() => toggleEdit(index)}
-                  />
-                )}
-              </Box>
-            </div>
-          ))}
-        </Box>
+              {isEdit[index] ? (
+                <UButton text="SAVE" onClick={() => saveGrade(index)} />
+              ) : (
+                <UButton text="EDIT" onClick={() => toggleEdit(index)} />
+              )}
+            </Box>
+          </div>
+        ))}
       </Box>
-    )
-  }
+    </Box>
+  )
 }
 
 export default ManageGrades

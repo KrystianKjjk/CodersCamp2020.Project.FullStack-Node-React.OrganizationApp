@@ -13,10 +13,13 @@ import {
   projectOperationSuccess,
   initialProjectState,
 } from './TeamProjectSlice'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
 import FindSection from '../../../components/FindSection/index'
 import DeleteButton from '../../../components/DeleteButton'
 import { useParams } from 'react-router-dom'
+import PageHeader from '../../../components/PageHeader'
+import SearchInput from '../../../components/SearchInput'
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 export interface TeamProjectProps {}
 
@@ -98,125 +101,146 @@ const TeamProject: React.FC<TeamProjectProps> = () => {
     return <span>Set</span>
   }
 
-  return projectEditMode ? (
-    <div className={styles.teamProjectContainer}>
-      <div className={styles.teamProjectHeader}>
-        <span className={styles.teamProjectHeaderName}>
-          Manage team project
-        </span>
-        <Button id={styles.buttonEdit} onClick={() => handleSave()}>
-          Save
-        </Button>
-      </div>
-
-      <div className={styles.teamProjectDetailsContainer}>
-        <div className={styles.attributeNamesContainer}>
-          <div>Name:</div>
-          <div>Reference project:</div>
-          <div>Team mentor:</div>
-          <div>Section name:</div>
-          <div>Project URL:</div>
-          <div>Description:</div>
-        </div>
-        <div className={styles.attributeValuesContainer}>
-          <div>
-            <input
-              className={styles.input}
-              defaultValue={selectedTeamProject!.projectName}
-              onChange={(e) => handleChange(setProjectName, e)}
-            ></input>
-          </div>
-          <div>{referenceProjectName}</div>
-          <div>{selectedTeamProject!.mentor}</div>
-          <div>
-            {sectionName}
-            <Button
-              id={styles.buttonEdit}
-              onClick={() => {
-                openSectionsModal()
-                switchSectionSelectionMode()
-              }}
-            >
-              <ReferenceProjectButtonText
-                teamProject={selectedTeamProject!.referenceProjectName}
-              />
+  if (projectEditMode)
+    return (
+      <>
+        <PageHeader>
+          <ReusableGoBack
+            pageName="Team Projects"
+            pageLink="/teamprojects"
+            elementName={`'example to change`}
+          />
+        </PageHeader>
+        <div className={styles.teamProjectContainer}>
+          <div className={styles.teamProjectHeader}>
+            <span className={styles.teamProjectHeaderName}>
+              Manage team project
+            </span>
+            <Button id={styles.buttonEdit} onClick={() => handleSave()}>
+              Save
             </Button>
           </div>
-          <div>
-            <input
-              className={styles.input}
-              defaultValue={selectedTeamProject!.projectUrl}
-              onChange={(e) => handleChange(setProjectUrl, e)}
-            ></input>
-          </div>
-          <div>
-            <textarea
-              className={styles.textarea}
-              defaultValue={selectedTeamProject!.description}
-              onChange={(e) => handleChange(setProjectDescription, e)}
-            ></textarea>
-          </div>
-        </div>
-      </div>
 
-      <FindSection
-        onSectionSelection={async (sectionID: string) => {
-          const [projectName, sectionName] = await dispatch(
-            saveProjectSectionById(selectedTeamProject, sectionID),
-          )
-          setReferenceProjectName(projectName)
-          setSectionName(sectionName)
-          closeSectionsModal()
-        }}
-        //@ts-ignore
-        isOpen={isOpenSectionsModal}
-        handleClose={closeSectionsModal}
-      />
-    </div>
-  ) : (
-    <div className={styles.teamProjectContainer}>
-      <div className={styles.teamProjectHeader}>
-        <span className={styles.teamProjectHeaderName}>
-          Manage team project
-        </span>
-        <DeleteButton
-          confirmTitle="o you really want to delete this project?"
-          onConfirm={() => {
-            dispatch(deleteProjectById(id))
-          }}
+          <div className={styles.teamProjectDetailsContainer}>
+            <div className={styles.attributeNamesContainer}>
+              <div>Name:</div>
+              <div>Reference project:</div>
+              <div>Team mentor:</div>
+              <div>Section name:</div>
+              <div>Project URL:</div>
+              <div>Description:</div>
+            </div>
+            <div className={styles.attributeValuesContainer}>
+              <div>
+                <input
+                  className={styles.input}
+                  defaultValue={selectedTeamProject!.projectName}
+                  onChange={(e) => handleChange(setProjectName, e)}
+                ></input>
+              </div>
+              <div>{referenceProjectName}</div>
+              <div>{selectedTeamProject!.mentor}</div>
+              <div>
+                {sectionName}
+                <Button
+                  id={styles.buttonEdit}
+                  onClick={() => {
+                    openSectionsModal()
+                    switchSectionSelectionMode()
+                  }}
+                >
+                  <ReferenceProjectButtonText
+                    teamProject={selectedTeamProject!.referenceProjectName}
+                  />
+                </Button>
+              </div>
+              <div>
+                <input
+                  className={styles.input}
+                  defaultValue={selectedTeamProject!.projectUrl}
+                  onChange={(e) => handleChange(setProjectUrl, e)}
+                ></input>
+              </div>
+              <div>
+                <textarea
+                  className={styles.textarea}
+                  defaultValue={selectedTeamProject!.description}
+                  onChange={(e) => handleChange(setProjectDescription, e)}
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <FindSection
+            onSectionSelection={async (sectionID: string) => {
+              const [projectName, sectionName] = await dispatch(
+                saveProjectSectionById(selectedTeamProject, sectionID),
+              )
+              setReferenceProjectName(projectName)
+              setSectionName(sectionName)
+              closeSectionsModal()
+            }}
+            //@ts-ignore
+            isOpen={isOpenSectionsModal}
+            handleClose={closeSectionsModal}
+          />
+        </div>
+      </>
+    )
+
+  return (
+    <>
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Team Projects"
+          pageLink="/teamprojects"
+          elementName={`'example to change`}
         />
-        <Button
-          id={styles.buttonEdit}
-          onClick={() => dispatch(switchEditMode())}
-        >
-          Edit
-        </Button>
-        <Button id={styles.buttonEdit} onClick={() => {}}>
-          Back
-        </Button>
-      </div>
-
-      <div className={styles.teamProjectDetailsContainer}>
-        <div className={styles.attributeNamesContainer}>
-          <div>Name:</div>
-          <div>Reference project:</div>
-          <div>Team mentor:</div>
-          <div>Section name:</div>
-          <div>Project URL:</div>
-          <div>Description:</div>
+      </PageHeader>
+      <div className={styles.teamProjectContainer}>
+        <div className={styles.teamProjectHeader}>
+          <span className={styles.teamProjectHeaderName}>
+            Manage team project
+          </span>
+          <DeleteButton
+            confirmTitle="o you really want to delete this project?"
+            onConfirm={() => {
+              dispatch(deleteProjectById(id))
+            }}
+          />
+          <Button
+            id={styles.buttonEdit}
+            onClick={() => dispatch(switchEditMode())}
+          >
+            Edit
+          </Button>
+          <Button id={styles.buttonEdit} onClick={() => {}}>
+            Back
+          </Button>
         </div>
-        <div className={styles.attributeValuesContainer}>
-          <div>{selectedTeamProject!.projectName}</div>
-          <div>{selectedTeamProject!.referenceProjectName}</div>
-          <div>{selectedTeamProject!.mentor}</div>
-          <div>{selectedTeamProject!.sectionName}</div>
-          <div>{selectedTeamProject!.projectUrl}</div>
-          <div className={styles.description}>
-            {selectedTeamProject!.description}
+
+        <div className={styles.teamProjectDetailsContainer}>
+          <div className={styles.attributeNamesContainer}>
+            <div>Name:</div>
+            <div>Reference project:</div>
+            <div>Team mentor:</div>
+            <div>Section name:</div>
+            <div>Project URL:</div>
+            <div>Description:</div>
+          </div>
+          <div className={styles.attributeValuesContainer}>
+            <div>{selectedTeamProject!.projectName}</div>
+            <div>{selectedTeamProject!.referenceProjectName}</div>
+            <div>{selectedTeamProject!.mentor}</div>
+            <div>{selectedTeamProject!.sectionName}</div>
+            <div>{selectedTeamProject!.projectUrl}</div>
+            <div className={styles.description}>
+              {selectedTeamProject!.description}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

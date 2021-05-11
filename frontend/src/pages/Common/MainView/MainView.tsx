@@ -10,7 +10,6 @@ import Course from '../../Admin/Course'
 import CourseList from '../../Admin/CourseList'
 import LogIn from '../LogIn'
 import RegistrationView from '../Registration'
-import ResetPassword from '../ResetPassword'
 import ManageTeam from '../../Admin/ManageTeam'
 import { getUserFromLocalStorage } from '../../../app/utils'
 import ManageSheets from '../../Admin/ManageSheets'
@@ -30,6 +29,7 @@ import { UserType as Role } from '../../../models/User.model'
 import ReferenceProjects from '../../Admin/ReferenceProjects'
 import ManageReferenceProject from '../../Admin/ManageReferenceProject'
 import TeamProject from '../../Admin/TeamProject'
+import ResetPasswordRequest from '../ResetPassword'
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -85,7 +85,7 @@ function LoggedOut(props: LoggedOutViewProps) {
           <RegistrationView />
         </Route>
         <Route path="/resetpassword">
-          <ResetPassword />
+          <ResetPasswordRequest />
         </Route>
         <Route path="/passwordReset">
           <ResetPasswordFromLink />

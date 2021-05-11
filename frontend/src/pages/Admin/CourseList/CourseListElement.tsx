@@ -7,7 +7,7 @@ import {
   setActiveCourse,
   CourseListElementModel,
 } from './CourseListSlice'
-import { useAppDispatch } from '../../../app/hooks'
+import { useAppDispatch } from '../../../hooks/hooks'
 import UButton from '../../../components/UButton'
 import { format } from 'date-fns'
 import DeleteButton from '../../../components/DeleteButton'
