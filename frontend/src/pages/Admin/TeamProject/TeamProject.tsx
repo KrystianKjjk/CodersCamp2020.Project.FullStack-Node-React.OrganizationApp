@@ -15,27 +15,21 @@ import {
 } from './TeamProjectSlice'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import FindSection from '../../../components/FindSection/index'
+import DeleteButton from '../../../components/DeleteButton'
+import { useParams } from 'react-router-dom'
 
-export interface TeamProjectProps {
-  _id: string //id projektu wybranego w tabeli
-  changeViewFn: Function
-}
-
-interface deleteModalProps {
-  projectDeleteMode: boolean
-  _id: string
-}
+export interface TeamProjectProps {}
 
 interface referenceProjectButtonProps {
   teamProject: String
 }
 
-const TeamProject: React.FC<TeamProjectProps> = (props) => {
-  const { projectEditMode, projectDeleteMode, project } = useAppSelector(
-    selectTeamProjects,
-  )
+const TeamProject: React.FC<TeamProjectProps> = () => {
+  const { id } = useParams()
+  console.log('temID', id)
+
+  const { projectEditMode, project } = useAppSelector(selectTeamProjects)
   let selectedTeamProject = project
-  const changeView = props.changeViewFn
 
   const dispatch = useAppDispatch()
   const [projectName, setProjectName] = useState(project.projectName)
@@ -57,11 +51,11 @@ const TeamProject: React.FC<TeamProjectProps> = (props) => {
   }
 
   useEffect(() => {
-    dispatch(getProjectById(props._id))
+    dispatch(getProjectById(id))
     return () => {
       dispatch(projectOperationSuccess(initialProjectState))
     }
-  }, [dispatch, props._id])
+  }, [dispatch, id])
 
   useEffect(() => {
     setProjectName(project.projectName)
@@ -78,32 +72,6 @@ const TeamProject: React.FC<TeamProjectProps> = (props) => {
     projectEditMode,
   ])
 
-  const DeleteModal = (props: deleteModalProps) => {
-    const projectDeleteMode = props.projectDeleteMode
-    if (projectDeleteMode) {
-      return (
-        <div
-          className={styles.modal}
-          onClick={() => dispatch(switchDeleteMode())}
-        >
-          Do you really want to delete this project?
-          <br />
-          <br />
-          <Button
-            id={styles.buttonDelete}
-            onClick={() => {
-              dispatch(deleteProjectById(props._id))
-              changeView()
-            }}
-          >
-            Delete
-          </Button>
-        </div>
-      )
-    }
-    return null
-  }
-
   const handleSave = async () => {
     const newProjectData = {
       ...project,
@@ -112,8 +80,8 @@ const TeamProject: React.FC<TeamProjectProps> = (props) => {
       projectUrl: projectUrl,
       description: projectDescription,
     }
-    await dispatch(saveProjectById(newProjectData, props._id))
-    dispatch(getProjectById(props._id))
+    await dispatch(saveProjectById(newProjectData, id))
+    dispatch(getProjectById(id))
   }
 
   const handleChange = (
@@ -211,19 +179,19 @@ const TeamProject: React.FC<TeamProjectProps> = (props) => {
         <span className={styles.teamProjectHeaderName}>
           Manage team project
         </span>
-        <Button
-          id={styles.buttonDelete}
-          onClick={() => dispatch(switchDeleteMode())}
-        >
-          Delete
-        </Button>
+        <DeleteButton
+          confirmTitle="o you really want to delete this project?"
+          onConfirm={() => {
+            dispatch(deleteProjectById(id))
+          }}
+        />
         <Button
           id={styles.buttonEdit}
           onClick={() => dispatch(switchEditMode())}
         >
           Edit
         </Button>
-        <Button id={styles.buttonEdit} onClick={() => props.changeViewFn()}>
+        <Button id={styles.buttonEdit} onClick={() => {}}>
           Back
         </Button>
       </div>
@@ -248,10 +216,6 @@ const TeamProject: React.FC<TeamProjectProps> = (props) => {
           </div>
         </div>
       </div>
-      <DeleteModal
-        projectDeleteMode={projectDeleteMode}
-        _id={selectedTeamProject._id}
-      />
     </div>
   )
 }

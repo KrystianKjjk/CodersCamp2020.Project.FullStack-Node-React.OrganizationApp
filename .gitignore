@@ -6,3 +6,4 @@ Dist
 launch.json
 ./.env
 .env
+frontend/.env
