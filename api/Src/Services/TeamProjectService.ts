@@ -19,7 +19,7 @@ export default class TeamProjectService {
     private userRepository: UserRepository,
     private referenceProjectRepository: ProjectRepository,
     private sectionRepository: SectionRepository,
-  ) { }
+  ) {}
 
   getTeamProjectsByTeamId = async (
     teamId: mongoose.Types.ObjectId,
@@ -36,40 +36,23 @@ export default class TeamProjectService {
   }
 
   getTeamProjects = async (): Promise<TeamProjectDto[]> => {
-    const result: TeamProjectDto[] = []
+    const data = await this.teamProjectRepository.getAll()
+    const teamProjects = data.map<TeamProjectDto>((r) => ({
+      id: r._id,
+      teamProjectName: r.projectName,
+      mentor: r.teamId?.mentor,
+      referenceProject: r.parentProjectId && {
+        id: r.parentProjectId?._id,
+        projectName: r.parentProjectId?.projectName,
+      },
+      section: r.parentProjectId?.sectionId && {
+        id: r.parentProjectId?.sectionId?._id,
+        sectionName: r.parentProjectId?.sectionId?.name,
+      },
+    }))
+    console.log('TS', data)
 
-    const teamProjects: TeamProject[] = await this.teamProjectRepository.getAll()
-    teamProjects.forEach(async (t) => {
-      const team = await this.teamRepository.getById(t.teamId)
-      const mentor: UserModel = await this.userRepository.getById(team.mentor)
-
-      const parentProject: Project = await this.referenceProjectRepository.getById(
-        t.parentProjectId,
-      )
-      const section: Section = await this.sectionRepository.getById(
-        parentProject.sectionId,
-      )
-      const res: TeamProjectDto = {
-        id: t._id.toHexString(),
-        teamProjectName: t.projectName,
-        mentor: {
-          id: mentor._id.toHexString(),
-          name: `${mentor.name} ${mentor.surname}`,
-        },
-        referenceProject: {
-          id: t.parentProjectId.toHexString(),
-          projectName: parentProject.projectName,
-        },
-        section: {
-          id: parentProject.sectionId.toHexString(),
-          sectionName: section.name,
-        },
-      }
-      result.push(res)
-    })
-    console.log(result)
-    // const res = teamProjectInfo
-    return result
+    return teamProjects
   }
 
   getTeamProjectById = async (teamProjectId: mongoose.Types.ObjectId) => {
