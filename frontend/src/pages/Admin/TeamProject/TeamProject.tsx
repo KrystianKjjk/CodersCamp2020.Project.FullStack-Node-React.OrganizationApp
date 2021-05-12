@@ -13,7 +13,7 @@ import {
   projectOperationSuccess,
   initialProjectState,
 } from './TeamProjectSlice'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
 import FindSection from '../../../components/FindSection/index'
 
 export interface TeamProjectProps {

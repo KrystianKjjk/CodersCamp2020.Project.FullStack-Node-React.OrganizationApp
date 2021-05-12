@@ -70,7 +70,7 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
     { field: 'status', headerName: 'Status', width: 150, sortable: true },
   ]
 
-  function handleSelection(params: any, e: any) {
+  function handleSelection(params: any) {
     const userID = params.row.id
     const path = `users/${userID}`
     history.push(path)

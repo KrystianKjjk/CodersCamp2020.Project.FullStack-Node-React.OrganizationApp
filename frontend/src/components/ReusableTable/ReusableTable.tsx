@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { DataGrid, DataGridProps } from '@material-ui/data-grid'
 import styles from './ReusableTable.module.css'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { initTable, fetchData, selectTables } from './ReusableTableSlice'
 import { CircularProgress, LinearProgress } from '@material-ui/core'
 

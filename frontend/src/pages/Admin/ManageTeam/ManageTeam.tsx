@@ -11,6 +11,7 @@ import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
+import ReusableGoBack from '../../../components/ReusableGoBack';
 
 export interface ManageTeamProps {}
 
@@ -115,11 +116,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
   return (
     <Container className={styles.manageTeams} aria-label="Manage Teams">
       <CssBaseline />
-      <PageHeader
-        name={`Teams ${
-          '/ ' + (mentor ? `${mentor?.name} ${mentor?.surname}` : teamId)
-        }`}
-      />
+      <PageHeader><ReusableGoBack pageName="Teams" pageLink="/teams" elementName={mentor ? `${mentor?.name} ${mentor?.surname}` : teamId}/></PageHeader>
       <Paper className={styles.container}>
         <Container className={styles.manageHeader}>
           <h2>Manage Team</h2>
