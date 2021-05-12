@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styles from './TeamProjects.module.css'
-import ReusableTable from '../../../components/ReusableTable/index'
+import ReusableTable, {
+  ReusableTableReactQuery,
+} from '../../../components/ReusableTable/index'
 import { CssBaseline, Paper } from '@material-ui/core'
 import { useAppDispatch } from '../../../hooks/hooks'
 import { filterData } from '../../../components/ReusableTable/ReusableTableSlice'
@@ -9,10 +11,12 @@ import { useHistory } from 'react-router-dom'
 import PageHeader from '../../../components/PageHeader'
 import SearchInput from '../../../components/SearchInput'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import { useTeamProjects } from '../../../hooks/useQuery/useTeamProjects'
 
 export interface TeamProjectsProps {}
 
 const TeamProjects: React.FC<TeamProjectsProps> = () => {
+  const { data, ...restQuery } = useTeamProjects()
   const history = useHistory()
   const dispatch = useAppDispatch()
   const [search, setSearch] = useState('')
@@ -26,20 +30,19 @@ const TeamProjects: React.FC<TeamProjectsProps> = () => {
   }, [search, dispatch])
 
   const columns = [
-    { field: 'id', width: 250, sortable: true },
-    {
-      field: 'name',
-      width: 250,
-      sortable: true,
-      headerName: 'Mentor name',
-    },
     {
       field: 'teamProjectName',
       width: 250,
       sortable: true,
       headerName: 'Project name',
     },
-    { field: 'Section', width: 250, sortable: true },
+    {
+      field: 'name',
+      width: 250,
+      sortable: true,
+      headerName: 'Mentor name',
+    },
+    { field: 'sectionName', width: 250, sortable: true, headerName: 'Section' },
   ]
 
   return (
@@ -52,15 +55,21 @@ const TeamProjects: React.FC<TeamProjectsProps> = () => {
       </PageHeader>
       <Paper className={styles.main}>
         <div className={styles.table}>
-          <ReusableTable
-            name="Manage Team Projects"
-            getData={getTeamProjects}
+          <ReusableTableReactQuery
+            name={'Team projects'}
             columns={columns}
-            onRowClick={
-              (params, e) => console.log(params)
-
-              // history.push(`/teamprojects/${params.id}`)
-            }
+            onRowClick={(params) => history.push(`/teamprojects/${params.id}`)}
+            {...restQuery}
+            data={data?.map((d) => ({
+              id: d.id,
+              name: d.mentor ? `${d.mentor?.name} ${d.mentor?.surname}` : '-',
+              projectName: d.referenceProject?.projectName ?? '-',
+              sectionName: (() => {
+                console.log('SA', d.section?.sectionName ?? '-')
+                return d.section?.sectionName ?? '-'
+              })(),
+              teamProjectName: d.teamProjectName,
+            }))}
           />
         </div>
       </Paper>

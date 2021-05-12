@@ -41,11 +41,11 @@ export default class TeamProjectService {
       id: r._id,
       teamProjectName: r.projectName,
       mentor: r.teamId?.mentor,
-      referenceProject: r.parentProjectId && {
+      referenceProject: {
         id: r.parentProjectId?._id,
         projectName: r.parentProjectId?.projectName,
       },
-      section: r.parentProjectId?.sectionId && {
+      section: {
         id: r.parentProjectId?.sectionId?._id,
         sectionName: r.parentProjectId?.sectionId?.name,
       },

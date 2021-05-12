@@ -4,6 +4,7 @@ export interface TeamProjectDto {
   mentor: {
     id: string
     name: string
+    surname: string
   }
   referenceProject: {
     id: string
