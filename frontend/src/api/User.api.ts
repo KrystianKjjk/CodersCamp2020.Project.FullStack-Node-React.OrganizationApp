@@ -1,4 +1,4 @@
-import { api } from '.'
+import api from './api.service'
 import { CourseData, TeamData } from '../models'
 import {
   userStatusDict,
