@@ -21,13 +21,13 @@ describe('SearchInput', () => {
       // Type something and click arrow
       userEvent.type(input, sampleStr);
       userEvent.click(arrow);
-      await wait(() => expect(onSubmit).toBeCalledTimes(2));
+      await wait(() => expect(onSubmit).toBeCalledTimes(1));
       expect(onSubmit).toBeCalledWith(sampleStr);
 
       // Type something and press enter
       userEvent.type(input, sampleStr + 'x');
       ReactTestUtils.Simulate.keyPress(input, {key: "Enter"});
-      await wait(() => expect(onSubmit).toBeCalledTimes(3));
+      await wait(() => expect(onSubmit).toBeCalledTimes(2));
       expect(onSubmit).toBeCalledWith(sampleStr + 'x');
    });
 });

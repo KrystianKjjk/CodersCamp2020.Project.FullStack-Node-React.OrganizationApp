@@ -41,13 +41,13 @@ export interface useMultipleSelectArgs {
   labels?: { [option: string]: string }
 }
 
-export default function useMultipleSelect({
+export default function useMultipleSelect<T extends string = string>({
   options,
   label,
   labels = {},
-}: useMultipleSelectArgs): [JSX.Element, string[]] {
+}: useMultipleSelectArgs): [JSX.Element, T[]] {
   const theme = useTheme()
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<T[]>([])
 
   const handleChange = (
     event: React.ChangeEvent<{
@@ -55,7 +55,7 @@ export default function useMultipleSelect({
       value: unknown
     }>,
   ) => {
-    setSelected(event.target.value as string[])
+    setSelected(event.target.value as T[])
   }
   const multipleSelectComponent = (
     <Container>
