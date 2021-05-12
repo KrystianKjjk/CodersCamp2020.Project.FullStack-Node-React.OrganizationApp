@@ -1,72 +1,51 @@
 import React from 'react'
-import { fireEvent, render, screen, wait } from '@testing-library/react'
+import { render, screen, wait } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Provider } from 'react-redux'
-import { store } from '../../../app/store'
-import {
-  sortData,
-  filterData,
-} from '../../../components/ReusableTable/ReusableTableSlice'
-import UserService from '../../../api/User.service'
+import * as api from '../../../api/User.api'
 import ManageUsers, { usersDatabase } from '.'
-
-jest.mock('../../../api/User.service.ts', () => jest.fn())
+import { QueryClientProvider } from 'react-query'
+import queryClient from '../../../QueryClient'
+import ReactTestUtils from 'react-dom/test-utils'
+import { invUserStatusDict, invUserTypeDict, User } from '../../../models'
+import { sortUsers, filterUsers } from '../../../hooks'
 
 describe('ManageUsers', () => {
   jest.setTimeout(10000)
   it('renders without error, search input works, sort list works and filters work', async () => {
-    const getUsersMock = jest.fn(() => Promise.resolve(usersDatabase))
-    const UserServiceMock = {
-      getUsers: getUsersMock,
-    }
-    // @ts-ignore
-    UserService.mockImplementation(() => UserServiceMock)
-
+    const getUsersMock = jest
+      .spyOn(api, 'getUsers')
+      .mockImplementation(() => Promise.resolve(usersDatabase))
     render(
-      <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
         <ManageUsers />
-      </Provider>,
+      </QueryClientProvider>,
     )
     expect(getUsersMock).toBeCalledTimes(1)
     await screen.findByLabelText('Table - Users')
-    expect(store.getState().tables['Users'].rows).toHaveLength(
-      usersDatabase.length,
-    )
+    expect(queryClient.getQueryData('users')).toHaveLength(usersDatabase.length)
 
-    await screen.findByLabelText('Table - Users')
-    store.dispatch(
-      filterData({
-        table: 'Users',
-        filters: [{ column: 'surname', values: ['CSurname'] }],
-      }),
-    )
-    expect(store.getState().tables['Users'].displayedRows).toHaveLength(1)
-
-    await screen.findByLabelText('Table - Users')
-    store.dispatch(sortData({ table: 'Users', column: 'name' }))
-    expect(store.getState().tables['Users'].displayedRows[0].name).toBe('CName')
-
-    await screen.findByLabelText('Table - Users')
-    store.dispatch(
-      filterData({
-        table: 'Users',
-        filters: [{ column: 'type', values: ['Admin'] }],
-      }),
-    )
+    sortUsers('name')
     await wait(() =>
-      expect(store.getState().tables['Users'].displayedRows).toHaveLength(1),
+      expect((queryClient.getQueryData('users') as User[])[0].name).toBe(
+        'CName',
+      ),
     )
-    store.dispatch(
-      filterData({
-        table: 'Users',
-        filters: [
-          { column: 'status', values: ['Resigned'] },
-          { column: 'type', values: ['Admin'] },
-        ],
-      }),
-    )
-    await wait(() =>
-      expect(store.getState().tables['Users'].displayedRows).toHaveLength(0),
-    )
+
+    const searchInput = screen.getByPlaceholderText('User last name or ID')
+    expect(searchInput).toBeDefined()
+    expect(searchInput).not.toBeNull()
+    userEvent.type(searchInput, 'CSurname')
+    ReactTestUtils.Simulate.keyPress(searchInput, { key: 'Enter' })
+    await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(1))
+
+    await filterUsers({ type: [], status: [] })
+    await filterUsers({ type: [invUserTypeDict['Admin']], status: [] })
+    await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(1))
+
+    await filterUsers({
+      status: [invUserStatusDict['Resigned']],
+      type: [invUserTypeDict['Admin']],
+    })
+    await wait(() => expect(queryClient.getQueryData('users')).toHaveLength(0))
   })
 })
