@@ -139,13 +139,13 @@ function Admin(props: LoggedInViewProps) {
           path="/projects/:projectID"
           component={ManageReferenceProject}
         />
-
+        <PrivateRoute path="/teamprojects/:teamProjectId">
+          <TeamProject />
+        </PrivateRoute>
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
-        <PrivateRoute path="/teamprojects:id">
-          <TeamProject />
-        </PrivateRoute>
+
         <PrivateRoute
           path="/teams/:teamId"
           component={ManageTeam}

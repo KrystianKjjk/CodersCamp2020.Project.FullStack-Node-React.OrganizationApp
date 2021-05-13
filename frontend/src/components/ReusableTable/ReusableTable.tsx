@@ -80,8 +80,7 @@ const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
 }) => {
   const [tableName] = useState(name)
 
-  if (isLoading) return <CircularProgress />
-  if (isFetching) return <LinearProgress />
+  if (isLoading) return <LinearProgress />
   if (error) return <div>{error.message}</div>
   if (data === undefined) return <div>Error</div>
   return (

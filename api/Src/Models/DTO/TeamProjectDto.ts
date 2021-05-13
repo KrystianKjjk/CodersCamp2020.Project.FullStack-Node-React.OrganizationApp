@@ -1,17 +1,10 @@
 export interface TeamProjectDto {
   id: string
   teamProjectName: string
-  mentor: {
-    id: string
-    name: string
-    surname: string
-  }
-  referenceProject: {
-    id: string
-    projectName: string
-  }
-  section: {
-    id: string
-    sectionName: string
-  }
+  mentorName: string
+  mentorId: string
+  referenceProjectId: string
+  referenceProjectName: string
+  sectionId: string
+  sectionName: string
 }

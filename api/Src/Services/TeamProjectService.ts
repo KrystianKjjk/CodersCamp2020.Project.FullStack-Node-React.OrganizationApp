@@ -40,17 +40,15 @@ export default class TeamProjectService {
     const teamProjects = data.map<TeamProjectDto>((r) => ({
       id: r._id,
       teamProjectName: r.projectName,
-      mentor: r.teamId?.mentor,
-      referenceProject: {
-        id: r.parentProjectId?._id,
-        projectName: r.parentProjectId?.projectName,
-      },
-      section: {
-        id: r.parentProjectId?.sectionId?._id,
-        sectionName: r.parentProjectId?.sectionId?.name,
-      },
+      mentorName: r.teamId?.mentor
+        ? `${r.teamId?.mentor?.name} ${r.teamId?.mentor?.surname}`
+        : undefined,
+      mentorId: r.teamId?.mentor._id,
+      referenceProjectId: r.parentProjectId?._id,
+      referenceProjectName: r.parentProjectId?.projectName,
+      sectionId: r.parentProjectId?.sectionId?._id,
+      sectionName: r.parentProjectId?.sectionId?.name,
     }))
-    console.log('TS', data)
 
     return teamProjects
   }

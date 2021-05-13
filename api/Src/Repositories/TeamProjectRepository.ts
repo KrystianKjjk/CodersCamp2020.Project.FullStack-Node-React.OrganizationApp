@@ -1,6 +1,5 @@
 import { Repository } from './Repository'
 import * as mongoose from 'mongoose'
-import { TeamProject } from '../Models/TeamProject'
 
 export default class TeamProjectRepository extends Repository {
   async getAll() {
@@ -22,7 +21,23 @@ export default class TeamProjectRepository extends Repository {
   async findByTeamId(teamId: mongoose.Types.ObjectId) {
     return this.model.find({ teamId })
   }
-
+  async getById(id: mongoose.Types.ObjectId) {
+    return this.model
+      .findOne(id)
+      .populate({
+        path: 'teamId',
+        populate: {
+          path: 'mentor',
+          select: ['_id', 'name', 'surname', 'email'],
+        },
+      })
+      .populate({
+        path: 'parentProjectId',
+        populate: {
+          path: 'sectionId',
+        },
+      })
+  }
   async updateForTeam(
     id: mongoose.Types.ObjectId,
     teamId: mongoose.Types.ObjectId,

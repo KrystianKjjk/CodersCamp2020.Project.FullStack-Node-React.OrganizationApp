@@ -1,26 +1,36 @@
-import { Breadcrumbs, Link, Typography } from '@material-ui/core';
-import React from 'react';
-import styles from './ReusableGoBack.module.css';
-import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core'
+import React from 'react'
+import styles from './ReusableGoBack.module.css'
+import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
+import { useHistory } from 'react-router-dom'
 
 export interface ReusableGoBackProps {
-  pageName: string;
-  pageLink: string;
-  elementName: string;
+  pageName: string
+  pageLink: string
+  elementName: string
 }
 
-const ReusableGoBack: React.FC< ReusableGoBackProps > = props => {
+const ReusableGoBack: React.FC<ReusableGoBackProps> = ({
+  pageName,
+  pageLink,
+  elementName,
+}) => {
+  const history = useHistory()
   return (
     <div className={styles.container_goback}>
       <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
-          <Link href={props.pageLink} color="textPrimary" className={styles.breadcrumbs_link}> 
-            <ArrowBackRoundedIcon className={styles.icon_back} />
-            {props.pageName}
-          </Link>
-        <Typography>{props.elementName}</Typography>
+        <Link
+          onClick={() => history.push(pageLink)}
+          color="textPrimary"
+          className={styles.breadcrumbs_link}
+        >
+          <ArrowBackRoundedIcon className={styles.icon_back} />
+          {pageName}
+        </Link>
+        <Typography>{elementName}</Typography>
       </Breadcrumbs>
     </div>
-  );
-};
+  )
+}
 
-export default ReusableGoBack;
+export default ReusableGoBack
