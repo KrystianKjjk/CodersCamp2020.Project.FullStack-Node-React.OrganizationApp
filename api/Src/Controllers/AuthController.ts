@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as cache from 'memory-cache';
 import AuthService from "../Services/AuthService";
 import User from "../Models/User";
 
@@ -80,8 +81,16 @@ export default class AuthController {
     }
 
     logOut = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+        const refreshToken = req.cookies.refreshToken;
+        const result = this.service.isRefreshTokenValid(req);
 
+        if(result) {
+            cache.put(refreshToken, true, this.service.getRefreshTokenExp() * 1000);
+        }
 
+        return res.cookie('token', 'deleted', {maxAge: 100})
+            .cookie('refreshToken', 'deleted',
+                { httpOnly: true, maxAge: 100})
+            .status(200).json({message: 'LOGOUT'});
     }
-
 };

@@ -31,6 +31,7 @@ import MyProfileView from "../MyProfile";
 import {UserType as Role} from "../../../models/User.model";
 import ReferenceProjects from "../../Admin/ReferenceProjects";
 import ManageReferenceProject from "../../Admin/ManageReferenceProject";
+import BaseService from "../../../app/baseService";
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -42,6 +43,8 @@ interface LoggedOutViewProps {
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage();
+  const service = new BaseService();
+
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
 
   // eslint-disable-next-line
@@ -58,8 +61,9 @@ const MainView: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged, loaded]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsLogged(false);
+    await service.get('logout');
     removeCookie('token');
   }
 
