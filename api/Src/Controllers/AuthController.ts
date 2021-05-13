@@ -63,6 +63,11 @@ export default class AuthController {
 
     refreshToken = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
         const result = this.service.isRefreshTokenValid(req);
+
+        const isTokenBlackListed = cache.get(req.cookies.refreshToken);
+
+        if(isTokenBlackListed) return res.status(400).json({message: 'TOKEN HAS BEEN BLACKLISTED'});
+
         if(result) {
             const user = await this.service.findUserById(result._id);
             user._id = result._id;
@@ -81,16 +86,16 @@ export default class AuthController {
     }
 
     logOut = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
-        const refreshToken = req.cookies.refreshToken;
         const result = this.service.isRefreshTokenValid(req);
 
+        //blacklist refresh token in cache for token lifetime in ms
         if(result) {
-            cache.put(refreshToken, true, this.service.getRefreshTokenExp() * 1000);
+            cache.put(req.cookies.refreshToken, true, this.service.getRefreshTokenExp() * 1000);
         }
 
-        return res.cookie('token', 'deleted', {maxAge: 100})
-            .cookie('refreshToken', 'deleted',
-                { httpOnly: true, maxAge: 100})
+        return res.cookie('token', 'DELETED', {maxAge: 0})
+            .cookie('refreshToken', 'DELETED',
+                { httpOnly: true, maxAge: 0 })
             .status(200).json({message: 'LOGOUT'});
     }
 };
