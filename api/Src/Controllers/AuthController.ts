@@ -78,4 +78,10 @@ export default class AuthController {
             return res.status(400).json({message: 'REFRESH TOKEN IS INVALID'});
         }
     }
+
+    logOut = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+
+
+    }
+
 };
