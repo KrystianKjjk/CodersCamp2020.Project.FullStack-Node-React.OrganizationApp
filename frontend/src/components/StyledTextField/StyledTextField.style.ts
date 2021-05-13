@@ -1,20 +1,20 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles((theme) => ({
   cssLabel: {
-    color : '#FFF !important'
+    color: '#FFF !important',
   },
 
-  cssFocused: { },
+  cssFocused: {},
 
   notchedOutline: {
     borderWidth: '1px',
-    borderColor: '#696969'
+    borderColor: '#696969',
   },
 
   outlinedInput: {
     '&$cssFocused $notchedOutline': {
-      border: '1px solid #FFF'
+      border: '1px solid #FFF',
     },
   },
-}));
+}))

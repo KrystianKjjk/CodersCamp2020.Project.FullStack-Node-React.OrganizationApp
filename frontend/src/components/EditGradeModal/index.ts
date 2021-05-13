@@ -1,1 +1,1 @@
-export { default } from './EditGrade';
+export { default } from './EditGrade'

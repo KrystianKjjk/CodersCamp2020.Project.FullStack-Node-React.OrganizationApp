@@ -1,1 +1,1 @@
-export { default } from './ManageGrades';
+export { default } from './ManageGrades'
