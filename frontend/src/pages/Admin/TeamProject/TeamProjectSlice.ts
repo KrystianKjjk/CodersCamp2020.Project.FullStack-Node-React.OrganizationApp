@@ -179,8 +179,8 @@ export function saveProjectSectionById(
 
     try {
       const allReferenceProjects = await api.get(`/projects`)
-      //@ts-ignore
       const referenceProject = allReferenceProjects.data.find(
+        //@ts-ignore
         (project) => project.sectionId === sectionId,
       )
       newProject.parentProjectId = referenceProject._id
