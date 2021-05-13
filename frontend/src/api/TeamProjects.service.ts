@@ -36,8 +36,8 @@ async function getTeamProjects(): Promise<any[]> {
       getProjectDetailedData(project),
     ),
   )
-  //@ts-ignore
   if (courseId)
+    //@ts-ignore
     return allProjects.filter((project) => project.CourseId === courseId)
   return allProjects
 }
