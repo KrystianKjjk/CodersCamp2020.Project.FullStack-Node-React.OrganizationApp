@@ -1,7 +1,8 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useState } from 'react';
 import styles from './SearchInput.module.css';
 import { InputAdornment, IconButton, FormControl, OutlinedInput } from '@material-ui/core';
 import { ArrowForwardOutlined, SearchRounded } from '@material-ui/icons';
+import { useDidUpdateEffect } from '../../hooks';
 
 export interface SearchInputProps {
   onSubmit: (value: string) => void;
@@ -19,7 +20,7 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
     if(e.key === 'Enter' && inputRef.current)
       setValue(inputRef.current.value);
   }
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     onSubmit(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
@@ -46,4 +47,4 @@ const SearchInput: React.FC< SearchInputProps > = ({ placeholder, onSubmit }) =>
   );
 };
 
-export default SearchInput;
+export default React.memo(SearchInput);

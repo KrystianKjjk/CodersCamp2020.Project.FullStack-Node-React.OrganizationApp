@@ -3,6 +3,7 @@ import { DataGrid, DataGridProps } from '@material-ui/data-grid'
 import styles from './ReusableTable.module.css'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { initTable, fetchData, selectTables } from './ReusableTableSlice'
+import { CircularProgress, LinearProgress } from '@material-ui/core'
 
 interface Column {
   field: string
@@ -58,3 +59,43 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
 }
 
 export default ReusableTable
+
+export type ReusableTableReactQueryProps = {
+  name: string
+  columns?: Column[]
+  isLoading: boolean
+  error: unknown
+  data?: any[]
+  isFetching: boolean
+} & Omit<DataGridProps, 'rows'>
+
+const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
+  name,
+  columns = [],
+  isLoading,
+  error,
+  data,
+  isFetching,
+  ...restOfProps
+}) => {
+  const [tableName] = useState(name)
+
+  if (isLoading) return <CircularProgress />
+  if (isFetching) return <LinearProgress />
+  if (error) return <div>{error.message}</div>
+  if (data === undefined) return <div>Error</div>
+  return (
+    <div className={styles.container} aria-label={'Table - ' + tableName}>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={5}
+        autoHeight
+        disableSelectionOnClick={true}
+        {...restOfProps}
+      />
+    </div>
+  )
+}
+
+export const ReusableTableReactQuery = React.memo(ReusableTableReactQueryFC)
