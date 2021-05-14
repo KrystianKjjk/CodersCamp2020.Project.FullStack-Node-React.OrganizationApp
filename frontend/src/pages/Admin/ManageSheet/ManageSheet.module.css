@@ -1,80 +1,80 @@
 .sheetId {
-    font-size: 0.7em;
-    font-weight: 500;
+  font-size: 0.7em;
+  font-weight: 500;
 }
 .manageSheet {
-    margin: auto;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    font-size: 1.3rem;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 1.3rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .container {
-    border: gray 1px solid;
+  border: gray 1px solid;
 }
 .container > * {
-    border-bottom: gray 1px solid;
+  border-bottom: gray 1px solid;
 }
 .container > *:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 .mainHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    margin-bottom: 3rem;
-    border: gray 1px solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  border: gray 1px solid;
 }
 .teamInfo {
-    list-style-type: none;
+  list-style-type: none;
 }
 .teamInfoRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-items: left;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: left;
+  align-items: center;
 }
 .reviewersInfo {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    justify-items: left;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  justify-items: left;
+  align-items: center;
 }
 .reviewerInfoRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: left;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: left;
+  align-items: center;
 }
 .reviewers {
-    list-style-type: none;
+  list-style-type: none;
 }
 .manageContainer {
-    margin-bottom: 3rem;
-    display: grid;
-    grid-template-areas:    "mainHeader buttons buttons";
-    border-bottom: gray 1px solid;
-    padding: 1rem;
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-areas: 'mainHeader buttons buttons';
+  border-bottom: gray 1px solid;
+  padding: 1rem;
 }
 .manageHeader {
-    grid-area: mainHeader;
-    align-self: center;
-    padding: 1rem;
+  grid-area: mainHeader;
+  align-self: center;
+  padding: 1rem;
 }
 .buttons {
-    display: flex;
-    grid-area: buttons;
-    justify-self: end;
-    align-self: center;
-    align-items: center;
-    justify-content: space-around;
+  display: flex;
+  grid-area: buttons;
+  justify-self: end;
+  align-self: center;
+  align-items: center;
+  justify-content: space-around;
 }
 .buttons > * {
-    margin-left: 2rem !important;
+  margin-left: 2rem !important;
 }
 .table {
-    padding: 3rem;
+  padding: 3rem;
 }

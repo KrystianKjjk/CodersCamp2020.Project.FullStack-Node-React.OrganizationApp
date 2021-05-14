@@ -19,7 +19,7 @@ import { CourseForSection } from '../../../models/Course.model'
 import StyledTextField from '../../../components/StyledTextField'
 import UButton from '../../../components/UButton'
 import DeleteButton from '../../../components/DeleteButton'
-import PageHeader from '../../../components/PageHeader';
+import PageHeader from '../../../components/PageHeader'
 import ReusableGoBack from '../../../components/ReusableGoBack'
 
 const SectionView = () => {
@@ -184,7 +184,11 @@ const SectionView = () => {
     <Container className={styles.manageSections} aria-label="Manage Section">
       <CssBaseline />
       <PageHeader>
-        <ReusableGoBack pageName="Sections" pageLink="/sections" elementName={sectionName} />
+        <ReusableGoBack
+          pageName="Sections"
+          pageLink="/sections"
+          elementName={sectionName}
+        />
       </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>

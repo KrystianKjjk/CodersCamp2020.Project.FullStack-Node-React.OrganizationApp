@@ -15,7 +15,7 @@ import { useAppDispatch } from '../../../hooks/hooks'
 import EditGradeModal from '../../../components/EditGradeModal'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
-import ReusableGoBack from '../../../components/ReusableGoBack';
+import ReusableGoBack from '../../../components/ReusableGoBack'
 
 type Grade = SheetGrade & { quality: string }
 
@@ -223,7 +223,13 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   return (
     <Container className={styles.manageSheet} aria-label="Manage Sheet">
       <CssBaseline />
-      <PageHeader><ReusableGoBack pageName="Sheets" pageLink="/gradesheets" elementName={mentor ? `${mentor.name} ${mentor.surname}` : sheetId}/></PageHeader>
+      <PageHeader>
+        <ReusableGoBack
+          pageName="Sheets"
+          pageLink="/gradesheets"
+          elementName={mentor ? `${mentor.name} ${mentor.surname}` : sheetId}
+        />
+      </PageHeader>
 
       <Paper className={styles.container}>
         <Container className={styles.manageHeader}>

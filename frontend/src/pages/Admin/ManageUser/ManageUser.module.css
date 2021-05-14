@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
 .error {
   font-family: Montserrat, sans-serif;
   font-size: 3rem;
@@ -78,7 +78,8 @@
   margin-left: 1rem;
   align-self: center;
 }
-.manageUserForm__row__value input, .manageUserForm__row__value select {
+.manageUserForm__row__value input,
+.manageUserForm__row__value select {
   padding: 0.7rem 1rem;
   width: 15rem;
   background: #1c1c1c;
@@ -86,7 +87,8 @@
   border: rgba(255, 255, 255, 0.87) 1px solid;
   border-radius: 0.4rem;
 }
-.manageUserForm__row__value input:focus, .manageUserForm__row__value select:focus {
+.manageUserForm__row__value input:focus,
+.manageUserForm__row__value select:focus {
   outline: none;
   border: #fff 1px solid;
 }
@@ -109,7 +111,7 @@
 .status_radio_button__edit div:first-child label {
   margin-left: 0;
 }
-.status_radio_button input[type=radio] {
+.status_radio_button input[type='radio'] {
   opacity: 0;
   position: fixed;
   width: 0;
@@ -127,7 +129,7 @@
   display: inline-block;
   background: #1c1c1c;
   border: rgba(240, 55, 56, 0.75) 1px solid;
-  color: #F03738;
+  color: #f03738;
   padding: 0.5rem 0.7rem;
   border-radius: 0.2rem;
   margin: 0 0.5rem;
@@ -141,7 +143,7 @@
   border-radius: 0.2rem;
   margin: 0 0.5rem;
 }
-.status_radio_button input[type=radio]:checked + label {
+.status_radio_button input[type='radio']:checked + label {
   display: inline-block;
   border: rgba(255, 255, 255, 0.75) 1px solid;
   color: #fff;
