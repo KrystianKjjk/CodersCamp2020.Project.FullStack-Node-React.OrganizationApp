@@ -1,25 +1,30 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from 'mongoose'
 
 export interface Team {
-    _id: mongoose.Types.ObjectId,
-    mentor: mongoose.Types.ObjectId;
-    users: mongoose.Types.ObjectId[];
-    course: mongoose.Types.ObjectId
-};
+  _id: mongoose.Types.ObjectId
+  mentor: mongoose.Types.ObjectId
+  users: mongoose.Types.ObjectId[]
+  course: mongoose.Types.ObjectId
+}
 
-const TeamSchema = new mongoose.Schema({
+const TeamSchema = new mongoose.Schema(
+  {
     mentor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
-    users: [{
+    users: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
+      },
+    ],
     course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-    }
-  }, {timestamps: true});
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    },
+  },
+  { timestamps: true },
+)
 
-  export default mongoose.model<Team & mongoose.Document>('Team', TeamSchema);
+export default mongoose.model<Team & mongoose.Document>('Team', TeamSchema)

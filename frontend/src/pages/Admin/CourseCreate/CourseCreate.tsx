@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { CourseCreateObject, Course } from "../Course/CourseDetailsSlice";
-import TextField from "@material-ui/core/TextField";
-import { Button, ThemeProvider } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
-import PageHeader from "../../../components/PageHeader";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import "date-fns";
+import React, { useState } from 'react'
+import { CourseCreateObject, Course } from '../Course/CourseDetailsSlice'
+import TextField from '@material-ui/core/TextField'
+import { Button, ThemeProvider } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import PageHeader from '../../../components/PageHeader'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import 'date-fns'
 
-import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import CoursesService from "../../../api/courses.service";
-import { mainTheme } from "../../../theme/customMaterialTheme";
+import DateFnsUtils from '@date-io/date-fns'
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
+import CoursesService from '../../../api/courses.service'
+import { mainTheme } from '../../../theme/customMaterialTheme'
 
 export interface CourseCreateProps {}
 
@@ -18,82 +18,82 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
-        "& .MuiTextField-root": {
+        '& .MuiTextField-root': {
           margin: theme.spacing(1),
-          width: "90%",
+          width: '90%',
         },
       },
       nameInput: {
-        "&.MuiTextField-root": {
-          width: "50%",
-          paddingBottom: "2%",
+        '&.MuiTextField-root': {
+          width: '50%',
+          paddingBottom: '2%',
         },
       },
       container: {
-        textAlign: "left",
-        fontFamily: "Montserrat",
-        backgroundColor: "#1C1C1C",
-        border: "1px solid #666666",
+        textAlign: 'left',
+        fontFamily: 'Montserrat',
+        backgroundColor: '#1C1C1C',
+        border: '1px solid #666666',
       },
       inputs: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        borderTop: "1px solid #666666",
-        paddingTop: "2%",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderTop: '1px solid #666666',
+        paddingTop: '2%',
       },
       header: {
-        paddingLeft: "3%",
+        paddingLeft: '3%',
       },
       dateContainer: {
-        display: "flex",
-        justifyContent: "space-between",
-        margin: "2% 15%",
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: '2% 15%',
       },
       datePicker: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: "50px",
+        width: '50px',
       },
       button: {
-        backgroundColor: "#1a90ff",
-        margin: "2% 0",
-        width: "120px",
-        "&:hover": {
-          backgroundColor: "#2272bd",
+        backgroundColor: '#1a90ff',
+        margin: '2% 0',
+        width: '120px',
+        '&:hover': {
+          backgroundColor: '#2272bd',
         },
       },
       buttonAlignment: {
-        display: "flex",
-        justifyContent: "center",
+        display: 'flex',
+        justifyContent: 'center',
       },
-    })
-  );
+    }),
+  )
 
-  const classes = useStyles();
-  const courseService = new CoursesService();
+  const classes = useStyles()
+  const courseService = new CoursesService()
 
-  const [courseName, changeCourseName] = useState("");
-  const [description, changeDescription] = useState("");
-  const [startDate, changeStartDate] = useState<Date | null>(new Date());
-  const [endDate, changeEndDate] = useState<Date | null>(new Date());
-  const history = useHistory();
+  const [courseName, changeCourseName] = useState('')
+  const [description, changeDescription] = useState('')
+  const [startDate, changeStartDate] = useState<Date | null>(new Date())
+  const [endDate, changeEndDate] = useState<Date | null>(new Date())
+  const history = useHistory()
 
   const handleCourseNameChange = (e: any) => {
-    changeCourseName(e.target.value);
-  };
+    changeCourseName(e.target.value)
+  }
 
   const handleDescriptionChange = (e: any) => {
-    changeDescription(e.target.value);
-  };
+    changeDescription(e.target.value)
+  }
 
   const handleStartDateChange = (date: Date | null) => {
-    changeStartDate(date);
-  };
+    changeStartDate(date)
+  }
 
   const handleEndDateChange = (date: Date | null) => {
-    changeEndDate(date);
-  };
+    changeEndDate(date)
+  }
 
   const handleSaveButtonClick = async () => {
     const course: CourseCreateObject = {
@@ -101,17 +101,17 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
       description: description,
       startDate: startDate!,
       endDate: endDate!,
-    };
+    }
 
     courseService.createCourse(course).then((response: any) => {
-      const createdCourse: Course = response.data;
-      history.push("/courses/" + createdCourse._id);
-    });
-  };
+      const createdCourse: Course = response.data
+      history.push('/courses/' + createdCourse._id)
+    })
+  }
 
   return (
     <div className={classes.root}>
-      <PageHeader name={"Create Course"}></PageHeader>
+      <PageHeader name={'Create Course'}></PageHeader>
       <div className={classes.container}>
         <div className={classes.header}>
           <h3>Manage course</h3>
@@ -172,7 +172,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CourseCreate;
+export default CourseCreate

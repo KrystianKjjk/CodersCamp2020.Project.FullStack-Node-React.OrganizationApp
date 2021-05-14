@@ -1,62 +1,62 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
 .error {
-    font-family: Montserrat, sans-serif;
-    font-size: 3rem;
-    font-weight: 400;
-    margin: 17rem auto;
-    color: #ff384a;
+  font-family: Montserrat, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  margin: 17rem auto;
+  color: #ff384a;
 }
 
 .loading {
-    margin: 15rem auto;
+  margin: 15rem auto;
 }
 
 .breadcrumbs {
-    position: relative;
-    background-color: #1c1c1c;
-    border: 1px solid #666666;
-    border-radius: 0.2rem;
-    padding: 1rem 2rem;
-    margin: 1rem 0;
-    display: flex;
-    align-items: center;
+  position: relative;
+  background-color: #1c1c1c;
+  border: 1px solid #666666;
+  border-radius: 0.2rem;
+  padding: 1rem 2rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
 }
 
 .container {
-    background: #1c1c1c;
-    margin: 1rem 0;
-    border: 1px #666666 solid;
-    border-radius: 0.3rem;
-    height: fit-content;
+  background: #1c1c1c;
+  margin: 1rem 0;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
+  height: fit-content;
 }
 .container__header {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    background: inherit;
-    color: rgba(255, 255, 255, 0.87);
-    font-size: 1.4rem;
-    border: 1px #666666 solid;
-    border-radius: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: inherit;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 1.4rem;
+  border: 1px #666666 solid;
+  border-radius: 0.3rem;
 }
 .container__header span {
-    font-weight: 500;
-    align-self: center;
+  font-weight: 500;
+  align-self: center;
 }
 .container__header__button {
-    display: flex;
+  display: flex;
 }
 .container__body {
-    height: fit-content;
+  height: fit-content;
 }
 
 .manageForm {
-    max-width: 70rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-family: Montserrat, sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-align: left;
-    margin: 1.5rem 5rem 2rem 2rem;
+  max-width: 70rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: left;
+  margin: 1.5rem 5rem 2rem 2rem;
 }

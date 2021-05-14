@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-import {ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 export interface ListItemLinkProps {
-  path: string;
-  icon: React.ReactNode;
-  text: string;
+  path: string
+  icon: React.ReactNode
+  text: string
 }
 
 const ListItemLink = ({ path, icon, text }: ListItemLinkProps) => {
@@ -14,7 +14,7 @@ const ListItemLink = ({ path, icon, text }: ListItemLinkProps) => {
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={text} />
     </ListItem>
-  );
-};
+  )
+}
 
-export default ListItemLink;
+export default ListItemLink
