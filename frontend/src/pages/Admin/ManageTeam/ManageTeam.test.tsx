@@ -58,7 +58,7 @@ jest.mock('../../../api/Team.service.ts', () => jest.fn())
 jest.mock('../../../api/User.service.ts', () => jest.fn())
 
 describe('ManageTeam', () => {
-  jest.setTimeout(15000)
+  jest.setTimeout(20000)
   it('renders without error', async () => {
     const getTeamMock = jest.fn((id: string) =>
       Promise.resolve(teamsDatabase[+id]),
