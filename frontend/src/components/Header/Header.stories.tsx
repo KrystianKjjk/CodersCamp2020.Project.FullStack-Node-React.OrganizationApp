@@ -1,12 +1,12 @@
-import React from 'react';
-import { Story, Meta } from '@storybook/react/types-6-0';
-import Header from './Header';
+import React from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import Header from './Header'
 
 export default {
   title: 'Header component',
   component: Header,
-} as Meta;
+} as Meta
 
-const Template: Story = (args) => <Header {...args} />;
+const Template: Story = (args) => <Header {...args} />
 
-export const BasicHeader = Template.bind({});
+export const BasicHeader = Template.bind({})

@@ -1,1 +1,1 @@
-export { default } from './HeaderRegistration';
+export { default } from './HeaderRegistration'

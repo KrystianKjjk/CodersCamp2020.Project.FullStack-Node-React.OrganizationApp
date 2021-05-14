@@ -1,1 +1,1 @@
-export { default } from './UButton';
+export { default } from './UButton'

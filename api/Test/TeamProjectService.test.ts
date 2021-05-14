@@ -1,187 +1,188 @@
-import * as mongoose from "mongoose";
-import { TeamProject } from "../Src/Models/TeamProject";
-import TeamProjectSchema from "../Src/Models/TeamProject";
-import TeamProjectRepository from "../Src/Repositories/TeamProjectRepository";
-import TeamProjectService from "../Src/Services/TeamProjectService";
-import { TestTeamsRepository } from './TeamService.test';
+import * as mongoose from 'mongoose'
+import { TeamProject } from '../Src/Models/TeamProject'
+import TeamProjectSchema from '../Src/Models/TeamProject'
+import TeamProjectRepository from '../Src/Repositories/TeamProjectRepository'
+import TeamProjectService from '../Src/Services/TeamProjectService'
+import { TestTeamsRepository } from './TeamService.test'
 
 class TestTeamProjectRepository extends TeamProjectRepository {
-  private projects: TeamProject[] = [];
+  private projects: TeamProject[] = []
 
   constructor() {
-    super(TeamProjectSchema);
+    super(TeamProjectSchema)
   }
 
   async getAll() {
-    return this.projects;
+    return this.projects
   }
 
   async getById(id: mongoose.Types.ObjectId) {
-    return this.projects.find((project) => project._id === id);
+    return this.projects.find((project) => project._id === id)
   }
 
   async create(project: TeamProject & mongoose.Document<TeamProject>) {
-    this.projects.push(project);
+    this.projects.push(project)
   }
 
   async deleteById(id: mongoose.Types.ObjectId) {
     const projectIndex = this.projects.findIndex(
-      (project) => project._id === id
-    );
+      (project) => project._id === id,
+    )
     if (projectIndex > -1) {
-      this.projects.splice(projectIndex, 1);
+      this.projects.splice(projectIndex, 1)
     }
   }
 
-  async deleteByIdForTeam(id: mongoose.Types.ObjectId, teamId: mongoose.Types.ObjectId) {
+  async deleteByIdForTeam(
+    id: mongoose.Types.ObjectId,
+    teamId: mongoose.Types.ObjectId,
+  ) {
     const projectIndex = this.projects.findIndex(
-      (project) => project._id === id && project.teamId === teamId
-    );
+      (project) => project._id === id && project.teamId === teamId,
+    )
     if (projectIndex > -1) {
-      return this.projects.splice(projectIndex, 1);
+      return this.projects.splice(projectIndex, 1)
     }
-    return null;
+    return null
   }
 
   async updateById(
     id: mongoose.Types.ObjectId,
-    project: TeamProject & mongoose.Document<TeamProject>
+    project: TeamProject & mongoose.Document<TeamProject>,
   ) {
     const projectIndex = this.projects.findIndex(
-      (project) => project._id === id
-    );
-    this.projects[projectIndex] = project;
-    return project;
+      (project) => project._id === id,
+    )
+    this.projects[projectIndex] = project
+    return project
   }
- 
+
   async findByTeamId(teamId: mongoose.Types.ObjectId) {
-    const teamProjects = this.projects.filter(
-      (project) => teamId.equals(project.teamId)
-    );
-    return teamProjects;
+    const teamProjects = this.projects.filter((project) =>
+      teamId.equals(project.teamId),
+    )
+    return teamProjects
   }
 }
 
-describe("TeamProjectService", () => {
-  let service: TeamProjectService;
-  let teamId = mongoose.Types.ObjectId();
-  let mentorId = mongoose.Types.ObjectId();
+describe('TeamProjectService', () => {
+  let service: TeamProjectService
+  let teamId = mongoose.Types.ObjectId()
+  let mentorId = mongoose.Types.ObjectId()
   beforeEach(() => {
     const team1 = {
       _id: teamId,
       mentor: mentorId,
       users: [mongoose.Types.ObjectId()],
       course: mongoose.Types.ObjectId(),
-    };
-    const teamProjectRepository = new TestTeamProjectRepository();
-    const teamRepository = new TestTeamsRepository();
-    teamRepository.create(team1);
-    service = new TeamProjectService(teamProjectRepository, teamRepository);
-  });
+    }
+    const teamProjectRepository = new TestTeamProjectRepository()
+    const teamRepository = new TestTeamsRepository()
+    teamRepository.create(team1)
+    service = new TeamProjectService(teamProjectRepository, teamRepository)
+  })
 
-  test("should create team project and fetch it", async () => {
+  test('should create team project and fetch it', async () => {
     const teamProject = new TeamProjectSchema({
-      teamId: "1",
-      parentProjectId: "2",
-      projectName: "FitNotFat",
-      projectUrl: "fitnotfat.url",
-      description: "description",
-    });
+      teamId: '1',
+      parentProjectId: '2',
+      projectName: 'FitNotFat',
+      projectUrl: 'fitnotfat.url',
+      description: 'description',
+    })
 
-    await service.createTeamProject(teamProject);
-    const fetchedTeamProject = await service.getTeamProjectById(
-      teamProject._id
-    );
-    expect(fetchedTeamProject).toEqual(teamProject);
-  });
+    await service.createTeamProject(teamProject)
+    const fetchedTeamProject = await service.getTeamProjectById(teamProject._id)
+    expect(fetchedTeamProject).toEqual(teamProject)
+  })
 
-  test("should fetch all team projects", async () => {
+  test('should fetch all team projects', async () => {
     const teamProject1 = new TeamProjectSchema({
       teamId: teamId,
       parentProjectIds: new mongoose.Types.ObjectId(),
-      projectName: "FitNotFat",
-      projectUrl: "fitnotfat.url",
-      description: "description",
-    });
+      projectName: 'FitNotFat',
+      projectUrl: 'fitnotfat.url',
+      description: 'description',
+    })
     const teamProject2 = new TeamProjectSchema({
-      teamId: "2",
-      parentProjectId: "4",
-      projectName: "Pokemons",
-      projectUrl: "pokemons.url",
-      description: "description",
-    });
+      teamId: '2',
+      parentProjectId: '4',
+      projectName: 'Pokemons',
+      projectUrl: 'pokemons.url',
+      description: 'description',
+    })
 
-    await service.createTeamProjectForMentor(mentorId, teamProject1);
-    await service.createTeamProject(teamProject2);
+    await service.createTeamProjectForMentor(mentorId, teamProject1)
+    await service.createTeamProject(teamProject2)
 
-    const fetchedTeamProjects = await service.getTeamProjectsByMentorId(mentorId);
-    expect(fetchedTeamProjects.length).toBe(1);
-  });
+    const fetchedTeamProjects = await service.getTeamProjectsByMentorId(
+      mentorId,
+    )
+    expect(fetchedTeamProjects.length).toBe(1)
+  })
 
-  test("should delete teamProject", async () => {
+  test('should delete teamProject', async () => {
     const teamProject = new TeamProjectSchema({
       teamId: teamId,
       parentProjectIds: new mongoose.Types.ObjectId(),
-      projectName: "FitNotFat",
-      projectUrl: "fitnotfat.url",
-      description: "description",
-    });
+      projectName: 'FitNotFat',
+      projectUrl: 'fitnotfat.url',
+      description: 'description',
+    })
 
-    await service.createTeamProject(teamProject);
-    await service.deleteTeamProjectByIdForMentor(teamProject._id, mentorId);
+    await service.createTeamProject(teamProject)
+    await service.deleteTeamProjectByIdForMentor(teamProject._id, mentorId)
 
-    const fetchedTeamProjects = await service.getTeamProjects();
-    expect(fetchedTeamProjects.length).toBe(0);
-  });
+    const fetchedTeamProjects = await service.getTeamProjects()
+    expect(fetchedTeamProjects.length).toBe(0)
+  })
 
-  test("should update teamProject", async () => {
+  test('should update teamProject', async () => {
     const teamProject = new TeamProjectSchema({
-      teamId: "1",
-      parentProjectId: "2",
-      projectName: "FitNotFat",
-      projectUrl: "fitnotfat.url",
-      description: "description",
-    });
-    await service.createTeamProject(teamProject);
-    teamProject.projectName = "updated project name";
+      teamId: '1',
+      parentProjectId: '2',
+      projectName: 'FitNotFat',
+      projectUrl: 'fitnotfat.url',
+      description: 'description',
+    })
+    await service.createTeamProject(teamProject)
+    teamProject.projectName = 'updated project name'
     const updatedTeamProject = await service.updateTeamProject(
       teamProject._id,
-      teamProject
-    );
+      teamProject,
+    )
 
-    expect(updatedTeamProject.projectName).toBe(teamProject.projectName);
+    expect(updatedTeamProject.projectName).toBe(teamProject.projectName)
+  })
 
-    
-  });
-
-  test("should fetch all team projects by teamId", async () => {
+  test('should fetch all team projects by teamId', async () => {
     const teamProject1 = new TeamProjectSchema({
-      teamId: "6041184b4864b56a243b20bf",
-      parentProjectId: "2",
-      projectName: "FitNotFat",
-      projectUrl: "fitnotfat.url",
-      description: "description",
-    });
+      teamId: '6041184b4864b56a243b20bf',
+      parentProjectId: '2',
+      projectName: 'FitNotFat',
+      projectUrl: 'fitnotfat.url',
+      description: 'description',
+    })
     const teamProject2 = new TeamProjectSchema({
-      teamId: "6041184b4864b56a243b20bf",
-      parentProjectId: "4",
-      projectName: "Pokemons",
-      projectUrl: "pokemons.url",
-      description: "description",
-    });
+      teamId: '6041184b4864b56a243b20bf',
+      parentProjectId: '4',
+      projectName: 'Pokemons',
+      projectUrl: 'pokemons.url',
+      description: 'description',
+    })
     const teamProject3 = new TeamProjectSchema({
-      teamId: "1041184b4864b56a243b20bf",
-      parentProjectId: "3",
-      projectName: "Chess",
-      projectUrl: "chess.url",
-      description: "description",
-    });
+      teamId: '1041184b4864b56a243b20bf',
+      parentProjectId: '3',
+      projectName: 'Chess',
+      projectUrl: 'chess.url',
+      description: 'description',
+    })
 
-    await service.createTeamProject(teamProject1);
-    await service.createTeamProject(teamProject2);
-    await service.createTeamProject(teamProject3);
-    const id = new mongoose.Types.ObjectId("6041184b4864b56a243b20bf");
-    const fetchedTeamProjects = await service.getTeamProjectsByTeamId(id);
-    expect(fetchedTeamProjects.length).toBe(2);
-  });
-});
+    await service.createTeamProject(teamProject1)
+    await service.createTeamProject(teamProject2)
+    await service.createTeamProject(teamProject3)
+    const id = new mongoose.Types.ObjectId('6041184b4864b56a243b20bf')
+    const fetchedTeamProjects = await service.getTeamProjectsByTeamId(id)
+    expect(fetchedTeamProjects.length).toBe(2)
+  })
+})

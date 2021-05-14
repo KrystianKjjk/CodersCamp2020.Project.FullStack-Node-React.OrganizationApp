@@ -1,1 +1,1 @@
-export { default } from './SelectSortBy';
+export { default } from './SelectSortBy'

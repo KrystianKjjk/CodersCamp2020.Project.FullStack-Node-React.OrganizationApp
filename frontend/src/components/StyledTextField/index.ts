@@ -1,1 +1,1 @@
-export { default } from './StyledTextField';
+export { default } from './StyledTextField'

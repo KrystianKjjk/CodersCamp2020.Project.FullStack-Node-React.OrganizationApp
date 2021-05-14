@@ -1,1 +1,1 @@
-export { default } from './UserGrades';
+export { default } from './UserGrades'
