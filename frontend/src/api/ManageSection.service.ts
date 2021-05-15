@@ -17,7 +17,7 @@ export default class SectionService {
     const coursesResponse = await this.api.get('/courses')
     const courses = coursesResponse.data as CourseDataForSection[]
     const sections = (await this.api.get('/sections'))
-      .data as ManageSectionData[]
+      ?.data as ManageSectionData[]
     return sections.map((section) => {
       const course = courses.find((course) => course._id === section.course)
       return {
@@ -39,7 +39,7 @@ export default class SectionService {
     const courseResponse = await this.api.get(`/courses/${id}`)
     const course = courseResponse.data as CourseDataForSection
     const sections = (await this.api.get(`/courses/${id}/sections`))
-      .data as ManageSectionData[]
+      ?.data as ManageSectionData[]
     return sections.map((section) => {
       return {
         id: section._id,
@@ -58,7 +58,7 @@ export default class SectionService {
 
   getCourses = async (): Promise<CourseForSection[]> => {
     const courses = (await this.api.get('/courses'))
-      .data as CourseDataForSection[]
+      ?.data as CourseDataForSection[]
     return courses.map((course) => {
       return {
         id: course._id,
@@ -69,7 +69,7 @@ export default class SectionService {
 
   getProjectForSection = async (id: string): Promise<ProjectForSection> => {
     const projects = (await this.api.get('/projects'))
-      .data as ProjectDataForSection[]
+      ?.data as ProjectDataForSection[]
     const project = projects.find(
       (project) => project.sectionId && project.sectionId === id,
     )
@@ -81,7 +81,7 @@ export default class SectionService {
 
   getOneSection = async (id: string): Promise<ManageSection> => {
     const section = (await this.api.get(`/sections/${id}`))
-      .data as ManageSectionData
+      ?.data as ManageSectionData
     let course = null
     if (section.course) {
       try {
