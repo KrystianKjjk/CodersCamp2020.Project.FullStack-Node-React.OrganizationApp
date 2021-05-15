@@ -70,7 +70,7 @@ export default class SectionService {
   getProjectForSection = async (id: string): Promise<ProjectForSection> => {
     const projects = (await this.api.get('/projects'))
       ?.data as ProjectDataForSection[]
-    const project = projects.find(
+    const project = projects?.find(
       (project) => project.sectionId && project.sectionId === id,
     )
     return {
