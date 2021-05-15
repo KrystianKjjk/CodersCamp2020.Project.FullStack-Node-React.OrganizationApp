@@ -11,8 +11,8 @@ class ProjectService {
     this.projectRepository = projectRepository
   }
 
-  async getProjects() {
-    return this.projectRepository.getAll()
+  async getProjects(courseId: string) {
+    return this.projectRepository.getAllByCourse(courseId)
   }
 
   async findProjectById(id: mongoose.Types.ObjectId) {

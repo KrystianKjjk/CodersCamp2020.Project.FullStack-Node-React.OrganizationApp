@@ -10,7 +10,7 @@ export interface DeleteButtonProps {
   onClose?: (event?: EventType) => void
 }
 const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
-  return <ConfirmButton {...props} text={'Delete'} />
+  return <ConfirmButton {...props} text={'DELETE'} />
 }
 
 export default DeleteButton

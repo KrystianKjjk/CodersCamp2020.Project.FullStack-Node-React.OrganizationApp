@@ -4,6 +4,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
       notifyOnChangeProps: [
         'data',
         'error',

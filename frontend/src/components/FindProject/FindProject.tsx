@@ -6,16 +6,17 @@ import SectionsService from '../../api/sections.service'
 import ReusableTable from '../ReusableTable'
 import SearchInput from '../SearchInput'
 
-import styles from './FindSection.module.css'
+import styles from './FindProject.module.css'
 import { mainTheme } from '../../theme/customMaterialTheme'
 
 export interface FindSectionProps {
+  selectedProjectId?: string
   isOpen: boolean
   handleClose: any
   onSectionSelection: any
 }
 
-const FindSection: React.FC<FindSectionProps> = (props) => {
+const FindProject: React.FC<FindSectionProps> = (props) => {
   const sectionsService = new SectionsService(new BaseService())
 
   const [isUpdate, setIsUpdate] = useState(false)
@@ -58,44 +59,33 @@ const FindSection: React.FC<FindSectionProps> = (props) => {
   function getSections() {
     const activeCourse = localStorage.getItem('activeCourse')
     const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null
-    if (courseID) {
-      sectionsService
-        .getSectionsByCourseId(courseID)
-        .then((res) => {
-          if (res.status === 200) {
-            setSections([...res.data])
-            setFilteredSections([...res.data])
-          } else throw Error
-        })
-        .catch((err) => {})
-    } else {
-      sectionsService
-        .getSections()
-        .then((res) => {
-          if (res.status === 200) {
-            setSections([...res.data])
-            setFilteredSections([...res.data])
-          } else throw Error
-        })
-        .catch((err) => {})
-    }
-  }
+    if (!courseID) return
 
+    sectionsService
+      .getSectionsByCourseId(courseID)
+      .then((res) => {
+        if (res.status === 200) {
+          setSections([...res.data])
+          setFilteredSections([...res.data])
+        } else throw Error
+      })
+      .catch((err) => {})
+  }
   function getSectionsTable(): Promise<[]> {
     const sectionsTmp = filteredSections.map((section: any) => ({
       id: section._id,
-      Name: section.name,
-      'Start date': new Date(section.startDate).toLocaleDateString(),
-      'End date': new Date(section.endDate).toLocaleDateString(),
+      name: section.name,
+      StartDate: new Date(section.startDate).toLocaleDateString(),
+      EndDate: new Date(section.endDate).toLocaleDateString(),
     }))
     return Promise.resolve(sectionsTmp)
   }
 
   const columns = [
-    { field: 'Name', width: 270 },
-    { field: 'Start date', width: 130 },
-    { field: 'End date', width: 130 },
-    { field: 'Course Name', width: 250 },
+    { field: 'name', width: 270, headerName: 'Name' },
+    { field: 'StartDate', width: 130, headerName: 'Start date' },
+    { field: 'EndDate', width: 130, headerName: 'End date' },
+    { field: 'projectName', width: 250, headerName: 'Project name' },
   ]
 
   return (
@@ -140,4 +130,4 @@ const FindSection: React.FC<FindSectionProps> = (props) => {
   )
 }
 
-export default FindSection
+export default FindProject

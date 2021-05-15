@@ -3,7 +3,7 @@ import { DataGrid, DataGridProps } from '@material-ui/data-grid'
 import styles from './ReusableTable.module.css'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { initTable, fetchData, selectTables } from './ReusableTableSlice'
-import { CircularProgress, LinearProgress } from '@material-ui/core'
+import { LinearProgress } from '@material-ui/core'
 
 interface Column {
   field: string

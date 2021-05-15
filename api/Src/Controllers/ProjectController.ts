@@ -10,7 +10,8 @@ export default class ProjectController {
   }
 
   getAllProjects = async (req: express.Request, res: express.Response) => {
-    const allProjects = await this.service.getProjects()
+    const courseId: string = req.query.courseId as string
+    const allProjects = await this.service.getProjects(courseId)
     res.status(200).json(allProjects)
   }
 

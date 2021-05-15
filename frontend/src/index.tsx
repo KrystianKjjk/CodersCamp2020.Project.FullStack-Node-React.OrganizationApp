@@ -12,16 +12,14 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import queryClient from './QueryClient'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  </Provider>,
   document.getElementById('root'),
 )
 

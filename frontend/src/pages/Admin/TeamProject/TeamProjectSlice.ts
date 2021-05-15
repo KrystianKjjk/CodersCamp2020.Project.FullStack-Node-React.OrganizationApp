@@ -1,7 +1,5 @@
-import { createSlice, Dispatch } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../../app/store'
-import BaseService from '../../../app/baseService'
-import axios from 'axios'
 
 export interface TeamProjectState {
   _id: string

@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styles from './TeamProject.module.css'
-import {
-  selectTeamProjects,
-  // getProjectById,
-  // saveProjectById,
-  // deleteProjectById,
-  // saveProjectSectionById,
-  switchEditMode,
-  switchSectionSelectionMode,
-} from './TeamProjectSlice'
+import { selectTeamProjects, switchEditMode } from './TeamProjectSlice'
 import { useAppSelector } from '../../../hooks/hooks'
+import FindProject from '../../../components/FindProject'
 import DeleteButton from '../../../components/DeleteButton'
 import { useParams } from 'react-router-dom'
 import PageHeader from '../../../components/PageHeader'
@@ -26,10 +19,6 @@ import NameValuePair from '../../../components/NameValuePair'
 import ConfirmButton from '../../../components/ConfirmButton'
 
 export interface TeamProjectProps {}
-
-interface referenceProjectButtonProps {
-  teamProject: String
-}
 
 const TeamProject: React.FC<TeamProjectProps> = () => {
   const { teamProjectId } = useParams()
@@ -75,14 +64,6 @@ const TeamProjectContent = ({
 
   const { projectEditMode } = useAppSelector(selectTeamProjects)
 
-  const [] = useState(data?.projectName)
-  const [] = useState(data?.projectUrl)
-  const [] = useState(data?.description)
-  const [] = useState(data?.parentProjectId?.projectName)
-  const [] = useState(data?.parentProjectId?.sectionId?.name)
-
-  const [, setIsOpenSectionsModal] = useState(false)
-
   if (isLoading) return <div> loading...</div>
   if (isError) return <div> Error...</div>
   if (!data) return <div>Error </div>
@@ -100,7 +81,16 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
   const [projectName, setProjectName] = useState(props.projectName)
   const [projectUrl, setProjectUrl] = useState(props.projectUrl)
   const [description, setProjectDescription] = useState(props.description)
-  const [parentProjectId] = useState(props?.parentProjectId?._id)
+  const [project] = useState(props?.parentProjectId)
+
+  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
+  function closeSectionsModal() {
+    setIsOpenSectionsModal(false)
+  }
+  function openSectionsModal() {
+    setIsOpenSectionsModal(true)
+  }
+
   const mentorName = `${props.teamId?.mentor.name ?? ''} ${
     props.teamId?.mentor.surname ?? ''
   }`
@@ -136,7 +126,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
               projectName,
               projectUrl,
               description,
-              parentProjectId,
+              parentProjectId: project?._id,
             })
           }}
         />
@@ -151,12 +141,11 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
         </NameValuePair>
         <NameValuePair name={'Reference project:'}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p>{props.parentProjectId?.projectName ?? ''}</p>
+            <p>{project?.projectName ?? ''}</p>
             <UButton
               text={'change project/section'}
               onClick={() => {
-                // openSectionsModal()
-                switchSectionSelectionMode()
+                openSectionsModal()
               }}
             >
               {/* <ReferenceProjectButtonText
@@ -169,7 +158,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
           <p>{mentorName}</p>
         </NameValuePair>
         <NameValuePair name={'Section name:'}>
-          <p>{props.parentProjectId?.sectionId?.name ?? ''}</p>
+          <p>{project?.sectionId?.name ?? ''}</p>
         </NameValuePair>
         <NameValuePair name={'Project URL:'}>
           <input
@@ -187,8 +176,10 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
         </NameValuePair>
       </div>
 
-      {/* <FindSection
-        onSectionSelection={async (sectionID: string) => {
+      <FindProject
+        selectedProjectId={project?._id}
+        onSectionSelection={async () => {
+          //setParentProjectId(sectionId)
           //const [projectName, sectionName] =
           //await dispatch(
           // saveProjectSectionById(props, sectionID),
@@ -200,7 +191,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
         //@ts-ignore
         isOpen={isOpenSectionsModal}
         handleClose={closeSectionsModal}
-      /> */}
+      />
     </div>
   )
 }

@@ -26,14 +26,6 @@
   padding: 5px 0;
 }
 
-#buttonEdit {
-  background-color: #2196F3;
-  margin: 0 10px;
-  width: 100px;
-  color: #FFFFFF;
-
-}
-
 .teamProjectDetailsContainer {
   width: 100%;
   display: flex;
@@ -45,19 +37,7 @@
   margin: 4px;
 }
 
-.attributeNamesContainer {
-  width: 20%;
-  min-width: 200px;
-  font-weight: bold;
-}
-
-.attributeValuesContainer {
-  width: 80%;
-}
-
-.attributeValuesContainer>div,
-.attributeNamesContainer>div,
-.attributeValuesContainer>input {
+.attributeValuesContainer>div {
   height: 50px;
 }
 
@@ -76,20 +56,4 @@
 
 .textarea {
   min-height: 96px;
-}
-
-.modal {
-  color: #FFFFFF;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }

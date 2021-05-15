@@ -11,7 +11,7 @@ import {
 } from '../ReferenceProjects/ReferenceProjectsSlice'
 import { useHistory } from 'react-router-dom'
 
-import FindSection from '../../../components/FindSection'
+import FindSection from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
 import {

@@ -50,14 +50,12 @@ const TeamProjects: React.FC<TeamProjectsProps> = () => {
         />
       </PageHeader>
       <Paper className={styles.main}>
-        <div className={styles.table}>
-          <ReusableTableReactQuery
-            name={'Team projects'}
-            columns={columns}
-            onRowClick={(params) => history.push(`/teamprojects/${params.id}`)}
-            {...info}
-          />
-        </div>
+        <ReusableTableReactQuery
+          name={'Team projects'}
+          columns={columns}
+          onRowClick={(params) => history.push(`/teamprojects/${params.id}`)}
+          {...info}
+        />
       </Paper>
     </CssBaseline>
   )
