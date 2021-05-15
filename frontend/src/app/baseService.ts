@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import {getUserFromLocalStorage, removeUserFromLocalStorage} from "./utils";
+import {removeUserFromLocalStorage} from "./utils";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
 axios.defaults.withCredentials = true;
@@ -62,6 +62,6 @@ export default class BaseService {
               'Content-Type': 'application/json;charset=UTF-8'
             },
           }
-        return axios.put(path, data, {...putConfig, withCredentials: true })
-    }
+        return axios.put(path, data, {...putConfig })
+  }
 }

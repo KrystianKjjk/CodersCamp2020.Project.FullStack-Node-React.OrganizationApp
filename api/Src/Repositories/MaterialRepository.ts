@@ -1,7 +1,5 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose'
 
-import { Repository } from "./Repository";
+import { Repository } from './Repository'
 
-export default class MaterialRepository extends Repository {
-
-}
+export default class MaterialRepository extends Repository {}

@@ -1,18 +1,18 @@
-.headerContainer{
-    border: 1px solid #666666;
-    border-radius: 5px;
-    padding: 1.5%;
-    margin-bottom: 2%;
-    background-color: #1C1C1C;
-    padding-left: 3%;
-    padding-right: 3%;
-    color:#fff;
-    text-align: left;
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 75px;
+.headerContainer {
+  border: 1px solid #666666;
+  border-radius: 5px;
+  padding: 1.5%;
+  margin-bottom: 2%;
+  background-color: #1c1c1c;
+  padding-left: 3%;
+  padding-right: 3%;
+  color: #fff;
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 75px;
 }

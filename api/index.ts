@@ -1,4 +1,4 @@
-import appContainer from './CreateContainer';
+import appContainer from './CreateContainer'
 
-const app = appContainer.App;
-app.listen();
+const app = appContainer.App
+app.listen()

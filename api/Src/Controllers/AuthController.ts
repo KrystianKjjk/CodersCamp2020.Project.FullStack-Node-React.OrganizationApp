@@ -3,45 +3,52 @@ import * as cache from 'memory-cache';
 import AuthService from "../Services/AuthService";
 import User from "../Models/User";
 
-interface MailingService{
-    sendMail: Function
+interface MailingService {
+  sendMail: Function
 }
 
 export default class AuthController {
-    mailingService: MailingService;
+  mailingService: MailingService
 
-    constructor(private service: AuthService, mailingService: MailingService) {
-        this.mailingService = mailingService;
+  constructor(private service: AuthService, mailingService: MailingService) {
+    this.mailingService = mailingService
+  }
+
+  register = async (
+    req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction,
+  ) => {
+    try {
+      let user = await this.service.findUser(req.body.email)
+      if (user)
+        return res
+          .status(400)
+          .json({ message: 'Email has already been taken.' })
+      req.body.password = await this.service.hashPassword(req.body)
+      user = new User(req.body)
+      await user.validate()
+      await this.service.saveUser(user)
+      res.status(201).json({ message: 'Register succeed' })
+
+      //Mailing the user
+      this.mailingService.sendMail({
+        from: 'coderscamp@fastmail.com',
+        to: user.email,
+        subject: 'Welcome to CodersCamp',
+        template: 'welcomeEmail',
+        context: {
+          userName: user.name,
+          email: user.email,
+          appLink: process.env.PAGE_URL || 'https://coderscamp.edu.pl/',
+        },
+      })
+    } catch (error) {
+      if (error.name === 'ValidationError')
+        return res.status(400).json({ message: error.message })
+      return res.status(500).json({ message: 'Internal server error.' })
     }
-
-    register = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
-        try {
-            let user = await this.service.findUser(req.body.email);
-            if(user) return res.status(400).json({message: 'Email has already been taken.'});
-            req.body.password = await this.service.hashPassword(req.body);
-            user = new User(req.body);
-            await user.validate();
-            await this.service.saveUser(user);
-            res.status(201).json({message: 'Register succeed'});
-
-             //Mailing the user
-             this.mailingService.sendMail({
-                from: 'coderscamp@fastmail.com',
-                to: user.email,
-                subject: 'Welcome to CodersCamp',
-                template: 'welcomeEmail',
-                context:{
-                    userName: user.name,
-                    email: user.email,
-                    appLink: process.env.PAGE_URL || "https://coderscamp.edu.pl/"
-                }
-            });
-        }
-        catch(error) {
-            if(error.name === 'ValidationError') return res.status(400).json({message: error.message})
-            return res.status(500).json({message: 'Internal server error.'});
-        }
-    }
+  }
 
     login = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
         try {
@@ -98,4 +105,5 @@ export default class AuthController {
                 { httpOnly: true, maxAge: 0 })
             .status(200).json({message: 'LOGOUT'});
     }
-};
+}
+

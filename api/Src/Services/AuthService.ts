@@ -1,14 +1,15 @@
-import {UserModel} from "../Models/User";
-import { UserType} from "../Models/User";
-import * as mongoose from 'mongoose';
-import UserRepository from "../Repositories/UserRepository";
-import * as bcrypt from "bcrypt";
-import * as express from "express";
-const jwt = require('jsonwebtoken');
+import { UserModel } from '../Models/User'
+import { UserType } from '../Models/User'
+import * as mongoose from 'mongoose'
+import UserRepository from '../Repositories/UserRepository'
+import * as bcrypt from 'bcrypt'
+import * as express from 'express'
+const jwt = require('jsonwebtoken')
 
-type User = UserModel & mongoose.Document;
+type User = UserModel & mongoose.Document
 
 export default class AuthService {
+
     private saltRounds: number = 10;
 
     constructor(private repository: UserRepository,

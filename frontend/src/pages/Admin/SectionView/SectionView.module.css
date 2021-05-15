@@ -1,192 +1,191 @@
 .manageSections {
-    margin: auto;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .select {
-    min-width: 200px;
-    text-transform: capitalize;
+  min-width: 200px;
+  text-transform: capitalize;
 }
 
 .container {
-    border: gray 1px solid;
+  border: gray 1px solid;
 }
 
 .mainHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    border: gray 1px solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border: gray 1px solid;
 }
 
 .mainHeader h2 {
-    margin: 0px;
-    text-transform: uppercase;
-    font-size: 15px;
+  margin: 0px;
+  text-transform: uppercase;
+  font-size: 15px;
 }
 
 .manageContainer {
-    margin-bottom: 1rem;
-    display: grid;
-    grid-template-areas: "mainHeader buttContainer";
-    border-bottom: gray 1px solid;
-
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-areas: 'mainHeader buttContainer';
+  border-bottom: gray 1px solid;
 }
 
 .manageContainer h2 {
-    margin: 0px;
+  margin: 0px;
 }
 
 .buttonContainer {
-    grid-area: buttContainer;
-    margin: 0px;
-    padding: 0px;
-    display: flex;
-    justify-content: flex-end;
+  grid-area: buttContainer;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .deleteButton {
-    justify-self: end;
-    align-self: center;
-    padding-right: 10px;
+  justify-self: end;
+  align-self: center;
+  padding-right: 10px;
 }
 
 .editButton {
-    justify-self: end;
-    align-self: center;
-    padding-right: 10px;
+  justify-self: end;
+  align-self: center;
+  padding-right: 10px;
 }
 
 .saveButton {
-    justify-self: end;
-    align-self: center;
-    padding-right: 10px;
-    display:flex;
+  justify-self: end;
+  align-self: center;
+  padding-right: 10px;
+  display: flex;
 }
 
 .manageHeader {
-    grid-area: mainHeader;
-    padding: 1rem;
-    justify-self: start;
+  grid-area: mainHeader;
+  padding: 1rem;
+  justify-self: start;
 }
 
 .manageDescription {
-    display: flex;
-    flex-direction: column;
-    border-bottom: gray 1px solid;
-  }
+  display: flex;
+  flex-direction: column;
+  border-bottom: gray 1px solid;
+}
 
 .manageSectionInfo {
-    margin-bottom: 1rem;
-    display: grid;
-    grid-template-columns: 40% 60%;
-    grid-template-areas: "material dates"
-                        "material refpro";
-    padding: 1rem;
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-areas:
+    'material dates'
+    'material refpro';
+  padding: 1rem;
 }
 
 .section_title {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 28px;
-    line-height: 30px;
-    text-align: center;
-    letter-spacing: 0.15px;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.15px;
 }
 
 .course_title {
-    font-family: Montserrat;
-    font-style: normal;
-    font-size: 18px;
-    line-height: 30px;
-    text-align: center;
-    letter-spacing: 0.15px;
-    padding-bottom: 10px;
+  font-family: Montserrat;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.15px;
+  padding-bottom: 10px;
 }
 
 .manageSectionMaterial {
-    grid-area: material;
-    text-align: justify;
-    align-self: start;
-    display:flex;
-    flex-direction:column;
-    padding: 0px;
+  grid-area: material;
+  text-align: justify;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
 }
 
 .manageSectionMaterial h3 {
-    font-weight: bold;
-    margin: 0xp;
+  font-weight: bold;
+  margin: 0xp;
 }
 
 .manageSectionDates {
-    grid-area: dates;
-    text-align: justify;
-    align-self: start;
-    display:flex;
-    flex-direction:column;
-    padding: 0px;
+  grid-area: dates;
+  text-align: justify;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
 }
 
 .manageSectionDates h3 {
-    font-weight: bold;
-    margin: 0xp;
+  font-weight: bold;
+  margin: 0xp;
 }
 
 .sectionDatesItem {
-    margin:0px;
+  margin: 0px;
 }
 
 .manageSectionRefPro {
-    grid-area: refpro;
-    text-align: justify;
-    align-self: start;
-    display:flex;
-    flex-direction:column;
+  grid-area: refpro;
+  text-align: justify;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
 }
 
 .manageSectionRefPro p {
-    font-size: 20px;
-    margin: 0px;
+  font-size: 20px;
+  margin: 0px;
 }
 
 .textFieldSectionName {
-    width: 250px;
-    align-self: center;
-    padding-bottom: 10px;
+  width: 250px;
+  align-self: center;
+  padding-bottom: 10px;
 }
 
 .textFieldDescription {
-    width: 100%;
-    align-self: center;
-    padding: 10px;
+  width: 100%;
+  align-self: center;
+  padding: 10px;
 }
 
 .textFieldDate {
-    width: 150px;
-    height: 20px;
+  width: 150px;
+  height: 20px;
 }
 
 .textFieldDateContainerOnEdit {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: baseline;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: baseline;
 }
 
 .select {
-    min-width: 250px;
-    text-transform: capitalize;
-    text-align: justify;
+  min-width: 250px;
+  text-transform: capitalize;
+  text-align: justify;
 }
 
 .textFieldCourse {
-    width: 250px;
-    align-self: center;
-    padding-bottom: 10px;
-
+  width: 250px;
+  align-self: center;
+  padding-bottom: 10px;
 }

@@ -1,0 +1,31 @@
+.breadcrumbs {
+  background-color: hsl(0, 0%, 11%);
+  color: white !important;
+  display: flex;
+}
+
+.breadcrumbs_link {
+  display: flex;
+  align-items: center;
+  color: white !important;
+}
+
+.breadcrumbs_link:hover {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.container_goback {
+  color: white !important;
+  margin: 0px;
+}
+
+.container_goback:hover .breadcrumbs_link:hover {
+  text-decoration: none;
+}
+
+.icon_back {
+  width: 20;
+  height: 20;
+  color: white;
+}

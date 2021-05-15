@@ -1,52 +1,46 @@
 .container {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .mainHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    margin-bottom: 3rem;
-    border: 1px solid grey;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  border: 1px solid grey;
 }
 .manageContainer {
-    margin-bottom: 3rem;
-    display: grid;
-    grid-template-areas:    "mainHeader empty sortBy"
-                            "header header header"
-                            "checkboxes checkboxes checkboxes";
-    border-bottom: gray 1px solid;
-    padding: 1rem;
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-areas: 'mainHeader filters sortBy';
+  grid-template-columns: 1fr 2fr 1fr;
+  border-bottom: gray 1px solid;
+  padding: 1rem;
+}
+.filtersContainer {
+  grid-area: filters;
+  display: flex;
+  justify-content: center;
+  align-self: center;
 }
 .tableContainer {
-    border: gray 1px solid;
+  border: gray 1px solid;
+  text-align: center;
 }
 .tableContainer > * {
-    padding-inline: 1rem;
+  padding-inline: 1rem;
 }
 
-.checkbox {
-    text-transform: capitalize;
-}
 .selectSortBy {
-    grid-area: sortBy;
-    justify-self: center;
-    align-self: center;
+  grid-area: sortBy;
+  justify-self: center;
+  align-self: center;
 }
 .manageHeader {
-    grid-area: mainHeader;
-    align-self: center;
-}
-.checkboxesHeader {
-    grid-area: header;
-    text-align: center;
-}
-.checkboxContainer {
-    grid-area: checkboxes;
-    display: flex;
-    justify-content: center;
+  grid-area: mainHeader;
+  align-self: center;
 }

@@ -1,1 +1,1 @@
-export { default } from './CourseCreate';
+export { default } from './CourseCreate'

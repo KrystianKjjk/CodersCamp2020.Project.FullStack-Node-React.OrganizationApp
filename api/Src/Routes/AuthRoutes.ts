@@ -1,7 +1,7 @@
-import * as express from "express";
-import AuthController from "../Controllers/AuthController";
-import validate from "../Middlewares/Validate"
-import { validateUserLogin, validateUserRegistration } from "../Models/User";
+import * as express from 'express'
+import AuthController from '../Controllers/AuthController'
+import validate from '../Middlewares/Validate'
+import { validateUserLogin, validateUserRegistration } from '../Models/User'
 
 export default (controller: AuthController) => (router: express.Router) => {
     router.route("/register").all(validate(validateUserRegistration)).post(controller.register);
