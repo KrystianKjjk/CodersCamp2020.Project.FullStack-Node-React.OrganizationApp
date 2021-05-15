@@ -6,7 +6,7 @@ axios.defaults.headers.common = {
 }
 
 const api = {
-  post: <T = any, R = any>(
+  post: <T = any, R = T>(
     path: string,
     data: T,
     config?: AxiosRequestConfig,
@@ -19,14 +19,14 @@ const api = {
   delete: <R = any>(path: string, config?: AxiosRequestConfig) => {
     return axios.delete<R>(path, config)
   },
-  patch: <T = any, R = any>(
+  patch: <T = any, R = T>(
     path: string,
     data: T,
     config?: AxiosRequestConfig,
   ) => {
     return axios.patch<R>(path, data, config)
   },
-  put: <T = any, R = any>(path: string, data: T) => {
+  put: <T = any, R = T>(path: string, data: T) => {
     const putConfig = {
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

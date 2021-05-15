@@ -6,13 +6,12 @@ import { useHistory } from 'react-router-dom'
 
 export interface ReusableGoBackProps {
   pageName: string
-  pageLink: string
+  pageLink?: string
   elementName: string
 }
 
 const ReusableGoBack: React.FC<ReusableGoBackProps> = ({
   pageName,
-  pageLink,
   elementName,
 }) => {
   const history = useHistory()
@@ -20,7 +19,7 @@ const ReusableGoBack: React.FC<ReusableGoBackProps> = ({
     <div className={styles.container_goback}>
       <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
         <Link
-          onClick={() => history.push(pageLink)}
+          onClick={history.goBack}
           color="textPrimary"
           className={styles.breadcrumbs_link}
         >

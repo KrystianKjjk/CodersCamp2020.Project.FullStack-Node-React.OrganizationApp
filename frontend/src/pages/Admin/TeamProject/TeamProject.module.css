@@ -26,25 +26,23 @@
     padding: 5px 0;
 }
 
-#buttonDelete {
-    background-color: #FF384A;
-    margin: 0 10px;
-    width: 100px;    
-    color: #FFFFFF;
-}
-
 #buttonEdit {
     background-color: #2196F3;
     margin: 0 10px;
-    width: 100px;    
+    width: 100px;
     color: #FFFFFF;
 
 }
 
-.teamProjectDetailsContainer{
+.teamProjectDetailsContainer {
+    width: 100%;
     display: flex;
-    padding: 20px;
     font-size: 18px;
+    flex-direction: column;
+}
+
+.teamProjectDetailsContainer>p {
+    margin: 4px;
 }
 
 .attributeNamesContainer {
@@ -57,19 +55,18 @@
     width: 80%;
 }
 
-.attributeValuesContainer>div, .attributeNamesContainer>div, .attributeValuesContainer>input {
+.attributeValuesContainer>div,
+.attributeNamesContainer>div,
+.attributeValuesContainer>input {
     height: 50px;
 }
 
-.description{
-    display: inline-block;
-}
-
-.input, .textarea {
+.input,
+.textarea {
+    padding: 14px;
     width: 80%;
-    box-sizing: border-box;
-    margin: 0;
-    height: 30px;
+    margin-top: 6px;
+    margin-bottom: 6px;
     background-color: transparent;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
@@ -77,8 +74,8 @@
     font-size: 18px;
 }
 
-.textarea{
-    height: 50px;
+.textarea {
+    min-height: 96px;
 }
 
 .modal {
@@ -89,11 +86,10 @@
     z-index: 1;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.9);
+    background-color: rgba(0, 0, 0, 0.9);
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-

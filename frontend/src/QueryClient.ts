@@ -4,6 +4,13 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      notifyOnChangeProps: [
+        'data',
+        'error',
+        'isFetching',
+        'isLoading',
+        'isError',
+      ],
     },
   },
 })

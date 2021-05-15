@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import ConfirmationDialog from '../ConfirmationDialog'
-import UButton from '../UButton'
+import React from 'react'
+import ConfirmButton from '../ConfirmButton'
 
 type EventType = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
@@ -10,39 +9,8 @@ export interface DeleteButtonProps {
   onConfirm: (event?: EventType) => void
   onClose?: (event?: EventType) => void
 }
-const DeleteButton: React.FC<DeleteButtonProps> = ({
-  confirmTitle,
-  confirmContent = 'This action is irreversible.',
-  onConfirm,
-  onClose,
-}) => {
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-
-  const handleCancelConfirm = (e?: EventType) => {
-    setIsConfirmOpen(false)
-    onClose && onClose(e)
-  }
-  const handleConfirm = (e?: EventType) => {
-    onConfirm(e)
-    setIsConfirmOpen(false)
-  }
-  return (
-    <>
-      <ConfirmationDialog
-        title={confirmTitle}
-        content={confirmContent}
-        isOpen={isConfirmOpen}
-        onClose={handleCancelConfirm}
-        handleConfirm={handleConfirm}
-        handleCancel={handleCancelConfirm}
-      />
-      <UButton
-        text="DELETE"
-        color="secondary"
-        onClick={() => setIsConfirmOpen(true)}
-      />
-    </>
-  )
+const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
+  return <ConfirmButton {...props} text={'Delete'} />
 }
 
 export default DeleteButton

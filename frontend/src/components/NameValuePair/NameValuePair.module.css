@@ -1,0 +1,15 @@
+.container {
+  padding-left: 16px;
+  display: flex;
+  align-Items: center;
+}
+
+.name {
+  width: 30%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.value {
+  width: 100%;
+}

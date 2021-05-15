@@ -15,7 +15,8 @@ export default class TeamProjectController {
     res: express.Response,
     next?: express.NextFunction,
   ) => {
-    const teamProjects = await this.service.getTeamProjects()
+    const courseId: string = req.query.courseId as string
+    const teamProjects = await this.service.getTeamProjects(courseId)
     return res.status(200).json(teamProjects)
   }
 
@@ -124,6 +125,7 @@ export default class TeamProjectController {
     } catch (error) {
       const errorMessage = { message: error.message }
       if (error.name === 'ValidationError') {
+        res.statusMessage = 'Validation error'
         return res.status(400).json(errorMessage)
       }
       return res.status(500).json(errorMessage)
@@ -165,11 +167,15 @@ export default class TeamProjectController {
   ) => {
     try {
       const id = new mongoose.Types.ObjectId(req.params.id)
-      const teamProject = await this.service.deleteTeamProject(id)
-      if (!teamProject) {
-        return res.status(404).json({ message: 'Team project not found' })
-      }
-      return res.status(200).end()
+      console.log('ID', id)
+
+      res.statusMessage = 'project not found'
+      return res.status(404).end()
+      //const teamProject = await this.service.deleteTeamProject(id)
+      //   if (!teamProject) {
+      //     return res.status(404).json({ message: 'Team project not found' })
+      //   }
+      //   return res.status(200).end()
     } catch (error) {
       return res.status(500).json({ message: error.message })
     }

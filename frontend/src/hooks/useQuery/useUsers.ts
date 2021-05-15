@@ -4,13 +4,8 @@ import queryClient from '../../QueryClient'
 import { User, UserFilters, userStatusDict, userTypeDict } from '../../models'
 
 const useUsers = () => {
-  const { isLoading, error, data, isFetching } = useQuery(
-    'users',
-    () => api.getUsers(),
-    {
-      retryOnMount: false,
-      notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
-    },
+  const { isLoading, error, data, isFetching } = useQuery('users', () =>
+    api.getUsers(),
   )
   return { isLoading, error, data, isFetching }
 }
