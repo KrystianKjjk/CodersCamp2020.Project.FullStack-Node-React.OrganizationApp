@@ -1,2 +1,2 @@
-export { default } from './ManageUsers';
-export * from './DatabaseMock';
+export { default } from './ManageUsers'
+export * from './DatabaseMock'

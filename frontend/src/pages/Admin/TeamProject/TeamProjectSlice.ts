@@ -66,8 +66,8 @@ export const teamProjectSlice = createSlice({
       state.hasErrors = true
     },
     switchEditMode: (state) => {
-      // if (!state.loading || state.projectEditMode === true)
-      state.projectEditMode = !state.projectEditMode
+      if (!state.loading || state.projectEditMode === true)
+        state.projectEditMode = !state.projectEditMode
     },
     switchDeleteMode: (state) => {
       if (!state.loading || state.projectDeleteMode === true)

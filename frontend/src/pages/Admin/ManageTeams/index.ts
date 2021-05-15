@@ -1,1 +1,1 @@
-export { default } from './ManageTeams';
+export { default } from './ManageTeams'

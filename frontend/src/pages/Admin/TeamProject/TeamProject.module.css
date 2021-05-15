@@ -1,95 +1,95 @@
 .teamProjectContainer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #666666;
-    text-align: left;
-    width: 100%;
-    height: 100%;
-    background-color: #292929;
-    color: #FFFFFF;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #666666;
+  text-align: left;
+  width: 100%;
+  height: 100%;
+  background-color: #292929;
+  color: #ffffff;
 }
 
 .teamProjectHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    border: 1px solid #666666;
-    padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  border: 1px solid #666666;
+  padding: 10px;
 }
 
 .teamProjectHeaderName {
-    width: 100%;
-    margin-left: 10px;
-    font-size: 22px;
-    font-weight: bold;
-    padding: 5px 0;
+  width: 100%;
+  margin-left: 10px;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 5px 0;
 }
 
 #buttonEdit {
-    background-color: #2196F3;
-    margin: 0 10px;
-    width: 100px;
-    color: #FFFFFF;
+  background-color: #2196F3;
+  margin: 0 10px;
+  width: 100px;
+  color: #FFFFFF;
 
 }
 
 .teamProjectDetailsContainer {
-    width: 100%;
-    display: flex;
-    font-size: 18px;
-    flex-direction: column;
+  width: 100%;
+  display: flex;
+  font-size: 18px;
+  flex-direction: column;
 }
 
 .teamProjectDetailsContainer>p {
-    margin: 4px;
+  margin: 4px;
 }
 
 .attributeNamesContainer {
-    width: 20%;
-    min-width: 200px;
-    font-weight: bold;
+  width: 20%;
+  min-width: 200px;
+  font-weight: bold;
 }
 
 .attributeValuesContainer {
-    width: 80%;
+  width: 80%;
 }
 
 .attributeValuesContainer>div,
 .attributeNamesContainer>div,
 .attributeValuesContainer>input {
-    height: 50px;
+  height: 50px;
 }
 
 .input,
 .textarea {
-    padding: 14px;
-    width: 80%;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    background-color: transparent;
-    color: #FFFFFF;
-    border: 1px solid #FFFFFF;
-    border-radius: 5px;
-    font-size: 18px;
+  padding: 14px;
+  width: 80%;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 5px;
+  font-size: 18px;
 }
 
 .textarea {
-    min-height: 96px;
+  min-height: 96px;
 }
 
 .modal {
-    color: #FFFFFF;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  color: #FFFFFF;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

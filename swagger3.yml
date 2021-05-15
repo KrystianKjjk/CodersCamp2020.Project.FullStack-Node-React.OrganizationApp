@@ -1,38 +1,36 @@
 swagger: '2.0'
-info: 
+info:
   title: App for CodersCamp mentors and participants
   version: 1.0.0
 tags:
-- name: user
-  description: Operations about user
-- name: course
-  description: Operations about course
-- name: project
-  description: Operations about project
-- name: section
-  description: Operations about section
-- name: authorization
-  description: Registration and Log in
-- name: team
-  description: Operations about team
-- name: grade
-  description: Operations about grade
-- name: gradesheet
-  description: Operations about gradesheet
-- name: material
-  description: Operations about material
-- name: team project
-  description: Operations about team project
+  - name: user
+    description: Operations about user
+  - name: course
+    description: Operations about course
+  - name: project
+    description: Operations about project
+  - name: section
+    description: Operations about section
+  - name: authorization
+    description: Registration and Log in
+  - name: team
+    description: Operations about team
+  - name: grade
+    description: Operations about grade
+  - name: gradesheet
+    description: Operations about gradesheet
+  - name: material
+    description: Operations about material
+  - name: team project
+    description: Operations about team project
 
-  
 paths:
-
   /login:
     post:
       tags:
         - authorization
       summary: Log in user
-      consumes: 
+      consumes:
         - application/json
       parameters:
         - in: body
@@ -49,21 +47,21 @@ paths:
               password:
                 type: string
       responses:
-        200: 
+        200:
           description: Logged in correctly
-          headers: 
+          headers:
             'x-auth-token':
               type: string
         401:
           description: Invalid email or password
-        500: 
+        500:
           description: Internal server error
   /register:
     post:
       tags:
         - authorization
       summary: Register user
-      consumes: 
+      consumes:
         - application/json
       parameters:
         - in: body
@@ -81,16 +79,16 @@ paths:
                 type: string
               password:
                 type: string
-              name: 
+              name:
                 type: string
-              surname: 
+              surname:
                 type: string
       responses:
-        200: 
+        200:
           description: Register succeed
         400:
           description: Email has already been taken
-        500: 
+        500:
           description: Internal server error
   /users:
     get:
@@ -119,7 +117,7 @@ paths:
           type: string
           required: true
       responses:
-        200: 
+        200:
           description: Success
           schema:
             $ref: '#/definitions/User'
@@ -129,7 +127,7 @@ paths:
       tags:
         - user
       summary: Update user
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -148,7 +146,7 @@ paths:
           description: User updated
           schema:
             $ref: '#/definitions/User'
-        404: 
+        404:
           description: User not found
     delete:
       tags:
@@ -177,7 +175,7 @@ paths:
           type: string
           required: true
       responses:
-        200: 
+        200:
           description: Success
           schema:
             $ref: '#/definitions/User'
@@ -188,7 +186,7 @@ paths:
       tags:
         - user
       summary: Request for email to reset password
-      consumes: 
+      consumes:
         - application/json
       parameters:
         - in: body
@@ -203,16 +201,16 @@ paths:
                 type: string
                 example: 60392978e2219023e463c5e1
       responses:
-        200: 
+        200:
           description: Email sent to user with provided id
-        500: 
+        500:
           description: Email not sent
   /users/resetpassword:
     post:
       tags:
         - user
       summary: Reset password for user
-      consumes: 
+      consumes:
         - application/json
       parameters:
         - in: body
@@ -231,20 +229,20 @@ paths:
               token:
                 type: string
                 example: 9708ba32ed88ac3433603cfb0fe708744abd00554383a82f616021035cb1658d
-              password: 
+              password:
                 type: string
                 example: password
       responses:
-        200: 
+        200:
           description: Password changed
-        500: 
+        500:
           description: Password not changed
   /users/changepassword:
     post:
       tags:
         - user
       summary: Change password when the old one is known
-      consumes: 
+      consumes:
         - application/json
       parameters:
         - in: body
@@ -267,9 +265,9 @@ paths:
                 type: string
                 example: another-password123
       responses:
-        200: 
+        200:
           description: Email sent to user with provided id
-        500: 
+        500:
           description: Email not sent
   /courses:
     post:
@@ -369,7 +367,7 @@ paths:
       tags:
         - project
       summary: Create project
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -464,7 +462,7 @@ paths:
       tags:
         - section
       summary: Create section
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -576,7 +574,7 @@ paths:
       tags:
         - section
       summary: Add test to section
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -650,7 +648,7 @@ paths:
       tags:
         - team
       summary: Create team
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -740,7 +738,7 @@ paths:
           description: Team was deleted
         404:
           description: Team not found
-  /teams/{id}/users/{userId}:  
+  /teams/{id}/users/{userId}:
     delete:
       tags:
         - team
@@ -764,7 +762,7 @@ paths:
       tags:
         - team
       summary: Add user to team
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -790,7 +788,7 @@ paths:
       tags:
         - team
       summary: Add mentor to team
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -847,7 +845,7 @@ paths:
       tags:
         - grade
       summary: Create grade
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -940,7 +938,7 @@ paths:
       tags:
         - gradesheet
       summary: Create gradesheet
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -1408,7 +1406,7 @@ paths:
       tags:
         - teamProject
       summary: Create team project
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -1516,7 +1514,7 @@ paths:
           schema:
             $ref: '#/definitions/TeamProject'
   /mentors/me/{id}/projects:
-     get:
+    get:
       tags:
         - teamProject
       summary: Fetch team project by mentor id
@@ -1534,11 +1532,11 @@ paths:
             $ref: '#/definitions/TeamProject'
         404:
           description: Team project not found
-     post:
+    post:
       tags:
         - teamProject
       summary: Create team project for mentor
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -1685,7 +1683,7 @@ paths:
       tags:
         - material
       summary: Create materials
-      consumes: 
+      consumes:
         - application/json
       produces:
         - application/json
@@ -1731,24 +1729,24 @@ definitions:
   Grade:
     type: object
     properties:
-      _id: 
+      _id:
         type: string
         example: 60392978e2219023e463c5e1
-      sectionId: 
+      sectionId:
         $ref: '#/definitions/Section'
-      testPoints: 
+      testPoints:
         type: number
         example: 90
-      testMaxPoints: 
+      testMaxPoints:
         type: number
         example: 100
-      taskPoints: 
+      taskPoints:
         type: number
         example: 30
-      taskMaxPoints: 
+      taskMaxPoints:
         type: number
         example: 35
-      projectPoints: 
+      projectPoints:
         type: number
         example: 100
   Course:
@@ -1766,28 +1764,28 @@ definitions:
       startDate:
         type: string
         pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-        example: "2019-01-17"
+        example: '2019-01-17'
       endDate:
         type: string
         pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-        example: "2019-05-17"
+        example: '2019-05-17'
   Section:
     type: object
     properties:
-      _id: 
+      _id:
         type: string
         example: 60392978e2219023e463c5e1
-      name: 
+      name:
         type: string
         example: TypeScript
       startDate:
         type: string
         pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-        example: "2019-01-17"
+        example: '2019-01-17'
       endDate:
         type: string
         pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
-        example: "2019-05-17"
+        example: '2019-05-17'
       tests:
         $ref: '#/definitions/Test'
       referenceProjectId:
@@ -1829,13 +1827,13 @@ definitions:
       mentor:
         $ref: '#/definitions/User'
       users:
-        type:  array
+        type: array
         items:
-            $ref: '#/definitions/User'
-      course: 
+          $ref: '#/definitions/User'
+      course:
         $ref: '#/definitions/Course'
   TeamProject:
-    type:  object
+    type: object
     properties:
       _id:
         type: string
@@ -1846,15 +1844,15 @@ definitions:
         $ref: '#/definitions/Project'
       projectName:
         type: string
-        example: "FitNotFat"
+        example: 'FitNotFat'
       projectUrl:
         type: string
-        example: "https://CodersCamp2020.Project.TypeScript.FitNotFat/"
+        example: 'https://CodersCamp2020.Project.TypeScript.FitNotFat/'
       description:
         type: string
-        example: "FitNotFat is application to..."
+        example: 'FitNotFat is application to...'
   GradeSheet:
-    type:  object
+    type: object
     properties:
       _id:
         type: string
@@ -1864,12 +1862,12 @@ definitions:
       mentorID:
         $ref: '#/definitions/User'
       participants:
-        type:  array
+        type: array
         items:
           $ref: '#/definitions/_participant'
       reviewers:
         type: array
-        items: 
+        items:
           $ref: '#/definitions/User'
       mentorGrades:
         type: object
@@ -1879,7 +1877,7 @@ definitions:
         items:
           $ref: '#/definitions/_mentorReviewerGrade'
   Material:
-    type:  object
+    type: object
     properties:
       title:
         type: string
@@ -1887,7 +1885,7 @@ definitions:
       description:
         type: string
         example: 'JavaScript is language of...'
-      content_list: 
+      content_list:
         type: string
         example: '1. Introduction to JS 2. Arrays 3. Objects...'
       basicFreeMaterials:
@@ -1915,7 +1913,7 @@ definitions:
     type: object
     properties:
       testType:
-        type: string 
+        type: string
       testDate:
         type: string
       testUrl:
@@ -1926,7 +1924,7 @@ definitions:
     type: object
     properties:
       participantID:
-        $ref: '#/definitions/User' 
+        $ref: '#/definitions/User'
       engagement:
         type: number
         default: 0
@@ -1955,11 +1953,11 @@ definitions:
     type: object
     properties:
       default: {}
-    
+
 # Added by API Auto Mocking Plugin
 # Added by API Auto Mocking Plugin
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /CodersCamp2021/CodersCampAPI/1.0.0
 schemes:
- - https
+  - https

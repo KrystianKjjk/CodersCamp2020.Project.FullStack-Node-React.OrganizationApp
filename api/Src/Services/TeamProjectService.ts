@@ -3,22 +3,12 @@ import { TeamProject } from '../Models/TeamProject'
 import TeamProjectRepository from '../Repositories/TeamProjectRepository'
 import TeamRepository from '../Repositories/TeamRepository'
 import * as _ from 'lodash'
-import { Team } from '../Models/Team'
-import UserRepository from '../Repositories/UserRepository'
-import { UserType, UserModel } from '../Models/User'
-import ProjectRepository from '../Repositories/ProjectRepository'
-import { Project } from '../Models/Project'
-import SectionRepository from '../Repositories/SectionRepository'
-import { Section } from '../Models/Section'
 import { TeamProjectDto } from '../Models/DTO/TeamProjectDto'
 
 export default class TeamProjectService {
   constructor(
     private teamProjectRepository: TeamProjectRepository,
     private teamRepository: TeamRepository,
-    private userRepository: UserRepository,
-    private referenceProjectRepository: ProjectRepository,
-    private sectionRepository: SectionRepository,
   ) {}
 
   getTeamProjectsByTeamId = async (

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Story, Meta } from '@storybook/react/types-6-0';
-import TeamProject , { TeamProjectProps } from './TeamProject';
-import { Provider } from 'react-redux';
-import { store } from '../../../app/store';
+import React from 'react'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import TeamProject, { TeamProjectProps } from './TeamProject'
+import { Provider } from 'react-redux'
+import { store } from '../../../app/store'
 
 // export default {
 //   title: 'TeamProject component',

@@ -1,1 +1,1 @@
-export { default } from './ReusableGoBack';
+export { default } from './ReusableGoBack'

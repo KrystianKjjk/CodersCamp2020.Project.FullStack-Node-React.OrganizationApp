@@ -1,1 +1,1 @@
-export { default } from './AddButton';
+export { default } from './AddButton'

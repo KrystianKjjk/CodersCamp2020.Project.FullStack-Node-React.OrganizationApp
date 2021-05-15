@@ -1,1 +1,1 @@
-export { default } from './FindSection';
+export { default } from './FindSection'

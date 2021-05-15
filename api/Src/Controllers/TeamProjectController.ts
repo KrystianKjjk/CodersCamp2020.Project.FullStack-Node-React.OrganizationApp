@@ -167,15 +167,13 @@ export default class TeamProjectController {
   ) => {
     try {
       const id = new mongoose.Types.ObjectId(req.params.id)
-      console.log('ID', id)
+      const teamProject = await this.service.deleteTeamProject(id)
 
-      res.statusMessage = 'project not found'
-      return res.status(404).end()
-      //const teamProject = await this.service.deleteTeamProject(id)
-      //   if (!teamProject) {
-      //     return res.status(404).json({ message: 'Team project not found' })
-      //   }
-      //   return res.status(200).end()
+      if (!teamProject) {
+        res.statusMessage = 'Team project not found'
+        return res.status(404).json({ message: 'Team project not found' })
+      }
+      return res.status(200).end()
     } catch (error) {
       return res.status(500).json({ message: error.message })
     }

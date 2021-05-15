@@ -40,9 +40,9 @@ import PasswordController from './Src/Controllers/PasswordController'
 import PasswordRoutes from './Src/Routes/PasswordRoutes'
 import { Repository } from './Src/Repositories/Repository'
 
-import AuthService from "./Src/Services/AuthService"
-import AuthController from "./Src/Controllers/AuthController"
-import authRoutes from "./Src/Routes/AuthRoutes"
+import AuthService from './Src/Services/AuthService'
+import AuthController from './Src/Controllers/AuthController'
+import authRoutes from './Src/Routes/AuthRoutes'
 
 import SectionModel, { Test } from './Src/Models/Section'
 import SectionRepository from './Src/Repositories/SectionRepository'
@@ -65,31 +65,31 @@ import TeamService from './Src/Services/TeamService'
 import Team from './Src/Models/Team'
 import TeamRepository from './Src/Repositories/TeamRepository'
 
-import gradeRoutes from "./Src/Routes/GradeRoutes"
-import GradeController from "./Src/Controllers/GradeController"
-import GradeService from "./Src/Services/GradeService"
-import GradeModel from "./Src/Models/Grade"
+import gradeRoutes from './Src/Routes/GradeRoutes'
+import GradeController from './Src/Controllers/GradeController'
+import GradeService from './Src/Services/GradeService'
+import GradeModel from './Src/Models/Grade'
 
-import AuthGradeController from "./Src/Controllers/GradeAuthController"
+import AuthGradeController from './Src/Controllers/GradeAuthController'
 
-import materialRoutes from "./Src/Routes/MaterialRoutes"
-import MaterialController from "./Src/Controllers/MaterialController"
-import MaterialService from "./Src/Services/MaterialService"
-import MaterialRepository from "./Src/Repositories/MaterialRepository"
-import MaterialModel from "./Src/Models/Material"
+import materialRoutes from './Src/Routes/MaterialRoutes'
+import MaterialController from './Src/Controllers/MaterialController'
+import MaterialService from './Src/Services/MaterialService'
+import MaterialRepository from './Src/Repositories/MaterialRepository'
+import MaterialModel from './Src/Models/Material'
 
 const appContainer = new Container()
 
 // JWT .ENV
-appContainer.declare("jwtKey", (c) => process.env.JWT_PRIVATE_KEY)
-appContainer.declare("jwtExpiresIn", (c) => process.env.JWT_TOKEN_EXPIRESIN)
+appContainer.declare('jwtKey', (c) => process.env.JWT_PRIVATE_KEY)
+appContainer.declare('jwtExpiresIn', (c) => process.env.JWT_TOKEN_EXPIRESIN)
 
 // Mongo config
-appContainer.declare("Port", (c) => process.env.PORT)
-appContainer.declare("MongoUrl", (c) => process.env.MONGO_URL)
+appContainer.declare('Port', (c) => process.env.PORT)
+appContainer.declare('MongoUrl', (c) => process.env.MONGO_URL)
 
 //error handler
-appContainer.declare("ErrorMiddleware", (c) => new ErrorMiddleware())
+appContainer.declare('ErrorMiddleware', (c) => new ErrorMiddleware())
 
 // Middlewares
 const middlewares = [
@@ -97,9 +97,9 @@ const middlewares = [
   cors({
     origin: '*',
     exposedHeaders: 'x-auth-token',
-  })
+  }),
 ]
-appContainer.declare("Middlewares", (c) => middlewares)
+appContainer.declare('Middlewares', (c) => middlewares)
 
 // Models
 appContainer.declare('UserModel', (c) => UserModel)
@@ -131,7 +131,7 @@ appContainer.declare("MailingService", (c) => new MailingService(nodemailer))
 appContainer.declare("UserService", (c) => new UserService(c.UserRepository))
 appContainer.declare("PasswordService", (c) => new PasswordService(c.UserRepository, c.PasswordResetTokenRepository))
 appContainer.declare("CourseService", (c) => new CourseService(c.CourseRepository))
-appContainer.declare("TeamProjectService", (c) => new TeamProjectService(c.TeamProjectRepository, c.TeamRepository, c.UserRepository, c.ProjectService, c.SectionRepository))
+appContainer.declare("TeamProjectService", (c) => new TeamProjectService(c.TeamProjectRepository, c.TeamRepository))
 appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectRepository))
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository))
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository))
@@ -169,16 +169,21 @@ appContainer.declare("Routes", (c) => [
   teamProjectRoutes(c.TeamProjectController),
   teamsRoutes(c.TeamController),
   gradeRoutes(c.GradeController, c.AuthGradeController),
-  materialRoutes(c.MaterialController)
+  materialRoutes(c.MaterialController),
 ])
 
 // Create router
 type Routes = (router: express.Router) => express.Router
-appContainer.declare("Router", (c) => c.Routes.reduce((router: express.Router, addRoutes: Routes) => addRoutes(router), express.Router()))
+appContainer.declare('Router', (c) =>
+  c.Routes.reduce(
+    (router: express.Router, addRoutes: Routes) => addRoutes(router),
+    express.Router(),
+  ),
+)
 
 // Create App
 appContainer.declare(
-  "App",
+  'App',
   (c) =>
     new App(
       c.jwtKey,
@@ -186,8 +191,8 @@ appContainer.declare(
       c.Middlewares,
       c.Router,
       c.Port,
-      c.ErrorMiddleware
-    )
+      c.ErrorMiddleware,
+    ),
 )
 
 export default appContainer
