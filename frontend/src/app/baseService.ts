@@ -3,7 +3,6 @@ import {removeUserFromLocalStorage} from "./utils";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/';
 axios.defaults.withCredentials = true;
-axios.defaults.adapter = require('axios/lib/adapters/http');
 
 axios.interceptors.response.use( response => response,
     async error => {
