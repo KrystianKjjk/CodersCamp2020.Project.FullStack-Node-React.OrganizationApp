@@ -23,7 +23,6 @@ export interface TeamProjectProps {}
 const TeamProject: React.FC<TeamProjectProps> = () => {
   const { teamProjectId } = useParams()
   const [headerName, setHeaderName] = useState(teamProjectId)
-
   return (
     <DetailPage pageName={'Team Projects'} elementName={headerName}>
       <TeamProjectContent

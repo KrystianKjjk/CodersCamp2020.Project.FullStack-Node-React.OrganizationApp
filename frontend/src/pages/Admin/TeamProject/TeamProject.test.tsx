@@ -6,14 +6,15 @@ import TeamProject from './TeamProject'
 
 describe('TeamProject', () => {
   it('renders without error', () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
+      useParams: jest
+        .fn()
+        .mockReturnValue({ environment: 'dev', service: 'fakeService' }),
+    }))
     render(
       <Provider store={store}>
-        <TeamProject
-          _id="6042af0f06ad6350dcdaee27"
-          changeViewFn={() => {
-            return null
-          }}
-        />
+        <TeamProject />
       </Provider>,
     )
   })
@@ -23,10 +24,7 @@ describe('TeamProject', () => {
 
     render(
       <Provider store={store}>
-        <TeamProject
-          _id="6042af0f06ad6350dcdaee27"
-          changeViewFn={mockCallback}
-        />
+        <TeamProject />
       </Provider>,
     )
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Snackbar } from '@material-ui/core'
-import MuiAlert from '@material-ui/lab/Alert'
+import { Box } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import {
   addRefProject,
@@ -24,24 +23,19 @@ import styles from './ManageReferenceProject.module.css'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface ManageReferenceProjectProps {}
-
-function Alert(props: any) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 const ManageReferenceProject = (props: any) => {
   const dispatch = useDispatch()
   const history = useHistory()
-
+  const { showSuccess, showError } = useSnackbar()
   const projectID = props?.match?.params?.projectID
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const [project, setProject] = useState<any>()
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false)
-  const [openErrorAlert, setOpenErrorAlert] = React.useState(false)
   const { actionError, actionSuccess } = useSelector(selectReferenceProjects)
 
   useEffect(() => {
@@ -54,11 +48,11 @@ const ManageReferenceProject = (props: any) => {
 
   useEffect(() => {
     if (actionError) {
-      setOpenErrorAlert(true)
+      showError('Operation failed.')
       dispatch(clearActionError())
     }
     if (actionSuccess) {
-      setOpenSuccessAlert(true)
+      showSuccess('Operation successfully completed.')
       dispatch(clearActionSuccess())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,39 +120,11 @@ const ManageReferenceProject = (props: any) => {
     })
   }
 
-  const handleClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSuccessAlert(false)
-    setOpenErrorAlert(false)
-  }
-
   return (
     <ThemeProvider theme={mainTheme}>
-      <Snackbar
-        open={openSuccessAlert}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="success">
-          Operation successfully completed.
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openErrorAlert}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Operation failed.
-        </Alert>
-      </Snackbar>
-
       <PageHeader>
         <ReusableGoBack
           pageName="Projects"
-          pageLink="/projects"
           elementName={project?.projectName}
         />
       </PageHeader>

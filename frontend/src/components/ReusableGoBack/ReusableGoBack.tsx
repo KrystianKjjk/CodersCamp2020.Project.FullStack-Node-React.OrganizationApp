@@ -19,7 +19,7 @@ const ReusableGoBack: React.FC<ReusableGoBackProps> = ({
     <div className={styles.container_goback}>
       <Breadcrumbs aria-label="breadcrumb" className={styles.breadcrumbs}>
         <Link
-          onClick={history.goBack}
+          onClick={() => history.goBack()}
           color="textPrimary"
           className={styles.breadcrumbs_link}
         >
