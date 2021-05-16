@@ -17,6 +17,7 @@ import UButton from '../../../components/UButton'
 import { useDispatch } from 'react-redux'
 import NameValuePair from '../../../components/NameValuePair'
 import ConfirmButton from '../../../components/ConfirmButton'
+import { LinearProgress } from '@material-ui/core'
 
 export interface TeamProjectProps {}
 
@@ -63,7 +64,7 @@ const TeamProjectContent = ({
 
   const { projectEditMode } = useAppSelector(selectTeamProjects)
 
-  if (isLoading) return <div> loading...</div>
+  if (isLoading) return <div>Loading...</div>
   if (isError) return <div> Error...</div>
   if (!data) return <div>Error </div>
 
