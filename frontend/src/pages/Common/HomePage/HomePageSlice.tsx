@@ -14,7 +14,6 @@ const initialState: any = {
   userData: {},
 }
 
-
 export const fetchUser: any = createAsyncThunk(
   'fetchUserData',
   async (userID: string) => {

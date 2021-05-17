@@ -1,8 +1,8 @@
 import Container from './Container'
 import MailingService from './Src/Services/MailingService'
-import 'dotenv/config';
-import 'express-async-errors';
-import * as cookieParser from 'cookie-parser';
+import 'dotenv/config'
+import 'express-async-errors'
+import * as cookieParser from 'cookie-parser'
 import App from './App'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
@@ -83,13 +83,18 @@ import MaterialModel from './Src/Models/Material'
 
 const appContainer = new Container()
 
-
 // JWT .ENV
 appContainer.declare('jwtKey', (c) => process.env.JWT_PRIVATE_KEY)
 appContainer.declare('jwtExpiresIn', (c) => process.env.JWT_TOKEN_EXPIRESIN)
 
-appContainer.declare("jwtRefreshKey", (c) => process.env.JWT_REFRESH_PRIVATE_KEY);
-appContainer.declare("jwtRefreshExpiresIn", (c) => process.env.JWT_REFRESH_EXPIRESIN);
+appContainer.declare(
+  'jwtRefreshKey',
+  (c) => process.env.JWT_REFRESH_PRIVATE_KEY,
+)
+appContainer.declare(
+  'jwtRefreshExpiresIn',
+  (c) => process.env.JWT_REFRESH_EXPIRESIN,
+)
 
 // Mongo config
 appContainer.declare('Port', (c) => process.env.PORT)
@@ -100,14 +105,14 @@ appContainer.declare('ErrorMiddleware', (c) => new ErrorMiddleware())
 
 // Middlewares
 const middlewares = [
-    bodyParser.json(),
-    cors({
-        origin: process.env.CLIENT_URL,
-        credentials: true
-    }),
-    cookieParser()
-];
-appContainer.declare("Middlewares", (c) => middlewares);
+  bodyParser.json(),
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+  cookieParser(),
+]
+appContainer.declare('Middlewares', (c) => middlewares)
 
 // Models
 appContainer.declare('UserModel', (c) => UserModel)
@@ -184,8 +189,16 @@ appContainer.declare(
 appContainer.declare('TeamService', (c) => new TeamService(c.TeamRepository))
 
 appContainer.declare(
-    "AuthService",
-    (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn, c.jwtRefreshKey, c.jwtRefreshExpiresIn));
+  'AuthService',
+  (c) =>
+    new AuthService(
+      c.UserRepository,
+      c.jwtKey,
+      c.jwtExpiresIn,
+      c.jwtRefreshKey,
+      c.jwtRefreshExpiresIn,
+    ),
+)
 
 appContainer.declare('GradeService', (c) => new GradeService(c.UserService))
 appContainer.declare(

@@ -1,38 +1,37 @@
-import React, {useEffect, useState} from "react";
-import { useCookies } from 'react-cookie';
-import styles from "./MainView.module.css";
-import Header from "../../../components/Header";
-import { Switch, Route, Redirect } from "react-router-dom";
-import PrivateRoute from "../../../components/PrivateRoute";
-import HomePage from "../HomePage";
+import React, { useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
+import styles from './MainView.module.css'
+import Header from '../../../components/Header'
+import { Switch, Route, Redirect } from 'react-router-dom'
+import PrivateRoute from '../../../components/PrivateRoute'
+import HomePage from '../HomePage'
 
-import CourseCreate from "../../Admin/CourseCreate";
-import Course from "../../Admin/Course";
-import CourseList from "../../Admin/CourseList";
-import LogIn from "../LogIn";
-import RegistrationView from "../Registration";
-import ManageTeam from "../../Admin/ManageTeam";
-import { getUserFromLocalStorage } from "../../../app/utils";
-import ManageSheets from "../../Admin/ManageSheets";
-import ManageSheet from "../../Admin/ManageSheet";
-import TeamProjectsComponent from "../../Admin/TeamProjects";
-import { getTeamProjects } from "../../../api/TeamProjects.service";
-import ManageTeams from "../../Admin/ManageTeams";
-import ManageUsers from "../../Admin/ManageUsers";
-import UserGrades from "../../Participant/UserGrades";
-import {fetchUser, selectUserData} from "../HomePage/HomePageSlice";
-import {useDispatch, useSelector} from "react-redux";
-import ManageUser from "../../Admin/ManageUser";
-import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink';
-import ManageSections from "../../Admin/ManageSections";
-import SectionView from "../../Admin/SectionView";
-import MyProfileView from "../MyProfile";
-import {UserType as Role} from "../../../models/User.model";
-import ReferenceProjects from "../../Admin/ReferenceProjects";
-import ManageReferenceProject from "../../Admin/ManageReferenceProject";
-import BaseService from "../../../app/baseService";
+import CourseCreate from '../../Admin/CourseCreate'
+import Course from '../../Admin/Course'
+import CourseList from '../../Admin/CourseList'
+import LogIn from '../LogIn'
+import RegistrationView from '../Registration'
+import ManageTeam from '../../Admin/ManageTeam'
+import { getUserFromLocalStorage } from '../../../app/utils'
+import ManageSheets from '../../Admin/ManageSheets'
+import ManageSheet from '../../Admin/ManageSheet'
+import TeamProjectsComponent from '../../Admin/TeamProjects'
+import { getTeamProjects } from '../../../api/TeamProjects.service'
+import ManageTeams from '../../Admin/ManageTeams'
+import ManageUsers from '../../Admin/ManageUsers'
+import UserGrades from '../../Participant/UserGrades'
+import { fetchUser, selectUserData } from '../HomePage/HomePageSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import ManageUser from '../../Admin/ManageUser'
+import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink'
+import ManageSections from '../../Admin/ManageSections'
+import SectionView from '../../Admin/SectionView'
+import MyProfileView from '../MyProfile'
+import { UserType as Role } from '../../../models/User.model'
+import ReferenceProjects from '../../Admin/ReferenceProjects'
+import ManageReferenceProject from '../../Admin/ManageReferenceProject'
+import BaseService from '../../../app/baseService'
 import ResetPasswordRequest from '../ResetPassword'
-
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -43,30 +42,29 @@ interface LoggedOutViewProps {
 }
 
 const MainView: React.FC = () => {
+  const userData = getUserFromLocalStorage()
+  const service = new BaseService()
 
-  const userData = getUserFromLocalStorage();
-  const service = new BaseService();
-
-  const [isLogged, setIsLogged] = useState(Boolean(userData.userType));
+  const [isLogged, setIsLogged] = useState(Boolean(userData.userType))
 
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
 
-  const dispatch = useDispatch();
-  const {loaded} = useSelector(selectUserData);
+  const dispatch = useDispatch()
+  const { loaded } = useSelector(selectUserData)
 
   useEffect(() => {
-    if(isLogged) {
-      const userID = localStorage.getItem('id');
-      dispatch(fetchUser(userID));
+    if (isLogged) {
+      const userID = localStorage.getItem('id')
+      dispatch(fetchUser(userID))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged, loaded])
 
   const handleLogout = async () => {
-    setIsLogged(false);
-    await service.get('logout');
-    removeCookie('token');
+    setIsLogged(false)
+    await service.get('logout')
+    removeCookie('token')
   }
 
   const MainContent = () => {

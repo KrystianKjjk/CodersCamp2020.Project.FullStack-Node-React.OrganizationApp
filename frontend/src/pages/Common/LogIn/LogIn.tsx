@@ -39,14 +39,12 @@ export default function SignIn(props: LogInProps) {
   }
 
   const setResponseDataToLocalStorage = (response: AxiosResponse) => {
+    const userId = response.data?.['_id']
+    const userType = response.data?.['type']
 
-    const userId = response.data?.["_id"];
-    const userType = response.data?.["type"];
-
-    localStorage.setItem("id", userId);
-    localStorage.setItem("type", userType);
-  };
-
+    localStorage.setItem('id', userId)
+    localStorage.setItem('type', userType)
+  }
 
   const handleSignInClick = async () => {
     const service = new BaseService()
@@ -62,7 +60,6 @@ export default function SignIn(props: LogInProps) {
       showError(
         error?.response?.data?.message ?? 'Error while trying to sign in',
       )
-
     }
   }
 

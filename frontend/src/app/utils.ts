@@ -1,17 +1,16 @@
 import { CourseListElementModel } from '../pages/Admin/CourseList/CourseListSlice'
 
 export const getUserFromLocalStorage = () => {
-  const userId = localStorage.getItem("id");
-  const userType = localStorage.getItem("type");
+  const userId = localStorage.getItem('id')
+  const userType = localStorage.getItem('type')
 
-  return { userId, userType };
-};
+  return { userId, userType }
+}
 
 export const removeUserFromLocalStorage = () => {
-  localStorage.removeItem("id");
-  localStorage.removeItem("type");
-};
-
+  localStorage.removeItem('id')
+  localStorage.removeItem('type')
+}
 
 export function setActiveCourse(course: CourseListElementModel) {
   localStorage.setItem('activeCourse', JSON.stringify(course))

@@ -16,11 +16,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-          <CookiesProvider>
-              <ThemeProvider theme={theme}>
-              <App />
-              </ThemeProvider>
-          </CookiesProvider>
+        <CookiesProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </CookiesProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </Provider>
