@@ -4,15 +4,10 @@ import { useQuery } from 'react-query'
 type QueryKey = string[] | string
 
 export const useGenericQuery = <T>(key: QueryKey, getPromise: Promise<T>) => {
-  const { isLoading, error, data, isFetching } = useQuery(
-    key,
-    () => getPromise,
-    {
-      retryOnMount: false,
-      notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
-    },
-  )
-  return { isLoading, error, data, isFetching }
+  return useQuery(key, () => getPromise, {
+    retryOnMount: false,
+    notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
+  })
 }
 
 export const genericSearch = <T>(queryKey: QueryKey) => (
@@ -34,7 +29,6 @@ export const genericSort = <T>(queryKey: QueryKey) => (column: keyof T) => {
     if (!items || !(items as T[]).length) return items
 
     const itemsArr = [...(items as T[])]
-
     if (typeof itemsArr[0][column] === 'number')
       // @ts-ignore
       return itemsArr.sort((a, b) => a[column] - b[column])
