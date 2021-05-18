@@ -1,6 +1,5 @@
 import * as api from '../../api/Course.api'
 import { useGenericQuery } from './useGenericQuery'
-import queryClient from '../../QueryClient'
 import * as sectionsApi from '../../api/Section.api'
 import {
   Course,
@@ -27,14 +26,8 @@ export const updateCourseAsync = async (
   course: Course,
   sectionsIdToDelete: string[],
 ): Promise<void> => {
-  try {
-    sectionsIdToDelete.forEach(async (sectionId) => {
-      await sectionsApi.deleteSection(sectionId)
-    })
-    await api.updateCourse(course)
-    await queryClient.refetchQueries(['course', course._id], { active: true })
-    return Promise.resolve()
-  } catch (exception) {
-    return Promise.reject(exception)
-  }
+  sectionsIdToDelete.forEach(async (sectionId) => {
+    await sectionsApi.deleteSection(sectionId)
+  })
+  await api.updateCourse(course)
 }

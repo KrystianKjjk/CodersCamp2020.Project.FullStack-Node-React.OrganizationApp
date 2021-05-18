@@ -5,7 +5,6 @@ type QueryKey = string[] | string
 
 export const useGenericQuery = <T>(key: QueryKey, getPromise: Promise<T>) => {
   return useQuery(key, () => getPromise, {
-    retryOnMount: false,
     notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
   })
 }

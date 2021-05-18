@@ -23,12 +23,12 @@ import {
 } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { mainTheme } from '../../../theme/customMaterialTheme'
-import useSnackbar from '../../../hooks/useSnackbar'
 import ReusableGoBack from '../../../components/ReusableGoBack'
 import { Course, SectionListElement } from '../../../models'
 import useCourse, { updateCourseAsync } from '../../../hooks/useQuery/useCourse'
 import { useAppSelector } from '../../../hooks/hooks'
 import { resetSectionsToDelete } from './CourseDetailsSlice'
+import { useMutationWithConfirm } from '../../../hooks'
 
 export interface CourseProps {
   id: string
@@ -42,8 +42,14 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const [startDate, changeStartDate] = useState<Date | null>(new Date())
   const [endDate, changeEndDate] = useState<Date | null>(new Date())
   const [isEdit, setIsEdit] = useState(false)
-  const { showSuccess, showError } = useSnackbar()
   const { isLoading, data, isFetching, error } = useCourse(match.params.id)
+  const { mutate: updateCourse } = useMutationWithConfirm(
+    (vars: [Course, string[]]) => updateCourseAsync(...vars),
+    {
+      onSettled: () => resetSectionsToDelete(),
+      invalidate: 'course'
+    },
+  )
 
   const classes = useStyles()
 
@@ -72,14 +78,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
       endDate: endDate!.toISOString(),
     }
 
-    updateCourseAsync(courseToSave, sectionsIdToDelete)
-      .then((response) => {
-        showSuccess('Course was updated')
-      })
-      .catch((exception) => {
-        showError('Sorry, something went wrong')
-      })
-      .finally(() => resetSectionsToDelete())
+    updateCourse([courseToSave, sectionsIdToDelete])
   }
 
   const handleStartDateChange = (date: Date | null) => {
