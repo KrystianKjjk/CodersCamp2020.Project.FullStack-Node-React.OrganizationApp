@@ -6,6 +6,7 @@ import referenceProjectsReducer from '../pages/Admin/ReferenceProjects/Reference
 import courseDetails from '../pages/Admin/Course/CourseDetailsSlice'
 import courseList from '../pages/Admin/CourseList/CourseListSlice'
 import SnackbarReducer from '../components/Snackbar/SnackbarSlice'
+import headerReducer from '../components/Header/HeaderSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     courseDetails,
     courseList,
     snackbarDetails: SnackbarReducer,
+    headerReducer,
   },
 })
 
