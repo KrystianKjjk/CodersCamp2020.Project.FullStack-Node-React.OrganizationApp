@@ -6,6 +6,9 @@ import Menu from '../Menu'
 export interface PrivateRouteProps extends RouteProps {}
 
 const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
+
+
+
   return (
     <div className={styles.container}>
       <Menu />

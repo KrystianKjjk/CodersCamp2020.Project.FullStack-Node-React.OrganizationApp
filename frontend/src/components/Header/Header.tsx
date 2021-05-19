@@ -4,6 +4,8 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import { removeUserFromLocalStorage } from '../../app/utils'
 import { useHistory } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/hooks'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleMenu } from './HeaderSlice'
 
 import MenuIcon from '@material-ui/icons/Menu'
 
@@ -13,6 +15,8 @@ interface HeaderProps {
 
 const Header = (props: HeaderProps) => {
   const { activeCourse } = useAppSelector((state) => state.courseList)
+  const dispatch = useDispatch()
+
   const handleLogOut = () => {
     removeUserFromLocalStorage()
   }
@@ -28,12 +32,16 @@ const Header = (props: HeaderProps) => {
     history.push(path)
   }
 
+  const handleMenuIconClick = () => {
+    dispatch(toggleMenu())
+  }
+
   return (
     <div className={styles.header}>
       <div
         style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
       >
-        <MenuIcon />
+        <MenuIcon onClick={handleMenuIconClick} />
         <div
           className={styles.logo}
           onClick={takeHome}
