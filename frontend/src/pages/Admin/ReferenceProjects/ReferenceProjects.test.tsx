@@ -4,8 +4,10 @@ import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { store } from '../../../app/store'
 import ReferenceProjects from './ReferenceProjects'
-import MockAdapter from 'axios-mock-adapter/types'
+import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
+import { QueryClientProvider } from 'react-query'
+import queryClient from '../../../QueryClient'
 
 let projects: any[] = []
 
@@ -31,9 +33,11 @@ mock.onAny().reply(200)
 describe('ReferenceProjects', () => {
   it('renders without error', () => {
     render(
-      <Provider store={store}>
-        <ReferenceProjects />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <ReferenceProjects />
+        </Provider>
+      </QueryClientProvider>,
     )
   })
 })

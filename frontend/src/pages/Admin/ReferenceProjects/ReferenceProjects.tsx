@@ -19,7 +19,7 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = () => {
   const { data: refProjects, isLoading, error, isFetching } = useProjects()
   const { showError } = useSnackbar()
   const activeCourse = localStorage.getItem('activeCourse')
-  const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null
+  // const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null
 
   const columns = [
     { field: 'Name', width: 500 },

@@ -17,7 +17,6 @@ import {
   useUpdateProject,
   useDeleteProject,
   useCreateProject,
-  useDidUpdateEffect,
 } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
 

@@ -7,7 +7,26 @@ export const getRefProjects = async () => {
   return api.get<any[]>(`${endpoint}`)
 }
 export const getRefProjectByID = async (projectID: string) => {
-  return api.get(`${endpoint}/${projectID}`)
+  const response = await api.get(`${endpoint}/${projectID}`)
+  const project = response.data
+  try {
+    if (!project?.sectionId) throw Error
+    const section = await sectionService.getOneSection(project.sectionId)
+    return {
+      ...project,
+      id: project._id,
+      Name: project.projectName,
+      'Section name': section?.name || '',
+      course: section?.courseName,
+    }
+  } catch {
+    return {
+      ...project,
+      id: project._id,
+      Name: project.projectName,
+      'Section name': 'Section does not exist',
+    }
+  }
 }
 export const createRefProject = async (project: any) => {
   return api.post(`${endpoint}`, project)
