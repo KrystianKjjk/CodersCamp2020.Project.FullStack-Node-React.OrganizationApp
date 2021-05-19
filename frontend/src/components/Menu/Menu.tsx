@@ -13,11 +13,14 @@ import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
 import { useSelector } from 'react-redux'
 import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
+import { selectHeader } from '../Header/HeaderSlice'
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
   const { userData } = useSelector(selectUserData)
-  const classes = useStyles()
+  const classes = useStyles();
+
+  const { showSmallMenu } = useSelector(selectHeader);
 
   const userInfo = getUserFromLocalStorage()
 
