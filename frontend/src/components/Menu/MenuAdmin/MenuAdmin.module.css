@@ -1,6 +1,10 @@
+:root {
+    --navMenu: 16rem;
+}
+
 .nav {
     width: 23%;
-    max-width: 16rem;
+    max-width: var(--navMenu);
     min-width: 8rem;
     border-right: #666 1px solid;
 }

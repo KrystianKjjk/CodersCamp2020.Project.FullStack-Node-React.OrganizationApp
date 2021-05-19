@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import styles from './ListItemLink.module.css'
+import { useSelector } from 'react-redux'
+import { selectHeader } from '../Header/HeaderSlice'
 
 export interface ListItemLinkProps {
   path: string
@@ -12,17 +14,42 @@ export interface ListItemLinkProps {
   selected: boolean
 }
 
-const ListItemLink = ({ path, icon, text, onClick, selected }: ListItemLinkProps) => {
+const ListItemLink = ({
+  path,
+  icon,
+  text,
+  onClick,
+  selected,
+}: ListItemLinkProps) => {
+  const { showSmallMenu } = useSelector(selectHeader)
+
   return (
     <ListItem
       button
       component={Link}
       to={path}
-      className={`${styles.ListItem} ${selected && styles.ListItemSelected}`}
+      className={
+        !showSmallMenu
+          ? `${styles.ListItem} ${selected && styles.ListItemSelected}`
+          : styles.ListItemSmall
+      }
       onClick={onClick}
     >
-      <ListItemIcon className={`${styles.ListItemIcon} ${selected && styles.ListItemInsideSelected}`}>{icon}</ListItemIcon>
-      <ListItemText className={`${styles.ListItemText} ${selected && styles.ListItemInsideSelected}`} primary={text} />
+      <div>
+        <ListItemIcon
+          className={`${styles.ListItemIcon} ${
+            selected && styles.ListItemInsideSelected
+          }`}
+        >
+          {icon}
+        </ListItemIcon>
+      </div>
+      <ListItemText
+        className={`${styles.ListItemText} ${
+          selected && styles.ListItemInsideSelected
+        }`}
+        primary={text}
+      />
     </ListItem>
   )
 }

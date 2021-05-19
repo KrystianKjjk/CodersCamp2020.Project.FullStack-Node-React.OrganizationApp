@@ -41,7 +41,7 @@ const Header = (props: HeaderProps) => {
       <div
         style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
       >
-        <MenuIcon onClick={handleMenuIconClick} />
+        <MenuIcon onClick={handleMenuIconClick} style={{cursor: "pointer"}}/>
         <div
           className={styles.logo}
           onClick={takeHome}

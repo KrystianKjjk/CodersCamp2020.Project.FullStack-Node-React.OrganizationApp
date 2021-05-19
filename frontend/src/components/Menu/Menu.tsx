@@ -123,7 +123,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   //@ts-ignore
   switch (parseInt(userType)) {
     case UserType.Admin:
-      return <MenuAdmin name={name} surname={surname}/>;
+      return <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu}/>;
     default:
       return <h1>Default</h1>;
   }

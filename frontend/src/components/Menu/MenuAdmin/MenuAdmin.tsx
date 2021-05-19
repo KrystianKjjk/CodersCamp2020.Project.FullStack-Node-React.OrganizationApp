@@ -13,90 +13,109 @@ import styles from './MenuAdmin.module.css'
 export interface MenuProps {
   name: string
   surname: string
+  smallMenu: boolean
 }
 
 enum MenuAdminOption {
-  Users = "Users",
-  Courses = "Courses",
-  Sections = "Sections",
-  "Grade sheets" = "Grade sheets",
-  Projects = "Projects",
-  "Team projects" = "Team projects",
-  Teams = "Teams",
-  "My profile" = "My profile"
+  Users = 'Users',
+  Courses = 'Courses',
+  Sections = 'Sections',
+  'Grade sheets' = 'Grade sheets',
+  Projects = 'Projects',
+  'Team projects' = 'Team projects',
+  Teams = 'Teams',
+  'My profile' = 'My profile',
 }
 
-const MenuAdmin: React.FC<MenuProps> = ({ name, surname }) => {
-
-  const [selected, setSelected] = useState<string>('Users');
+const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
+  const [selected, setSelected] = useState<MenuAdminOption | null>(null)
 
   const handleSelect = (option: MenuAdminOption) => {
-    setSelected(option);
+    setSelected(option)
   }
 
   return (
     <nav className={styles.nav} onClick={(e: any) => console.log(e)}>
-      <div style={{borderBottom: "1px solid #666"}}>
-        <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }} />
-        <p style={{fontWeight: 500}}>{`${name || ''} ${surname || ''}`}</p>
-        <p>Admin</p>
-      </div>
+      {!smallMenu && (
+        <div style={{ borderBottom: '1px solid #666' }}>
+          <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }} />
+          <p style={{ fontWeight: 500 }}>{`${name || ''} ${surname || ''}`}</p>
+          <p>Admin</p>
+        </div>
+      )}
+
       <ListItemLink
         path="/users"
         icon={<PeopleIcon className={styles.icon} />}
         text={MenuAdminOption.Users}
-        onClick={() => { setSelected(MenuAdminOption.Users) }}
-        selected={ selected === MenuAdminOption.Users}
+        onClick={() => {
+          setSelected(MenuAdminOption.Users)
+        }}
+        selected={selected === MenuAdminOption.Users}
       />
       <ListItemLink
         path="/courses"
         icon={<NotificationsIcon className={styles.icon} />}
         text={MenuAdminOption.Courses}
-        onClick={() => { setSelected(MenuAdminOption.Courses) }}
-        selected={ selected === MenuAdminOption.Courses}
+        onClick={() => {
+          setSelected(MenuAdminOption.Courses)
+        }}
+        selected={selected === MenuAdminOption.Courses}
       />
       <ListItemLink
         path="/sections"
         icon={<AppsIcon className={styles.icon} />}
         text={MenuAdminOption.Sections}
-        onClick={() => { setSelected(MenuAdminOption.Sections) }}
-        selected={ selected === MenuAdminOption.Sections}
+        onClick={() => {
+          setSelected(MenuAdminOption.Sections)
+        }}
+        selected={selected === MenuAdminOption.Sections}
       />
       <ListItemLink
         path="/gradesheets"
         icon={<AssignmentIcon className={styles.icon} />}
-        text={MenuAdminOption["Grade sheets"]}
-        onClick={() => { setSelected(MenuAdminOption["Grade sheets"]) }}
-        selected={ selected === MenuAdminOption["Grade sheets"]}
+        text={MenuAdminOption['Grade sheets']}
+        onClick={() => {
+          setSelected(MenuAdminOption['Grade sheets'])
+        }}
+        selected={selected === MenuAdminOption['Grade sheets']}
       />
       <ListItemLink
         path="/projects"
         icon={<EmojiObjectsIcon className={styles.icon} />}
         text={MenuAdminOption.Projects}
-        onClick={() => { setSelected(MenuAdminOption.Projects) }}
-        selected={ selected === MenuAdminOption.Projects}
+        onClick={() => {
+          setSelected(MenuAdminOption.Projects)
+        }}
+        selected={selected === MenuAdminOption.Projects}
       />
       <ListItemLink
         path="/teamprojects"
         icon={<EmojiObjectsIcon className={styles.icon} />}
-        text={MenuAdminOption["Team projects"]}
-        onClick={() => { setSelected(MenuAdminOption["Team projects"]) }}
-        selected={ selected === MenuAdminOption["Team projects"]}
-        />
+        text={MenuAdminOption['Team projects']}
+        onClick={() => {
+          setSelected(MenuAdminOption['Team projects'])
+        }}
+        selected={selected === MenuAdminOption['Team projects']}
+      />
       <ListItemLink
         path="/teams"
         icon={<PeopleIcon className={styles.icon} />}
         text={MenuAdminOption.Teams}
-        onClick={() => { setSelected(MenuAdminOption.Teams) }}
-        selected={ selected === MenuAdminOption.Teams}
+        onClick={() => {
+          setSelected(MenuAdminOption.Teams)
+        }}
+        selected={selected === MenuAdminOption.Teams}
       />
       <span className={styles.settings}>Settings</span>
       <ListItemLink
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
-        text={MenuAdminOption["My profile"]}
-        onClick={() => { setSelected(MenuAdminOption["My profile"]) }}
-        selected={ selected === MenuAdminOption["My profile"]}
+        text={MenuAdminOption['My profile']}
+        onClick={() => {
+          setSelected(MenuAdminOption['My profile'])
+        }}
+        selected={selected === MenuAdminOption['My profile']}
       />
     </nav>
   )
