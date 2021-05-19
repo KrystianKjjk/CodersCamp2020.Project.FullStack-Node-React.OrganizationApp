@@ -5,6 +5,8 @@ import { removeUserFromLocalStorage } from '../../app/utils'
 import { useHistory } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/hooks'
 
+import MenuIcon from '@material-ui/icons/Menu';
+
 interface HeaderProps {
   onLogout?: Function
 }
@@ -29,12 +31,15 @@ const Header = (props: HeaderProps) => {
 
   return (
     <div className={styles.header}>
-      <div
-        className={styles.logo}
-        onClick={takeHome}
-        style={{ cursor: 'pointer' }}
-      >
-        <span>.</span>Coders<span>Camp</span>
+      <div style={{display: "flex", alignItems: "center", marginLeft: "1rem"}}>
+        <MenuIcon />
+        <div
+          className={styles.logo}
+          onClick={takeHome}
+          style={{ cursor: 'pointer' }}
+        >
+          <span>.</span>Coders<span>Camp</span>
+        </div>
       </div>
       <div className={styles.activeCourseBox}>
         <p className={styles.activeCourse}>{activeCourse?.name}</p>
