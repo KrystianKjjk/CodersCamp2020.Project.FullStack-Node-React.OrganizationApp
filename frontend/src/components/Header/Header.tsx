@@ -5,14 +5,13 @@ import { removeUserFromLocalStorage } from '../../app/utils'
 import { useHistory } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/hooks'
 
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu'
 
 interface HeaderProps {
   onLogout?: Function
 }
 
 const Header = (props: HeaderProps) => {
-  // const Header: React.FC = () => {
   const { activeCourse } = useAppSelector((state) => state.courseList)
   const handleLogOut = () => {
     removeUserFromLocalStorage()
@@ -31,7 +30,9 @@ const Header = (props: HeaderProps) => {
 
   return (
     <div className={styles.header}>
-      <div style={{display: "flex", alignItems: "center", marginLeft: "1rem"}}>
+      <div
+        style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
+      >
         <MenuIcon />
         <div
           className={styles.logo}
@@ -51,9 +52,7 @@ const Header = (props: HeaderProps) => {
             if (props.onLogout) props.onLogout()
           }}
         >
-          <PowerSettingsNewIcon
-            style={{ color: 'rgba(255, 255, 255, 0.6)' }}
-          ></PowerSettingsNewIcon>
+          <PowerSettingsNewIcon style={{ color: 'rgba(255, 255, 255, 0.6)' }} />
           <span> Log out</span>
         </div>
       </div>
