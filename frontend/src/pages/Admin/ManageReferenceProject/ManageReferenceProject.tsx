@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Box, Snackbar } from '@material-ui/core'
-import MuiAlert from '@material-ui/lab/Alert'
+import { Box, LinearProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
-import {
-  addRefProject,
-  deleteRefProject,
-  selectReferenceProjects,
-  updateRefProject,
-} from '../ReferenceProjects/ReferenceProjectsSlice'
 import { useHistory } from 'react-router-dom'
 
 import FindSection from '../../../components/FindSection'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
-import {
-  clearActionError,
-  clearActionSuccess,
-} from '../ReferenceProjects/ReferenceProjectsSlice'
 
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import styles from './ManageReferenceProject.module.css'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
+import useSnackbar from '../../../hooks/useSnackbar'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import {
+  useUpdateProject,
+  useDeleteProject,
+  useCreateProject,
+  useDidUpdateEffect,
+} from '../../../hooks'
+import useProject from '../../../hooks/useQuery/useProject'
 
 export interface ManageReferenceProjectProps {}
 
-function Alert(props: any) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
 const ManageReferenceProject = (props: any) => {
-  const dispatch = useDispatch()
   const history = useHistory()
 
   const projectID = props?.match?.params?.projectID
@@ -40,9 +31,11 @@ const ManageReferenceProject = (props: any) => {
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const [project, setProject] = useState<any>()
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false)
-  const [openErrorAlert, setOpenErrorAlert] = React.useState(false)
-  const { actionError, actionSuccess } = useSelector(selectReferenceProjects)
+  const { showError } = useSnackbar()
+  const { mutate: updateProject } = useUpdateProject()
+  const { mutate: deleteProject } = useDeleteProject()
+  const { mutate: addProject } = useCreateProject()
+  const { data: fetchedProject, error, isLoading } = useProject(projectID)
 
   useEffect(() => {
     if (props?.match?.path?.match('add')) {
@@ -53,26 +46,8 @@ const ManageReferenceProject = (props: any) => {
   }, [])
 
   useEffect(() => {
-    if (actionError) {
-      setOpenErrorAlert(true)
-      dispatch(clearActionError())
-    }
-    if (actionSuccess) {
-      setOpenSuccessAlert(true)
-      dispatch(clearActionSuccess())
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actionError, actionSuccess])
-
-  const tmp = useSelector((state: any) =>
-    state.refProjects.refProjects.find(
-      (project: any) => project._id === projectID,
-    ),
-  )
-
-  useEffect(() => {
-    setProject(tmp)
-  }, [tmp])
+    setProject(fetchedProject)
+  }, [fetchedProject])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
@@ -92,17 +67,17 @@ const ManageReferenceProject = (props: any) => {
 
   function handleSave() {
     if (isAdding) {
-      dispatch(addRefProject(project))
+      addProject(project)
       setIsAdding(false)
     } else {
-      dispatch(updateRefProject(project))
+      updateProject(project)
     }
     toggleEdit()
   }
 
   function handleDelete() {
     if (!isAdding) {
-      dispatch(deleteRefProject(project._id))
+      deleteProject(project._id)
     }
 
     history.push('/projects')
@@ -126,35 +101,12 @@ const ManageReferenceProject = (props: any) => {
     })
   }
 
-  const handleClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSuccessAlert(false)
-    setOpenErrorAlert(false)
-  }
+  if (error) showError((error as Error).message)
+
+  if (isLoading) return <LinearProgress />
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Snackbar
-        open={openSuccessAlert}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="success">
-          Operation successfully completed.
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openErrorAlert}
-        autoHideDuration={3500}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Operation failed.
-        </Alert>
-      </Snackbar>
-
       <PageHeader>
         <ReusableGoBack
           pageName="Projects"
