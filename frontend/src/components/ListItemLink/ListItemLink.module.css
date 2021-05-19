@@ -1,0 +1,23 @@
+.ListItem:hover {
+    background: #1c1c1c !important;
+}
+
+.ListItemSelected{
+    background: #1c1c1c !important;
+}
+
+.ListItemText {
+    color: rgba(255,255,255,.87);
+}
+
+.ListItem:hover .ListItemText {
+    color: #1a90ff;
+}
+
+.ListItem:hover .ListItemIcon {
+    color: #1a90ff;
+}
+
+.ListItemInsideSelected {
+    color: #1a90ff !important;
+}

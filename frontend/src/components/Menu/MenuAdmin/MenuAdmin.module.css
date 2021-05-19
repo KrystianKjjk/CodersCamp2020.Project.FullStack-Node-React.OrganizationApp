@@ -1,37 +1,17 @@
 .nav {
     width: 23%;
+    max-width: 16rem;
+    min-width: 8rem;
+    border-right: #666 1px solid;
 }
 
-/*
+.nav div p {
+    font-family: Roboto, sans-serif;
+    color: rgba(255,255,255,.87);
+}
 
-const useStyles = makeStyles((theme: Theme) =>
-createStyles({
-root: {
-width: '23%',
-maxWidth: 360,
-minWidth: 180,
-backgroundColor: theme.palette.background.default,
-borderRight: '1px solid #666',
-color: '#fff',
-'& .MuiListItem-root': {
-'&:hover': {
-             color: '#1A90FF',
-             backgroundColor: '#1C1C1C',
-         },
-},
-'& .MuiListItemIcon-root': {
-                             color: 'inherit',
-                         },
-},
-span: {
-    paddingLeft: '13px',
-    float: 'left',
-    color: '#9E9E9E',
-    fontSize: '14px',
-},
-userDiv: {
-    borderBottom: '1px solid #666666',
-},
-}),
-)
-*/
+.settings {
+    display: flex;
+    justify-content: flex-start;
+    margin: 1rem;
+}
