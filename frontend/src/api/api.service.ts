@@ -16,6 +16,14 @@ const api = {
   get: <R = any>(path: string, config?: AxiosRequestConfig) => {
     return axios.get<R>(path, config)
   },
+  getMany: <R>(path: string, config?: AxiosRequestConfig) => {
+    const course = localStorage.getItem('activeCourse')
+    const courseId = course ? JSON.parse(course)._id : null
+    return axios.get<R>(path, {
+      params: { courseId },
+      ...config,
+    })
+  },
   delete: <R = any>(path: string, config?: AxiosRequestConfig) => {
     return axios.delete<R>(path, config)
   },

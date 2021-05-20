@@ -12,7 +12,12 @@ class ProjectService {
   }
 
   async getProjects(courseId: string) {
-    return this.projectRepository.getAllByCourse(courseId)
+    const projects = this.projectRepository.getAllByCourse(courseId)
+
+    return (await projects).map((p) => ({
+      ...p,
+      section: p.section && p.section[0],
+    }))
   }
 
   async findProjectById(id: mongoose.Types.ObjectId) {

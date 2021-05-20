@@ -8,6 +8,7 @@ export const HasRole = (roles: UserType[]) => (
   next: express.NextFunction,
 ) => {
   const token: string = req.header('x-auth-token')
+
   if (!token) return res.status(401).json({ message: 'UNAUTHORIZED' })
   try {
     const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY)

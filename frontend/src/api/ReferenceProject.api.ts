@@ -3,7 +3,7 @@ import api from './api.service'
 const endpoint = `projects`
 
 export const getRefProjects = async () => {
-  return api.get(`${endpoint}`)
+  return api.getMany<ReferenceProjects>(`${endpoint}`)
 }
 export const getRefProjectByID = async (projectID: string) => {
   return api.get(`${endpoint}/${projectID}`)
@@ -16,4 +16,15 @@ export const updateRefProject = async (project: any) => {
 }
 export const deleteRefProject = async (projectID: string) => {
   return api.delete(`${endpoint}/${projectID}`)
+}
+
+export interface ReferenceProjects {
+  _id: string
+  projectName: string
+  section: {
+    _id: string
+    name: string
+    startDate: Date
+    endDate: Date
+  }
 }

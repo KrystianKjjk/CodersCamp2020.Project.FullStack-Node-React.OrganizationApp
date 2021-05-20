@@ -7,6 +7,8 @@ export default class ProjectRepository extends Repository {
   }
   async getAllByCourse(courseId: string) {
     var id = new mongoose.mongo.ObjectID(courseId)
+    console.log('courseId', courseId)
+
     return this.model.aggregate([
       {
         $lookup: {
@@ -18,6 +20,18 @@ export default class ProjectRepository extends Repository {
       },
       {
         $match: { 'section.course': id },
+      },
+      {
+        $project: {
+          _id: 1,
+          projectName: 1,
+          section: {
+            _id: 1,
+            name: 1,
+            startDate: 1,
+            endDate: 1,
+          },
+        },
       },
     ])
   }

@@ -64,7 +64,7 @@ const TeamProjectContent = ({
 
   const { projectEditMode } = useAppSelector(selectTeamProjects)
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <LinearProgress />
   if (isError) return <div> Error...</div>
   if (!data) return <div>Error </div>
 
@@ -144,9 +144,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
             <p>{project?.projectName ?? ''}</p>
             <UButton
               text={'change project/section'}
-              onClick={() => {
-                openSectionsModal()
-              }}
+              onClick={openSectionsModal}
             >
               {/* <ReferenceProjectButtonText
                 teamProject={props.parentProjectId?.projectName ?? ''}

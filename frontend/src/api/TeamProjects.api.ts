@@ -3,11 +3,7 @@ import api from './api.service'
 // todo: get projects for course
 
 const getTeamProjects = async () => {
-  const course = localStorage.getItem('activeCourse')
-  const courseId = course ? JSON.parse(course)._id : null
-  const response = await api.get<TeamProjectDto[]>('/teams/projects', {
-    params: { courseId },
-  })
+  const response = await api.getMany<TeamProjectDto[]>('/teams/projects')
   return response.data
 }
 const getTeamProject = async (id: string) => {

@@ -50,7 +50,7 @@ const FindProject: React.FC<FindSectionProps> = (props) => {
     setSearch(name)
   }
 
-  function handleRowClick(params: any, e: any) {
+  function handleRowClick(params: any) {
     const sectionID = params.row.id
     const sectionName = params.row.Name
     props.onSectionSelection(sectionID, sectionName)
