@@ -9,7 +9,7 @@ import { setMenu, clearMenu } from './MenuSlice'
 import debounce from 'lodash.debounce'
 
 export const WIDTH_SMALL_MENU_ON_PX = 900
-export const DEBOUNCE_RESIZE_MS = 500
+export const DEBOUNCE_RESIZE_MS = 100
 
 export interface MenuProps {}
 
