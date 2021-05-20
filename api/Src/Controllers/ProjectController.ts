@@ -44,10 +44,13 @@ export default class ProjectController {
       projectData,
       false,
     ) as null | Partial<Omit<Project, '_id'>>
+
     const project = await this.service.findProjectById(id)
     if (!project) res.status(404).json({ message: 'Project not found' })
+
     if (validatedProjectData === null)
       res.status(400).json({ message: 'Provided data not correct' })
+
     const updatedProject = await this.service.updateProjectById(
       id,
       validatedProjectData,

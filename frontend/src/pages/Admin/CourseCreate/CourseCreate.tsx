@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CourseCreateObject, Course } from '../Course/CourseDetailsSlice'
+import { CourseCreateObject, Course } from '../../../models'
 import TextField from '@material-ui/core/TextField'
 import { Button, ThemeProvider } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
@@ -9,8 +9,8 @@ import 'date-fns'
 
 import DateFnsUtils from '@date-io/date-fns'
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
-import CoursesService from '../../../api/courses.service'
 import { mainTheme } from '../../../theme/customMaterialTheme'
+import { createCourse } from '../../../api'
 
 export interface CourseCreateProps {}
 
@@ -71,7 +71,6 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
   )
 
   const classes = useStyles()
-  const courseService = new CoursesService()
 
   const [courseName, changeCourseName] = useState('')
   const [description, changeDescription] = useState('')
@@ -103,7 +102,7 @@ const CourseCreate: React.FC<CourseCreateProps> = (props) => {
       endDate: endDate!,
     }
 
-    courseService.createCourse(course).then((response: any) => {
+    createCourse(course).then((response: any) => {
       const createdCourse: Course = response.data
       history.push('/courses/' + createdCourse._id)
     })

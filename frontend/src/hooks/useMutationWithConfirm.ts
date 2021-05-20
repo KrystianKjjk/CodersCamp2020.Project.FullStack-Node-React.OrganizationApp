@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query'
+import { MutationFunction, useMutation, useQueryClient } from 'react-query'
 import useSnackbar from './useSnackbar'
 
 interface Options {
@@ -6,11 +6,19 @@ interface Options {
   onSuccess?: () => void
   errorMessage?: string
   onError?: () => void
+  onSettled?: () => void
   invalidate?: string | string[]
 }
-const useMutationWithConfirm = <T>(
-  request: (data: T) => Promise<any>,
-  { successMessage, errorMessage, invalidate, onSuccess, onError }: Options,
+const useMutationWithConfirm = <T, R>(
+  request: MutationFunction<T, R>,
+  {
+    successMessage = 'Success!',
+    errorMessage = 'Something wents wrong :(',
+    invalidate,
+    onSuccess,
+    onError,
+    onSettled,
+  }: Options,
 ) => {
   const { showError, showSuccess } = useSnackbar()
   const queryClient = useQueryClient()
@@ -23,6 +31,11 @@ const useMutationWithConfirm = <T>(
     onError: () => {
       errorMessage && showError(errorMessage)
       onError && onError()
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      invalidate && queryClient.invalidateQueries(invalidate)
+      onSettled && onSettled()
     },
   })
   return mutation

@@ -3,11 +3,12 @@ import { Backdrop, Fade, Modal, MuiThemeProvider } from '@material-ui/core'
 
 import BaseService from '../../app/baseService'
 import SectionsService from '../../api/sections.service'
-import ReusableTable from '../ReusableTable'
+import ReusableTable, { ReusableTableReactQuery } from '../ReusableTable'
 import SearchInput from '../SearchInput'
 
 import styles from './FindProject.module.css'
 import { mainTheme } from '../../theme/customMaterialTheme'
+import { useProjects } from '../../hooks'
 
 export interface FindSectionProps {
   selectedProjectId?: string
@@ -17,77 +18,30 @@ export interface FindSectionProps {
 }
 
 const FindProject: React.FC<FindSectionProps> = (props) => {
-  const sectionsService = new SectionsService(new BaseService())
+  const { data: projects, ...restData } = useProjects()
+  const [searchedName, setSearchedName] = useState('')
 
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [search, setSearch] = useState('')
-  const [sections, setSections] = useState<any>([])
-  const [filteredSections, setFilteredSections] = useState<any>([])
-
-  useEffect(() => {
-    getSections()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const result = sections.filter((section: any) => {
-      return section.name.match(search)
-    })
-    setIsUpdate(false)
-    setFilteredSections([...result])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search])
-
-  useEffect(() => {
-    setIsUpdate(false)
-  }, [sections])
-
-  useEffect(() => {
-    setIsUpdate(true)
-  }, [filteredSections])
-
-  function onSearch(name: string) {
-    setSearch(name)
+  const handleRowClick = (params: any) => {
+    props.onSectionSelection(params.row)
   }
 
-  function handleRowClick(params: any) {
-    const sectionID = params.row.id
-    const sectionName = params.row.Name
-    props.onSectionSelection(sectionID, sectionName)
-  }
-
-  function getSections() {
-    const activeCourse = localStorage.getItem('activeCourse')
-    const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null
-    if (!courseID) return
-
-    sectionsService
-      .getSectionsByCourseId(courseID)
-      .then((res) => {
-        if (res.status === 200) {
-          setSections([...res.data])
-          setFilteredSections([...res.data])
-        } else throw Error
-      })
-      .catch((err) => {})
-  }
-  function getSectionsTable(): Promise<[]> {
-    const sectionsTmp = filteredSections.map((section: any) => ({
-      id: section._id,
-      name: section.name,
-      StartDate: new Date(section.startDate).toLocaleDateString(),
-      EndDate: new Date(section.endDate).toLocaleDateString(),
-    }))
-    return Promise.resolve(sectionsTmp)
+  const onSearch = (name: string) => {
+    setSearchedName(name)
   }
 
   const columns = [
-    { field: 'name', width: 270, headerName: 'Name' },
-    { field: 'StartDate', width: 130, headerName: 'Start date' },
-    { field: 'EndDate', width: 130, headerName: 'End date' },
-    { field: 'projectName', width: 250, headerName: 'Project name' },
+    { field: 'projectName', width: 200, headerName: 'Project Name' },
+    { field: 'sectionName', width: 200, headerName: 'section Name' },
+    { field: 'startDate', width: 130, headerName: 'Start date' },
+    { field: 'endDate', width: 130, headerName: 'End date' },
   ]
-
+  const displayedProjects =
+    projects &&
+    projects.filter(
+      (p) =>
+        p.projectName.toLowerCase().includes(searchedName.toLowerCase()) ||
+        p.sectionName.toLowerCase().includes(searchedName.toLowerCase()),
+    )
   return (
     <MuiThemeProvider theme={mainTheme}>
       <Modal
@@ -105,7 +59,7 @@ const FindProject: React.FC<FindSectionProps> = (props) => {
         <Fade in={props.isOpen}>
           <div className={styles.container}>
             <div className={styles.container__header}>
-              <span>Find Section</span>
+              <span>Select project</span>
             </div>
 
             <div className={styles.container__body}>
@@ -113,14 +67,13 @@ const FindProject: React.FC<FindSectionProps> = (props) => {
                 <SearchInput onSubmit={onSearch} placeholder="Search by name" />
               </div>
               <div className={styles.container__body__table}>
-                {isUpdate && (
-                  <ReusableTable
-                    name="Sections"
-                    getData={getSectionsTable}
-                    columns={columns}
-                    onRowClick={handleRowClick}
-                  />
-                )}
+                <ReusableTableReactQuery
+                  name="Projects"
+                  columns={columns}
+                  onRowClick={handleRowClick}
+                  data={displayedProjects}
+                  {...restData}
+                />
               </div>
             </div>
           </div>

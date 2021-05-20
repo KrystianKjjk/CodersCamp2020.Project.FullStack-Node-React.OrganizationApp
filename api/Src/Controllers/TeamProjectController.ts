@@ -120,6 +120,7 @@ export default class TeamProjectController {
       if (!updatedTeamProject) {
         return res.status(404).json({ message: 'Team project not found' })
       }
+
       const fetchedTeamProject = await this.service.getTeamProjectById(id)
       return res.status(201).json(fetchedTeamProject)
     } catch (error) {
@@ -128,6 +129,7 @@ export default class TeamProjectController {
         res.statusMessage = 'Validation error'
         return res.status(400).json(errorMessage)
       }
+
       return res.status(500).json(errorMessage)
     }
   }

@@ -7,7 +7,6 @@ export default class ProjectRepository extends Repository {
   }
   async getAllByCourse(courseId: string) {
     var id = new mongoose.mongo.ObjectID(courseId)
-    console.log('courseId', courseId)
 
     return this.model.aggregate([
       {

@@ -2,12 +2,9 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
-import {
-  deleteCourseAsync,
-  setActiveCourse,
-  CourseListElementModel,
-} from './CourseListSlice'
-import { useAppDispatch } from '../../../hooks/hooks'
+import { setActiveCourse, CourseListElementModel } from './CourseListSlice'
+import * as courseApi from '../../../api/Course.api'
+import { useAppDispatch, useMutationWithConfirm } from '../../../hooks'
 import UButton from '../../../components/UButton'
 import { format } from 'date-fns'
 import DeleteButton from '../../../components/DeleteButton'
@@ -24,9 +21,17 @@ const CourseListElement: React.FC<CourseListElementProps> = ({
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useAppDispatch()
+  const { mutate: deleteCourse } = useMutationWithConfirm(
+    courseApi.deleteCourse,
+    {
+      successMessage: 'Success!',
+      errorMessage: 'Something went wrong :(',
+      invalidate: 'courses',
+    },
+  )
 
   const handleConfirmButtonClick = (event: any) => {
-    dispatch(deleteCourseAsync(course._id))
+    deleteCourse(course._id)
     event.stopPropagation()
   }
 

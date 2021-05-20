@@ -1,42 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Box } from '@material-ui/core'
+import { Box, LinearProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
-import {
-  addRefProject,
-  deleteRefProject,
-  selectReferenceProjects,
-  updateRefProject,
-} from '../ReferenceProjects/ReferenceProjectsSlice'
 import { useHistory } from 'react-router-dom'
 
 import FindSection from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
-import {
-  clearActionError,
-  clearActionSuccess,
-} from '../ReferenceProjects/ReferenceProjectsSlice'
 
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import styles from './ManageReferenceProject.module.css'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
-import ReusableGoBack from '../../../components/ReusableGoBack'
 import useSnackbar from '../../../hooks/useSnackbar'
+import ReusableGoBack from '../../../components/ReusableGoBack'
+import {
+  useUpdateProject,
+  useDeleteProject,
+  useCreateProject,
+} from '../../../hooks'
+import useProject from '../../../hooks/useQuery/useProject'
 
 export interface ManageReferenceProjectProps {}
 
 const ManageReferenceProject = (props: any) => {
-  const dispatch = useDispatch()
   const history = useHistory()
-  const { showSuccess, showError } = useSnackbar()
   const projectID = props?.match?.params?.projectID
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const [project, setProject] = useState<any>()
-  const { actionError, actionSuccess } = useSelector(selectReferenceProjects)
+  const { showError } = useSnackbar()
+  const { mutate: updateProject } = useUpdateProject()
+  const { mutate: deleteProject } = useDeleteProject()
+  const { mutate: addProject } = useCreateProject()
+  const { data: fetchedProject, error, isLoading } = useProject(projectID)
 
   useEffect(() => {
     if (props?.match?.path?.match('add')) {
@@ -47,26 +44,8 @@ const ManageReferenceProject = (props: any) => {
   }, [])
 
   useEffect(() => {
-    if (actionError) {
-      showError('Operation failed.')
-      dispatch(clearActionError())
-    }
-    if (actionSuccess) {
-      showSuccess('Operation successfully completed.')
-      dispatch(clearActionSuccess())
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actionError, actionSuccess])
-
-  const tmp = useSelector((state: any) =>
-    state.refProjects.refProjects.find(
-      (project: any) => project._id === projectID,
-    ),
-  )
-
-  useEffect(() => {
-    setProject(tmp)
-  }, [tmp])
+    setProject(fetchedProject)
+  }, [fetchedProject])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
@@ -86,17 +65,17 @@ const ManageReferenceProject = (props: any) => {
 
   function handleSave() {
     if (isAdding) {
-      dispatch(addRefProject(project))
+      addProject(project)
       setIsAdding(false)
     } else {
-      dispatch(updateRefProject(project))
+      updateProject(project)
     }
     toggleEdit()
   }
 
   function handleDelete() {
     if (!isAdding) {
-      dispatch(deleteRefProject(project._id))
+      deleteProject(project._id)
     }
 
     history.push('/projects')
@@ -119,6 +98,10 @@ const ManageReferenceProject = (props: any) => {
       'Section name': sectionName,
     })
   }
+
+  if (error) showError((error as Error).message)
+
+  if (isLoading) return <LinearProgress />
 
   return (
     <ThemeProvider theme={mainTheme}>

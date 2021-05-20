@@ -1,11 +1,15 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, wait } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import CourseList from './CourseList'
 import configureStore from 'redux-mock-store'
 import * as CourseListSlice from './CourseListSlice'
 import { EnhancedStore } from '@reduxjs/toolkit'
+import { QueryClientProvider } from 'react-query'
+import queryClient from '../../../QueryClient'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
 const mockStore = configureStore([])
 
@@ -32,6 +36,27 @@ jest.mock('react-router-dom', () => ({
   }),
 }))
 
+let courses: CourseListSlice.CourseListElementModel[] = [courseListElement]
+
+let mock = new MockAdapter(axios)
+mock.onPost(`${process.env.REACT_APP_API_URL}/api/courses`).reply((config) => {
+  courses.push(config.data)
+  return [200, config.data]
+})
+
+mock.onGet(`${process.env.REACT_APP_API_URL}/api/courses`).reply(200, courses)
+
+mock
+  .onDelete(new RegExp(`${process.env.REACT_APP_API_URL}/api/courses/*`))
+  .reply((config) => {
+    if (!config.url) return [400]
+    const id = config.url.split('/').slice(-1)[0]
+    courses = courses.filter((course) => course._id !== id)
+    return [200]
+  })
+
+mock.onAny().reply(200)
+
 describe('CourseList', () => {
   let store: EnhancedStore<any, any>
 
@@ -39,92 +64,70 @@ describe('CourseList', () => {
     store = mockStore(initialState)
   })
 
-  it('should render course', () => {
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'fetchCoursesAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
+  it('should render course', async () => {
     render(
-      <Provider store={store}>
-        <CourseList />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <CourseList />
+        </Provider>
+      </QueryClientProvider>,
     )
-    expect(screen.getByText('dummyName')).toBeInTheDocument()
+    expect(await screen.findByText('dummyName')).toBeInTheDocument()
   })
 
-  it('should redirect to create course', () => {
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'fetchCoursesAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
+  it('should redirect to create course', async () => {
     render(
-      <Provider store={store}>
-        <CourseList />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <CourseList />
+        </Provider>
+      </QueryClientProvider>,
     )
-    userEvent.click(screen.getByText('ADD'))
+    userEvent.click(await screen.findByText('ADD'))
 
     expect(mockHistoryPush).toBeCalled()
   })
 
-  it('should delete course', () => {
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'fetchCoursesAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'deleteCourseAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
+  it('should delete course', async () => {
     render(
-      <Provider store={store}>
-        <CourseList />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <CourseList />
+        </Provider>
+      </QueryClientProvider>,
     )
-    userEvent.click(screen.getByText('DELETE'))
-    userEvent.click(screen.getByText('CONFIRM'))
+    userEvent.click(await screen.findByText('DELETE'))
+    userEvent.click(await screen.findByText('CONFIRM'))
 
-    expect(CourseListSlice.deleteCourseAsync).toBeCalled()
+    await wait(() => expect(courses).toHaveLength(0))
   })
 
-  it('should redirect to edit course', () => {
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'fetchCoursesAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
+  it('should redirect to edit course', async () => {
     render(
-      <Provider store={store}>
-        <CourseList />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <CourseList />
+        </Provider>
+      </QueryClientProvider>,
     )
-    userEvent.click(screen.getByText('EDIT'))
+    userEvent.click(await screen.findByText('EDIT'))
 
     expect(mockHistoryPush).toBeCalled()
   })
 
-  it('should set active course', () => {
+  it('should set active course', async () => {
     //@ts-ignore
-    jest.spyOn(CourseListSlice, 'fetchCoursesAsync').mockImplementation(() => ({
-      type: 'Test',
-    }))
-
-    //@ts-ignore
-    jest.spyOn(CourseListSlice, 'setActiveCourse').mockImplementation(() => ({
-      type: 'Test',
-    }))
+    jest.spyOn(CourseListSlice, 'setActiveCourse')
 
     render(
-      <Provider store={store}>
-        <CourseList />
-      </Provider>,
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <CourseList />
+        </Provider>
+      </QueryClientProvider>,
     )
-    userEvent.click(screen.getByTestId('course-list-element'))
+    userEvent.click(await screen.findByTestId('course-list-element'))
 
-    expect(CourseListSlice.setActiveCourse).toBeCalled()
+    await wait(() => expect(CourseListSlice.setActiveCourse).toBeCalled())
   })
 })

@@ -4,7 +4,7 @@ import { selectTeamProjects, switchEditMode } from './TeamProjectSlice'
 import { useAppSelector } from '../../../hooks/hooks'
 import FindProject from '../../../components/FindProject'
 import DeleteButton from '../../../components/DeleteButton'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import PageHeader from '../../../components/PageHeader'
 import ReusableGoBack from '../../../components/ReusableGoBack'
 import {
@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux'
 import NameValuePair from '../../../components/NameValuePair'
 import ConfirmButton from '../../../components/ConfirmButton'
 import { LinearProgress } from '@material-ui/core'
+import { ProjectDto } from '../../../api/ReferenceProject.api'
 
 export interface TeamProjectProps {}
 
@@ -65,8 +66,7 @@ const TeamProjectContent = ({
   const { projectEditMode } = useAppSelector(selectTeamProjects)
 
   if (isLoading) return <LinearProgress />
-  if (isError) return <div> Error...</div>
-  if (!data) return <div>Error </div>
+  if (isError || !data) return <div> Error...</div>
 
   if (projectEditMode) return <TeamProjectDetailsEdit {...data} />
 
@@ -74,14 +74,17 @@ const TeamProjectContent = ({
 }
 
 const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
+  const history = useHistory()
   const dispatch = useDispatch()
-  const deleteRequest = useDeleteTeamProject(() => dispatch(switchEditMode()))
+  const deleteRequest = useDeleteTeamProject(() => {
+    dispatch(switchEditMode())
+  })
   const updateRequest = useUpdateTeamProject(() => dispatch(switchEditMode()))
 
   const [projectName, setProjectName] = useState(props.projectName)
   const [projectUrl, setProjectUrl] = useState(props.projectUrl)
   const [description, setProjectDescription] = useState(props.description)
-  const [project] = useState(props?.parentProjectId)
+  const [project, setProject] = useState(props?.parentProjectId)
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
   function closeSectionsModal() {
@@ -114,9 +117,9 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
           confirmTitle="Do you really want to delete this project?"
           onConfirm={() => {
             deleteRequest(props._id)
+            history.goBack()
           }}
         />
-
         <UButton
           text={'Save'}
           onClick={() => {
@@ -145,11 +148,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
             <UButton
               text={'change project/section'}
               onClick={openSectionsModal}
-            >
-              {/* <ReferenceProjectButtonText
-                teamProject={props.parentProjectId?.projectName ?? ''}
-              /> */}
-            </UButton>
+            />
           </div>
         </NameValuePair>
         <NameValuePair name={'Team mentor:'}>
@@ -176,17 +175,20 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
 
       <FindProject
         selectedProjectId={project?._id}
-        onSectionSelection={async () => {
-          //setParentProjectId(sectionId)
-          //const [projectName, sectionName] =
-          //await dispatch(
-          // saveProjectSectionById(props, sectionID),
-          //)
-          // setReferenceProjectName(projectName)
-          // setSectionName(sectionName)
-          // closeSectionsModal()
+        onSectionSelection={async (row: ProjectDto) => {
+          if (!project) return
+          setProject({
+            ...project,
+            _id: row.id,
+            projectName: row.projectName,
+            sectionId: {
+              ...project.sectionId,
+              id: row.sectionId,
+              name: row.sectionName,
+            },
+          })
+          closeSectionsModal()
         }}
-        //@ts-ignore
         isOpen={isOpenSectionsModal}
         handleClose={closeSectionsModal}
       />
