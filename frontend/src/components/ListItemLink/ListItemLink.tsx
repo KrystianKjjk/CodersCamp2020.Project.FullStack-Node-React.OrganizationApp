@@ -44,12 +44,13 @@ const ListItemLink = ({
           {icon}
         </ListItemIcon>
       </div>
-      <ListItemText
-        className={`${styles.ListItemText} ${
+      <p
+        className={`${ showSmallMenu ? styles.ListItemTextSmall : styles.ListItemText} ${
           selected && styles.ListItemInsideSelected
         }`}
-        primary={text}
-      />
+      >
+        {text}{' '}
+      </p>
     </ListItem>
   )
 }

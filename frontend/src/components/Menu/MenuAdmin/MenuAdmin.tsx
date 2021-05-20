@@ -35,7 +35,7 @@ const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
   }
 
   return (
-    <nav className={styles.nav} onClick={(e: any) => console.log(e)}>
+    <nav className={smallMenu ? styles.navSmall : styles.nav} onClick={(e: any) => console.log(e)}>
       {!smallMenu && (
         <div style={{ borderBottom: '1px solid #666' }}>
           <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }} />

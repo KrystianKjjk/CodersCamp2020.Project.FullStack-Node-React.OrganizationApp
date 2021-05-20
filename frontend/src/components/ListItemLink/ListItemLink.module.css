@@ -7,7 +7,17 @@
 }
 
 .ListItemText {
+    margin: .5rem 0;
     color: rgba(255,255,255,.87);
+}
+
+.ListItemTextSmall {
+    text-align: center;
+    margin: .5rem 0;
+    color: rgba(255,255,255,.87);
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    font-size: 12px;
 }
 
 .ListItem:hover .ListItemText {
