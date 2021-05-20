@@ -39,7 +39,7 @@ const Header = (props: HeaderProps) => {
   return (
     <div className={styles.header}>
       <div
-        style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
+        style={{ display: 'flex', alignItems: 'center', marginLeft: '1.8rem' }}
       >
         <MenuIcon onClick={handleMenuIconClick} style={{cursor: "pointer"}}/>
         <div

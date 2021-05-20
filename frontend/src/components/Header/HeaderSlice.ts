@@ -17,11 +17,17 @@ export const headerSlice = createSlice({
     toggleMenu(state) {
       state.showSmallMenu = !state.showSmallMenu
     },
+    setMenu(state) {
+      state.showSmallMenu = true;
+    },
+    clearMenu(state) {
+      state.showSmallMenu = false;
+    }
   },
 })
 
 export const selectHeader = (state: RootState) => state.headerReducer
 
-export const { toggleMenu } = headerSlice.actions
+export const { toggleMenu, setMenu, clearMenu } = headerSlice.actions
 
 export default headerSlice.reducer

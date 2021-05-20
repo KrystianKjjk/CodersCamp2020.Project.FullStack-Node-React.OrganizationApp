@@ -1,17 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
 import { selectHeader } from '../Header/HeaderSlice'
 import MenuAdmin from './MenuAdmin'
+import { setMenu, clearMenu } from '../Header/HeaderSlice'
+
+export const WIDTH_SMALL_MENU_ON = 900
+
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
-  const { userData: { name, surname } } = useSelector(selectUserData)
-  const { showSmallMenu } = useSelector(selectHeader);
+  const dispatch = useDispatch()
 
-  const { userId, userType } = getUserFromLocalStorage();
+  const {
+    userData: { name, surname },
+  } = useSelector(selectUserData)
+  const { showSmallMenu } = useSelector(selectHeader)
+
+  const { userType } = getUserFromLocalStorage()
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  function handleResize() {
+    window.innerWidth <= WIDTH_SMALL_MENU_ON
+      ? dispatch(setMenu())
+      : !showSmallMenu
+      ?? dispatch(clearMenu())
+  }
 
   /*  const VisibleOptions = () => {
       //@ts-ignore
@@ -123,9 +143,11 @@ const Menu: React.FC<MenuProps> = (props) => {
   //@ts-ignore
   switch (parseInt(userType)) {
     case UserType.Admin:
-      return <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu}/>;
+      return (
+        <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu} />
+      )
     default:
-      return <h1>Default</h1>;
+      return <h1>Default</h1>
   }
 }
 
