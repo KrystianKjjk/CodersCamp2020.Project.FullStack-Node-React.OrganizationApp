@@ -6,8 +6,10 @@ import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
 import { selectMenu } from './MenuSlice'
 import MenuAdmin from './MenuAdmin'
 import { setMenu, clearMenu } from './MenuSlice'
+import debounce from 'lodash.debounce'
 
-export const WIDTH_SMALL_MENU_ON = 900
+export const WIDTH_SMALL_MENU_ON_PX = 900
+export const DEBOUNCE_RESIZE_MS = 500
 
 export interface MenuProps {}
 
@@ -30,19 +32,13 @@ const Menu: React.FC<MenuProps> = (props) => {
     return () => window.removeEventListener('resize', handleResize)
   })
 
-  const handleResize = () => {
-    if(window.innerWidth <= WIDTH_SMALL_MENU_ON) {
-      dispatch(setMenu());
+  const handleResize = debounce(() => {
+    if (window.innerWidth <= WIDTH_SMALL_MENU_ON_PX) {
+      dispatch(setMenu())
     } else {
-      if(!showSmallMenuUserAction) dispatch(clearMenu());
+      if (!showSmallMenuUserAction) dispatch(clearMenu())
     }
-
-/*    window.innerWidth <= WIDTH_SMALL_MENU_ON
-      ? dispatch(setMenu())
-      : showSmallMenuUserAction
-      ? dispatch(setMenu())
-      : dispatch(clearMenu())*/
-  }
+  }, DEBOUNCE_RESIZE_MS)
 
   /*  const VisibleOptions = () => {
       //@ts-ignore
