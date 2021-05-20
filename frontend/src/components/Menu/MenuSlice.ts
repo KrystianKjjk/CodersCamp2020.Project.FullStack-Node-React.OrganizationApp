@@ -4,10 +4,12 @@ import { RootState } from '../../app/store'
 
 interface IMenu {
   showSmallMenu: boolean
+  showSmallMenuUserAction: boolean
 }
 
 const initialState: IMenu = {
   showSmallMenu: false,
+  showSmallMenuUserAction: false
 }
 
 export const menuSlice = createSlice({
@@ -15,7 +17,7 @@ export const menuSlice = createSlice({
   initialState,
   reducers: {
     toggleMenu(state) {
-      state.showSmallMenu = !state.showSmallMenu
+      state.showSmallMenuUserAction = !state.showSmallMenuUserAction
     },
     setMenu(state) {
       state.showSmallMenu = true

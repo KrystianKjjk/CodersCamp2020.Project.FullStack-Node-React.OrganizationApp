@@ -17,20 +17,31 @@ const Menu: React.FC<MenuProps> = (props) => {
   const {
     userData: { name, surname },
   } = useSelector(selectUserData)
-  const { showSmallMenu } = useSelector(selectMenu)
+  const { showSmallMenu, showSmallMenuUserAction } = useSelector(selectMenu)
 
   const { userType } = getUserFromLocalStorage()
 
   useEffect(() => {
+    showSmallMenuUserAction ? dispatch(setMenu()) : dispatch(clearMenu())
+  }, [showSmallMenuUserAction])
+
+  useEffect(() => {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  })
 
-  function handleResize() {
-    window.innerWidth <= WIDTH_SMALL_MENU_ON
+  const handleResize = () => {
+    if(window.innerWidth <= WIDTH_SMALL_MENU_ON) {
+      dispatch(setMenu());
+    } else {
+      if(!showSmallMenuUserAction) dispatch(clearMenu());
+    }
+
+/*    window.innerWidth <= WIDTH_SMALL_MENU_ON
       ? dispatch(setMenu())
-      : !showSmallMenu
-      ?? dispatch(clearMenu())
+      : showSmallMenuUserAction
+      ? dispatch(setMenu())
+      : dispatch(clearMenu())*/
   }
 
   /*  const VisibleOptions = () => {
