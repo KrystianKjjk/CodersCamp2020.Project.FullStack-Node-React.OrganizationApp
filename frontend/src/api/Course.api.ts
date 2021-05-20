@@ -3,7 +3,7 @@ import api from './api.service'
 import {
   Course,
   CourseCreateObject,
-} from '../pages/Admin/Course/CourseDetailsSlice'
+} from '../models/Course.model'
 
 export interface CourseListElementDto {
   _id: string

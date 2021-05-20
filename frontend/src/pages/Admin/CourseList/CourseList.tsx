@@ -1,26 +1,23 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './CourseList.module.css'
-import { fetchCoursesAsync } from './CourseListSlice'
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
+import { useAppSelector } from '../../../hooks/hooks'
 import CourseListElement from './CourseListElement'
 import PageHeader from '../../../components/PageHeader'
 import { useHistory } from 'react-router-dom'
 import UButton from '../../../components/UButton'
+import { useCourses } from '../../../hooks'
+import { CircularProgress, LinearProgress } from '@material-ui/core'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface CourseListProps {}
 
 const CourseList: React.FC<CourseListProps> = (props) => {
-  const dispatch = useAppDispatch()
   const history = useHistory()
-  const { courseList, activeCourse } = useAppSelector(
-    (state) => state.courseList,
-  )
+  const { activeCourse } = useAppSelector((state) => state.courseList)
+  const { data: courseList, error, isLoading, isFetching } = useCourses()
+  const { showError } = useSnackbar()
 
-  useEffect(() => {
-    dispatch(fetchCoursesAsync())
-  }, [dispatch])
-
-  const listElements = courseList.map((courseListElement) => (
+  const listElements = courseList?.map((courseListElement) => (
     <CourseListElement
       key={courseListElement._id}
       course={courseListElement}
@@ -31,6 +28,12 @@ const CourseList: React.FC<CourseListProps> = (props) => {
   const handleAddButtonClick = (event: any) => {
     history.push('coursecreate/')
   }
+
+  if (error) showError('Something went wrong :(')
+
+  if (isLoading) return <CircularProgress />
+  
+  if (isFetching) return <LinearProgress />
 
   return (
     <div>
