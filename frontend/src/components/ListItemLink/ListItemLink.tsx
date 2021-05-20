@@ -4,7 +4,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import styles from './ListItemLink.module.css'
 import { useSelector } from 'react-redux'
-import { selectHeader } from '../Header/HeaderSlice'
+import { selectMenu } from '../Menu/MenuSlice'
 
 export interface ListItemLinkProps {
   path: string
@@ -21,7 +21,7 @@ const ListItemLink = ({
   onClick,
   selected,
 }: ListItemLinkProps) => {
-  const { showSmallMenu } = useSelector(selectHeader)
+  const { showSmallMenu } = useSelector(selectMenu)
 
   return (
     <ListItem

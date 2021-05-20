@@ -3,9 +3,9 @@ import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
-import { selectHeader } from '../Header/HeaderSlice'
+import { selectMenu } from './MenuSlice'
 import MenuAdmin from './MenuAdmin'
-import { setMenu, clearMenu } from '../Header/HeaderSlice'
+import { setMenu, clearMenu } from './MenuSlice'
 
 export const WIDTH_SMALL_MENU_ON = 900
 
@@ -17,7 +17,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   const {
     userData: { name, surname },
   } = useSelector(selectUserData)
-  const { showSmallMenu } = useSelector(selectHeader)
+  const { showSmallMenu } = useSelector(selectMenu)
 
   const { userType } = getUserFromLocalStorage()
 

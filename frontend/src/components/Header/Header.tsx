@@ -5,7 +5,7 @@ import { removeUserFromLocalStorage } from '../../app/utils'
 import { useHistory } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/hooks'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleMenu } from './HeaderSlice'
+import { toggleMenu } from '../Menu/MenuSlice'
 
 import MenuIcon from '@material-ui/icons/Menu'
 
