@@ -27,6 +27,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   useEffect(() => {
     showSmallMenuUserAction ? dispatch(setMenu()) : dispatch(clearMenu())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSmallMenuUserAction])
 
   useEffect(() => {

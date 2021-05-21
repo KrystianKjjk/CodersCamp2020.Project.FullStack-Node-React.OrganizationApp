@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { ListItem, ListItemIcon } from '@material-ui/core'
 
 import styles from './ListItemLink.module.css'
 import { useSelector } from 'react-redux'

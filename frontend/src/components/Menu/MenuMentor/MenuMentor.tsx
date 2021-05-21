@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import NotificationsIcon from '@material-ui/icons/Notifications'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import SettingsIcon from '@material-ui/icons/Settings'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
