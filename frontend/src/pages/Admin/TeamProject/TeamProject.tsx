@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import styles from './TeamProject.module.css'
-import { selectTeamProjects, switchEditMode } from './TeamProjectSlice'
-import { useAppSelector } from '../../../hooks/hooks'
 import FindProject from '../../../components/FindProject'
 import DeleteButton from '../../../components/DeleteButton'
 import { useParams, useHistory } from 'react-router-dom'
@@ -14,11 +12,11 @@ import {
 } from '../../../hooks/useQuery/useTeamProjects'
 import { TeamProjectDetails } from '../../../api/TeamProjects.api'
 import UButton from '../../../components/UButton'
-import { useDispatch } from 'react-redux'
 import NameValuePair from '../../../components/NameValuePair'
 import ConfirmButton from '../../../components/ConfirmButton'
 import { LinearProgress } from '@material-ui/core'
 import { ProjectDto } from '../../../api/ReferenceProject.api'
+import { useEditing } from '../../../Redux/EditingSlice'
 
 export interface TeamProjectProps {}
 
@@ -59,7 +57,8 @@ const TeamProjectContent = ({
   setHeader: Function
 }) => {
   const { isLoading, isError, data } = useTeamProject(teamProjectId)
-  const { projectEditMode } = useAppSelector(selectTeamProjects)
+  const { isEditMode } = useEditing()
+  // const { isEditMode } = useAppSelector(selectTeamProjects)
 
   useEffect(() => {
     setHeader(data?.projectName ?? teamProjectId)
@@ -68,31 +67,23 @@ const TeamProjectContent = ({
   if (isLoading) return <LinearProgress />
   if (isError || !data) return <div> Error...</div>
 
-  if (projectEditMode) return <TeamProjectDetailsEdit {...data} />
+  if (isEditMode) return <TeamProjectDetailsEdit {...data} />
 
   return <TeamProjectDetailView {...data} />
 }
 
 const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
   const history = useHistory()
-  const dispatch = useDispatch()
-  const turnOffEdit = () => dispatch(switchEditMode())
+  const { switchEditMode } = useEditing()
 
-  const deleteRequest = useDeleteTeamProject(turnOffEdit)
-  const updateRequest = useUpdateTeamProject(turnOffEdit)
+  const deleteRequest = useDeleteTeamProject(switchEditMode)
+  const updateRequest = useUpdateTeamProject(switchEditMode)
 
   const [projectName, setProjectName] = useState(props.projectName)
   const [projectUrl, setProjectUrl] = useState(props.projectUrl)
   const [description, setProjectDescription] = useState(props.description)
   const [project, setProject] = useState(props?.parentProjectId)
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
-
-  useEffect(() => {
-    return () => {
-      turnOffEdit()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const closeSectionsModal = () => {
     setIsOpenSectionsModal(false)
@@ -116,7 +107,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
           text={'Cancel'}
           confirmTitle="Implemented changes will be abandoned"
           confirmContent="Are u sure?"
-          onConfirm={turnOffEdit}
+          onConfirm={switchEditMode}
         />
         <DeleteButton
           confirmTitle="Do you really want to delete this project?"
@@ -202,7 +193,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
 }
 
 const TeamProjectDetailView = (props: TeamProjectDetails) => {
-  const dispatch = useDispatch()
+  const { switchEditMode } = useEditing()
 
   return (
     <div className={styles.teamProjectContainer}>
@@ -210,7 +201,7 @@ const TeamProjectDetailView = (props: TeamProjectDetails) => {
         <span className={styles.teamProjectHeaderName}>
           Manage team project
         </span>
-        <UButton text={'Edit'} onClick={() => dispatch(switchEditMode())} />
+        <UButton text={'Edit'} onClick={switchEditMode} />
       </div>
 
       <div className={styles.teamProjectDetailsContainer}>

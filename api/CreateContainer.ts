@@ -1,5 +1,8 @@
 import Container from './Container'
 import MailingService from './Src/Services/MailingService'
+import 'dotenv/config'
+import 'express-async-errors'
+import * as cookieParser from 'cookie-parser'
 import App from './App'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
@@ -84,6 +87,15 @@ const appContainer = new Container()
 appContainer.declare('jwtKey', (c) => process.env.JWT_PRIVATE_KEY)
 appContainer.declare('jwtExpiresIn', (c) => process.env.JWT_TOKEN_EXPIRESIN)
 
+appContainer.declare(
+  'jwtRefreshKey',
+  (c) => process.env.JWT_REFRESH_PRIVATE_KEY,
+)
+appContainer.declare(
+  'jwtRefreshExpiresIn',
+  (c) => process.env.JWT_REFRESH_EXPIRESIN,
+)
+
 // Mongo config
 appContainer.declare('Port', (c) => process.env.PORT)
 appContainer.declare('MongoUrl', (c) => process.env.MONGO_URL)
@@ -95,9 +107,10 @@ appContainer.declare('ErrorMiddleware', (c) => new ErrorMiddleware())
 const middlewares = [
   bodyParser.json(),
   cors({
-    origin: '*',
-    exposedHeaders: 'x-auth-token',
+    origin: process.env.CLIENT_URL,
+    credentials: true,
   }),
+  cookieParser(),
 ]
 appContainer.declare('Middlewares', (c) => middlewares)
 
@@ -136,7 +149,7 @@ appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectReposi
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository))
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository))
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository))
-appContainer.declare("AuthService", (c) => new AuthService(c.UserRepository, c.jwtKey, c.jwtExpiresIn))
+appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService))
 appContainer.declare("GradeService", (c) => new GradeService(c.UserService))
 appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService))
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository))
