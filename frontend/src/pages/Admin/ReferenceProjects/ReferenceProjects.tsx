@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CircularProgress, LinearProgress } from '@material-ui/core'
+import { Box, LinearProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
@@ -18,8 +18,6 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = () => {
   const history = useHistory()
   const { data: refProjects, isLoading, error, isFetching } = useProjects()
   const { showError } = useSnackbar()
-  //const activeCourse = localStorage.getItem('activeCourse')
-  // const courseID: string = activeCourse ? JSON.parse(activeCourse)._id : null
 
   const columns = [
     { field: 'projectName', width: 300, headerName: 'Project name' },
@@ -43,8 +41,6 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = () => {
 
   if (isLoading) return <LinearProgress />
   if (!refProjects) return <div>Error...</div>
-
-  console.log('projects', refProjects)
 
   return (
     <ThemeProvider theme={mainTheme}>

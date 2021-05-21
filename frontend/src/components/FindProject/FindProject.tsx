@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Backdrop, Fade, Modal, MuiThemeProvider } from '@material-ui/core'
 
-import BaseService from '../../app/baseService'
-import SectionsService from '../../api/sections.service'
-import ReusableTable, { ReusableTableReactQuery } from '../ReusableTable'
+import { ReusableTableReactQuery } from '../ReusableTable'
 import SearchInput from '../SearchInput'
 
 import styles from './FindProject.module.css'
