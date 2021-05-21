@@ -10,14 +10,17 @@ import theme from './theme/customMaterialTheme'
 import { QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import queryClient from './QueryClient'
+import { CookiesProvider } from 'react-cookie'
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
+        <CookiesProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </CookiesProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </Provider>

@@ -7,7 +7,9 @@ import * as mongoose from 'mongoose'
 type UserType = UserModel & mongoose.Document
 
 process.env.JWT_PRIVATE_KEY = 'thisisprivatekey'
-process.env.JWT_TOKEN_EXPIRESIN = '20m'
+process.env.JWT_TOKEN_EXPIRESIN = '900'
+process.env.JWT_REFRESH_PRIVATE_KEY = 'somesecretRefreshKey'
+process.env.JWT_REFRESH_EXPIRESIN = '1800'
 
 const user = {
   name: `Test`,
@@ -38,7 +40,9 @@ const repo = new TestRepository()
 const service = new AuthService(
   repo,
   process.env.JWT_PRIVATE_KEY,
-  (process.env.JWT_TOKEN_EXPIRESIN = '20m'),
+  (process.env.JWT_TOKEN_EXPIRESIN = '900'),
+  (process.env.JWT_REFRESH_PRIVATE_KEY = 'somesecretRefreshKey'),
+  (process.env.JWT_REFRESH_EXPIRESIN = '1800'),
 )
 
 describe('Test AuthService ', () => {

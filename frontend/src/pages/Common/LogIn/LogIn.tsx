@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { AxiosResponse } from 'axios'
-import {
-  setActiveCourse,
-} from '../../Admin/CourseList/CourseListSlice'
+import { setActiveCourse } from '../../Admin/CourseList/CourseListSlice'
 
 import {
   Button,
@@ -13,12 +11,10 @@ import {
   Typography,
   Container,
 } from '@material-ui/core'
-
 import StyledTextField from '../../../components/StyledTextField'
 import useStyles from './LogIn.style'
 import BaseService from '../../../app/baseService'
 import HeaderRegistration from '../../../components/HeaderRegistration'
-import axios from 'axios'
 import { useAppDispatch, fetchCoursesAndSort } from '../../../hooks'
 import useSnackbar from '../../../hooks/useSnackbar'
 
@@ -40,11 +36,9 @@ export default function SignIn(props: LogInProps) {
   }
 
   const setResponseDataToLocalStorage = (response: AxiosResponse) => {
-    const token = response.headers?.['x-auth-token']
     const userId = response.data?.['_id']
     const userType = response.data?.['type']
 
-    localStorage.setItem('token', token)
     localStorage.setItem('id', userId)
     localStorage.setItem('type', userType)
   }
@@ -54,9 +48,6 @@ export default function SignIn(props: LogInProps) {
     try {
       const response = await service.post('login', { email, password })
       setResponseDataToLocalStorage(response)
-      axios.defaults.headers.common = {
-        'x-auth-token': localStorage.getItem('token'),
-      }
       const courses = await fetchCoursesAndSort()
       const mostRecentCourse = courses[0]
       appDispatch(setActiveCourse(mostRecentCourse))
