@@ -59,11 +59,11 @@ const TeamProjectContent = ({
   setHeader: Function
 }) => {
   const { isLoading, isError, data } = useTeamProject(teamProjectId)
+  const { projectEditMode } = useAppSelector(selectTeamProjects)
+
   useEffect(() => {
     setHeader(data?.projectName ?? teamProjectId)
   }, [data, setHeader, teamProjectId])
-
-  const { projectEditMode } = useAppSelector(selectTeamProjects)
 
   if (isLoading) return <LinearProgress />
   if (isError || !data) return <div> Error...</div>
@@ -76,21 +76,28 @@ const TeamProjectContent = ({
 const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const deleteRequest = useDeleteTeamProject(() => {
-    dispatch(switchEditMode())
-  })
-  const updateRequest = useUpdateTeamProject(() => dispatch(switchEditMode()))
+  const turnOffEdit = () => dispatch(switchEditMode())
+
+  const deleteRequest = useDeleteTeamProject(turnOffEdit)
+  const updateRequest = useUpdateTeamProject(turnOffEdit)
 
   const [projectName, setProjectName] = useState(props.projectName)
   const [projectUrl, setProjectUrl] = useState(props.projectUrl)
   const [description, setProjectDescription] = useState(props.description)
   const [project, setProject] = useState(props?.parentProjectId)
-
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
-  function closeSectionsModal() {
+
+  useEffect(() => {
+    return () => {
+      turnOffEdit()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const closeSectionsModal = () => {
     setIsOpenSectionsModal(false)
   }
-  function openSectionsModal() {
+  const openSectionsModal = () => {
     setIsOpenSectionsModal(true)
   }
 
@@ -109,9 +116,7 @@ const TeamProjectDetailsEdit = (props: TeamProjectDetails) => {
           text={'Cancel'}
           confirmTitle="Implemented changes will be abandoned"
           confirmContent="Are u sure?"
-          onConfirm={() => {
-            dispatch(switchEditMode())
-          }}
+          onConfirm={turnOffEdit}
         />
         <DeleteButton
           confirmTitle="Do you really want to delete this project?"

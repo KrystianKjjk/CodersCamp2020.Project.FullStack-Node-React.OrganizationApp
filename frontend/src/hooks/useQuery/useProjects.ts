@@ -1,5 +1,5 @@
-import { useGenericQuery } from './useGenericQuery'
 import * as api from '../../api/ReferenceProject.api'
+import { useQuery } from 'react-query'
 
-const useProjects = () => useGenericQuery('projects', api.getRefProjects())
+const useProjects = () => useQuery('projects', api.getRefProjects)
 export default useProjects

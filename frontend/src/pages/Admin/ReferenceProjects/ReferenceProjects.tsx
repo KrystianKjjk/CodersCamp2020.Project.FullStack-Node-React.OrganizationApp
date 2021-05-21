@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress, LinearProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
@@ -41,8 +41,8 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = () => {
 
   if (error) showError((error as Error).message)
 
-  if (isLoading) return <CircularProgress className={styles.loading} />
-  if (!refProjects) return <div>Eroor...</div>
+  if (isLoading) return <LinearProgress />
+  if (!refProjects) return <div>Error...</div>
 
   console.log('projects', refProjects)
 

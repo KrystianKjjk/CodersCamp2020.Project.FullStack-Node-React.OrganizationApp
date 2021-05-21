@@ -1,9 +1,10 @@
 import * as api from '../../api/User.api'
 import queryClient from '../../QueryClient'
 import { User, UserFilters, userStatusDict, userTypeDict } from '../../models'
-import { genericSearch, genericSort, useGenericQuery } from './useGenericQuery'
+import { genericSearch, genericSort } from './useGenericQuery'
+import { useQuery } from 'react-query'
 
-const useUsers = () => useGenericQuery('users', api.getUsers())
+const useUsers = () => useQuery('users', api.getUsers)
 
 export default useUsers
 export const searchUser = genericSearch<User>('users')

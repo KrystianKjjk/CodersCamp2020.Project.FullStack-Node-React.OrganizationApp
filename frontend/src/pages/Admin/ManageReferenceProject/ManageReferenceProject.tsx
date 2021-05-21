@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import FindSection from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
@@ -23,8 +23,9 @@ import useProject from '../../../hooks/useQuery/useProject'
 export interface ManageReferenceProjectProps {}
 
 const ManageReferenceProject = (props: any) => {
+  const { projectID } = useParams()
   const history = useHistory()
-  const projectID = props?.match?.params?.projectID
+  // const projectID = props?.match?.params?.projectID
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
@@ -34,6 +35,8 @@ const ManageReferenceProject = (props: any) => {
   const { mutate: deleteProject } = useDeleteProject()
   const { mutate: addProject } = useCreateProject()
   const { data: fetchedProject, error, isLoading } = useProject(projectID)
+
+  console.log('proj', fetchedProject)
 
   useEffect(() => {
     if (props?.match?.path?.match('add')) {
@@ -142,7 +145,7 @@ const ManageReferenceProject = (props: any) => {
             isAdding={isAdding}
             fieldName={'Section name:'}
             fieldID={'Section name'}
-            fieldValue={project?.['Section name']}
+            fieldValue={project?.sectionId.name}
             modalAction={openSectionsModal}
           />
 
