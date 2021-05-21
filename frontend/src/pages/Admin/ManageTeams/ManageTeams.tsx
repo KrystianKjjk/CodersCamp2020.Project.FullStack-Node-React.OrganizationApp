@@ -15,6 +15,7 @@ import {
   searchTeam,
   useCreateTeam,
   useDeleteTeam,
+  useAppSelector,
 } from '../../../hooks'
 import { Team } from '../../../models'
 
@@ -22,8 +23,9 @@ export interface ManageTeamsProps {}
 
 const ManageTeams: React.FC<ManageTeamsProps> = () => {
   const history = useHistory()
+  const { activeCourse } = useAppSelector((state) => state.courseList)
   const selectedTeams = useRef([] as string[])
-  const { data: teams, isLoading, isFetching, error } = useTeams()
+  const { data: teams, isLoading, isFetching, error } = useTeams(activeCourse?._id)
   const { mutate: createTeam } = useCreateTeam()
   const { mutate: deleteTeam } = useDeleteTeam()
 
@@ -56,7 +58,7 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
   ]
 
   const handleTeamSelection = (params: GridSelectionModelChangeParams) => {
-    selectedTeams.current = params.selectionModel as string[]
+    selectedTeams.current = [...params.selectionModel] as string[]
   }
 
   const deleteSelectedTeams = () => {
@@ -85,7 +87,7 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
           <div className={styles.buttons}>
             <AddButton
               text="Add"
-              onClick={() => createTeam(null)}
+              onClick={() => createTeam(activeCourse?._id)}
               aria-label="Add team"
             />
             <DeleteButton

@@ -4,7 +4,7 @@ import { Team } from '../../models'
 
 const queryKey = 'teams'
 
-const useTeams = () => useGenericQuery(queryKey, api.getTeams())
+const useTeams = (courseId?: string) => useGenericQuery(queryKey, api.getTeams(courseId))
 export default useTeams
 
 export const searchTeam = genericSearch<Team>(queryKey)
