@@ -1,1 +1,1 @@
-export { default } from './MenuParticipant'
+export { default } from './MenuMentor'

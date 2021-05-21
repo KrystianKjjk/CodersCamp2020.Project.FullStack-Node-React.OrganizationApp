@@ -14,21 +14,20 @@ export interface MenuProps {
   smallMenu: boolean
 }
 
-enum MenuParticipantOption {
-  Grades = 'grades',
-  Team = 'team',
+enum MenuMentorOption {
+  GradeSheets = 'gradesheets',
   'My profile' = 'myprofile',
 }
 
-const MenuParticipant: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
-  const [selected, setSelected] = useState<MenuParticipantOption | null>(null)
+const MenuMentor: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
+  const [selected, setSelected] = useState<MenuMentorOption | null>(null)
   const location = useLocation()
 
   useEffect(() => {
-    const option: MenuParticipantOption = location.pathname.replace(
+    const option: MenuMentorOption = location.pathname.replace(
       '/',
       '',
-    ) as MenuParticipantOption
+    ) as MenuMentorOption
     setSelected(option)
   }, [location])
 
@@ -38,32 +37,26 @@ const MenuParticipant: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         <div style={{ borderBottom: '1px solid #666' }}>
           <AccountCircleIcon style={{ paddingTop: 20, fontSize: 40 }} />
           <p style={{ fontWeight: 500 }}>{`${name || ''} ${surname || ''}`}</p>
-          <p>Participant</p>
+          <p>Mentor</p>
         </div>
       )}
 
       <ListItemLink
-        path="/grades"
+        path="gradesheets"
         icon={<AssignmentIcon className={styles.icon} />}
-        text="Grades"
-        selected={selected === MenuParticipantOption.Grades}
+        text="Grade sheets"
+        selected={selected === MenuMentorOption.GradeSheets}
       />
 
-      <ListItemLink
-        path="/team"
-        icon={<NotificationsIcon className={styles.icon} />}
-        text="Team"
-        selected={selected === MenuParticipantOption.Team}
-      />
       {!smallMenu && <span className={styles.settings}>Settings</span>}
       <ListItemLink
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
         text="My profile"
-        selected={selected === MenuParticipantOption['My profile']}
+        selected={selected === MenuMentorOption['My profile']}
       />
     </nav>
   )
 }
 
-export default MenuParticipant
+export default MenuMentor
