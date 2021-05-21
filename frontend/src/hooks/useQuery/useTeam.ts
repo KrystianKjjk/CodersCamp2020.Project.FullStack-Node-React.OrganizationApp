@@ -19,10 +19,10 @@ export const useAddUserToTeam = () =>
 
 export const useDeleteTeam = () =>
   useMutationWithConfirm(api.deleteTeam, {
-    invalidate: queryKey,
+    invalidate: queryKey + 's',
   })
 
 export const useCreateTeam = () =>
   useMutationWithConfirm(api.createTeam, {
-    invalidate: queryKey,
+    invalidate: queryKey + 's',
   })
