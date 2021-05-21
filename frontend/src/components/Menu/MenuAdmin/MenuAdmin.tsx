@@ -9,7 +9,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ListItemLink from '../../ListItemLink'
 import { useLocation } from 'react-router-dom'
 
-import styles from './MenuAdmin.module.css'
+import styles from '../Menu.module.css'
 
 export interface MenuProps {
   name: string

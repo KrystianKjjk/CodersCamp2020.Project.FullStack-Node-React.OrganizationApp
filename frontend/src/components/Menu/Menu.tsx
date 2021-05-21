@@ -7,6 +7,7 @@ import { selectMenu } from './MenuSlice'
 import MenuAdmin from './MenuAdmin'
 import { setMenu, clearMenu } from './MenuSlice'
 import debounce from 'lodash.debounce'
+import MenuParticipant from './MenuParticipant'
 
 export const WIDTH_SMALL_MENU_ON_PX = 900
 export const DEBOUNCE_RESIZE_MS = 100
@@ -150,11 +151,9 @@ const Menu: React.FC<MenuProps> = (props) => {
   //@ts-ignore
   switch (parseInt(userType)) {
     case UserType.Admin:
-      return (
-        <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu} />
-      )
+      return <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu} />
     default:
-      return <h1>Default</h1>
+      return <MenuParticipant name={name} surname={surname} smallMenu={showSmallMenu} />
   }
 }
 
