@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PeopleIcon from '@material-ui/icons/People'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AppsIcon from '@material-ui/icons/Apps'
@@ -7,6 +7,7 @@ import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects'
 import SettingsIcon from '@material-ui/icons/Settings'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ListItemLink from '../../ListItemLink'
+import { useLocation } from 'react-router-dom'
 
 import styles from './MenuAdmin.module.css'
 
@@ -17,22 +18,27 @@ export interface MenuProps {
 }
 
 enum MenuAdminOption {
-  Users = 'Users',
-  Courses = 'Courses',
-  Sections = 'Sections',
-  'Grade sheets' = 'Grade sheets',
-  Projects = 'Projects',
-  'Team projects' = 'Team projects',
-  Teams = 'Teams',
-  'My profile' = 'My profile',
+  Users = 'users',
+  Courses = 'courses',
+  Sections = 'sections',
+  'Grade sheets' = 'gradesheets',
+  Projects = 'projects',
+  'Team projects' = 'teamprojects',
+  Teams = 'teams',
+  'My profile' = 'myprofile',
 }
 
 const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
   const [selected, setSelected] = useState<MenuAdminOption | null>(null)
+  const location = useLocation()
 
-  const handleSelect = (option: MenuAdminOption) => {
+  useEffect(() => {
+    const option: MenuAdminOption = location.pathname.replace(
+      '/',
+      '',
+    ) as MenuAdminOption
     setSelected(option)
-  }
+  }, [location])
 
   return (
     <nav className={smallMenu ? styles.navSmall : styles.nav}>
@@ -47,74 +53,50 @@ const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
       <ListItemLink
         path="/users"
         icon={<PeopleIcon className={styles.icon} />}
-        text={MenuAdminOption.Users}
-        onClick={() => {
-          handleSelect(MenuAdminOption.Users)
-        }}
+        text="Users"
         selected={selected === MenuAdminOption.Users}
       />
       <ListItemLink
         path="/courses"
         icon={<NotificationsIcon className={styles.icon} />}
-        text={MenuAdminOption.Courses}
-        onClick={() => {
-          handleSelect(MenuAdminOption.Courses)
-        }}
+        text="Courses"
         selected={selected === MenuAdminOption.Courses}
       />
       <ListItemLink
         path="/sections"
         icon={<AppsIcon className={styles.icon} />}
-        text={MenuAdminOption.Sections}
-        onClick={() => {
-          handleSelect(MenuAdminOption.Sections)
-        }}
+        text="Sections"
         selected={selected === MenuAdminOption.Sections}
       />
       <ListItemLink
         path="/gradesheets"
         icon={<AssignmentIcon className={styles.icon} />}
-        text={MenuAdminOption['Grade sheets']}
-        onClick={() => {
-          handleSelect(MenuAdminOption['Grade sheets'])
-        }}
+        text="Grade sheets"
         selected={selected === MenuAdminOption['Grade sheets']}
       />
       <ListItemLink
         path="/projects"
         icon={<EmojiObjectsIcon className={styles.icon} />}
-        text={MenuAdminOption.Projects}
-        onClick={() => {
-          handleSelect(MenuAdminOption.Projects)
-        }}
+        text="Projects"
         selected={selected === MenuAdminOption.Projects}
       />
       <ListItemLink
         path="/teamprojects"
         icon={<EmojiObjectsIcon className={styles.icon} />}
-        text={MenuAdminOption['Team projects']}
-        onClick={() => {
-          handleSelect(MenuAdminOption['Team projects'])
-        }}
+        text="Team projects"
         selected={selected === MenuAdminOption['Team projects']}
       />
       <ListItemLink
         path="/teams"
         icon={<PeopleIcon className={styles.icon} />}
-        text={MenuAdminOption.Teams}
-        onClick={() => {
-          handleSelect(MenuAdminOption.Teams)
-        }}
+        text="Teams"
         selected={selected === MenuAdminOption.Teams}
       />
       {!smallMenu && <span className={styles.settings}>Settings</span>}
       <ListItemLink
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
-        text={MenuAdminOption['My profile']}
-        onClick={() => {
-          handleSelect(MenuAdminOption['My profile'])
-        }}
+        text="My profile"
         selected={selected === MenuAdminOption['My profile']}
       />
     </nav>

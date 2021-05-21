@@ -10,7 +10,6 @@ export interface ListItemLinkProps {
   path: string
   icon: React.ReactNode
   text: string
-  onClick: (e: any) => void
   selected: boolean
 }
 
@@ -18,7 +17,6 @@ const ListItemLink = ({
   path,
   icon,
   text,
-  onClick,
   selected,
 }: ListItemLinkProps) => {
   const { showSmallMenu } = useSelector(selectMenu)
@@ -33,7 +31,6 @@ const ListItemLink = ({
           ? `${styles.ListItem} ${selected && styles.ListItemSelected}`
           : styles.ListItemSmall
       }
-      onClick={onClick}
     >
       <div>
         <ListItemIcon
