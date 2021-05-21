@@ -16,7 +16,7 @@ export interface MenuProps {
 
 enum MenuMentorOption {
   GradeSheets = 'gradesheets',
-  'My profile' = 'myprofile',
+  MyProfile = 'myprofile',
 }
 
 const MenuMentor: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
@@ -53,7 +53,7 @@ const MenuMentor: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
         text="My profile"
-        selected={selected === MenuMentorOption['My profile']}
+        selected={selected === MenuMentorOption.MyProfile}
       />
     </nav>
   )

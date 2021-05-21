@@ -17,7 +17,7 @@ export interface MenuProps {
 enum MenuParticipantOption {
   Grades = 'grades',
   Team = 'team',
-  'My profile' = 'myprofile',
+  MyProfile = 'myprofile',
 }
 
 const MenuParticipant: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
@@ -60,7 +60,7 @@ const MenuParticipant: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
         text="My profile"
-        selected={selected === MenuParticipantOption['My profile']}
+        selected={selected === MenuParticipantOption.MyProfile}
       />
     </nav>
   )

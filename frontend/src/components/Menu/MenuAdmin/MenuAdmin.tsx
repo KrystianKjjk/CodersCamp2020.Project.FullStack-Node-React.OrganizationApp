@@ -21,11 +21,11 @@ enum MenuAdminOption {
   Users = 'users',
   Courses = 'courses',
   Sections = 'sections',
-  'Grade sheets' = 'gradesheets',
+  GradeSheets = 'gradesheets',
   Projects = 'projects',
-  'Team projects' = 'teamprojects',
+  TeamProjects = 'teamprojects',
   Teams = 'teams',
-  'My profile' = 'myprofile',
+  MyProfile = 'myprofile',
 }
 
 const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
@@ -72,7 +72,7 @@ const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         path="/gradesheets"
         icon={<AssignmentIcon className={styles.icon} />}
         text="Grade sheets"
-        selected={selected === MenuAdminOption['Grade sheets']}
+        selected={selected === MenuAdminOption.GradeSheets}
       />
       <ListItemLink
         path="/projects"
@@ -84,7 +84,7 @@ const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         path="/teamprojects"
         icon={<EmojiObjectsIcon className={styles.icon} />}
         text="Team projects"
-        selected={selected === MenuAdminOption['Team projects']}
+        selected={selected === MenuAdminOption.TeamProjects}
       />
       <ListItemLink
         path="/teams"
@@ -97,7 +97,7 @@ const MenuAdmin: React.FC<MenuProps> = ({ name, surname, smallMenu }) => {
         path="/myprofile"
         icon={<SettingsIcon className={styles.icon} />}
         text="My profile"
-        selected={selected === MenuAdminOption['My profile']}
+        selected={selected === MenuAdminOption.MyProfile}
       />
     </nav>
   )
