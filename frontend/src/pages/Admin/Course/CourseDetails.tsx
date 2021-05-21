@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import {
-  fetchCourseAsync,
-  Course,
-  updateCourseAsync,
-} from './CourseDetailsSlice'
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import TextField from '@material-ui/core/TextField'
 import CourseSectionElement from './CourseSectionListElement'
@@ -16,6 +10,7 @@ import {
   createStyles,
   Box,
   ThemeProvider,
+  LinearProgress,
 } from '@material-ui/core'
 import PageHeader from '../../../components/PageHeader'
 import UButton from '../../../components/UButton'
@@ -28,25 +23,33 @@ import {
 } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { mainTheme } from '../../../theme/customMaterialTheme'
-import useSnackbar from '../../../hooks/useSnackbar'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import { Course, SectionListElement } from '../../../models'
+import useCourse, { updateCourseAsync } from '../../../hooks/useQuery/useCourse'
+import { useAppSelector } from '../../../hooks/hooks'
+import { resetSectionsToDelete } from './CourseDetailsSlice'
+import { useMutationWithConfirm } from '../../../hooks'
 
 export interface CourseProps {
   id: string
 }
 
 const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
-  const dispatch = useAppDispatch()
   const history = useHistory()
-  const { course, sectionsIdToDelete } = useAppSelector(
-    (state) => state.courseDetails,
-  )
+  const { sectionsIdToDelete } = useAppSelector((state) => state.courseDetails)
   const [courseName, changeCourseName] = useState('')
   const [description, changeDescription] = useState('')
   const [startDate, changeStartDate] = useState<Date | null>(new Date())
   const [endDate, changeEndDate] = useState<Date | null>(new Date())
   const [isEdit, setIsEdit] = useState(false)
-  const { showSuccess, showError } = useSnackbar()
+  const { isLoading, data, isFetching, error } = useCourse(match.params.id)
+  const { mutate: updateCourse } = useMutationWithConfirm(
+    (vars: [Course, string[]]) => updateCourseAsync(...vars),
+    {
+      onSettled: () => resetSectionsToDelete(),
+      invalidate: 'course'
+    },
+  )
 
   const classes = useStyles()
 
@@ -68,20 +71,14 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
 
   const handleSaveButtonClick = () => {
     const courseToSave: Course = {
-      ...course!,
+      ...data!,
       name: courseName,
       description: description,
       startDate: startDate!.toISOString(),
       endDate: endDate!.toISOString(),
     }
 
-    dispatch(updateCourseAsync(courseToSave, sectionsIdToDelete))
-      .then((response) => {
-        showSuccess('Course was updated')
-      })
-      .catch((exception) => {
-        showError('Sorry, something went wrong')
-      })
+    updateCourse([courseToSave, sectionsIdToDelete])
   }
 
   const handleStartDateChange = (date: Date | null) => {
@@ -93,21 +90,18 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   }
 
   useEffect(() => {
-    const courseId = match.params.id
-    dispatch(fetchCourseAsync(courseId))
-  }, [match.params.id, dispatch])
-
-  useEffect(() => {
-    if (!course) {
+    if (!data) {
       return
     }
-    changeCourseName(course.name)
-    changeDescription(course.description ?? '')
-    changeStartDate(new Date(Date.parse(course.startDate)))
-    changeEndDate(new Date(Date.parse(course.endDate)))
-  }, [course])
+    changeCourseName(data.name)
+    changeDescription(data.description ?? '')
+    changeStartDate(new Date(Date.parse(data.startDate)))
+    changeEndDate(new Date(Date.parse(data.endDate)))
+  }, [data])
 
-  if (!course) return <CircularProgress />
+  if (isLoading) return <CircularProgress />
+  if (isFetching) return <LinearProgress />
+  if (error) return <div>{(error as Error).message}</div>
 
   return (
     <div className={classes.root}>
@@ -171,7 +165,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
         >
           <Box marginLeft="3%" marginTop="2%" width="400px">
             <h4>Sections:</h4>
-            {course.sections.map((section) => (
+            {data?.sections.map((section: SectionListElement) => (
               <CourseSectionElement
                 section={section}
                 isEdit={isEdit}

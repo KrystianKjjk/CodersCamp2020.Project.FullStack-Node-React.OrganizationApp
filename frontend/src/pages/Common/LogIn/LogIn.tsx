@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { AxiosResponse } from 'axios'
-import {
-  fetchCoursesAndSort,
-  setActiveCourse,
-} from '../../Admin/CourseList/CourseListSlice'
+import { setActiveCourse } from '../../Admin/CourseList/CourseListSlice'
 
 import {
   Button,
@@ -18,7 +15,7 @@ import StyledTextField from '../../../components/StyledTextField'
 import useStyles from './LogIn.style'
 import BaseService from '../../../app/baseService'
 import HeaderRegistration from '../../../components/HeaderRegistration'
-import { useAppDispatch } from '../../../hooks/hooks'
+import { useAppDispatch, fetchCoursesAndSort } from '../../../hooks'
 import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface LogInProps {

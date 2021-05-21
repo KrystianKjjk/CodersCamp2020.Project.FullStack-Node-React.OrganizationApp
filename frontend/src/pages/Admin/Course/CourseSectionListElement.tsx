@@ -1,8 +1,9 @@
 import { Box } from '@material-ui/core'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteSection, SectionListElement } from './CourseDetailsSlice'
 import DeleteButton from '../../../components/DeleteButton'
+import { SectionListElement } from '../../../models'
+import { deleteSection } from './CourseDetailsSlice'
 
 interface CourseSectionElementProps {
   section: SectionListElement
