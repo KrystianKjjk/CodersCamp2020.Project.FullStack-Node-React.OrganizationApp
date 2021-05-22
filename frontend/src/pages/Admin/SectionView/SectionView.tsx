@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import DateFnsUtils from '@date-io/date-fns'
 import 'date-fns'
@@ -10,20 +10,28 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  CircularProgress,
+  LinearProgress,
 } from '@material-ui/core'
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
 import styles from './SectionView.module.css'
-import SectionService from '../../../api/ManageSection.service'
 import { NewSectionData } from '../../../models/Section.model'
-import { CourseForSection } from '../../../models/Course.model'
 import StyledTextField from '../../../components/StyledTextField'
 import UButton from '../../../components/UButton'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import {
+  useCourses,
+  useCreateSection,
+  useDeleteSection,
+  usePatchSection,
+  useProjectForSection,
+  useSection,
+} from '../../../hooks'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 const SectionView = () => {
-  const sectionService = useMemo(() => new SectionService(), [])
   const [sectionName, setSectionName] = useState('')
   const [courseName, setCourseName] = useState('')
   const [courseId, setCourseId] = useState('')
@@ -31,38 +39,34 @@ const SectionView = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date())
   const [endDate, setEndDate] = useState<Date | undefined>(new Date())
   const [referenceProject, setReferenceProject] = useState('')
-  const [courses, setCourses] = useState<CourseForSection[]>([])
+  const coursesQuery = useCourses()
   const [isInEditMode, setIsInEditMode] = useState(false)
+
   const { id } = useParams<Record<'id', string>>()
+  const { data: section, isLoading, isFetching, error } = useSection(id)
+  const projectQuery = useProjectForSection(id)
+  const { mutate: patchSection } = usePatchSection()
+  const { mutate: addSection } = useCreateSection()
+  const { mutate: deleteSection } = useDeleteSection()
+  const { showError } = useSnackbar()
   const history = useHistory()
 
   useEffect(() => {
-    const getCourseData = async () => {
-      const data = await sectionService.getCourses()
-      setCourses(data)
+    setReferenceProject(projectQuery.data?.projectName ?? '---')
+  }, [projectQuery.data])
+
+  useEffect(() => {
+    if (section) {
+      setSectionName(section.name)
+      setCourseName(section.courseName)
+      setCourseId(section.courseId)
+      setDescription(section.description || '')
+      setStartDate(
+        section.startDate ? new Date(section.startDate * 1000) : undefined,
+      )
+      setEndDate(section.endDate ? new Date(section.endDate * 1000) : undefined)
     }
-
-    const getProjectData = async () => {
-      const project = await sectionService.getProjectForSection(id)
-      setReferenceProject(project.projectName)
-    }
-
-    const getOneSectionData = async () => {
-      const data = await sectionService.getOneSection(id)
-
-      setSectionName(data.name)
-      setCourseName(data.courseName)
-      setCourseId(data.courseId)
-      setDescription(data.description || '')
-      setStartDate(data.startDate ? new Date(data.startDate * 1000) : undefined)
-      setEndDate(data.endDate ? new Date(data.endDate * 1000) : undefined)
-    }
-
-    if (id) getOneSectionData()
-    else setIsInEditMode(true)
-    getCourseData()
-    getProjectData()
-  }, [sectionService, id])
+  }, [section])
 
   const saveSection = async () => {
     const sectionData: NewSectionData = {
@@ -74,13 +78,13 @@ const SectionView = () => {
     }
 
     id
-      ? await sectionService.patchSection(id, sectionData)
-      : await sectionService.addSection(sectionData)
+      ? patchSection([id, sectionData])
+      : addSection(sectionData)
     setIsInEditMode(false)
   }
 
   const handleDeleteClick = async () => {
-    await sectionService.deleteSection(id)
+    deleteSection(id)
     history.push('/sections')
   }
 
@@ -139,8 +143,8 @@ const SectionView = () => {
 
   const handleChangeCourse = (e: any) => {
     const newCourseId = e.target.value
-    const newCourse = courses.find((course) => course.id === newCourseId)
-    const newCourseName = newCourse ? newCourse.courseName : ''
+    const newCourse = coursesQuery.data?.find((course) => course.name === newCourseId)
+    const newCourseName = newCourse ? newCourse.name : ''
 
     setCourseId(newCourseId)
     setCourseName(newCourseName)
@@ -157,9 +161,9 @@ const SectionView = () => {
           onChange={handleChangeCourse}
         >
           <MenuItem disabled>Pick a course</MenuItem>
-          {courses.map((course) => (
-            <MenuItem value={course.id} key={course.id}>
-              {course.courseName}
+          {coursesQuery.data?.map((course) => (
+            <MenuItem value={course._id} key={course._id}>
+              {course.name}
             </MenuItem>
           ))}
         </Select>
@@ -179,6 +183,13 @@ const SectionView = () => {
       )
     )
   }
+
+  const displayedError = error ?? coursesQuery.error ?? projectQuery.error
+  if(displayedError) showError((displayedError as Error).message)
+
+  if( isLoading || coursesQuery.isLoading || projectQuery.isLoading ) return <CircularProgress />
+  
+  if( isFetching || coursesQuery.isFetching || projectQuery.isFetching ) return <LinearProgress />
 
   return (
     <Container className={styles.manageSections} aria-label="Manage Section">

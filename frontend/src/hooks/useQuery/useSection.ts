@@ -3,22 +3,29 @@ import * as api from '../../api/Section.api'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 import { NewSectionData } from '../../models'
 
-const queryKey = 'team'
+const queryKey = 'section'
 
-const useTeam = (id: string) => useGenericQuery([queryKey, id], () => api.getSection(id))
-export default useTeam
+const useSection = (id: string) =>
+  useGenericQuery([queryKey, id], () => api.getOneSection(id))
+export default useSection
+
+export const useProjectForSection = (id: string) =>
+  useGenericQuery([queryKey, id], () => api.getProjectForSection(id))
 
 export const usePatchSection = () =>
-  useMutationWithConfirm((vars: [string, NewSectionData]) => api.patchSection(...vars), {
-    invalidate: queryKey,
-  })
+  useMutationWithConfirm(
+    (vars: [string, NewSectionData]) => api.patchSection(...vars),
+    {
+      invalidate: queryKey,
+    },
+  )
 
 export const useDeleteSection = () =>
   useMutationWithConfirm(api.deleteSection, {
-    invalidate: queryKey,
+    invalidate: queryKey+'s',
   })
 
 export const useCreateSection = () =>
   useMutationWithConfirm(api.addSection, {
-    invalidate: queryKey,
+    invalidate: queryKey+'s',
   })
