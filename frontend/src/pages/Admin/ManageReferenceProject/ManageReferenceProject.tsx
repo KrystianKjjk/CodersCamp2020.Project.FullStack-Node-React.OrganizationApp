@@ -34,7 +34,9 @@ const ManageReferenceProject = (props: any) => {
   const { mutate: updateProject } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
   const { mutate: addProject } = useCreateProject()
-  const { data: fetchedProject, error, isLoading } = useProject(projectID)
+  const { data: fetchedProject, error, isLoading } = useProject(projectID, {
+    enabled: !!projectID,
+  })
 
   useEffect(() => {
     if (props?.match?.path?.match('add')) {
@@ -68,6 +70,7 @@ const ManageReferenceProject = (props: any) => {
     if (isAdding) {
       addProject(project)
       setIsAdding(false)
+      history.push('/projects')
     } else {
       updateProject(project)
     }
