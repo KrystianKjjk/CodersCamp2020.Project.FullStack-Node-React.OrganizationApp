@@ -1,73 +1,53 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './ManageTeam.module.css'
 import AddButton from '../../../components/AddButton'
 import UButton from '../../../components/UButton'
-import Table from '../../../components/ReusableTable'
-import FindModal from '../../../components/FindModal'
+import { ReusableTableReactQuery } from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
-import { TeamProject, User } from '../../../models'
-import { TeamService, UserService } from '../../../api'
+import { User } from '../../../models'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import {
+  useAddUserToTeam,
+  useDeleteUserFromTeam,
+  useParticipantsNotInTeam,
+  useSetMentor,
+  useTeam,
+  useUsersOfType,
+} from '../../../hooks'
+import { FindModalReactQuery } from '../../../components/FindModal/FindModal'
 
 export interface ManageTeamProps {}
 
 const ManageTeam: React.FC<ManageTeamProps> = () => {
-  const api = new TeamService()
-  const usersApi = new UserService()
-
-  const [loading, setLoading] = useState<'loading' | 'idle'>('loading')
-  const [mentor, setMentor] = useState<User>()
-  const [projects, setProjects] = useState<TeamProject[]>([])
-  const [avgGrade, setAvgGrade] = useState<number>()
-  const [teamMembers, setTeamMembers] = useState<User[]>([])
   const [openMentorsModal, setOpenMentorsModal] = useState<boolean>(false)
   const [openUsersModal, setOpenUsersModal] = useState<boolean>(false)
 
   const selectedUsers = useRef<string[]>([])
 
   let { teamId } = useParams<{ teamId: string }>()
-
-  useEffect(() => {
-    api.getTeam(teamId).then((team) => {
-      setMentor(team.mentor)
-      setProjects(team.projects)
-      setAvgGrade(team.teamAvgGrade)
-      setTeamMembers(team.users)
-      setLoading('idle')
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamId])
-
-  useEffect(() => {
-    const avg =
-      teamMembers.reduce(
-        (acc: number, user: User) => user.averageGrade ?? 0 + acc,
-        0,
-      ) / teamMembers.length
-    setAvgGrade(avg)
-  }, [teamMembers])
+  const { data: team, isLoading, isFetching, error } = useTeam(teamId)
+  const participantsNotInTeamQuery = useParticipantsNotInTeam({
+    enabled: openUsersModal,
+  })
+  const mentorsQuery = useUsersOfType('Mentor', {
+    enabled: openMentorsModal,
+  })
+  const { mutate: setMentor } = useSetMentor()
+  const { mutate: addUserToTeam } = useAddUserToTeam()
+  const { mutate: deleteUserFromTeam } = useDeleteUserFromTeam()
 
   const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false)
-    api.setMentor(teamId, row.id)
-    setMentor({
-      id: row.id,
-      name: row.name,
-      surname: row.surname,
-    })
+    setMentor([teamId, row.id])
   }
-
-  let getTeamMemebers = () => Promise.resolve(teamMembers as User[])
 
   const handleAddUserSelection = (row: User) => {
     setOpenUsersModal(false)
-    api.addUserToTeam(teamId, row.id)
-    setTeamMembers([...teamMembers, row])
-    getTeamMemebers = () => Promise.resolve(teamMembers as User[])
+    addUserToTeam([teamId, row.id])
   }
 
   const columns = [
@@ -88,11 +68,8 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
 
   const deleteSelectedUsers = () => {
     selectedUsers.current.forEach((user) => {
-      api.deleteUserFromTeam(teamId, user)
+      deleteUserFromTeam([teamId, user])
     })
-    setTeamMembers(
-      teamMembers.filter((user) => !selectedUsers.current.includes(user.id)),
-    )
     selectedUsers.current = []
   }
 
@@ -112,7 +89,6 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
     { field: 'sectionName', headerName: 'Section', width: 270 },
   ]
 
-  if (loading === 'loading') return <p>...Loading</p>
   return (
     <Container className={styles.manageTeams} aria-label="Manage Teams">
       <CssBaseline />
@@ -120,7 +96,11 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
         <ReusableGoBack
           pageName="Teams"
           pageLink="/teams"
-          elementName={mentor ? `${mentor?.name} ${mentor?.surname}` : teamId}
+          elementName={
+            team?.mentor
+              ? `${team?.mentor?.name} ${team?.mentor?.surname}`
+              : teamId
+          }
         />
       </PageHeader>
       <Paper className={styles.container}>
@@ -129,9 +109,10 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
         </Container>
         <div>
           {openMentorsModal && (
-            <FindModal<User>
+            <FindModalReactQuery<User>
               onRowSelection={handleMentorSelection}
-              getData={() => usersApi.getUsersOfType('Mentor')}
+              query={mentorsQuery}
+              queryKey='Mentors'
               columns={mentorColumns}
               searchPlaceholder="Search by surname"
               searchBy="surname"
@@ -145,7 +126,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
             <li className={styles.teamInfoRow}>
               <span>Mentor:</span>
               <span>
-                {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
+                {team?.mentor?.name ?? '---'} {team?.mentor?.surname ?? '---'}
               </span>
               <UButton
                 test-id="change-mentor"
@@ -156,7 +137,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
             </li>
             <li className={styles.teamInfoRow}>
               <span>Average grade:</span>
-              <span>{avgGrade}%</span>
+              <span>{team?.teamAvgGrade}%</span>
             </li>
           </ul>
         </div>
@@ -164,9 +145,10 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           {openUsersModal && (
-            <FindModal<User>
+            <FindModalReactQuery<User>
               onRowSelection={handleAddUserSelection}
-              getData={() => usersApi.getParticipantsNotInTeam()}
+              query={participantsNotInTeamQuery}
+              queryKey="participantsNotInTeam"
               columns={participantColumns}
               searchPlaceholder="Search by surname"
               searchBy="surname"
@@ -190,11 +172,14 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTableReactQuery
             aria-label="Team members table"
             name="Team"
             columns={columns}
-            getData={getTeamMemebers}
+            data={team?.users}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            error={error}
             checkboxSelection={true}
             onSelectionModelChange={handleUserSelection}
           />
@@ -203,10 +188,13 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
           <h2 className={styles.manageHeader}>Projects</h2>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTableReactQuery
             name="TeamProjects"
             columns={projectColumns}
-            getData={() => Promise.resolve(projects)}
+            data={team?.projects}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            error={error}
           />
         </div>
       </Paper>
