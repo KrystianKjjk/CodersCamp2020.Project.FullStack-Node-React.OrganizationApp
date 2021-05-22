@@ -1,5 +1,4 @@
 import React from 'react'
-import styles from './DetailPage.module.css'
 import PageHeader from '../../components/PageHeader'
 import ReusableGoBack from '../../components/ReusableGoBack'
 

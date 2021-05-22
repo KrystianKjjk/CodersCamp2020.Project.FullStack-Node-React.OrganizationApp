@@ -149,11 +149,10 @@ appContainer.declare("ProjectService", (c) => new ProjectService(c.ProjectReposi
 appContainer.declare("GradeSheetService", (c) => new GradeSheetService(c.GradeSheetRepository))
 appContainer.declare("SectionService", (c) => new SectionService(c.SectionRepository))
 appContainer.declare("TeamService", (c) => new TeamService(c.TeamRepository))
-appContainer.declare("AuthController", (c) => new AuthController(c.AuthService, c.MailingService))
 appContainer.declare("GradeService", (c) => new GradeService(c.UserService))
 appContainer.declare("MaterialService", (c) => new MaterialService(c.MaterialRepository, c.SectionService))
 appContainer.declare("TestService", (c) => new TestService(c.SectionRepository))
-
+appContainer.declare('AuthService',(c) =>new AuthService(c.UserRepository,c.jwtKey,c.jwtExpiresIn,c.jwtRefreshKey,c.jwtRefreshExpiresIn,))
 
 // Controllers
 appContainer.declare("UserController", (c) => new UserController(c.UserService, c.MailingService, c.TeamService))

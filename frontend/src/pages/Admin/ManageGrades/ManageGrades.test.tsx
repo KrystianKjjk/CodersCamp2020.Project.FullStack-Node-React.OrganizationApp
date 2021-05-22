@@ -9,7 +9,7 @@ describe('ManageGrades', () => {
   it('renders without error', () => {
     render(
       <Provider store={store}>
-        <ManageGrades />
+        <ManageGrades userID="123" />
       </Provider>,
     )
   })

@@ -3,8 +3,6 @@ import styles from './TeamProject.module.css'
 import FindProject from '../../../components/FindProject'
 import DeleteButton from '../../../components/DeleteButton'
 import { useParams, useHistory } from 'react-router-dom'
-import PageHeader from '../../../components/PageHeader'
-import ReusableGoBack from '../../../components/ReusableGoBack'
 import {
   useTeamProject,
   useDeleteTeamProject,
@@ -17,6 +15,7 @@ import ConfirmButton from '../../../components/ConfirmButton'
 import { LinearProgress } from '@material-ui/core'
 import { ProjectDto } from '../../../api/ReferenceProject.api'
 import { useEditing } from '../../../Redux/EditingSlice'
+import DetailPage from '../../../components/DetailPage'
 
 export interface TeamProjectProps {}
 
@@ -33,20 +32,6 @@ const TeamProject: React.FC<TeamProjectProps> = () => {
   )
 }
 
-interface DetailPageProps {
-  pageName: string
-  elementName: string
-}
-const DetailPage: React.FC<DetailPageProps> = ({ children, ...restProps }) => {
-  return (
-    <div>
-      <PageHeader>
-        <ReusableGoBack {...restProps} />
-      </PageHeader>
-      {children}
-    </div>
-  )
-}
 export default TeamProject
 
 const TeamProjectContent = ({
@@ -58,7 +43,6 @@ const TeamProjectContent = ({
 }) => {
   const { isLoading, isError, data } = useTeamProject(teamProjectId)
   const { isEditMode } = useEditing()
-  // const { isEditMode } = useAppSelector(selectTeamProjects)
 
   useEffect(() => {
     setHeader(data?.projectName ?? teamProjectId)
