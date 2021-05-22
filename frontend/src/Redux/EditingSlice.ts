@@ -16,8 +16,6 @@ export const EditingSlice = createSlice({
   initialState,
   reducers: {
     switchEditMode: (state) => {
-      console.log('edi', state.isEditMode)
-
       state.isEditMode = !state.isEditMode
     },
   },
