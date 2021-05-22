@@ -6,7 +6,7 @@ import { Grades } from '../../models'
 const queryKey = 'sheet'
 
 const useSheet = (id: string) =>
-  useGenericQuery([queryKey, id], api.getSheet(id))
+  useGenericQuery([queryKey, id], () => api.getSheet(id))
 export default useSheet
 
 interface Options {

@@ -5,7 +5,7 @@ import { NewSectionData } from '../../models'
 
 const queryKey = 'team'
 
-const useTeam = (id: string) => useGenericQuery([queryKey, id], api.getSection(id))
+const useTeam = (id: string) => useGenericQuery([queryKey, id], () => api.getSection(id))
 export default useTeam
 
 export const usePatchSection = () =>

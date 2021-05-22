@@ -53,7 +53,7 @@ const useMutationWithConfirm = <T, R, D>(
     },
     // Always refetch after error or success:
     onSettled: () => {
-      //invalidate && queryClient.invalidateQueries(invalidate)
+      invalidate && queryClient.invalidateQueries(invalidate)
       onSettled && onSettled()
     },
   })

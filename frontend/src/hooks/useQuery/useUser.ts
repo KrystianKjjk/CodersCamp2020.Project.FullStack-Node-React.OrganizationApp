@@ -5,7 +5,7 @@ import { IUser, User } from '../../models'
 
 const queryKey = 'user'
 
-const useUser = (id: string) => useGenericQuery([queryKey, id], api.getUser(id))
+const useUser = (id: string) => useGenericQuery([queryKey, id], () => api.getUser(id))
 export default useUser
 
 export const useUpdateUser = (

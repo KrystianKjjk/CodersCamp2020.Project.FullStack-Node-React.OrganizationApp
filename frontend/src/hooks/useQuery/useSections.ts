@@ -4,7 +4,7 @@ import { ManageSection } from '../../models'
 
 const queryKey = 'sections'
 
-const useSections = () => useGenericQuery(queryKey, api.getSections())
+const useSections = () => useGenericQuery(queryKey, () => api.getSections())
 export default useSections
 
 export const searchSection = genericSearch<ManageSection>(queryKey)

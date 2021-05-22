@@ -4,7 +4,7 @@ import useMutationWithConfirm from '../useMutationWithConfirm'
 
 const queryKey = 'team'
 
-const useTeam = (id: string) => useGenericQuery([queryKey, id], api.getTeam(id))
+const useTeam = (id: string) => useGenericQuery([queryKey, id], () => api.getTeam(id))
 export default useTeam
 
 export const useSetMentor = () =>

@@ -4,7 +4,7 @@ import { GradeSheet } from '../../models'
 
 const queryKey = 'sheets'
 
-const useSheets = () => useGenericQuery(queryKey, api.getSheets())
+const useSheets = () => useGenericQuery(queryKey, () => api.getSheets())
 export default useSheets
 
 export const searchSheet = genericSearch<GradeSheet>(queryKey)

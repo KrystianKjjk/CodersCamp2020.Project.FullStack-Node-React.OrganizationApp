@@ -9,20 +9,20 @@ import {
 } from './useGenericQuery'
 import { UseQueryOptions } from 'react-query'
 
-const useUsers = () => useGenericQuery('users', api.getUsers())
+const useUsers = () => useGenericQuery('users', () => api.getUsers())
 export const useParticipantsNotInTeam = (
   options?: UseQueryOptions<User[], unknown, User[], QueryKey>,
 ) =>
   useGenericQuery(
     'participantsNotInTeam',
-    api.getParticipantsNotInTeam(),
+    () => api.getParticipantsNotInTeam(),
     options,
   )
 
 export const useUsersOfType = (
   type: string,
   options?: UseQueryOptions<User[], unknown, User[], QueryKey>,
-) => useGenericQuery(`${type}s`, api.getUsersOfType(type), options)
+) => useGenericQuery(`${type}s`, () => api.getUsersOfType(type), options)
 
 export default useUsers
 export const searchUser = genericSearch<User>('users')

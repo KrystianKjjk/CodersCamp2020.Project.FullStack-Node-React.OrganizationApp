@@ -19,5 +19,5 @@ export const fetchCoursesAndSort = async () => {
 }
 
 const useCourses = () =>
-  useGenericQuery('courses', fetchCoursesAndSort())
+  useGenericQuery('courses', () => fetchCoursesAndSort())
 export default useCourses

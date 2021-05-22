@@ -10,7 +10,7 @@ import {
 const queryKey = 'project'
 
 const useProject = (id: string) =>
-  useGenericQuery([queryKey, id], api.getRefProjectByID(id))
+  useGenericQuery([queryKey, id], () => api.getRefProjectByID(id))
 export default useProject
 
 export const useUpdateProject = () =>

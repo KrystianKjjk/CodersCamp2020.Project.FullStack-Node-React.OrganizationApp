@@ -19,7 +19,7 @@ const fetchCourseAsync = async (courseId: string): Promise<Course> => {
 }
 
 const useCourse = (courseId: string) =>
-  useGenericQuery(['course', courseId], fetchCourseAsync(courseId))
+  useGenericQuery(['course', courseId], () => fetchCourseAsync(courseId))
 export default useCourse
 
 export const updateCourseAsync = async (
