@@ -17,7 +17,7 @@ mock.onPost(`${process.env.REACT_APP_API_URL}/api/projects`).reply((config) => {
   return [200, config.data]
 })
 
-mock.onGet(`${process.env.REACT_APP_API_URL}/api/courses`).reply(200, projects)
+mock.onGet(`${process.env.REACT_APP_API_URL}/api/projects`).reply(200, projects)
 
 mock
   .onDelete(new RegExp(`${process.env.REACT_APP_API_URL}/api/projects/*`))

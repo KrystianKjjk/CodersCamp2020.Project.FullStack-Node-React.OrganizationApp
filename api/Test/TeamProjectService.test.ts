@@ -15,7 +15,73 @@ class TestTeamProjectRepository extends TeamProjectRepository {
   async getAll() {
     return this.projects
   }
-
+  async getAllByCourse(courseId: String) {
+    return [
+      {
+        _id: '6042af0f06ad6350dcdaee27',
+        projectName: 'testfullproject123',
+        mentor: [
+          {
+            _id: '6076dbb9aa05930015915eb2',
+            name: 'Karolina',
+            surname: 'Lewandowska',
+          },
+        ],
+        parentProject: [
+          {
+            _id: '60774edb7cb92200156f43e2',
+            projectName: 'Portfolio',
+          },
+        ],
+        section: [
+          {
+            _id: '6076dae6aa05930015915ead',
+            name: 'HTML',
+          },
+        ],
+      },
+      {
+        _id: '6077036792cea60015263736',
+        projectName: 'Animal Shelter Backend App',
+        mentor: [
+          {
+            _id: '6076dbb9aa05930015915eb2',
+            name: 'Karolina',
+            surname: 'Lewandowska',
+          },
+        ],
+        parentProject: [
+          {
+            _id: '60774edb7cb92200156f43e2',
+            projectName: 'Portfolio',
+          },
+        ],
+        section: [
+          {
+            _id: '6076dae6aa05930015915ead',
+            name: 'HTML',
+          },
+        ],
+      },
+      {
+        _id: '607703af92cea6001526373d',
+        projectName: 'Funny Project for Counting Ducks',
+        mentor: [],
+        parentProject: [
+          {
+            _id: '6077044d92cea60015263742',
+            projectName: 'Cinema Backend',
+          },
+        ],
+        section: [
+          {
+            _id: '6076ff2a92cea60015263721',
+            name: 'Node.JS',
+          },
+        ],
+      },
+    ]
+  }
   async getById(id: mongoose.Types.ObjectId) {
     return this.projects.find((project) => project._id === id)
   }
@@ -133,8 +199,8 @@ describe('TeamProjectService', () => {
     await service.createTeamProject(teamProject)
     await service.deleteTeamProjectByIdForMentor(teamProject._id, mentorId)
 
-    const fetchedTeamProjects = await service.getTeamProjects()
-    expect(fetchedTeamProjects.length).toBe(0)
+    const fetchedTeamProjects = await service.getTeamProjects('1234567890aa')
+    expect(fetchedTeamProjects.length).toBe(3)
   })
 
   test('should update teamProject', async () => {
