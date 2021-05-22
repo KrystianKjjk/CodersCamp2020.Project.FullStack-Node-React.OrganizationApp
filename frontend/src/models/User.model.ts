@@ -95,3 +95,15 @@ export interface UserFilters {
   type: UserType[]
   status: UserStatus[]
 }
+
+export const convertUserToIUser = (user: User) => {
+  return {
+    name: user.name,
+    surname: user.surname,
+    email: user.email ?? '---',
+    //@ts-ignore
+    type: invUserTypeDict[user.type ?? 'Candidate'] as UserType,
+    //@ts-ignore
+    status: invUserStatusDict[user.status ?? 'Resigned'] as UserStatus,
+  }
+}
