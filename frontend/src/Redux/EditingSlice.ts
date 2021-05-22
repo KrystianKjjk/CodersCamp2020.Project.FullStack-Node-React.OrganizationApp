@@ -15,8 +15,10 @@ export const EditingSlice = createSlice({
   name: 'teamProject',
   initialState,
   reducers: {
-    switchEditMode: ({ isEditMode }) => {
-      isEditMode = !isEditMode
+    switchEditMode: (state) => {
+      console.log('edi', state.isEditMode)
+
+      state.isEditMode = !state.isEditMode
     },
   },
 })
@@ -36,7 +38,7 @@ export const useEditing = () => {
 
   return {
     isEditMode,
-    switchEditMode: dispatch(switchEditMode),
+    switchEditMode: () => dispatch(switchEditMode()),
   }
 }
 export default EditingSlice.reducer
