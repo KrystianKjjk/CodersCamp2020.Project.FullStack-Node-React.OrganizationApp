@@ -77,9 +77,7 @@ const SectionView = () => {
       course: courseId,
     }
 
-    id
-      ? patchSection([id, sectionData])
-      : addSection(sectionData)
+    id ? patchSection([id, sectionData]) : addSection(sectionData)
     setIsInEditMode(false)
   }
 
@@ -143,7 +141,9 @@ const SectionView = () => {
 
   const handleChangeCourse = (e: any) => {
     const newCourseId = e.target.value
-    const newCourse = coursesQuery.data?.find((course) => course.name === newCourseId)
+    const newCourse = coursesQuery.data?.find(
+      (course) => course.name === newCourseId,
+    )
     const newCourseName = newCourse ? newCourse.name : ''
 
     setCourseId(newCourseId)
@@ -175,7 +175,8 @@ const SectionView = () => {
 
   const renderButtonDelete = () => {
     return (
-      id && (
+      id &&
+      !isInEditMode && (
         <DeleteButton
           confirmTitle="Are you sure you want to delete this section?"
           onConfirm={handleDeleteClick}
@@ -185,11 +186,13 @@ const SectionView = () => {
   }
 
   const displayedError = error ?? coursesQuery.error ?? projectQuery.error
-  if(displayedError) showError((displayedError as Error).message)
+  if (displayedError) showError((displayedError as Error).message)
 
-  if( isLoading || coursesQuery.isLoading || projectQuery.isLoading ) return <CircularProgress />
-  
-  if( isFetching || coursesQuery.isFetching || projectQuery.isFetching ) return <LinearProgress />
+  if (isLoading || coursesQuery.isLoading || projectQuery.isLoading)
+    return <CircularProgress />
+
+  if (isFetching || coursesQuery.isFetching || projectQuery.isFetching)
+    return <LinearProgress />
 
   return (
     <Container className={styles.manageSections} aria-label="Manage Section">
