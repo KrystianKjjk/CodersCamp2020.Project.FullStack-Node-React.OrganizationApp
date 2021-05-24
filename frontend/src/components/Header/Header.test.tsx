@@ -3,6 +3,8 @@ import Header from './index'
 import { render } from '@testing-library/react'
 import * as Hooks from '../../hooks/hooks'
 import { CourseListElementModel } from '../../pages/Admin/CourseList/CourseListSlice'
+import { store } from '../../app/store'
+import { Provider } from 'react-redux'
 
 const courseListElement: CourseListElementModel = {
   _id: 'dummyId',
@@ -17,7 +19,12 @@ describe('Header', () => {
     jest
       .spyOn(Hooks, 'useAppSelector')
       .mockReturnValue({ activeCourse: courseListElement })
-    const { container } = render(<Header />)
+
+    const { container } = render(
+      <Provider store={store}>
+        <Header />
+      </Provider>,
+    )
     expect(container).toMatchSnapshot()
   })
 })

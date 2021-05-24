@@ -5,6 +5,7 @@ import homePageReducer from '../pages/Common/HomePage/HomePageSlice'
 import courseDetails from '../pages/Admin/Course/CourseDetailsSlice'
 import courseList from '../pages/Admin/CourseList/CourseListSlice'
 import SnackbarReducer from '../components/Snackbar/SnackbarSlice'
+import menuReducer from '../components/Menu/MenuSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     courseDetails,
     courseList,
     snackbarDetails: SnackbarReducer,
+    menuReducer,
   },
 })
 

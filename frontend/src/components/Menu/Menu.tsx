@@ -1,169 +1,67 @@
-import React from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import { List } from '@material-ui/core'
-import PeopleIcon from '@material-ui/icons/People'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import AppsIcon from '@material-ui/icons/Apps'
-import AssignmentIcon from '@material-ui/icons/Assignment'
-import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects'
-import SettingsIcon from '@material-ui/icons/Settings'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import ListItemLink from '../ListItemLink'
+import React, { useEffect } from 'react'
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
+import { selectMenu } from './MenuSlice'
+import MenuAdmin from './MenuAdmin'
+import { setMenu, clearMenu } from './MenuSlice'
+import debounce from 'lodash.debounce'
+import MenuParticipant from './MenuParticipant'
+import MenuMentor from './MenuMentor'
+
+export const WIDTH_SMALL_MENU_ON_PX = 900
+export const DEBOUNCE_RESIZE_MS = 100
+
 export interface MenuProps {}
 
 const Menu: React.FC<MenuProps> = (props) => {
-  const { userData } = useSelector(selectUserData)
-  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const userInfo = getUserFromLocalStorage()
+  const {
+    userData: { name, surname },
+  } = useSelector(selectUserData)
+  const { showSmallMenu, showSmallMenuUserAction } = useSelector(selectMenu)
 
-  const VisibleOptions = () => {
-    //@ts-ignore
-    switch (parseInt(userInfo.userType)) {
-      case UserType.Admin:
-        return (
-          <List component="nav">
-            <div className={classes.userDiv}>
-              <AccountCircleIcon
-                style={{ paddingTop: 20, fontSize: 40 }}
-              ></AccountCircleIcon>
-              <p
-                style={{ fontWeight: 500 }}
-              >{`${userData?.name} ${userData?.surname}`}</p>
-              <p>Admin</p>
-            </div>
-            <ListItemLink path="/users" icon={<PeopleIcon />} text="Users" />
-            <ListItemLink
-              path="/courses"
-              icon={<NotificationsIcon />}
-              text="Courses"
-            />
-            <ListItemLink
-              path="/sections"
-              icon={<AppsIcon />}
-              text="Sections"
-            />
-            <ListItemLink
-              path="/gradesheets"
-              icon={<AssignmentIcon />}
-              text="Grade sheets"
-            />
-            <ListItemLink
-              path="/projects"
-              icon={<EmojiObjectsIcon />}
-              text="Projects"
-            />
-            <ListItemLink
-              path="/teamprojects"
-              icon={<EmojiObjectsIcon />}
-              text="Team projects"
-            />
-            <ListItemLink path="/teams" icon={<PeopleIcon />} text="Teams" />
-            <span className={classes.span}>Settings</span>
-            <ListItemLink
-              path="/myprofile"
-              icon={<SettingsIcon />}
-              text="My profile"
-            />
-          </List>
-        )
+  const { userType } = getUserFromLocalStorage()
 
-      case UserType.Mentor:
-        return (
-          <List component="nav">
-            <div className={classes.userDiv}>
-              <AccountCircleIcon
-                style={{ paddingTop: 20, fontSize: 40 }}
-              ></AccountCircleIcon>
-              <p
-                style={{ fontWeight: 500 }}
-              >{`${userData?.name} ${userData?.surname}`}</p>
-              <p>Mentor</p>
-            </div>
-            <ListItemLink
-              path="/gradesheets"
-              icon={<AssignmentIcon />}
-              text="Grade sheets"
-            />
-            <ListItemLink path="/team" icon={<PeopleIcon />} text="Team" />
-            <span className={classes.span}>Settings</span>
-            <ListItemLink
-              path="/myprofile"
-              icon={<SettingsIcon />}
-              text="My profile"
-            />
-          </List>
-        )
+  useEffect(() => {
+    showSmallMenuUserAction ? dispatch(setMenu()) : dispatch(clearMenu())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSmallMenuUserAction])
 
-      default:
-        return (
-          <List component="nav">
-            <div className={classes.userDiv}>
-              <AccountCircleIcon
-                style={{ paddingTop: 20, fontSize: 40 }}
-              ></AccountCircleIcon>
-              <p
-                style={{ fontWeight: 500 }}
-              >{`${userData?.name} ${userData?.surname}`}</p>
-              <p>Participant</p>
-            </div>
-            <ListItemLink
-              path="/grades"
-              icon={<AssignmentIcon />}
-              text="Grades"
-            />
-            <ListItemLink path="/team" icon={<PeopleIcon />} text="Team" />
-            <span className={classes.span}>Settings</span>
-            <ListItemLink
-              path="/myprofile"
-              icon={<SettingsIcon />}
-              text="My profile"
-            />
-          </List>
-        )
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  })
+
+  const handleResize = debounce(() => {
+    if (window.innerWidth <= WIDTH_SMALL_MENU_ON_PX) {
+      dispatch(setMenu())
+    } else {
+      if (!showSmallMenuUserAction) dispatch(clearMenu())
     }
-  }
+  }, DEBOUNCE_RESIZE_MS)
 
-  return (
-    <div className={classes.root}>
-      <VisibleOptions />
-    </div>
-  )
+  //@ts-ignore
+  switch (parseInt(userType)) {
+    case UserType.Admin:
+      return (
+        <MenuAdmin name={name} surname={surname} smallMenu={showSmallMenu} />
+      )
+    case UserType.Mentor:
+      return (
+        <MenuMentor name={name} surname={surname} smallMenu={showSmallMenu} />
+      )
+    default:
+      return (
+        <MenuParticipant
+          name={name}
+          surname={surname}
+          smallMenu={showSmallMenu}
+        />
+      )
+  }
 }
 
 export default Menu
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '23%',
-      maxWidth: 360,
-      minWidth: 180,
-      backgroundColor: theme.palette.background.default,
-      borderRight: '1px solid #666',
-      color: '#fff',
-      '& .MuiListItem-root': {
-        '&:hover': {
-          color: '#1A90FF',
-          backgroundColor: '#1C1C1C',
-        },
-      },
-      '& .MuiListItemIcon-root': {
-        color: 'inherit',
-      },
-    },
-    span: {
-      paddingLeft: '13px',
-      float: 'left',
-      color: '#9E9E9E',
-      fontSize: '14px',
-    },
-    userDiv: {
-      borderBottom: '1px solid #666666',
-    },
-  }),
-)
