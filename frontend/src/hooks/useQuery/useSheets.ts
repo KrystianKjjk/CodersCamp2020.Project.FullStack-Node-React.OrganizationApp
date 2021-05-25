@@ -1,10 +1,11 @@
-import { genericSearch, genericSort, useGenericQuery } from './useGenericQuery'
+import { genericSearch, genericSort } from './useGenericQuery'
 import * as api from '../../api/Sheet.api'
 import { GradeSheet } from '../../models'
+import { useQuery } from 'react-query'
 
 const queryKey = 'sheets'
 
-const useSheets = () => useGenericQuery(queryKey, () => api.getSheets())
+const useSheets = () => useQuery(queryKey, () => api.getSheets())
 export default useSheets
 
 export const searchSheet = genericSearch<GradeSheet>(queryKey)

@@ -1,12 +1,12 @@
-import { useGenericQuery } from './useGenericQuery'
 import * as api from '../../api/Sheet.api'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 import { Grades } from '../../models'
+import { useQuery } from 'react-query'
 
 const queryKey = 'sheet'
 
 const useSheet = (id: string) =>
-  useGenericQuery([queryKey, id], () => api.getSheet(id))
+  useQuery([queryKey, id], () => api.getSheet(id))
 export default useSheet
 
 interface Options {

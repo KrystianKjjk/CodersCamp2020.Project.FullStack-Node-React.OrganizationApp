@@ -1,16 +1,16 @@
-import { useGenericQuery } from './useGenericQuery'
 import * as api from '../../api/Section.api'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 import { NewSectionData } from '../../models'
+import { useQuery } from 'react-query'
 
 const queryKey = 'section'
 
 const useSection = (id: string) =>
-  useGenericQuery([queryKey, id], () => api.getOneSection(id))
+  useQuery([queryKey, id], () => api.getOneSection(id))
 export default useSection
 
 export const useProjectForSection = (id: string) =>
-  useGenericQuery([queryKey, id], () => api.getProjectForSection(id))
+  useQuery([queryKey, id], () => api.getProjectForSection(id))
 
 export const usePatchSection = () =>
   useMutationWithConfirm(
