@@ -6,16 +6,31 @@ exports[`Header should render header 1`] = `
     class="header"
   >
     <div
-      class="logo"
-      style="cursor: pointer;"
+      style="display: flex; align-items: center; margin-left: 1.8rem;"
     >
-      <span>
-        .
-      </span>
-      Coders
-      <span>
-        Camp
-      </span>
+      <svg
+        aria-hidden="true"
+        class="MuiSvgIcon-root"
+        focusable="false"
+        style="cursor: pointer;"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+        />
+      </svg>
+      <div
+        class="logo"
+        style="cursor: pointer;"
+      >
+        <span>
+          .
+        </span>
+        Coders
+        <span>
+          Camp
+        </span>
+      </div>
     </div>
     <div
       class="activeCourseBox"

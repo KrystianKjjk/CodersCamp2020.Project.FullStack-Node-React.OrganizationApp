@@ -1,0 +1,22 @@
+.nav {
+    width: 16rem;
+    border-right: #666 1px solid;
+}
+
+.nav div p {
+    font-family: Roboto, sans-serif;
+    color: rgba(255,255,255,.87);
+}
+
+
+.navSmall {
+    padding-top: .5rem;
+    width: 5rem;
+    border-right: #666 1px solid;
+}
+
+.settings {
+    display: flex;
+    justify-content: flex-start;
+    margin: 1rem;
+}
