@@ -15,8 +15,7 @@ import ManageTeam from '../../Admin/ManageTeam'
 import { getUserFromLocalStorage } from '../../../app/utils'
 import ManageSheets from '../../Admin/ManageSheets'
 import ManageSheet from '../../Admin/ManageSheet'
-import TeamProjectsComponent from '../../Admin/TeamProjects'
-import { getTeamProjects } from '../../../api/TeamProjects.service'
+import TeamProjects from '../../Admin/TeamProjects'
 import ManageTeams from '../../Admin/ManageTeams'
 import ManageUsers from '../../Admin/ManageUsers'
 import UserGrades from '../../Participant/UserGrades'
@@ -30,6 +29,7 @@ import MyProfileView from '../MyProfile'
 import { UserType as Role } from '../../../models/User.model'
 import ReferenceProjects from '../../Admin/ReferenceProjects'
 import ManageReferenceProject from '../../Admin/ManageReferenceProject'
+import TeamProject from '../../Admin/TeamProject'
 import BaseService from '../../../app/baseService'
 import ResetPasswordRequest from '../ResetPassword'
 
@@ -152,10 +152,13 @@ function Admin(props: LoggedInViewProps) {
           path="/projects/:projectID"
           component={ManageReferenceProject}
         />
-
+        <PrivateRoute path="/teamprojects/:teamProjectId">
+          <TeamProject />
+        </PrivateRoute>
         <PrivateRoute path="/teamprojects">
           <TeamProjects />
         </PrivateRoute>
+
         <PrivateRoute
           path="/teams/:teamId"
           component={ManageTeam}
@@ -228,9 +231,6 @@ function Participant(props: LoggedInViewProps) {
 }
 function Projects() {
   return <ReferenceProjects />
-}
-function TeamProjects() {
-  return <TeamProjectsComponent getFunction={getTeamProjects} />
 }
 
 function MyTeam() {

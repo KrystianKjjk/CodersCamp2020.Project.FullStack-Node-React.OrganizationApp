@@ -13,18 +13,16 @@ import queryClient from './QueryClient'
 import { CookiesProvider } from 'react-cookie'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <CookiesProvider>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </CookiesProvider>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <CookiesProvider>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </CookiesProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  </Provider>,
   document.getElementById('root'),
 )
 

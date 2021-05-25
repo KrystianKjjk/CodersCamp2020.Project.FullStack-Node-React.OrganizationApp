@@ -12,6 +12,9 @@ export class Repository {
   async getAll() {
     return this.model.find({})
   }
+  async getAllByCourse(courseId: String) {
+    return this.model.find({ courseId })
+  }
   async getById(id: mongoose.Types.ObjectId) {
     return this.model.findOne(id)
   }

@@ -44,6 +44,7 @@ const useMutationWithConfirm = <T, R, D>(
       return { previousData }
     },
     onSuccess: () => {
+      invalidate && queryClient.invalidateQueries(invalidate)
       successMessage && showSuccess(successMessage)
       onSuccess && onSuccess()
     },

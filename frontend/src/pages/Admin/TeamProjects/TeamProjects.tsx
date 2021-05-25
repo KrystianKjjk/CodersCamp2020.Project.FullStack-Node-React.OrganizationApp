@@ -1,39 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import styles from './TeamProjects.module.css'
-import ReusableTable from '../../../components/ReusableTable/index'
+import { ReusableTableReactQuery } from '../../../components/ReusableTable/index'
 import { CssBaseline, Paper } from '@material-ui/core'
-import SearchInput from '../../../components/SearchInput'
 import { useAppDispatch } from '../../../hooks/hooks'
 import { filterData } from '../../../components/ReusableTable/ReusableTableSlice'
-import TeamProject from '../TeamProject/index'
-import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
+import { useHistory } from 'react-router-dom'
 import PageHeader from '../../../components/PageHeader'
-import ReusableGoBack from '../../../components/ReusableGoBack'
+import SearchInput from '../../../components/SearchInput'
+import { useTeamProjects } from '../../../hooks/useQuery/useTeamProjects'
 
-export interface TeamProjectsProps {
-  getFunction: () => Promise<any[]>
-}
+export interface TeamProjectsProps {}
 
-interface MainViewProps {
-  detailedView: boolean
-}
-
-enum HeaderText {
-  MAIN = 'Team Projects',
-  EDIT = `Edit Team Project`,
-}
-
-const TeamProjects: React.FC<TeamProjectsProps> = ({ getFunction }) => {
+const TeamProjects: React.FC<TeamProjectsProps> = () => {
+  const info = useTeamProjects()
+  const history = useHistory()
   const dispatch = useAppDispatch()
-  const [detailedView, setDetailedView] = useState(false)
-  const [selectedProjectId, setSelectedProjectId] = useState({})
-  const [selectedProjectName, setSelectedProjectName] = useState('')
   const [search, setSearch] = useState('')
-  const [tableDisplay, setTableDisplay] = useState('initial')
-
-  const changeSearch = (value: string) => {
-    setSearch(value)
-  }
 
   useEffect(() => {
     const f = {
@@ -44,72 +26,36 @@ const TeamProjects: React.FC<TeamProjectsProps> = ({ getFunction }) => {
   }, [search, dispatch])
 
   const columns = [
-    { field: 'Name', width: 250, sortable: true },
-    { field: 'Mentor', width: 250, sortable: true },
-    { field: 'ReferenceProject', width: 250, sortable: true },
-    { field: 'Section', width: 250, sortable: true },
+    {
+      field: 'teamProjectName',
+      width: 250,
+      sortable: true,
+      headerName: 'Project name',
+    },
+    {
+      field: 'mentorName',
+      width: 250,
+      sortable: true,
+      headerName: 'Mentor name',
+    },
+    { field: 'sectionName', width: 250, sortable: true, headerName: 'Section' },
   ]
-
-  const Header = (detailedView: boolean) => {
-    return detailedView ? (
-      <PageHeader>
-        <ReusableGoBack
-          pageName="Team Projects"
-          pageLink="/teamprojects"
-          elementName={selectedProjectName}
-        />
-      </PageHeader>
-    ) : (
-      <PageHeader name={HeaderText.MAIN}>
-        <SearchInput
-          onSubmit={changeSearch}
-          placeholder="Search for project name"
-        />
-      </PageHeader>
-    )
-  }
-
-  const EditView = () => {
-    return (
-      <TeamProject
-        //@ts-ignore
-        _id={selectedProjectId}
-        changeViewFn={() => {
-          setTableDisplay('initial')
-          setDetailedView(false)
-          dispatch(fetchData('Manage Team Projects', getFunction))
-        }}
-      />
-    )
-  }
-
-  const MainView = (props: MainViewProps) => {
-    return props.detailedView ? (
-      <div>
-        <EditView />
-      </div>
-    ) : null
-  }
 
   return (
     <CssBaseline>
-      <div>{Header(detailedView)}</div>
-
+      <PageHeader name={'Team Projects'}>
+        <SearchInput
+          onSubmit={setSearch}
+          placeholder="Search for project name"
+        />
+      </PageHeader>
       <Paper className={styles.main}>
-        <MainView detailedView={detailedView} />
-        <div className={styles.table} style={{ display: tableDisplay }}>
-          <ReusableTable
-            name="Manage Team Projects"
-            getData={getFunction}
-            columns={columns}
-            onRowClick={(params, e) => {
-              setDetailedView(true)
-              setSelectedProjectId(params.row.id)
-              setSelectedProjectName(params.row.projectName)
-              setTableDisplay('none')
-            }}
-          />
-        </div>
+        <ReusableTableReactQuery
+          name={'Team projects'}
+          columns={columns}
+          onRowClick={(params) => history.push(`/teamprojects/${params.id}`)}
+          {...info}
+        />
       </Paper>
     </CssBaseline>
   )

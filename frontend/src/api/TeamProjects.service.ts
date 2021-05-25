@@ -27,19 +27,17 @@ interface Project {
 const api = new BaseService()
 
 async function getTeamProjects(): Promise<any[]> {
-  const course = localStorage.getItem('activeCourse')
-  const courseId = course ? JSON.parse(course)._id : null
+  // const course = localStorage.getItem('activeCourse')
+  // const courseId = course ? JSON.parse(course)._id : null
 
   const response = await api.get('/teams/projects')
-  const allProjects = await Promise.all(
-    response.data.map((project: TeamProject) =>
-      getProjectDetailedData(project),
-    ),
-  )
-  if (courseId)
-    //@ts-ignore
-    return allProjects.filter((project) => project.CourseId === courseId)
-  return allProjects
+  console.log('projects', response)
+
+  // const allProjects = await Promise.all(response.data.map((project: TeamProject) => getProjectDetailedData(project)));
+  //@ts-ignore
+  //   if (courseId)
+  //     return allProjects.filter((project) => project.CourseId === courseId)
+  return response.data
 }
 
 async function getProjectDetailedData(project: TeamProject) {
@@ -76,4 +74,4 @@ async function getProjectDetailedData(project: TeamProject) {
   return returnProject
 }
 
-export { getTeamProjects }
+export { getTeamProjects, getProjectDetailedData }

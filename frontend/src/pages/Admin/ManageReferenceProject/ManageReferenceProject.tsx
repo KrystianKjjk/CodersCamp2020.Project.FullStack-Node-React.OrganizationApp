@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
-import { ThemeProvider } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
-import FindSection from '../../../components/FindSection'
+import FindProject from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
 
-import { mainTheme } from '../../../theme/customMaterialTheme'
 import styles from './ManageReferenceProject.module.css'
-import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
-import ReusableGoBack from '../../../components/ReusableGoBack'
 import {
   useUpdateProject,
   useDeleteProject,
   useCreateProject,
 } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
+import DetailPage from '../../../components/DetailPage'
 
 export interface ManageReferenceProjectProps {}
 
 const ManageReferenceProject = (props: any) => {
+  const { projectID } = useParams()
   const history = useHistory()
-
-  const projectID = props?.match?.params?.projectID
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
@@ -108,15 +104,7 @@ const ManageReferenceProject = (props: any) => {
   if (isLoading) return <LinearProgress />
 
   return (
-    <ThemeProvider theme={mainTheme}>
-      <PageHeader>
-        <ReusableGoBack
-          pageName="Projects"
-          pageLink="/projects"
-          elementName={project?.projectName}
-        />
-      </PageHeader>
-
+    <DetailPage pageName={'Projects'} elementName={project?.projectName}>
       <Box className={styles.container}>
         <Box display="flex" className={styles.container__header}>
           <span>Manage project</span>
@@ -147,12 +135,12 @@ const ManageReferenceProject = (props: any) => {
             isAdding={isAdding}
             fieldName={'Section name:'}
             fieldID={'Section name'}
-            fieldValue={project?.['Section name']}
+            fieldValue={project?.sectionId.name}
             modalAction={openSectionsModal}
           />
 
           {isOpenSectionsModal && isEdit && (
-            <FindSection
+            <FindProject
               isOpen={isOpenSectionsModal}
               handleClose={closeSectionsModal}
               onSectionSelection={handleSectionSelection}
@@ -179,7 +167,7 @@ const ManageReferenceProject = (props: any) => {
           />
         </form>
       </Box>
-    </ThemeProvider>
+    </DetailPage>
   )
 }
 

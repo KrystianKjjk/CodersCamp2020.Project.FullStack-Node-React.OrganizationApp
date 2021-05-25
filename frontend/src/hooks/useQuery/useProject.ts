@@ -1,4 +1,3 @@
-import { QueryKey, useGenericQuery } from './useGenericQuery'
 import * as api from '../../api/ReferenceProject.api'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 import {
@@ -6,12 +5,12 @@ import {
   deleteRefProject,
   updateRefProject,
 } from '../../api/ReferenceProject.api'
-import { UseQueryOptions } from 'react-query'
+import { useQuery } from 'react-query'
 
 const queryKey = 'project'
 
-const useProject = (id: string, options?: UseQueryOptions<any, unknown, any, QueryKey>,) =>
-  useGenericQuery([queryKey, id], () => api.getRefProjectByID(id), options)
+const useProject = (id: string) =>
+  useQuery([queryKey, id], () => api.getRefProject(id))
 export default useProject
 
 export const useUpdateProject = () =>

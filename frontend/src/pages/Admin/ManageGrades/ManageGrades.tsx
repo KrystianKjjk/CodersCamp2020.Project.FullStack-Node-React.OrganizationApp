@@ -6,7 +6,7 @@ import BaseService from '../../../app/baseService'
 import GradeService from '../../../api/grades.service'
 import { IGrade } from '../../../models/User.model'
 import UButton from '../../../components/UButton'
-import FindSection from '../../../components/FindSection'
+import FindProject from '../../../components/FindProject'
 
 import styles from './ManageGrades.module.css'
 import DeleteButton from '../../../components/DeleteButton'
@@ -218,7 +218,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
         {grades?.map((grade, index) => (
           <div className={styles.gradeContainer} key={index}>
             {isOpenSectionsModal && isEdit[index] && (
-              <FindSection
+              <FindProject
                 isOpen={isOpenSectionsModal}
                 handleClose={closeSectionsModal}
                 onSectionSelection={handleSectionSelection(index)}

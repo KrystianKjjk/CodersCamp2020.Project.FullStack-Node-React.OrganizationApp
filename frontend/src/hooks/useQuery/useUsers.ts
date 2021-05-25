@@ -1,28 +1,10 @@
 import * as api from '../../api/User.api'
 import queryClient from '../../QueryClient'
 import { User, UserFilters, userStatusDict, userTypeDict } from '../../models'
-import {
-  genericSearch,
-  genericSort,
-  QueryKey,
-  useGenericQuery,
-} from './useGenericQuery'
-import { UseQueryOptions } from 'react-query'
+import { genericSearch, genericSort } from './useGenericQuery'
+import { useQuery } from 'react-query'
 
-const useUsers = () => useGenericQuery('users', () => api.getUsers())
-export const useParticipantsNotInTeam = (
-  options?: UseQueryOptions<User[], unknown, User[], QueryKey>,
-) =>
-  useGenericQuery(
-    'participantsNotInTeam',
-    () => api.getParticipantsNotInTeam(),
-    options,
-  )
-
-export const useUsersOfType = (
-  type: string,
-  options?: UseQueryOptions<User[], unknown, User[], QueryKey>,
-) => useGenericQuery(`${type}s`, () => api.getUsersOfType(type), options)
+const useUsers = () => useQuery('users', api.getUsers)
 
 export default useUsers
 export const searchUser = genericSearch<User>('users')

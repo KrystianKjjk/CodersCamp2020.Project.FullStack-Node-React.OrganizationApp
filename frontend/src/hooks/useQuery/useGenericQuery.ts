@@ -1,18 +1,6 @@
 import queryClient from '../../QueryClient'
-import { useQuery, UseQueryOptions } from 'react-query'
 
 export type QueryKey = string[] | string
-
-export const useGenericQuery = <T>(
-  key: QueryKey,
-  getPromise: () => Promise<T>,
-  options?: UseQueryOptions<T, unknown, T, QueryKey>,
-) => {
-  return useQuery(key, getPromise, {
-    notifyOnChangeProps: ['data', 'error', 'isFetching', 'isLoading'],
-    ...options,
-  })
-}
 
 export const genericSearch = <T>(queryKey: QueryKey) => (
   column: keyof T,
