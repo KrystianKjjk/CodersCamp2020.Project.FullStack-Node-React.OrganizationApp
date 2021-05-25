@@ -25,7 +25,6 @@ export default class TeamProjectService {
     return this.getTeamProjectsByTeamId(team._id)
   }
 
-  //fajnie by było przeprowadzic te filtracje jeszcze ana bazie ... ale jak ?
   getTeamProjects = async (courseId: string): Promise<TeamProjectDto[]> => {
     const data = await this.teamProjectRepository.getAllByCourse(courseId)
     const teamProjects = data.map<TeamProjectDto>((r) => ({

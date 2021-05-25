@@ -50,7 +50,6 @@ class ProjectService {
         !projectData.projectName ||
         !projectData.projectUrl
       ) {
-        console.log(projectData.projectName)
         return null
       }
     }
@@ -59,13 +58,10 @@ class ProjectService {
       projectData.projectName &&
       typeof projectData.projectName !== 'string'
     ) {
-      console.log(projectData.projectName)
-
       return null
     }
 
     if (projectData.projectUrl && typeof projectData.projectUrl !== 'string') {
-      console.log(projectData.projectUrl)
       return null
     }
 
@@ -73,7 +69,6 @@ class ProjectService {
       projectData.description &&
       typeof projectData.description !== 'string'
     ) {
-      console.log(projectData.description)
       return null
     }
 
