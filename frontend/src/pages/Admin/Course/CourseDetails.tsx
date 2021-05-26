@@ -47,7 +47,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     (vars: [Course, string[]]) => updateCourseAsync(...vars),
     {
       onSettled: () => resetSectionsToDelete(),
-      invalidate: 'course'
+      invalidate: 'course',
     },
   )
 
@@ -66,7 +66,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   }
 
   const handleAddButtonClick = () => {
-    history.push('/sections/')
+    history.push('/sections/create')
   }
 
   const handleSaveButtonClick = () => {
@@ -99,8 +99,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
     changeEndDate(new Date(Date.parse(data.endDate)))
   }, [data])
 
-  if (isLoading) return <CircularProgress />
-  if (isFetching) return <LinearProgress />
+  if (isLoading) return <LinearProgress />
   if (error) return <div>{(error as Error).message}</div>
 
   return (
@@ -172,13 +171,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
                 key={section._id}
               />
             ))}
-            {isEdit ? (
-              <UButton
-                text="ADD"
-                color="primary"
-                onClick={handleAddButtonClick}
-              ></UButton>
-            ) : null}
+            {isEdit && <UButton text="ADD" onClick={handleAddButtonClick} />}
           </Box>
           <Box marginTop="2%">
             <h4>Dates:</h4>

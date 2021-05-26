@@ -337,7 +337,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
             </form>
             <Box display="flex" justifyContent="center">
               <DeleteButton
-                confirmTitle="Are you sure you want to delete this grade? XX"
+                confirmTitle="Are you sure you want to delete this grade?"
                 onConfirm={() => deleteGrade(index)}
               />
 
