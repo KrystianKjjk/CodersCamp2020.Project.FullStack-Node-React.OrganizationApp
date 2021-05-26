@@ -7,7 +7,7 @@ export default class TeamRepository extends Repository {
     return this.model.find({}).populate('users').populate('mentor')
   }
 
-  async getById(id: mongoose.Types.ObjectId) {
+  async getById(id: mongoose.Types.ObjectId): Promise<Team> {
     return this.model.findOne(id).populate('users').populate('mentor')
   }
 

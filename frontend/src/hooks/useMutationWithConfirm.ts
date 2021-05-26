@@ -24,6 +24,7 @@ const useMutationWithConfirm = <T, R>(
   const queryClient = useQueryClient()
   const mutation = useMutation(request, {
     onSuccess: () => {
+      invalidate && queryClient.invalidateQueries(invalidate)
       successMessage && showSuccess(successMessage)
       onSuccess && onSuccess()
     },

@@ -9,7 +9,10 @@ describe('ReusableGoBack', () => {
   it('renders without error', () => {
     render(
       <Provider store={store}>
-        <ReusableGoBack name="ReusableGoBack" />
+        <ReusableGoBack
+          pageName={'egzample name'}
+          elementName={'element name'}
+        />
       </Provider>,
     )
   })

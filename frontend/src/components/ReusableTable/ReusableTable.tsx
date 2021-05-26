@@ -3,7 +3,7 @@ import { DataGrid, DataGridProps } from '@material-ui/data-grid'
 import styles from './ReusableTable.module.css'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { initTable, fetchData, selectTables } from './ReusableTableSlice'
-import { CircularProgress, LinearProgress } from '@material-ui/core'
+import { LinearProgress } from '@material-ui/core'
 
 interface Column {
   field: string
@@ -80,8 +80,7 @@ const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
 }) => {
   const [tableName] = useState(name)
 
-  if (isLoading) return <CircularProgress />
-  if (isFetching) return <LinearProgress />
+  if (isLoading) return <LinearProgress />
   if (error) return <div>{error.message}</div>
   if (data === undefined) return <div>Error</div>
   return (

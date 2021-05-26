@@ -26,75 +26,34 @@
   padding: 5px 0;
 }
 
-#buttonDelete {
-  background-color: #ff384a;
-  margin: 0 10px;
-  width: 100px;
-  color: #ffffff;
-}
-
-#buttonEdit {
-  background-color: #2196f3;
-  margin: 0 10px;
-  width: 100px;
-  color: #ffffff;
-}
-
 .teamProjectDetailsContainer {
+  width: 100%;
   display: flex;
-  padding: 20px;
   font-size: 18px;
+  flex-direction: column;
 }
 
-.attributeNamesContainer {
-  width: 20%;
-  min-width: 200px;
-  font-weight: bold;
+.teamProjectDetailsContainer>p {
+  margin: 4px;
 }
 
-.attributeValuesContainer {
-  width: 80%;
-}
-
-.attributeValuesContainer > div,
-.attributeNamesContainer > div,
-.attributeValuesContainer > input {
+.attributeValuesContainer>div {
   height: 50px;
-}
-
-.description {
-  display: inline-block;
 }
 
 .input,
 .textarea {
+  padding: 14px;
   width: 80%;
-  box-sizing: border-box;
-  margin: 0;
-  height: 30px;
+  margin-top: 6px;
+  margin-bottom: 6px;
   background-color: transparent;
-  color: #ffffff;
-  border: 1px solid #ffffff;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
   border-radius: 5px;
   font-size: 18px;
 }
 
 .textarea {
-  height: 50px;
-}
-
-.modal {
-  color: #ffffff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  min-height: 96px;
 }

@@ -23,7 +23,6 @@ export default class PasswordService {
     if (token) await this.passwordTokenRepository.deleteById(userId)
 
     let resetToken = crypto.randomBytes(32).toString('hex')
-    console.log(resetToken)
     const hashedResetToken = await bcrypt.hash(resetToken, this.rounds)
 
     await this.passwordTokenRepository.create({
@@ -32,7 +31,6 @@ export default class PasswordService {
       createdAt: Date.now(),
     })
     const link = `${process.env.PAGE_URL}/passwordReset?token=${resetToken}&id=${user._id}`
-    console.log(link)
     return {
       email: user.email,
       link: link,

@@ -3,18 +3,13 @@ import { TeamProject } from '../Models/TeamProject'
 import TeamProjectRepository from '../Repositories/TeamProjectRepository'
 import TeamRepository from '../Repositories/TeamRepository'
 import * as _ from 'lodash'
+import { TeamProjectDto } from '../Models/DTO/TeamProjectDto'
 
 export default class TeamProjectService {
-  private teamProjectRepository: TeamProjectRepository
-  private teamRepository: TeamRepository
-
   constructor(
-    teamProjectRepository: TeamProjectRepository,
-    teamRepository: TeamRepository,
-  ) {
-    this.teamProjectRepository = teamProjectRepository
-    this.teamRepository = teamRepository
-  }
+    private teamProjectRepository: TeamProjectRepository,
+    private teamRepository: TeamRepository,
+  ) {}
 
   getTeamProjectsByTeamId = async (
     teamId: mongoose.Types.ObjectId,
@@ -30,10 +25,20 @@ export default class TeamProjectService {
     return this.getTeamProjectsByTeamId(team._id)
   }
 
-  getTeamProjects = async (): Promise<
-    (TeamProject & mongoose.Document<TeamProject>)[]
-  > => {
-    return this.teamProjectRepository.getAll()
+  getTeamProjects = async (courseId: string): Promise<TeamProjectDto[]> => {
+    const data = await this.teamProjectRepository.getAllByCourse(courseId)
+    const teamProjects = data.map<TeamProjectDto>((r) => ({
+      id: r._id,
+      teamProjectName: r.projectName,
+      mentorName: r.mentor[0] && `${r.mentor[0].name} ${r.mentor[0].surname}`,
+      mentorId: r.mentor[0]?._id,
+      referenceProjectId: r.parentProject[0]?._id,
+      referenceProjectName: r.parentProject[0]?.projectName,
+      sectionId: r.section[0]?._id,
+      sectionName: r.section[0]?.name,
+    }))
+
+    return teamProjects
   }
 
   getTeamProjectById = async (teamProjectId: mongoose.Types.ObjectId) => {

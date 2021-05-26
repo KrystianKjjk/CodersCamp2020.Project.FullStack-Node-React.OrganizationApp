@@ -13,6 +13,9 @@ class TestProjectRepository extends ProjectRepository {
   async getAll() {
     return this.projects
   }
+  async getAllByCourse(courseId: string) {
+    return this.projects
+  }
 
   async getById(id: mongoose.Types.ObjectId) {
     return this.projects.find((project) => project._id === id)
@@ -39,7 +42,7 @@ class TestProjectRepository extends ProjectRepository {
 
 describe('Project Service', () => {
   let service: ProjectService
-
+  const exampleCourseId = '1234567890aa'
   beforeEach(() => {
     service = new ProjectService(new TestProjectRepository(ProjectSchema))
   })
@@ -78,7 +81,7 @@ describe('Project Service', () => {
     await service.createProject(firstProject)
     await service.createProject(secondProject)
 
-    const allProjects = await service.getProjects()
+    const allProjects = await service.getProjects(exampleCourseId)
     expect(allProjects).toHaveLength(2)
   })
 
@@ -93,7 +96,7 @@ describe('Project Service', () => {
     await service.createProject(project)
     await service.deleteProjectById(project._id)
 
-    const allProjects = await service.getProjects()
+    const allProjects = await service.getProjects(exampleCourseId)
     expect(allProjects).toHaveLength(0)
   })
 

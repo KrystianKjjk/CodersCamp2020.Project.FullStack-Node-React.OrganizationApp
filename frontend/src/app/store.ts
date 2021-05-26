@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import teamProjectReducer from '../pages/Admin/TeamProject/TeamProjectSlice'
+import editingReducer from '../Redux/EditingSlice'
 import reusableTableReducer from '../components/ReusableTable/ReusableTableSlice'
 import homePageReducer from '../pages/Common/HomePage/HomePageSlice'
 import courseDetails from '../pages/Admin/Course/CourseDetailsSlice'
@@ -9,7 +9,7 @@ import menuReducer from '../components/Menu/MenuSlice'
 
 export const store = configureStore({
   reducer: {
-    teamProjects: teamProjectReducer,
+    editingInfo: editingReducer,
     tables: reusableTableReducer,
     userData: homePageReducer,
     courseDetails,

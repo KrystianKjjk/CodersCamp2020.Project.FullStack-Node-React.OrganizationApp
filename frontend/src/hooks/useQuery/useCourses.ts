@@ -1,6 +1,6 @@
 import * as api from '../../api/Course.api'
-import { useGenericQuery } from './useGenericQuery'
 import { CourseListElementModel } from '../../pages/Admin/CourseList/CourseListSlice'
+import { useQuery } from 'react-query'
 
 export const fetchCoursesAndSort = async () => {
   const response = await api.fetchCourses()
@@ -18,6 +18,5 @@ export const fetchCoursesAndSort = async () => {
   return courses
 }
 
-const useCourses = () =>
-  useGenericQuery('courses', fetchCoursesAndSort())
+const useCourses = () => useQuery('courses', fetchCoursesAndSort)
 export default useCourses
