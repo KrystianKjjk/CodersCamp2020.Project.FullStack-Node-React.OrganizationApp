@@ -1,11 +1,12 @@
 import { genericSearch, genericSort } from './useGenericQuery'
 import * as api from '../../api/Section.api'
 import { ManageSection } from '../../models'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryOptions } from 'react-query'
 
 const queryKey = 'sections'
 
-const useSections = () => useQuery(queryKey, () => api.getSections())
+const useSections = (options?: Partial<UseQueryOptions<ManageSection[]>>) =>
+  useQuery(queryKey, () => api.getSections(), options)
 export default useSections
 
 export const searchSection = genericSearch<ManageSection>(queryKey)

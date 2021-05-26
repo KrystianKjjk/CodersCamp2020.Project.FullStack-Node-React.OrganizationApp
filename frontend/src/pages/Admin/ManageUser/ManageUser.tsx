@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Box, CircularProgress } from '@material-ui/core'
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import { ThemeProvider } from '@material-ui/styles'
@@ -25,7 +25,7 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
   const [userToSave, setUserToSave] = useState<IUser | undefined>()
   const { showError } = useSnackbar()
 
-  let userID = props?.match?.params?.userID
+  let { userID } = useParams<{userID: string}>()
   const { data: user, isLoading, error } = useUser(userID)
   const { mutate: updateUser } = useUpdateUser({
     successMessage: 'User updated correctly!',

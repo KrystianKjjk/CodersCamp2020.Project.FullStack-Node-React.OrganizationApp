@@ -33,6 +33,7 @@ export const getUsers = async (): Promise<User[]> => {
 export const getUser = async (id: string) => {
   const response = await api.get(`${endpoint}/${id}`)
   const user = response.data as UserData
+  console.log({userID: id})
   return transformUserData(user)
 }
 
