@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import TextField from '@material-ui/core/TextField'
 import CourseSectionElement from './CourseSectionListElement'
 import {
@@ -42,7 +41,7 @@ const CourseComponent = ({ match }: RouteComponentProps<CourseProps>) => {
   const [startDate, changeStartDate] = useState<Date | null>(new Date())
   const [endDate, changeEndDate] = useState<Date | null>(new Date())
   const [isEdit, setIsEdit] = useState(false)
-  const { isLoading, data, isFetching, error } = useCourse(match.params.id)
+  const { isLoading, data, error } = useCourse(match.params.id)
   const { mutate: updateCourse } = useMutationWithConfirm(
     (vars: [Course, string[]]) => updateCourseAsync(...vars),
     {
