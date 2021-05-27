@@ -10,86 +10,115 @@ const useSheet = (id: string) =>
 export default useSheet
 
 interface Options {
-    invalidate?: string | string[]
+  invalidate?: string | string[]
 }
 
-export const useSetMentorForSheet = ({invalidate}: Options) =>
-  useMutationWithConfirm((vars: [string, string]) => api.setMentor(...vars), {
-    invalidate: invalidate ?? queryKey,
-  })
-
-export const useAddUserToSheet = ({invalidate}: Options) =>
+export const useSetMentorForSheet = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
   useMutationWithConfirm(
-    (vars: [string, string]) => api.addParticipant(...vars),
+    (mentorId: string) => api.setMentor(sheetId, mentorId),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const useAddReviewer = ({invalidate}: Options) =>
-  useMutationWithConfirm((vars: [string, string]) => api.addReviewer(...vars), {
-    invalidate: invalidate ?? queryKey,
-  })
-
-export const useDeleteUserFromSheet = ({invalidate}: Options) =>
+export const useAddUserToSheet = (sheetId: string, { invalidate }: Options) =>
   useMutationWithConfirm(
-    (vars: [string, string]) => api.deleteParticipant(...vars),
+    (participantId: string) => api.addParticipant(sheetId, participantId),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const usePatchMentorGrade = ({invalidate}: Options) =>
+export const useAddReviewer = (sheetId: string, { invalidate }: Options) =>
   useMutationWithConfirm(
-    (vars: [string, Grades]) => api.patchMentorGrade(...vars),
+    (mentorId: string) => api.addReviewer(sheetId, mentorId),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const usePatchMentorReviewerGrade = ({invalidate}: Options) =>
+export const useDeleteUserFromSheet = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
   useMutationWithConfirm(
-    (vars: [string, string, Grades]) => api.patchMentorReviewerGrade(...vars),
+    (participantId: string) => api.deleteParticipant(sheetId, participantId),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const useSetMentorGrade = ({invalidate}: Options) =>
+export const usePatchMentorGrade = (sheetId: string, { invalidate }: Options) =>
   useMutationWithConfirm(
-    (vars: [string, Grades]) => api.setMentorGrade(...vars),
+    (grades: Grades) => api.patchMentorGrade(sheetId, grades),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const useSetMentorReviewerGrade = ({invalidate}: Options) =>
+export const usePatchMentorReviewerGrade = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
   useMutationWithConfirm(
-    (vars: [string, string, Grades]) => api.setMentorReviewerGrade(...vars),
+    ([mentorId, grades]: [string, Grades]) =>
+      api.patchMentorReviewerGrade(sheetId, mentorId, grades),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const useSetProject = ({invalidate}: Options) =>
-  useMutationWithConfirm((vars: [string, string]) => api.setProject(...vars), {
-    invalidate: invalidate ?? queryKey,
-  })
-
-export const useSetReviewers = ({invalidate}: Options) =>
+export const useSetMentorGrade = (sheetId: string, { invalidate }: Options) =>
   useMutationWithConfirm(
-    (vars: [string, string[]]) => api.setReviewers(...vars),
+    (grades: Grades) => api.setMentorGrade(sheetId, grades),
     {
       invalidate: invalidate ?? queryKey,
     },
   )
 
-export const useDeleteSheet = ({invalidate}: Options) =>
+export const useSetMentorReviewerGrade = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
+  useMutationWithConfirm(
+    ([mentorId, grades]: [string, Grades]) =>
+      api.setMentorReviewerGrade(sheetId, mentorId, grades),
+    {
+      invalidate: invalidate ?? queryKey,
+    },
+  )
+
+export const useSetProjectForSheet = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
+  useMutationWithConfirm(
+    (projectId: string) => api.setProject(sheetId, projectId),
+    {
+      invalidate: invalidate ?? queryKey,
+    },
+  )
+
+export const useSetReviewersForSheet = (
+  sheetId: string,
+  { invalidate }: Options,
+) =>
+  useMutationWithConfirm(
+    (participantsIds: string[]) => api.setReviewers(sheetId, participantsIds),
+    {
+      invalidate: invalidate ?? queryKey,
+    },
+  )
+
+export const useDeleteSheet = ({ invalidate }: Options) =>
   useMutationWithConfirm(api.deleteSheet, {
     invalidate: invalidate ?? queryKey,
   })
 
-export const useCreateSheet = ({invalidate}: Options) =>
+export const useCreateSheet = ({ invalidate }: Options) =>
   useMutationWithConfirm(api.createSheet, {
     invalidate: invalidate ?? queryKey,
   })

@@ -81,7 +81,7 @@ const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
   const [tableName] = useState(name)
 
   if (isLoading) return <LinearProgress />
-  if (error) return <div>{error.message}</div>
+  if (error) {console.trace(); return <div>{error.message}</div>}
   if (data === undefined) return <div>Error</div>
   return (
     <div className={styles.container} aria-label={'Table - ' + tableName}>
