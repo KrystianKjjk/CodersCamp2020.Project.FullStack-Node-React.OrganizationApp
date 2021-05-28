@@ -4,6 +4,5 @@ Coverage
 Dist
 ./Api/Dist
 launch.json
-./.env
 .env
-frontend/.env
+./frontend/.env

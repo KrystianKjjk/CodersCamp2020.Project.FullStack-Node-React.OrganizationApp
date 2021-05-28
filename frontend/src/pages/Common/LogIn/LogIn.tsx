@@ -13,10 +13,10 @@ import {
 } from '@material-ui/core'
 import StyledTextField from '../../../components/StyledTextField'
 import useStyles from './LogIn.style'
-import BaseService from '../../../app/baseService'
 import HeaderRegistration from '../../../components/HeaderRegistration'
 import { useAppDispatch, fetchCoursesAndSort } from '../../../hooks'
 import useSnackbar from '../../../hooks/useSnackbar'
+import { api } from '../../../api'
 
 export interface LogInProps {
   onLogin?: Function
@@ -44,9 +44,8 @@ export default function SignIn(props: LogInProps) {
   }
 
   const handleSignInClick = async () => {
-    const service = new BaseService()
     try {
-      const response = await service.post('login', { email, password })
+      const response = await api.post('login', { email, password })
       setResponseDataToLocalStorage(response)
       const courses = await fetchCoursesAndSort()
       const mostRecentCourse = courses[0]

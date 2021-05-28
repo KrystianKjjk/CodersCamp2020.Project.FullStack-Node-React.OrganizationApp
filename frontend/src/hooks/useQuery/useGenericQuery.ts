@@ -1,6 +1,6 @@
 import queryClient from '../../QueryClient'
 
-type QueryKey = string[] | string
+export type QueryKey = string[] | string
 
 export const genericSearch = <T>(queryKey: QueryKey) => (
   column: keyof T,

@@ -5,12 +5,14 @@ import {
   deleteRefProject,
   updateRefProject,
 } from '../../api/ReferenceProject.api'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryOptions } from 'react-query'
 
 const queryKey = 'project'
 
-const useProject = (id: string) =>
-  useQuery([queryKey, id], () => api.getRefProject(id))
+const useProject = (
+  id: string,
+  options?: Partial<UseQueryOptions<api.Project, unknown, [string, api.Project]>>,
+) => useQuery([queryKey, id], () => api.getRefProject(id), options)
 export default useProject
 
 export const useUpdateProject = () =>
@@ -20,10 +22,10 @@ export const useUpdateProject = () =>
 
 export const useDeleteProject = () =>
   useMutationWithConfirm(deleteRefProject, {
-    invalidate: queryKey,
+    invalidate: queryKey + 's',
   })
 
 export const useCreateProject = () =>
   useMutationWithConfirm(createRefProject, {
-    invalidate: queryKey,
+    invalidate: queryKey + 's',
   })

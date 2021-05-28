@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core'
 import StyledTextField from '../../../components/StyledTextField'
 import HeaderRegistration from '../../../components/HeaderRegistration'
-import BaseService from '../../../app/baseService'
 import useSnackbar from '../../../hooks/useSnackbar'
 import useStyles from './ResetPasswordStyles'
 import SuccessfulResetPasswordInfo from './SuccessfulResetPasswordInfo'
+import { api } from '../../../api'
 
 export interface ResetPasswordProps {}
 
@@ -29,9 +29,8 @@ export default function ResetPasswordFromLink() {
   console.log(userId, token)
 
   const handleSubmit = async () => {
-    const service = new BaseService()
     try {
-      await service.post('users/resetpassword', { userId, token, password })
+      await api.post('users/resetpassword', { userId, token, password })
       setBeenSent(true)
     } catch (error) {
       showError('Incorrect password or the reset link expired!')

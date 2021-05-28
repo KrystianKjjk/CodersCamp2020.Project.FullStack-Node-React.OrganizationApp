@@ -6,8 +6,12 @@ import {
   User,
   UserData,
   UserFilters,
+  IUser,
 } from '../models/User.model'
 import { calcAvgGrade } from './gradesProcessing'
+import { getSection } from './Section.api'
+
+const endpoint = '/users'
 
 function transformUserData(data: UserData): User {
   return {
@@ -23,13 +27,14 @@ function transformUserData(data: UserData): User {
 }
 
 export const getUsers = async (): Promise<User[]> => {
-  const response = await api.get('/users')
+  const response = await api.get(endpoint)
   return response.data.map(transformUserData)
 }
 
 export const getUser = async (id: string) => {
-  const response = await api.get('/users/' + id)
+  const response = await api.get(`${endpoint}/${id}`)
   const user = response.data as UserData
+  console.log({ userID: id })
   return transformUserData(user)
 }
 
@@ -39,7 +44,7 @@ export const getUsersOfType = async (type: string): Promise<User[]> => {
 }
 
 export const filterUsers = async (filters: UserFilters): Promise<User[]> => {
-  const response = await api.get('/users', { data: filters })
+  const response = await api.get(endpoint, { data: filters })
   const users = response.data.map(transformUserData)
   if (filters.type && filters.type.length > 0) return [users[0]]
   if (filters.status && filters.status.length > 0) return [users[1]]
@@ -65,4 +70,51 @@ export const getParticipantsNotInTeam = async (): Promise<User[]> => {
     )
   })
   return result
+}
+
+export const getUserMe = async (userID: string) => {
+  return api.get(`${endpoint}/me/${userID}`)
+}
+export const deleteUser = async (userID: string) => {
+  return api.delete(`${endpoint}/${userID}`)
+}
+export const updateUser = async (userID: string, user: IUser) => {
+  return api.patch(`${endpoint}/${userID}`, user)
+}
+
+export const fetchUserMe = async (userID: string): Promise<IUser> => {
+  const response = await getUserMe(userID)
+  const userData = response.data
+
+  const gradesExtended = await Promise.all(
+    userData.grades.map(async (grade: any) => {
+      try {
+        if (!grade?.sectionId) throw Error
+        const section = await getSection(grade.sectionId)
+        return {
+          ...grade,
+          'Section name': section?.name || '',
+        }
+      } catch {
+        return {
+          ...grade,
+          'Section name': 'Section does not exist',
+        }
+      }
+    }),
+  )
+
+  userData.grades = gradesExtended
+  return userData
+}
+
+export const fetchUserProfile = async (userId: string): Promise<IUser> => {
+  const userData = await fetchUserMe(userId)
+  return {
+    name: userData.name,
+    surname: userData.surname,
+    type: userData.type,
+    status: userData.status,
+    email: userData.email,
+  }
 }

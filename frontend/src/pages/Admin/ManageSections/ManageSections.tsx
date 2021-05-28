@@ -5,26 +5,19 @@ import { GridValueFormatterParams } from '@material-ui/data-grid'
 import styles from './ManageSections.module.css'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import Table from '../../../components/ReusableTable'
-import {
-  searchData,
-  sortData,
-} from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../hooks/hooks'
-import SectionService from '../../../api/ManageSection.service'
+import { ReusableTableReactQuery } from '../../../components/ReusableTable'
 import UButton from '../../../components/UButton'
-import { getActiveCourse } from '../../../app/utils'
 import PageHeader from '../../../components/PageHeader'
+import { searchSection, sortSections, useSections } from '../../../hooks'
+import { ManageSection } from '../../../models'
 
 export interface ManageSectionsProps {}
 
 const ManageSections: React.FC<ManageSectionsProps> = () => {
-  const sectionService = new SectionService()
-
-  const dispatch = useAppDispatch()
   const history = useHistory()
   const tableName = 'Sections'
-  const courseActive = getActiveCourse()
+  const { data: sections, isLoading, isFetching, error } = useSections()
+
   const displayFormattedDate = (date: number) => {
     if (!date) return ''
     const dateObject = new Date(date * 1000)
@@ -33,16 +26,12 @@ const ManageSections: React.FC<ManageSectionsProps> = () => {
   }
 
   const changeSortBy = (value: string) => {
-    dispatch(sortData({ table: tableName, column: value }))
+    sortSections(value as keyof ManageSection)
   }
 
   const changeSearch = (value: string) => {
-    const searchQuery = {
-      table: tableName,
-      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'name',
-      search: value,
-    }
-    dispatch(searchData(searchQuery))
+    const column = /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'name'
+    searchSection(column, value)
   }
 
   const handleRowClick = (data: { id: string | number }) => {
@@ -104,15 +93,14 @@ const ManageSections: React.FC<ManageSectionsProps> = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTableReactQuery
             name={tableName}
             columns={columns}
             onRowClick={handleRowClick}
-            getData={() =>
-              courseActive
-                ? sectionService.getSectionsByCourseId(courseActive._id)
-                : sectionService.getSections()
-            }
+            data={sections}
+            isFetching={isFetching}
+            isLoading={isLoading}
+            error={error}
           />
         </div>
       </Paper>

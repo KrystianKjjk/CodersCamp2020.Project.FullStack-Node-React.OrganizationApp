@@ -1,1 +1,1 @@
-export { default } from './FindModal'
+export * from './FindModal'

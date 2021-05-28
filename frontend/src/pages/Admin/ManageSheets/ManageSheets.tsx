@@ -3,41 +3,40 @@ import styles from './ManageSheets.module.css'
 import AddButton from '../../../components/AddButton'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import Table from '../../../components/ReusableTable'
-import {
-  fetchData,
-  searchData,
-  sortData,
-} from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../hooks/hooks'
+import { ReusableTableReactQuery } from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
-import SheetService from '../../../api/Sheet.service'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useHistory } from 'react-router-dom'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
+import {
+  sortSheets,
+  searchSheet,
+  useSheets,
+  useCreateSheet,
+  useDeleteSheet,
+} from '../../../hooks'
+import { GradeSheet } from '../../../models'
 
 export interface ManageSheetsProps {}
 
 const ManageSheets: React.FC<ManageSheetsProps> = () => {
-  const api = new SheetService()
   const history = useHistory()
-  const dispatch = useAppDispatch()
   const selectedSheets = useRef([] as string[])
 
   const tableName = 'Sheets'
+  const { data: sheets, error, isLoading, isFetching } = useSheets()
+  const { mutate: createSheet } = useCreateSheet({ invalidate: 'sheets' })
+  const { mutate: deleteSheet } = useDeleteSheet({ invalidate: 'sheets' })
 
   const changeSortBy = (value: string) => {
-    dispatch(sortData({ table: tableName, column: value }))
+    sortSheets(value as keyof GradeSheet)
   }
 
   const changeSearch = (value: string) => {
-    const searchQuery = {
-      table: tableName,
-      column: /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'mentorSurname',
-      search: value,
-    }
-    dispatch(searchData(searchQuery))
+    const column = /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'mentorSurname'
+    const search = value
+    searchSheet(column, search)
   }
 
   const sortByOptions = ['mentorName', 'mentorSurname', 'projectName']
@@ -67,20 +66,14 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
     },
   ]
 
-  const handleAddClick = async () => {
-    await api.createSheet()
-    dispatch(fetchData(tableName, api.getSheets))
-  }
-
   const handleSheetSelection = (params: GridSelectionModelChangeParams) => {
     selectedSheets.current = params.selectionModel as string[]
   }
 
   const deleteSelectedSheets = () => {
     selectedSheets.current.forEach((sheetId) => {
-      api.deleteSheet(sheetId)
+      deleteSheet(sheetId)
     })
-    setTimeout(() => dispatch(fetchData(tableName, api.getSheets)), 300)
     selectedSheets.current = []
   }
 
@@ -103,7 +96,7 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
           <div className={styles.buttons}>
             <AddButton
               text="Add"
-              onClick={handleAddClick}
+              onClick={() => createSheet(null)}
               aria-label="Add sheet"
             />
             <DeleteButton
@@ -121,13 +114,16 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTableReactQuery
             name={tableName}
             columns={columns}
-            getData={api.getSheets}
+            isLoading={isLoading}
+            error={error}
+            data={sheets}
+            isFetching={isFetching}
+            onRowClick={handleRowClick}
             onSelectionModelChange={handleSheetSelection}
             checkboxSelection
-            onRowClick={handleRowClick}
           />
         </div>
       </Paper>

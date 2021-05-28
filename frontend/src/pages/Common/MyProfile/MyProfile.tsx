@@ -1,61 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from './MyProfile.module.css'
-import UserService from '../../../api/users.service'
-import BaseService from '../../../app/baseService'
 import { CircularProgress, Button, Grid } from '@material-ui/core'
-import { IUser } from '../../../models/User.model'
 import StyledTextField from '../../../components/StyledTextField'
 import PageHeader from '../../../components/PageHeader'
 import useSnackbar from '../../../hooks/useSnackbar'
+import { useUserProfile } from '../../../hooks'
+import { api } from '../../../api'
 
 export interface MyProfileProps {}
 
 const MyProfile = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
-  const [user, setUser] = useState<IUser | undefined>(undefined)
-  const [error, setError] = useState()
-  const [isLoaded, setIsLoaded] = useState(false)
   const [isPasswordChange, setIsPasswordChange] = useState(false)
   const [passwordChanged, setPasswordChanged] = useState(false)
   const { showError } = useSnackbar()
-
-  const userService = new UserService(new BaseService())
-  useEffect(() => {
-    getUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  function getUser() {
-    const userId = localStorage.getItem('id')
-    if (!userId) return null
-    userService
-      .getUser(userId)
-      .then((res) => {
-        if (res.status === 200) {
-          setUser({
-            name: res.data.name,
-            surname: res.data.surname,
-            type: res.data.type,
-            status: res.data.status,
-            email: res.data.email,
-          })
-          setIsLoaded(true)
-        } else {
-          throw Error
-        }
-      })
-      .catch((err) => {
-        setError(err)
-        setIsLoaded(true)
-      })
-  }
+  const userID = localStorage.getItem('id') ?? ''
+  const { data: user, isLoading, error } = useUserProfile(userID, {
+    enabled: !!userID,
+  })
 
   const handleSubmit = async () => {
-    const service = new BaseService()
     const id = localStorage.getItem('id')
     try {
-      await service.post('users/changepassword', {
+      await api.post('users/changepassword', {
         id,
         oldPassword,
         newPassword,
@@ -69,7 +37,7 @@ const MyProfile = () => {
 
   if (error) return <div className={styles.error}>Something went wrong :(</div>
 
-  if (!isLoaded || !user) return <CircularProgress className={styles.loading} />
+  if (isLoading || !user) return <CircularProgress className={styles.loading} />
 
   if (isPasswordChange && !passwordChanged) {
     return (

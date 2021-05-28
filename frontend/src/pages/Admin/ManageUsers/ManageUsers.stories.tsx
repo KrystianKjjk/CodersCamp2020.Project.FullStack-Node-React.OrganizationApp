@@ -5,7 +5,6 @@ import { store } from '../../../app/store'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from '@material-ui/styles'
 import darkTheme from '../../../theme/customMaterialTheme'
-import UserService from '../../../api/User.service'
 
 export default {
   title: 'ManageUsers component',

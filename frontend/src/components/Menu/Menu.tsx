@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { UserType } from '../../models/User.model'
 import { getUserFromLocalStorage } from '../../app/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectUserData } from '../../pages/Common/HomePage/HomePageSlice'
 import { selectMenu } from './MenuSlice'
 import MenuAdmin from './MenuAdmin'
 import { setMenu, clearMenu } from './MenuSlice'
 import debounce from 'lodash.debounce'
 import MenuParticipant from './MenuParticipant'
 import MenuMentor from './MenuMentor'
+import { useUserMe } from '../../hooks'
 
 export const WIDTH_SMALL_MENU_ON_PX = 900
 export const DEBOUNCE_RESIZE_MS = 100
@@ -18,12 +18,13 @@ export interface MenuProps {}
 const Menu: React.FC<MenuProps> = (props) => {
   const dispatch = useDispatch()
 
-  const {
-    userData: { name, surname },
-  } = useSelector(selectUserData)
   const { showSmallMenu, showSmallMenuUserAction } = useSelector(selectMenu)
 
-  const { userType } = getUserFromLocalStorage()
+  const { userType, userId } = getUserFromLocalStorage()
+  const { data: userData } = useUserMe(userId ?? '', {
+    enabled: !!userId,
+  })
+  const { name, surname } = userData ?? {name: '', surname: ''}
 
   useEffect(() => {
     showSmallMenuUserAction ? dispatch(setMenu()) : dispatch(clearMenu())
