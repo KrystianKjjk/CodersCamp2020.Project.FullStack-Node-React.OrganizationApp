@@ -9,9 +9,9 @@ import {
 import '@testing-library/jest-dom/extend-expect'
 import { Provider } from 'react-redux'
 import { store } from '../../../app/store'
-import BaseService from '../../../app/baseService'
+import BaseService from '../../../api/api.service'
 
-jest.mock('../../../app/baseService', () => jest.fn())
+//jest.mock('../../../api/api.service', () => jest.fn())
 
 describe('Registration', () => {
   jest.setTimeout(7000)
@@ -68,12 +68,8 @@ describe('Registration', () => {
       target: { value: 'Aaaa1234!' },
     })
 
-    const fakePost = jest.fn()
-
+    const fakePost = jest.spyOn(BaseService, 'post')
     //@ts-ignore
-    BaseService.mockImplementation(() => {
-      return { post: fakePost }
-    })
 
     const button = await screen.getByTestId('r-button')
     button.click()
