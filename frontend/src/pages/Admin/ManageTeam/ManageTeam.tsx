@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import styles from './ManageTeam.module.css'
 import AddButton from '../../../components/AddButton'
 import UButton from '../../../components/UButton'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { User } from '../../../models'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
@@ -18,7 +18,7 @@ import {
   useTeam,
   useUsersOfType,
 } from '../../../hooks'
-import { FindModalReactQuery } from '../../../components/FindModal/FindModal'
+import FindModal from '../../../components/FindModal/FindModal'
 
 export interface ManageTeamProps {}
 
@@ -109,7 +109,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
         </Container>
         <div>
           {openMentorsModal && (
-            <FindModalReactQuery<User>
+            <FindModal<User>
               onRowSelection={handleMentorSelection}
               query={mentorsQuery}
               queryKey='Mentors'
@@ -145,7 +145,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           {openUsersModal && (
-            <FindModalReactQuery<User>
+            <FindModal<User>
               onRowSelection={handleAddUserSelection}
               query={participantsNotInTeamQuery}
               queryKey="participantsNotInTeam"
@@ -172,7 +172,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             aria-label="Team members table"
             name="Team"
             columns={columns}
@@ -188,7 +188,7 @@ const ManageTeam: React.FC<ManageTeamProps> = () => {
           <h2 className={styles.manageHeader}>Projects</h2>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             name="TeamProjects"
             columns={projectColumns}
             data={team?.projects}

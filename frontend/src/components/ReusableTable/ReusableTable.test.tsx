@@ -20,13 +20,17 @@ describe('ReusableTable', () => {
     const getData = jest.fn(() => Promise.resolve(users))
     render(
       <Provider store={store}>
-        <ReusableTable name={tableName} getData={getData} columns={columns} />
+        <ReusableTable
+          name={tableName}
+          data={users}
+          isFetching={false}
+          isLoading={false}
+          error={null}
+          columns={columns}
+        />
       </Provider>,
     )
     const table = await screen.findByLabelText(`Table - ${tableName}`)
-    const state = store.getState()
     expect(table).toBeInTheDocument()
-    expect(getData).toBeCalledTimes(1)
-    expect(state.tables[tableName].rows).toEqual(users)
   })
 })

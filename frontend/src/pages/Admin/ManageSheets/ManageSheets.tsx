@@ -3,7 +3,7 @@ import styles from './ManageSheets.module.css'
 import AddButton from '../../../components/AddButton'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useHistory } from 'react-router-dom'
@@ -114,7 +114,7 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             name={tableName}
             columns={columns}
             isLoading={isLoading}

@@ -5,7 +5,7 @@ import { GridValueFormatterParams } from '@material-ui/data-grid'
 import styles from './ManageSections.module.css'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 import UButton from '../../../components/UButton'
 import PageHeader from '../../../components/PageHeader'
 import { searchSection, sortSections, useSections } from '../../../hooks'
@@ -93,7 +93,7 @@ const ManageSections: React.FC<ManageSectionsProps> = () => {
           </span>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             name={tableName}
             columns={columns}
             onRowClick={handleRowClick}

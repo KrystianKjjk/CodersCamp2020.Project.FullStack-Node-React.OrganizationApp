@@ -15,7 +15,7 @@ import {
   useUpdateGrade,
 } from '../../../hooks'
 import { Section } from '../../../models'
-import { FindModalReactQuery } from '../../../components/FindModal/FindModal'
+import FindModal from '../../../components/FindModal/FindModal'
 
 export interface ManageGradesProps {
   userID: string
@@ -146,7 +146,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
         {grades?.map((grade, index) => (
           <div className={styles.gradeContainer} key={index}>
             {isOpenSectionsModal && isEdit[index] && (
-              <FindModalReactQuery<Section>
+              <FindModal<Section>
                 onRowSelection={handleSectionSelection(index)}
                 query={sectionsQuery}
                 queryKey="sections"

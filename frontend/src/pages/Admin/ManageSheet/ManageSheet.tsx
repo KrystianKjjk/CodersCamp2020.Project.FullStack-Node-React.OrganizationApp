@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './ManageSheet.module.css'
 import AddButton from '../../../components/AddButton'
 import UButton from '../../../components/UButton'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { User, Grades, SheetGrade, Reviewer } from '../../../models'
 import _ from 'lodash'
@@ -24,7 +24,7 @@ import {
   useSheet,
   useUsersOfType,
 } from '../../../hooks'
-import { FindModalReactQuery } from '../../../components/FindModal/FindModal'
+import FindModal from '../../../components/FindModal/FindModal'
 import { useTeamProjects } from '../../../hooks/useQuery/useTeamProjects'
 import { TeamProjectDto } from '../../../api/TeamProjects.api'
 
@@ -230,7 +230,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
         </Container>
         <div>
           {openMentorsModal && (
-            <FindModalReactQuery<User>
+            <FindModal<User>
               onRowSelection={handleMentorSelection}
               query={mentorsQuery}
               queryKey="Mentors"
@@ -244,7 +244,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             />
           )}
           {openProjectsModal && (
-            <FindModalReactQuery<TeamProjectDto>
+            <FindModal<TeamProjectDto>
               onRowSelection={handleProjectSelection}
               query={teamProjectsQuery}
               queryKey="teamProjects"
@@ -258,7 +258,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             />
           )}
           {openReviewersModal && (
-            <FindModalReactQuery<User>
+            <FindModal<User>
               onRowSelection={handleReviewerSelection}
               query={mentorsQuery}
               queryKey="Mentors"
@@ -333,7 +333,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
           {openUsersModal && (
-            <FindModalReactQuery<User>
+            <FindModal<User>
               onRowSelection={handleAddUserSelection}
               query={participantsQuery}
               queryKey="Participants"
@@ -360,7 +360,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             aria-label="Participants table"
             name={participantsTableName}
             columns={participantColumns}
@@ -407,7 +407,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <ReusableTableReactQuery
+          <ReusableTable
             aria-label="Grades table"
             name={mentorGradesTableName}
             columns={gradeColumns}

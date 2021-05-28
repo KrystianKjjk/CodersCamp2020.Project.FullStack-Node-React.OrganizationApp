@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Backdrop, CssBaseline, Fade, Modal } from '@material-ui/core'
 
-import { ReusableTableReactQuery } from '../ReusableTable'
+import ReusableTable from '../ReusableTable'
 import SearchInput from '../SearchInput'
 
 import styles from './FindModal.module.css'
@@ -9,7 +9,7 @@ import { UseQueryResult } from 'react-query'
 import { genericSearch } from '../../hooks/useQuery/useGenericQuery'
 
 
-interface FindModalReactQueryProps<T> {
+interface FindModalProps<T> {
   onRowSelection: any
   query: UseQueryResult<T[]>
   columns: { field: string; width: number; fieldName?: string }[]
@@ -22,8 +22,8 @@ interface FindModalReactQueryProps<T> {
   handleOpen: () => void
 }
 
-export const FindModalReactQuery = <T extends unknown>(
-  props: FindModalReactQueryProps<T>,
+const FindModal = <T extends unknown>(
+  props: FindModalProps<T>,
 ) => {
   const [search, setSearch] = useState('')
 
@@ -75,7 +75,7 @@ export const FindModalReactQuery = <T extends unknown>(
                 />
               </div>
               <div className={styles.container__body__table}>
-                <ReusableTableReactQuery
+                <ReusableTable
                   name={props.name}
                   data={props.query.data}
                   isLoading={props.query.isLoading}
@@ -92,3 +92,5 @@ export const FindModalReactQuery = <T extends unknown>(
     </>
   )
 }
+
+export default FindModal

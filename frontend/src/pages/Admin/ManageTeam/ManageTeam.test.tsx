@@ -54,8 +54,8 @@ const mentorsDatabase = [
   },
 ]
 
-jest.mock('../../../api/Team.service.ts', () => jest.fn())
-jest.mock('../../../api/User.service.ts', () => jest.fn())
+// jest.mock('../../../api/Team.service.ts', () => jest.fn())
+// jest.mock('../../../api/User.service.ts', () => jest.fn())
 
 describe('ManageTeam', () => {
   jest.setTimeout(20000)

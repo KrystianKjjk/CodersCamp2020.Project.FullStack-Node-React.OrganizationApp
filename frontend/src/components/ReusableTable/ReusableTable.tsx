@@ -14,7 +14,7 @@ interface Column {
   sortComparator?: (v1: any, v2: any, cellParams1: any, cellParams2: any) => any
 }
 
-export type ReusableTableReactQueryProps = {
+export type ReusableTableProps = {
   name: string
   columns?: Column[]
   isLoading: boolean
@@ -23,7 +23,7 @@ export type ReusableTableReactQueryProps = {
   isFetching: boolean
 } & Omit<DataGridProps, 'rows'>
 
-const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
+const ReusableTableFC: React.FC<ReusableTableProps> = ({
   name,
   columns = [],
   isLoading,
@@ -51,4 +51,4 @@ const ReusableTableReactQueryFC: React.FC<ReusableTableReactQueryProps> = ({
   )
 }
 
-export const ReusableTableReactQuery = React.memo(ReusableTableReactQueryFC)
+export default React.memo(ReusableTableFC)

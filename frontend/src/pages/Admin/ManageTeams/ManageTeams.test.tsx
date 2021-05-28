@@ -46,7 +46,7 @@ const teamsDatabase = [
 const teamsCount = teamsDatabase.length
 const tableName = 'Teams'
 
-jest.mock('../../../api/Team.service.ts', () => jest.fn())
+// jest.mock('../../../api/Team.service.ts', () => jest.fn())
 
 describe('ManageTeams', () => {
   jest.setTimeout(20000)

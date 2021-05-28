@@ -3,7 +3,7 @@ import { Paper, CssBaseline, Container } from '@material-ui/core'
 import styles from './ManageUsers.module.css'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 import { useHistory } from 'react-router-dom'
 import useMultipleSelect from '../../../hooks/useMultipleSelect'
 import {
@@ -100,7 +100,7 @@ const ManageUsers: React.FC<ManageUsersProps> = () => {
             />
           </span>
         </div>
-        <ReusableTableReactQuery
+        <ReusableTable
           name={tableName}
           columns={columns}
           onRowClick={handleSelection}
