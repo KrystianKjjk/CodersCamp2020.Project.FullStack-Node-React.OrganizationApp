@@ -9,11 +9,11 @@ import {
   Container,
 } from '@material-ui/core'
 import StyledTextField from '../../../components/StyledTextField'
-import BaseService from '../../../app/baseService'
 import useStyles from './Registration.style'
 import HeaderRegistration from '../../../components/HeaderRegistration'
 import useSnackbar from '../../../hooks/useSnackbar'
 import { useHistory } from 'react-router-dom'
+import { api } from '../../../api'
 
 export interface RegistrationProps {}
 
@@ -30,9 +30,8 @@ export default function SignUp() {
   const { showError, showSuccess } = useSnackbar()
 
   const handleSignUpClick = async () => {
-    const service = new BaseService()
     try {
-      await service.post('register', {
+      await api.post('register', {
         name,
         surname,
         email,

@@ -8,6 +8,12 @@ const queryKey = 'user'
 const useUser = (id: string) => useQuery([queryKey, id], () => api.getUser(id))
 export default useUser
 
+export const useUserMe = (id: string, options?: Partial<UseQueryOptions<any>>) =>
+  useQuery([queryKey, 'me'], () => api.fetchUserMe(id), options)
+
+export const useUserProfile = (id: string, options?: Partial<UseQueryOptions<IUser>>) =>
+  useQuery([queryKey, 'myProfile'], () => api.fetchUserProfile(id), options)
+
 export const useUpdateUser = (
   options?: Partial<Options<User, [string, IUser]>>,
 ) =>

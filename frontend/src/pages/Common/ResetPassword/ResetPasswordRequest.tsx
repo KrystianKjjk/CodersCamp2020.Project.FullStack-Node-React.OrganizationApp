@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { Button, CssBaseline, Typography, Container } from '@material-ui/core'
 import StyledTextField from '../../../components/StyledTextField'
 import HeaderRegistration from '../../../components/HeaderRegistration'
-import BaseService from '../../../app/baseService'
 import useSnackbar from '../../../hooks/useSnackbar'
 import SuccessfulResetPasswordInfo from './SuccessfulResetPasswordInfo'
 import useStyles from './ResetPasswordStyles'
+import { api } from '../../../api'
 
 export interface ResetPasswordRequestProps {}
 
@@ -16,9 +16,8 @@ export default function ResetPasswordRequest() {
   const [beenSent, setBeenSent] = useState(false)
 
   const handleSubmit = async () => {
-    const service = new BaseService()
     try {
-      await service.post('users/requestpasswordreset', { email })
+      await api.post('users/requestpasswordreset', { email })
       setBeenSent(true)
     } catch (error) {
       showError('Incorrect email!')
