@@ -16,7 +16,7 @@ export interface UserGradesProps {}
 
 const UserGrades: React.FC<UserGradesProps> = (props) => {
   const userID = localStorage.getItem('id') ?? ''
-  const { data: userData, isLoading, error } = useUserMe(userID, {
+  const { data: userData, isLoading, error } = useUserMe({
     enabled: !!userID,
   })
 

@@ -29,8 +29,9 @@ import ReferenceProjects from '../../Admin/ReferenceProjects'
 import ManageReferenceProject from '../../Admin/ManageReferenceProject'
 import TeamProject from '../../Admin/TeamProject'
 import ResetPasswordRequest from '../ResetPassword'
-//import { useUserMe } from '../../../hooks'
 import { api } from '../../../api'
+import { useDidUpdateEffect, useUserMe } from '../../../hooks'
+import { useQueryClient } from 'react-query'
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -42,20 +43,27 @@ interface LoggedOutViewProps {
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage()
-  //const userID = userData.userId ?? ''
+  const userID = userData.userId ?? ''
 
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType))
+  const queryClient = useQueryClient()
+
+  useUserMe({
+    enabled: !!userID,
+  })
 
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  // const { data: userInfo, isLoading, error } = useUserMe(userID, {
-  //   enabled: !!userID,
-  // })
+
+  useDidUpdateEffect(() => {
+    if (isLogged) queryClient.refetchQueries(['user', 'me'])
+    else queryClient.removeQueries(['user', 'me'])
+  }, [isLogged])
 
   const handleLogout = async () => {
-    setIsLogged(false)
     await api.get('logout')
     removeCookie('token')
+    setIsLogged(false)
   }
 
   const MainContent = () => {

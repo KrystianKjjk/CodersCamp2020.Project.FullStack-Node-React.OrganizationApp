@@ -21,10 +21,10 @@ const Menu: React.FC<MenuProps> = (props) => {
   const { showSmallMenu, showSmallMenuUserAction } = useSelector(selectMenu)
 
   const { userType, userId } = getUserFromLocalStorage()
-  const { data: userData } = useUserMe(userId ?? '', {
+  const { data: userData } = useUserMe({
     enabled: !!userId,
   })
-  const { name, surname } = userData ?? {name: '', surname: ''}
+  const { name, surname } = userData ?? { name: '', surname: '' }
 
   useEffect(() => {
     showSmallMenuUserAction ? dispatch(setMenu()) : dispatch(clearMenu())

@@ -10,6 +10,7 @@ import {
 } from '../models/User.model'
 import { calcAvgGrade } from './gradesProcessing'
 import { getSection } from './Section.api'
+import { getUserFromLocalStorage } from '../app/utils'
 
 const endpoint = '/users'
 
@@ -82,7 +83,9 @@ export const updateUser = async (userID: string, user: IUser) => {
   return api.patch(`${endpoint}/${userID}`, user)
 }
 
-export const fetchUserMe = async (userID: string): Promise<IUser> => {
+export const fetchUserMe = async (): Promise<IUser> => {
+  const userDataLS = getUserFromLocalStorage()
+  const userID = userDataLS.userId ?? ''
   const response = await getUserMe(userID)
   const userData = response.data
 
@@ -108,8 +111,8 @@ export const fetchUserMe = async (userID: string): Promise<IUser> => {
   return userData
 }
 
-export const fetchUserProfile = async (userId: string): Promise<IUser> => {
-  const userData = await fetchUserMe(userId)
+export const fetchUserProfile = async (): Promise<IUser> => {
+  const userData = await fetchUserMe()
   return {
     name: userData.name,
     surname: userData.surname,

@@ -4,7 +4,7 @@ import { CircularProgress, Button, Grid } from '@material-ui/core'
 import StyledTextField from '../../../components/StyledTextField'
 import PageHeader from '../../../components/PageHeader'
 import useSnackbar from '../../../hooks/useSnackbar'
-import { useUserProfile } from '../../../hooks'
+import { useUserMe } from '../../../hooks'
 import { api } from '../../../api'
 
 export interface MyProfileProps {}
@@ -16,7 +16,7 @@ const MyProfile = () => {
   const [passwordChanged, setPasswordChanged] = useState(false)
   const { showError } = useSnackbar()
   const userID = localStorage.getItem('id') ?? ''
-  const { data: user, isLoading, error } = useUserProfile(userID, {
+  const { data: user, isLoading, error } = useUserMe({
     enabled: !!userID,
   })
 
