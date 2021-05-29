@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
 import { useHistory, useParams } from 'react-router-dom'
 
-import FindProject from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
 
@@ -17,7 +16,7 @@ import {
 } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
-import { Section as SectionData } from '../../../models'
+import { Section } from '../../../models'
 import FindModal from '../../../components/FindModal'
 import { GridValueFormatterParams } from '@material-ui/data-grid'
 import { displayFormattedDate } from '../../../api'
@@ -98,7 +97,7 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenSectionsModal(false)
   }
 
-  function handleSectionSelection(section: SectionData) {
+  function handleSectionSelection(section: Section) {
     closeSectionsModal()
     setProject({
       ...project,
@@ -168,7 +167,7 @@ const ManageReferenceProject = (props: any) => {
           />
 
           {isOpenSectionsModal && isEdit && (
-            <FindModal<SectionData>
+            <FindModal<Section>
               onRowSelection={handleSectionSelection}
               query={sectionsQuery}
               queryKey="sections"
