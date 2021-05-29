@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, LinearProgress } from '@material-ui/core'
-import { useHistory, useParams } from 'react-router-dom'
+import { Box } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
 
 import FindProject from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
@@ -9,40 +9,31 @@ import UButton from '../../../components/UButton'
 import styles from './ManageReferenceProject.module.css'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
-import {
-  useUpdateProject,
-  useDeleteProject,
-  useCreateProject,
-} from '../../../hooks'
-import useProject from '../../../hooks/useQuery/useProject'
+import { useCreateProject } from '../../../hooks'
 import DetailPage from '../../../components/DetailPage'
 
 export interface ManageReferenceProjectProps {}
 
 const ManageReferenceProject = (props: any) => {
-  const { projectID } = useParams<{ projectID: string }>()
   const history = useHistory()
 
-  const [isEdit, setIsEdit] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
+  const [isEdit, setIsEdit] = useState(true)
+  const [isAdding, setIsAdding] = useState(true)
   const [project, setProject] = useState<any>()
   const { showError } = useSnackbar()
-  const { mutate: updateProject } = useUpdateProject()
-  const { mutate: deleteProject } = useDeleteProject()
-  const { mutate: addProject } = useCreateProject()
-  const { data: fetchedProject, error, isLoading } = useProject(projectID)
+  const {
+    mutate: addProject,
+    status: queryStatus,
+    error,
+    data: queryResult,
+  } = useCreateProject()
 
   useEffect(() => {
-    if (props?.match?.path?.match('add')) {
-      setIsAdding(true)
-      setIsEdit(true)
+    if (queryStatus === 'success' && queryResult) {
+      toggleEdit()
+      history.push(`/projects/${queryResult.data._id}`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    setProject(fetchedProject)
-  }, [fetchedProject])
+  }, [queryStatus])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
@@ -52,7 +43,9 @@ const ManageReferenceProject = (props: any) => {
     const target = event.target
     const name = target.id
     let value = target.value
-    if (name === 'sectionId') value = parseInt(value, 10)
+    if (name === 'sectionId') {
+      value = parseInt(value, 10)
+    }
     // @ts-ignore
     setProject({
       ...project,
@@ -60,21 +53,11 @@ const ManageReferenceProject = (props: any) => {
     })
   }
 
-  function handleSave() {
-    if (isAdding) {
-      addProject(project)
-      setIsAdding(false)
-    } else {
-      updateProject(project)
-    }
-    toggleEdit()
+  async function handleSave() {
+    addProject({ ...project, sectionId: project.sectionId.id })
   }
 
   function handleDelete() {
-    if (!isAdding) {
-      deleteProject(project._id)
-    }
-
     history.push('/projects')
   }
 
@@ -87,18 +70,18 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenSectionsModal(false)
   }
 
-  function handleSectionSelection(sectionID: string, sectionName: string) {
+  function handleSectionSelection(sectionData: any) {
+    console.log(sectionData)
     closeSectionsModal()
     setProject({
       ...project,
-      sectionId: sectionID,
-      'Section name': sectionName,
+      sectionId: sectionData,
+      'Section name': sectionData.sectionName,
     })
+    setIsAdding(false)
   }
 
   if (error) showError((error as Error).message)
-
-  if (isLoading) return <LinearProgress />
 
   return (
     <DetailPage pageName={'Projects'} elementName={project?.projectName}>
@@ -110,16 +93,12 @@ const ManageReferenceProject = (props: any) => {
               confirmTitle="Are you sure you want to delete the project?"
               onConfirm={handleDelete}
             />
-            {isEdit ? (
-              <UButton text="SAVE" color="primary" onClick={handleSave} />
-            ) : (
-              <UButton text="EDIT" color="primary" onClick={toggleEdit} />
-            )}
+            <UButton text="SAVE" color="primary" onClick={handleSave} />
           </div>
         </Box>
         <form className={`${styles.manageForm} ${styles.container__body}`}>
           <EditableField
-            isEdit={isEdit}
+            isEdit={true}
             fieldName={'Name:'}
             fieldID={'projectName'}
             fieldValue={project?.projectName}
@@ -128,15 +107,15 @@ const ManageReferenceProject = (props: any) => {
           />
 
           <EditableField
-            isEdit={isEdit}
+            isEdit={true}
             isAdding={isAdding}
-            fieldName={'Section name:'}
+            fieldName={'Section name'}
             fieldID={'Section name'}
-            fieldValue={project?.sectionId?.name}
+            fieldValue={project?.sectionId?.sectionName}
             modalAction={openSectionsModal}
           />
 
-          {isOpenSectionsModal && isEdit && (
+          {isOpenSectionsModal && (
             <FindProject
               isOpen={isOpenSectionsModal}
               handleClose={closeSectionsModal}
@@ -145,7 +124,7 @@ const ManageReferenceProject = (props: any) => {
           )}
 
           <EditableField
-            isEdit={isEdit}
+            isEdit={true}
             fieldName={'URL:'}
             fieldID={'projectUrl'}
             fieldValue={project?.projectUrl}
@@ -154,7 +133,7 @@ const ManageReferenceProject = (props: any) => {
           />
 
           <EditableField
-            isEdit={isEdit}
+            isEdit={true}
             fieldName={'Description:'}
             fieldID={'description'}
             fieldValue={project?.description}
