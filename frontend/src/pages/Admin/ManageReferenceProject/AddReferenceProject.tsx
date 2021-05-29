@@ -12,14 +12,24 @@ import useSnackbar from '../../../hooks/useSnackbar'
 import { useCreateProject } from '../../../hooks'
 import DetailPage from '../../../components/DetailPage'
 
+import { SectionDataFromSelection, InputValues } from './types'
+
 export interface ManageReferenceProjectProps {}
+
+const initialValues: InputValues = {
+  _id: '',
+  description: '',
+  projectName: '',
+  projectUrl: '',
+  sectionId: '',
+  sectionName: '',
+}
 
 const ManageReferenceProject = (props: any) => {
   const history = useHistory()
 
-  const [isEdit, setIsEdit] = useState(true)
   const [isAdding, setIsAdding] = useState(true)
-  const [project, setProject] = useState<any>()
+  const [project, setProject] = useState<InputValues>(initialValues)
   const { showError } = useSnackbar()
   const {
     mutate: addProject,
@@ -30,23 +40,18 @@ const ManageReferenceProject = (props: any) => {
 
   useEffect(() => {
     if (queryStatus === 'success' && queryResult) {
-      toggleEdit()
       history.push(`/projects/${queryResult.data._id}`)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryStatus])
 
-  function toggleEdit() {
-    setIsEdit(!isEdit)
-  }
-
-  function handleInputChange(event: any) {
-    const target = event.target
+  function handleInputChange(event: React.FormEvent<HTMLInputElement>) {
+    const target = event.currentTarget
     const name = target.id
-    let value = target.value
+    let value: string | number = target.value
     if (name === 'sectionId') {
       value = parseInt(value, 10)
     }
-    // @ts-ignore
     setProject({
       ...project,
       [name]: value,
@@ -54,7 +59,7 @@ const ManageReferenceProject = (props: any) => {
   }
 
   async function handleSave() {
-    addProject({ ...project, sectionId: project.sectionId.id })
+    addProject(project)
   }
 
   function handleDelete() {
@@ -70,13 +75,15 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenSectionsModal(false)
   }
 
-  function handleSectionSelection(sectionData: any) {
-    console.log(sectionData)
+  function handleSectionSelection({
+    id,
+    sectionName,
+  }: SectionDataFromSelection) {
     closeSectionsModal()
     setProject({
       ...project,
-      sectionId: sectionData,
-      'Section name': sectionData.sectionName,
+      sectionId: id,
+      sectionName,
     })
     setIsAdding(false)
   }
@@ -101,17 +108,17 @@ const ManageReferenceProject = (props: any) => {
             isEdit={true}
             fieldName={'Name:'}
             fieldID={'projectName'}
-            fieldValue={project?.projectName}
-            placeholder={project?.projectName || 'example project name'}
+            fieldValue={project.projectName}
+            placeholder={project.projectName || 'example project name'}
             onChange={handleInputChange}
           />
 
           <EditableField
             isEdit={true}
             isAdding={isAdding}
-            fieldName={'Section name'}
-            fieldID={'Section name'}
-            fieldValue={project?.sectionId?.sectionName}
+            fieldName={'Section name:'}
+            fieldID={project.sectionName}
+            fieldValue={project.sectionName}
             modalAction={openSectionsModal}
           />
 
@@ -127,8 +134,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={true}
             fieldName={'URL:'}
             fieldID={'projectUrl'}
-            fieldValue={project?.projectUrl}
-            placeholder={project?.projectUrl || 'http://example.project.url'}
+            fieldValue={project.projectUrl}
+            placeholder={project.projectUrl || 'http://example.project.url'}
             onChange={handleInputChange}
           />
 
@@ -136,8 +143,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={true}
             fieldName={'Description:'}
             fieldID={'description'}
-            fieldValue={project?.description}
-            placeholder={project?.description || 'Some example description'}
+            fieldValue={project.description}
+            placeholder={project.description || 'Some example description'}
             onChange={handleInputChange}
             textArea={true}
           />

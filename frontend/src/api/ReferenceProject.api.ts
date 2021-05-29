@@ -1,6 +1,6 @@
 import api from './api.service'
 import * as sectionService from './Section.api'
-import { Section, ProjectData } from '../models'
+import { ProjectData } from '../models'
 
 const endpoint = `projects`
 
@@ -54,10 +54,21 @@ export interface ProjectDto {
 
 export interface Project {
   _id: string
-  sectionId: Section
+  sectionId: NotMappedSection
   projectName: string
   projectUrl: string
   description: string
   createdAt: string
   updatedAt: string
+}
+
+export interface NotMappedSection {
+  _id: string
+  name: string
+  course: string //* id
+  description: string
+  endDate: string
+  materials: unknown[] //! to change
+  startDate: string
+  tests: unknown[] //! to change
 }

@@ -9,51 +9,56 @@ import UButton from '../../../components/UButton'
 import styles from './ManageReferenceProject.module.css'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
-import {
-  useUpdateProject,
-  useDeleteProject,
-  useCreateProject,
-} from '../../../hooks'
+import { useUpdateProject, useDeleteProject } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
 
+import { SectionDataFromSelection, InputValues } from './types'
+
 export interface ManageReferenceProjectProps {}
+
+const initialValues: InputValues = {
+  _id: '',
+  description: '',
+  projectName: '',
+  projectUrl: '',
+  sectionId: '',
+  sectionName: '',
+}
 
 const ManageReferenceProject = (props: any) => {
   const { projectID } = useParams<{ projectID: string }>()
   const history = useHistory()
 
   const [isEdit, setIsEdit] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
-  const [project, setProject] = useState<any>()
+  const [project, setProject] = useState<InputValues>(initialValues)
   const { showError } = useSnackbar()
   const { mutate: updateProject } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
-  const { mutate: addProject } = useCreateProject()
   const { data: fetchedProject, error, isLoading } = useProject(projectID)
 
   useEffect(() => {
-    if (props?.match?.path?.match('add')) {
-      setIsAdding(true)
-      setIsEdit(true)
+    if (fetchedProject && fetchedProject.sectionId) {
+      setProject({
+        _id: fetchedProject._id,
+        description: fetchedProject.description,
+        projectName: fetchedProject.projectName,
+        projectUrl: fetchedProject.projectUrl,
+        sectionId: fetchedProject.sectionId._id,
+        sectionName: fetchedProject.sectionId.name,
+      })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    setProject(fetchedProject)
   }, [fetchedProject])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
   }
 
-  function handleInputChange(event: any) {
-    const target = event.target
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.currentTarget
     const name = target.id
-    let value = target.value
+    let value: string | number = target.value
     if (name === 'sectionId') value = parseInt(value, 10)
-    // @ts-ignore
     setProject({
       ...project,
       [name]: value,
@@ -61,20 +66,12 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleSave() {
-    if (isAdding) {
-      addProject(project)
-      setIsAdding(false)
-    } else {
-      updateProject(project)
-    }
+    updateProject(project)
     toggleEdit()
   }
 
   function handleDelete() {
-    if (!isAdding) {
-      deleteProject(project._id)
-    }
-
+    deleteProject(projectID)
     history.push('/projects')
   }
 
@@ -87,12 +84,15 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenSectionsModal(false)
   }
 
-  function handleSectionSelection(sectionID: string, sectionName: string) {
+  function handleSectionSelection({
+    id,
+    sectionName,
+  }: SectionDataFromSelection) {
     closeSectionsModal()
     setProject({
       ...project,
-      sectionId: sectionID,
-      'Section name': sectionName,
+      sectionId: id,
+      sectionName,
     })
   }
 
@@ -122,20 +122,21 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Name:'}
             fieldID={'projectName'}
-            fieldValue={project?.projectName}
-            placeholder={project?.projectName || 'example project name'}
+            fieldValue={project.projectName}
+            placeholder={project.projectName || 'example project name'}
             onChange={handleInputChange}
           />
 
           <EditableField
             isEdit={isEdit}
-            isAdding={isAdding}
+            isAdding={false}
             fieldName={'Section name:'}
-            fieldID={'Section name'}
-            fieldValue={project?.sectionId?.name}
+            fieldID={project.sectionName}
+            fieldValue={project.sectionName}
             modalAction={openSectionsModal}
           />
 
+          {/* // *TODO create component that displays sections without assigned projects */}
           {isOpenSectionsModal && isEdit && (
             <FindProject
               isOpen={isOpenSectionsModal}
@@ -148,8 +149,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'URL:'}
             fieldID={'projectUrl'}
-            fieldValue={project?.projectUrl}
-            placeholder={project?.projectUrl || 'http://example.project.url'}
+            fieldValue={project.projectUrl}
+            placeholder={project.projectUrl || 'http://example.project.url'}
             onChange={handleInputChange}
           />
 
@@ -157,8 +158,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Description:'}
             fieldID={'description'}
-            fieldValue={project?.description}
-            placeholder={project?.description || 'Some example description'}
+            fieldValue={project.description}
+            placeholder={project.description || 'Some example description'}
             onChange={handleInputChange}
             textArea={true}
           />
