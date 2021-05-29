@@ -21,7 +21,8 @@ export interface ISectionsUtility {
 
 async function getSectionNames(sections: ISectionsUtility[]) {
   const tmpSections: ISectionsUtility[] = [...sections]
-  sections.forEach(async (section: ISectionsUtility, index: number) => {
+  for(let index in sections) {
+    const section = sections[index]
     const res = await sectionService.getSection(section?._id)
     try {
       //@ts-ignore
@@ -29,17 +30,16 @@ async function getSectionNames(sections: ISectionsUtility[]) {
     } catch (err) {
       tmpSections[index] = { _id: section?._id, name: 'no section' }
     }
-  })
+  }
   return tmpSections
 }
 
 export async function getGrades(userID: string) {
   const response = await api.get(`${endpoint}/${userID}`)
-  if (response.status === 200) {
-    const grades = [...response.data]
-    const sections: ISectionsUtility[] = grades.map((grade: IGrade) => ({
-      _id: grade.sectionId,
-    }))
-    return { grades, sections: getSectionNames(sections) }
-  } else throw Error
+  const grades = [...response.data]
+  const sectionsIds: ISectionsUtility[] = grades.map((grade: IGrade) => ({
+    _id: grade.sectionId,
+  }))
+  const sections = await getSectionNames(sectionsIds)
+  return { grades, sections }
 }

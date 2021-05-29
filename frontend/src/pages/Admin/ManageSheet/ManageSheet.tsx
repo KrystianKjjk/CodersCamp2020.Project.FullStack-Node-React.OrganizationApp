@@ -92,7 +92,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
     enabled: openUsersModal,
   })
   const mentorsQuery = useUsersOfType('Mentor', {
-    enabled: openMentorsModal,
+    enabled: openMentorsModal || openReviewersModal,
   })
   const teamProjectsQuery = useTeamProjects({
     enabled: openProjectsModal,

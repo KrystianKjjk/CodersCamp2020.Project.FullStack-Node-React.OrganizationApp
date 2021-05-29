@@ -48,6 +48,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
 
   useEffect(() => {
     gradesData?.grades && setGrades(gradesData.grades)
+    gradesData?.sections && setSections(gradesData.sections)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gradesData])
 
@@ -80,7 +81,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
 
   function onClickDelete(index: number) {
     if (gradesData?.grades[index]) {
-      deleteGrade(gradesData?.grades[index])
+      deleteGrade(gradesData?.grades[index]?._id)
       toggleEdit(index)
     }
   }
@@ -101,7 +102,7 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
   }
 
   function addGrade(event: any) {
-    const tmpGrades = [...(grades as IGrade[])]
+    const idx = grades.length
     const tmpGrade: Omit<IGrade, '_id'> = {
       sectionId: '',
       testPoints: 0,
@@ -111,14 +112,12 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
       projectPoints: 0,
     }
     //@ts-ignore
-    tmpGrades.push(tmpGrade)
-    setGrades([...tmpGrades])
-    let tmpSections = sections
-    tmpSections.push({ _id: 'exampleID' })
-    setSections([...tmpSections])
+    setGrades([...grades, tmpGrade])
+    setSections([...sections, { _id: 'exampleID' }])
 
-    toggleEdit(tmpGrades.length - 1)
+    toggleEdit(idx)
   }
+
   function handleSectionSelection(index: number) {
     return function onSectionSelection(sectionRow: Section) {
       closeSectionsModal()
@@ -126,6 +125,8 @@ const ManageGrades: React.FC<ManageGradesProps> = (props) => {
       tmpGrades[index].sectionId = sectionRow.id
       setGrades([...tmpGrades])
 
+      console.log({ sections })
+      console.log({ grades })
       const tmpSections = [...sections]
       tmpSections[index].name = sectionRow.name
       setSections([...tmpSections])

@@ -32,12 +32,9 @@ const useMutationWithConfirm = <T, R, D>(
 
       // Snapshot the previous value
       const previousData = queryClient.getQueryData<D>(invalidate)
-      console.log({ previousData })
-      console.log({ invalidate })
       // Optimistically update to the new value
       if (previousData && newData) {
         const nextData = newData(reqParam, previousData)
-        console.log('UPdate', { nextData })
         queryClient.setQueryData<D>(invalidate, nextData)
       }
 

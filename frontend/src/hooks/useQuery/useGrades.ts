@@ -6,7 +6,9 @@ import useMutationWithConfirm from '../useMutationWithConfirm'
 const queryKey = 'grades'
 
 const useGrades = (userID: string) =>
-  useQuery(queryKey, () => api.getGrades(userID))
+  useQuery(queryKey, () => api.getGrades(userID), {
+    enabled: !!userID,
+  })
 export default useGrades
 
 export const useUpdateGrade = () =>

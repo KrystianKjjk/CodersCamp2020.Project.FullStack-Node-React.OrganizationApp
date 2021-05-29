@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 import * as api from '../../api/Team.api'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 
-const queryKey = 'team'
+const queryKey = 'teams'
 
 const useTeam = (id: string) => useQuery([queryKey, id], () => api.getTeam(id))
 export default useTeam
@@ -24,10 +24,10 @@ export const useDeleteUserFromTeam = () =>
 
 export const useDeleteTeam = () =>
   useMutationWithConfirm(api.deleteTeam, {
-    invalidate: queryKey + 's',
+    invalidate: queryKey,
   })
 
 export const useCreateTeam = () =>
   useMutationWithConfirm(api.createTeam, {
-    invalidate: queryKey + 's',
+    invalidate: queryKey,
   })

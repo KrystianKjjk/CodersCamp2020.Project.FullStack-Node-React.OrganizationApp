@@ -10,6 +10,7 @@ import UButton from '../../../components/UButton'
 import PageHeader from '../../../components/PageHeader'
 import { searchSection, sortSections, useSections } from '../../../hooks'
 import { ManageSection } from '../../../models'
+import { displayFormattedDate } from '../../../api'
 
 export interface ManageSectionsProps {}
 
@@ -17,13 +18,6 @@ const ManageSections: React.FC<ManageSectionsProps> = () => {
   const history = useHistory()
   const tableName = 'Sections'
   const { data: sections, isLoading, isFetching, error } = useSections()
-
-  const displayFormattedDate = (date: number) => {
-    if (!date) return ''
-    const dateObject = new Date(date * 1000)
-
-    return `${dateObject.toLocaleDateString()}`
-  }
 
   const changeSortBy = (value: string) => {
     sortSections(value as keyof ManageSection)
