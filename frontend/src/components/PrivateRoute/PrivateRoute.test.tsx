@@ -4,6 +4,8 @@ import PrivateRoute from './PrivateRoute'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { store } from '../../app/store'
 import { Provider } from 'react-redux'
+import { QueryClientProvider } from 'react-query'
+import queryClient from '../../QueryClient'
 
 describe('PrivateRoute', () => {
   it('renders properly', () => {
@@ -12,11 +14,13 @@ describe('PrivateRoute', () => {
     }
     const { container } = render(
       <Provider store={store}>
-        <Router>
-          <PrivateRoute path="/">
-            <DummyComponent />
-          </PrivateRoute>
-        </Router>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <PrivateRoute path="/">
+              <DummyComponent />
+            </PrivateRoute>
+          </Router>
+        </QueryClientProvider>
       </Provider>,
     )
     expect(container).toMatchSnapshot()

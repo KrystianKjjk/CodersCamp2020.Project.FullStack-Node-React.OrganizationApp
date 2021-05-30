@@ -1,40 +1,57 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Box, CircularProgress } from '@material-ui/core'
 import { mainTheme } from '../../../theme/customMaterialTheme'
 import { ThemeProvider } from '@material-ui/styles'
 
-import UserService from '../../../api/users.service'
-import BaseService from '../../../app/baseService'
-import { IUser } from '../../../models/User.model'
+import { convertUserToIUser, IUser, userStatusDict, userTypeDict } from '../../../models/User.model'
 import { UserStatus as Status } from '../../../models/User.model'
 import { UserType as Role } from '../../../models/User.model'
 import ManageGrades from '../ManageGrades'
 import UButton from '../../../components/UButton'
 import styles from './ManageUser.module.css'
 import DeleteButton from '../../../components/DeleteButton'
-import useSnackbar from '../../../hooks/useSnackbar'
 import ReusableGoBack from '../../../components/ReusableGoBack'
 import PageHeader from '../../../components/PageHeader'
+import { useDeleteUser, useUpdateUser, useUser } from '../../../hooks'
+import useSnackbar from '../../../hooks/useSnackbar'
 
 export interface ManageUserProps {}
 
 const ManageUser: React.FC<ManageUserProps> = (props: any) => {
-  const userService = new UserService(new BaseService())
   const history = useHistory()
 
-  const [error, setError] = useState(null)
-  const [isLoaded, setIsLoaded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+  const [userToSave, setUserToSave] = useState<IUser | undefined>()
+  const { showError } = useSnackbar()
 
-  const [user, setUser] = useState<IUser | undefined>(undefined)
-  const { showSuccess, showError } = useSnackbar()
-  let userID = props?.match?.params?.userID
+  let { userID } = useParams<{userID: string}>()
+  const { data: user, isLoading, error } = useUser(userID)
+  const { mutate: updateUser } = useUpdateUser({
+    successMessage: 'User updated correctly!',
+    errorMessage: 'User not updated!',
+    onSuccess: toggleEdit,
+    invalidate: ['user', userID],
+    newData: ([id, newUser], previousData) => ({
+      ...previousData,
+      name: newUser.name,
+      surname: newUser.surname,
+      email: newUser.email,
+      type: userTypeDict[newUser.type],
+      status: userStatusDict[newUser.status],
+    }),
+  })
+  const { mutate: deleteUser } = useDeleteUser({
+    successMessage: 'User deleted!',
+    errorMessage: 'User not deleted!',
+    onSuccess: () => history.push('/users'),
+    newData: (id, previousData) =>
+      previousData.filter((user) => user.id !== id),
+  })
 
   useEffect(() => {
-    getUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (user) setUserToSave(convertUserToIUser(user))
+  }, [user])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
@@ -46,66 +63,15 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
     let value = target.value
     if (!isNaN(value)) value = +value
     // @ts-ignore
-    setUser({
-      ...user,
+    setUserToSave({
+      ...userToSave,
       [name]: value,
     })
   }
 
-  function getUser() {
-    userService
-      .getUser(userID)
-      .then((res) => {
-        if (res.status === 200) {
-          setIsLoaded(true)
-          setUser({
-            name: res.data.name,
-            surname: res.data.surname,
-            type: res.data.type,
-            status: res.data.status,
-            email: res.data.email,
-          })
-        } else {
-          throw Error
-        }
-      })
-      .catch((err) => {
-        setIsLoaded(true)
-        setError(err)
-      })
-  }
+  if (error) showError((error as Error).message)
 
-  function updateUser() {
-    userService
-      .updateUser(userID, user as IUser)
-      .then((res) => {
-        if (res.status === 200) {
-          toggleEdit()
-          showSuccess('User updated correctly!')
-        }
-      })
-      .catch((err) => {
-        setError(err)
-        showError('User not updated!')
-      })
-  }
-
-  function deleteUser() {
-    userService
-      .deleteUser(userID)
-      .then((res) => {
-        if (res.status === 200) {
-          history.push('/users')
-        }
-      })
-      .catch((err) => {
-        showError('User not deleted!')
-      })
-  }
-
-  if (error) return <div className={styles.error}>Error</div>
-
-  if (!isLoaded) return <CircularProgress className={styles.loading} />
+  if (isLoading) return <CircularProgress className={styles.loading} />
 
   return (
     <ThemeProvider theme={mainTheme}>
@@ -123,10 +89,14 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
           <div className={styles.container__header__button}>
             <DeleteButton
               confirmTitle={`Are you sure you want to delete the user?`}
-              onConfirm={deleteUser}
+              onConfirm={() => deleteUser(userID)}
             />
             {isEdit ? (
-              <UButton text="SAVE" color="primary" onClick={updateUser} />
+              <UButton
+                text="SAVE"
+                color="primary"
+                onClick={() => updateUser([userID, userToSave!])}
+              />
             ) : (
               <UButton text="EDIT" color="primary" onClick={toggleEdit} />
             )}
@@ -145,14 +115,14 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
                           ${isEdit && styles.status_radio_button__edit}
                       `}
             >
-              {(isEdit || (user?.status as Status) === Status.Active) && (
+              {(isEdit || (userToSave?.status as Status) === Status.Active) && (
                 <>
                   <input
                     type="radio"
                     id="Active"
                     name="status"
                     value={Status.Active}
-                    checked={(user?.status as Status) === Status.Active}
+                    checked={(userToSave?.status as Status) === Status.Active}
                     onChange={handleInputChange}
                   />
                   <label
@@ -164,14 +134,15 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
                 </>
               )}
 
-              {(isEdit || (user?.status as Status) === Status.Resigned) && (
+              {(isEdit ||
+                (userToSave?.status as Status) === Status.Resigned) && (
                 <>
                   <input
                     type="radio"
                     id="Resigned"
                     name="status"
                     value={Status.Resigned}
-                    checked={(user?.status as Status) === Status.Resigned}
+                    checked={(userToSave?.status as Status) === Status.Resigned}
                     onChange={handleInputChange}
                   />
                   <label
@@ -183,14 +154,15 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
                 </>
               )}
 
-              {(isEdit || (user?.status as Status) === Status.Archived) && (
+              {(isEdit ||
+                (userToSave?.status as Status) === Status.Archived) && (
                 <>
                   <input
                     type="radio"
                     id="Archived"
                     name="status"
                     value={Status.Archived}
-                    checked={(user?.status as Status) === Status.Archived}
+                    checked={(userToSave?.status as Status) === Status.Archived}
                     onChange={handleInputChange}
                   />
                   <label
@@ -269,7 +241,7 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
               {isEdit ? (
                 <select
                   name="type"
-                  value={user?.type}
+                  value={userToSave?.type}
                   onChange={handleInputChange}
                 >
                   <option value={Role.Candidate}>Candidate</option>
@@ -278,7 +250,7 @@ const ManageUser: React.FC<ManageUserProps> = (props: any) => {
                   <option value={Role.Admin}>Admin</option>
                 </select>
               ) : (
-                <p>{Role[user?.type!]}</p>
+                <p>{Role[userToSave?.type!]}</p>
               )}
             </div>
           </div>

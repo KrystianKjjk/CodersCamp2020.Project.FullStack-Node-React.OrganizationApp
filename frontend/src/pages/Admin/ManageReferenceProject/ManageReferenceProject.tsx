@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
 import { useHistory, useParams } from 'react-router-dom'
 
-import FindProject from '../../../components/FindProject'
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
 
@@ -13,14 +12,19 @@ import {
   useUpdateProject,
   useDeleteProject,
   useCreateProject,
+  useSections,
 } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
+import { Section } from '../../../models'
+import FindModal from '../../../components/FindModal'
+import { GridValueFormatterParams } from '@material-ui/data-grid'
+import { displayFormattedDate } from '../../../api'
 
 export interface ManageReferenceProjectProps {}
 
 const ManageReferenceProject = (props: any) => {
-  const { projectID } = useParams()
+  const { projectID } = useParams<{ projectID: string }>()
   const history = useHistory()
 
   const [isEdit, setIsEdit] = useState(false)
@@ -30,7 +34,14 @@ const ManageReferenceProject = (props: any) => {
   const { mutate: updateProject } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
   const { mutate: addProject } = useCreateProject()
-  const { data: fetchedProject, error, isLoading } = useProject(projectID)
+  const { data: fetchedProject, error, isLoading } = useProject(projectID, {
+    enabled: !!projectID,
+  })
+
+  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
+  const sectionsQuery = useSections({
+    enabled: isOpenSectionsModal,
+  })
 
   useEffect(() => {
     if (props?.match?.path?.match('add')) {
@@ -64,6 +75,7 @@ const ManageReferenceProject = (props: any) => {
     if (isAdding) {
       addProject(project)
       setIsAdding(false)
+      history.push('/projects')
     } else {
       updateProject(project)
     }
@@ -78,8 +90,6 @@ const ManageReferenceProject = (props: any) => {
     history.push('/projects')
   }
 
-  const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
-
   function openSectionsModal() {
     setIsOpenSectionsModal(true)
   }
@@ -87,14 +97,34 @@ const ManageReferenceProject = (props: any) => {
     setIsOpenSectionsModal(false)
   }
 
-  function handleSectionSelection(sectionID: string, sectionName: string) {
+  function handleSectionSelection(section: Section) {
     closeSectionsModal()
     setProject({
       ...project,
-      sectionId: sectionID,
-      'Section name': sectionName,
+      sectionId: section.id,
+      'Section name': section.name,
     })
   }
+
+  const sectionColumns = [
+    { field: 'name', width: 200, headerName: 'section Name' },
+    {
+      field: 'startDate',
+      width: 200,
+      headerName: 'Start date',
+      sortable: true,
+      valueFormatter: (params: GridValueFormatterParams) =>
+        displayFormattedDate(params.value as number),
+    },
+    {
+      field: 'endDate',
+      width: 200,
+      headerName: 'End date',
+      sortable: true,
+      valueFormatter: (params: GridValueFormatterParams) =>
+        displayFormattedDate(params.value as number),
+    },
+  ]
 
   if (error) showError((error as Error).message)
 
@@ -132,15 +162,22 @@ const ManageReferenceProject = (props: any) => {
             isAdding={isAdding}
             fieldName={'Section name:'}
             fieldID={'Section name'}
-            fieldValue={project?.sectionId.name}
+            fieldValue={project?.sectionName}
             modalAction={openSectionsModal}
           />
 
           {isOpenSectionsModal && isEdit && (
-            <FindProject
-              isOpen={isOpenSectionsModal}
-              handleClose={closeSectionsModal}
-              onSectionSelection={handleSectionSelection}
+            <FindModal<Section>
+              onRowSelection={handleSectionSelection}
+              query={sectionsQuery}
+              queryKey="sections"
+              columns={sectionColumns}
+              searchPlaceholder="Search by name"
+              searchBy="name"
+              name="Find section"
+              open={isOpenSectionsModal}
+              handleClose={() => setIsOpenSectionsModal(false)}
+              handleOpen={() => setIsOpenSectionsModal(true)}
             />
           )}
 

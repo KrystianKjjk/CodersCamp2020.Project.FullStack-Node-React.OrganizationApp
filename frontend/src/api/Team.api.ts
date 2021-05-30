@@ -29,9 +29,7 @@ async function getTeamProjects(id: string, mentorId?: string): Promise<TeamProje
   return projects;
 }
 
-export const getTeams = async (): Promise<Team[]> => {
-  const activeCourse = localStorage.getItem('activeCourse')
-  const courseId: string = activeCourse ? JSON.parse(activeCourse)._id : null
+export const getTeams = async (courseId?: string): Promise<Team[]> => {
   const courseRes = await api.get('/courses/' + (courseId ?? ''))
   const course = courseRes.data as CourseData
   const teams = (await api.get(`courses/${course._id}/teams`))
@@ -111,9 +109,8 @@ export const deleteUserFromTeam = async (teamId: string, userId: string) => {
   await api.delete(`teams/${teamId}/users/${userId}`)
 }
 
-export const createTeam = async () => {
-  const courseId = localStorage.getItem('courseId')
-  await api.post('/teams', { course: courseId })
+export const createTeam = async (courseId?: string) => {
+  await api.post('/teams', { course: courseId ?? null })
 }
 
 export const deleteTeam = async (id: string) => {

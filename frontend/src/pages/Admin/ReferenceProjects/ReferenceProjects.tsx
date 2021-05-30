@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import UButton from '../../../components/UButton'
-import { ReusableTableReactQuery } from '../../../components/ReusableTable'
+import ReusableTable from '../../../components/ReusableTable'
 
 import styles from './ReferenceProjects.module.css'
 import { mainTheme } from '../../../theme/customMaterialTheme'
@@ -53,7 +53,7 @@ const ReferenceProjects: React.FC<ReferenceProjectsProps> = () => {
           </div>
         </Box>
         <div className={styles.projectsTable}>
-          <ReusableTableReactQuery
+          <ReusableTable
             name=""
             columns={columns}
             onRowClick={handleSelection}
