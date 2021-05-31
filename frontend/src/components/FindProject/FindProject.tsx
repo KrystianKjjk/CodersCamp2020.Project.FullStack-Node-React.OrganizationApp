@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Backdrop, Fade, Modal, MuiThemeProvider } from '@material-ui/core'
 
-import { ReusableTableReactQuery } from '../ReusableTable'
+import ReusableTable from '../ReusableTable'
 import SearchInput from '../SearchInput'
 
 import styles from './FindProject.module.css'
@@ -65,7 +65,7 @@ const FindProject: React.FC<FindSectionProps> = (props) => {
                 <SearchInput onSubmit={onSearch} placeholder="Search by name" />
               </div>
               <div className={styles.container__body__table}>
-                <ReusableTableReactQuery
+                <ReusableTable
                   name="Projects"
                   columns={columns}
                   onRowClick={handleRowClick}

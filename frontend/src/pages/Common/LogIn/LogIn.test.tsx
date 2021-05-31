@@ -10,9 +10,8 @@ import {
 import '@testing-library/jest-dom/extend-expect'
 import { Provider } from 'react-redux'
 import { store } from '../../../app/store'
-import BaseService from '../../../app/baseService'
+import BaseService from '../../../api/api.service'
 
-jest.mock('../../../app/baseService', () => jest.fn())
 
 describe('LogIn', () => {
   it('renders without error', () => {
@@ -46,11 +45,8 @@ describe('LogIn', () => {
     const inputPasswordElement = inputPasswordDiv.querySelector('input')
     fireEvent.change(inputPasswordElement, { target: { value: 'Aaaa1234!' } })
 
-    const fakePost = jest.fn()
-    //@ts-ignore
-    BaseService.mockImplementation(() => {
-      return { post: fakePost }
-    })
+    const fakePost = jest.spyOn(BaseService, 'post')
+
     const button = await screen.getByTestId('li-button')
 
     button.click()

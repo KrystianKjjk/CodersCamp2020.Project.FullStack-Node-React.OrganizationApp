@@ -2,20 +2,31 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './ManageSheet.module.css'
 import AddButton from '../../../components/AddButton'
 import UButton from '../../../components/UButton'
-import Table from '../../../components/ReusableTable'
-import FindModal from '../../../components/FindModal'
+import ReusableTable from '../../../components/ReusableTable'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { User, Grades, SheetGrade, Reviewer } from '../../../models'
 import _ from 'lodash'
-import { SheetService, UserService, getTeamProjects } from '../../../api'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import { useParams } from 'react-router-dom'
-import { fetchData } from '../../../components/ReusableTable/ReusableTableSlice'
-import { useAppDispatch } from '../../../hooks/hooks'
 import EditGradeModal from '../../../components/EditGradeModal'
 import DeleteButton from '../../../components/DeleteButton'
 import PageHeader from '../../../components/PageHeader'
 import ReusableGoBack from '../../../components/ReusableGoBack'
+import {
+  useAddReviewer,
+  useAddUserToSheet,
+  useDeleteUserFromSheet,
+  usePatchMentorGrade,
+  useSetMentorForSheet,
+  useSetMentorGrade,
+  useSetProjectForSheet,
+  useSetReviewersForSheet,
+  useSheet,
+  useUsersOfType,
+} from '../../../hooks'
+import FindModal from '../../../components/FindModal/FindModal'
+import { useTeamProjects } from '../../../hooks/useQuery/useTeamProjects'
+import { TeamProjectDto } from '../../../api/TeamProjects.api'
 
 type Grade = SheetGrade & { quality: string }
 
@@ -30,11 +41,8 @@ function gradesObjectToArray(grades: Grades): Grade[] {
 export interface ManageSheetProps {}
 
 const ManageSheet: React.FC<ManageSheetProps> = () => {
-  const api = new SheetService()
-  const usersApi = new UserService()
   const mentorGradesTableName = 'Mentor Grades'
   const participantsTableName = 'Participants'
-  const dispatch = useAppDispatch()
 
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading')
   const [mentor, setMentor] = useState<User>()
@@ -62,9 +70,36 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   })
 
   let { sheetId } = useParams<{ sheetId: string }>()
+  const { data: sheet, error, isLoading, isFetching } = useSheet(sheetId)
+  const { mutate: setMentorForSheet } = useSetMentorForSheet(sheetId, {})
+  const { mutate: setProjectForSheet } = useSetProjectForSheet(sheetId, {})
+  const { mutate: addParticipant } = useAddUserToSheet(sheetId, {})
+  const { mutate: deleteParticipant } = useDeleteUserFromSheet(sheetId, {})
+  const { mutate: addReviewer } = useAddReviewer(sheetId, {})
+  const { mutate: setReviewersForSheet } = useSetReviewersForSheet(sheetId, {})
+  const { mutate: patchMentorGrade } = usePatchMentorGrade(sheetId, {})
+  const { mutate: setMentorGrade } = useSetMentorGrade(sheetId, {})
+  // TODO: Mentor reviewers grades
+  // const { mutate: patchMentorReviewerGrade } = usePatchMentorReviewerGrade(
+  //   sheetId,
+  //   {},
+  // )
+  // const { mutate: setMentorReviewerGrade } = useSetMentorReviewerGrade(
+  //   sheetId,
+  //   {},
+  // )
+  const participantsQuery = useUsersOfType('Participant', {
+    enabled: openUsersModal,
+  })
+  const mentorsQuery = useUsersOfType('Mentor', {
+    enabled: openMentorsModal || openReviewersModal,
+  })
+  const teamProjectsQuery = useTeamProjects({
+    enabled: openProjectsModal,
+  })
 
-  const loadSheet = () => {
-    api.getSheet(sheetId).then((sheet) => {
+  useEffect(() => {
+    if (sheet) {
       setMentor({
         id: sheet.mentorID,
         name: sheet.mentorName,
@@ -85,63 +120,33 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
       setMentorGrades(sheet.mentorGrades)
       setLoading('idle')
       setOpenUsersModal(false)
-    })
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(loadSheet, [])
+    }
+  }, [sheet])
 
   const handleMentorSelection = (row: User) => {
     setOpenMentorsModal(false)
-    api
-      .setMentor(sheetId, row.id)
-      .then(() => {
-        setMentor({
-          id: row.id,
-          name: row.name,
-          surname: row.surname,
-        })
-      })
-      .catch((error) => console.log(error))
+    setMentorForSheet(row.id)
   }
 
-  let getParticipants = async () => api.getParticipants(sheetId)
-  let getMentorGrades = async () =>
-    gradesObjectToArray(await api.getMentorGrades(sheetId))
-
   const handleAddUserSelection = (row: User) => {
-    api
-      .addParticipant(sheetId, row.id)
-      .then(() => {
-        loadSheet()
-      })
-      .catch((error) => console.log(error))
+    addParticipant(row.id)
   }
 
   const handleProjectSelection = (row: any) => {
     setOpenProjectsModal(false)
-    api
-      .setProject(sheetId, row.id)
-      .then(() => setProject(row))
-      .catch((error) => console.log(error))
+    setProjectForSheet(row.id)
   }
 
   const handleReviewerSelection = (row: any) => {
     setOpenReviewersModal(false)
-    api
-      .addReviewer(sheetId, row.id)
-      .then(loadSheet)
-      .catch((error) => console.log(error))
+    addReviewer(row.id)
   }
 
   const deleteReviewer = (id: string) => {
     const newReviewers = reviewers
       .map((rev) => rev._id)
       .filter((rev) => rev !== id)
-    api
-      .setReviewers(sheetId, newReviewers)
-      .then(loadSheet)
-      .catch((error) => console.log(error))
+    setReviewersForSheet(newReviewers)
   }
 
   const handleParticipantSelection = (row: GridSelectionModelChangeParams) => {
@@ -149,11 +154,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   }
 
   const deleteSelectedUsers = () => {
-    Promise.all(
-      selectedParticipants.current.map((user) =>
-        api.deleteParticipant(sheetId, user),
-      ),
-    ).then(() => loadSheet())
+    selectedParticipants.current.forEach((user) => deleteParticipant(user))
     selectedParticipants.current = []
   }
 
@@ -169,17 +170,12 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
     if (editedGrade.quality !== Object.keys(grade)[0])
       delete newGrades[editedGrade.quality]
 
-    api
-      .patchMentorGrade(sheetId, newGrades)
-      .then(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)))
-      .catch((error) => console.log(error))
+    patchMentorGrade(newGrades)
   }
 
   const deleteSelectedGrades = () => {
     const newMentorGrades = _.omit(mentorGrades, selectedGrades.current)
-    api
-      .patchMentorGrade(sheetId, newMentorGrades)
-      .then(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)))
+    patchMentorGrade(newMentorGrades)
     selectedGrades.current = []
     setMentorGrades(newMentorGrades)
   }
@@ -188,10 +184,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
     const newGrades = {
       [grade.quality]: _.omit(grade, 'quality'),
     }
-    api
-      .setMentorGrade(id, newGrades)
-      .then(() => dispatch(fetchData(mentorGradesTableName, getMentorGrades)))
-      .catch((error) => console.log(error))
+    setMentorGrade(newGrades)
     setMentorGrades({ ...mentorGrades, ...newGrades })
   }
 
@@ -212,10 +205,10 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   ]
 
   const projectColumns = [
-    { field: 'Name', headerName: 'Name', width: 250 },
-    { field: 'Mentor', headerName: 'Mentor', width: 250 },
+    { field: 'teamProjectName', headerName: 'Name', width: 250 },
+    { field: 'mentorName', headerName: 'Mentor', width: 250 },
     { field: 'projectUrl', headerName: 'Url', width: 250 },
-    { field: 'Section', headerName: 'Mentor', width: 250 },
+    { field: 'sectionName', headerName: 'Section', width: 250 },
   ]
 
   if (loading === 'loading') return <p>...Loading</p>
@@ -239,7 +232,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           {openMentorsModal && (
             <FindModal<User>
               onRowSelection={handleMentorSelection}
-              getData={() => usersApi.getUsersOfType('Mentor')}
+              query={mentorsQuery}
+              queryKey="Mentors"
               columns={mentorColumns}
               searchPlaceholder="Search by surname"
               searchBy="surname"
@@ -250,12 +244,13 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             />
           )}
           {openProjectsModal && (
-            <FindModal<User>
+            <FindModal<TeamProjectDto>
               onRowSelection={handleProjectSelection}
-              getData={getTeamProjects}
+              query={teamProjectsQuery}
+              queryKey="teamProjects"
               columns={projectColumns}
               searchPlaceholder="Search by name"
-              searchBy="name"
+              searchBy="teamProjectName"
               name="Find project"
               open={openProjectsModal}
               handleClose={() => setOpenProjectsModal(false)}
@@ -265,7 +260,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           {openReviewersModal && (
             <FindModal<User>
               onRowSelection={handleReviewerSelection}
-              getData={() => usersApi.getUsersOfType('Mentor')}
+              query={mentorsQuery}
+              queryKey="Mentors"
               columns={mentorColumns}
               searchPlaceholder="Search by surname"
               searchBy="surname"
@@ -339,7 +335,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           {openUsersModal && (
             <FindModal<User>
               onRowSelection={handleAddUserSelection}
-              getData={() => usersApi.getUsersOfType('Participant')}
+              query={participantsQuery}
+              queryKey="Participants"
               columns={participantColumns}
               searchPlaceholder="Search by surname"
               searchBy="surname"
@@ -363,11 +360,18 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTable
             aria-label="Participants table"
             name={participantsTableName}
             columns={participantColumns}
-            getData={getParticipants}
+            data={sheet?.participants.map((user) => ({
+              id: user.participantID,
+              name: user.name,
+              surname: user.surname,
+            }))}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            error={error}
             checkboxSelection={true}
             onSelectionModelChange={handleParticipantSelection}
           />
@@ -403,11 +407,14 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           </div>
         </div>
         <div className={styles.table}>
-          <Table
+          <ReusableTable
             aria-label="Grades table"
             name={mentorGradesTableName}
             columns={gradeColumns}
-            getData={getMentorGrades}
+            data={gradesObjectToArray(sheet?.mentorGrades ?? {})}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            error={error}
             onSelectionModelChange={handleGradeSelection}
             onRowClick={(params) =>
               setEditedGrade({

@@ -1,10 +1,10 @@
 import * as api from '../../api/TeamProjects.api'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryOptions } from 'react-query'
 import useMutationWithConfirm from '../useMutationWithConfirm'
 
 const TEAM_PROJECTS = 'teamProjects'
-const useTeamProjects = () => {
-  return useQuery(TEAM_PROJECTS, () => api.getTeamProjects())
+const useTeamProjects = (options?: Partial<UseQueryOptions<api.TeamProjectDto[]>>) => {
+  return useQuery(TEAM_PROJECTS, () => api.getTeamProjects(), options)
 }
 const useTeamProject = (id: string) => {
   return useQuery([TEAM_PROJECTS, id], () => api.getTeamProject(id))

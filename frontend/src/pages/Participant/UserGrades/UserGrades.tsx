@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './UserGrades.module.css'
 import { Box, CircularProgress } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import { mainTheme } from '../../../theme/customMaterialTheme'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchUser, selectUserData } from '../../Common/HomePage/HomePageSlice'
 import {
   MAX_PROJECT,
   PROJECT_WEIGHT,
@@ -12,22 +10,17 @@ import {
   TASK_WEIGHT,
 } from '../../../app/constants'
 import PageHeader from '../../../components/PageHeader'
+import { useUserMe } from '../../../hooks'
 
 export interface UserGradesProps {}
 
 const UserGrades: React.FC<UserGradesProps> = (props) => {
-  const dispatch = useDispatch()
-  const { userData, loaded, error } = useSelector(selectUserData)
+  const userID = localStorage.getItem('id') ?? ''
+  const { data: userData, isLoading, error } = useUserMe({
+    enabled: !!userID,
+  })
 
   let finalResult = 0
-
-  useEffect(() => {
-    if (!loaded) {
-      const userID = localStorage.getItem('id')
-      dispatch(fetchUser(userID))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   function getColor(percentage: number) {
     if (percentage > 80) return '#3E66FB'
@@ -38,7 +31,7 @@ const UserGrades: React.FC<UserGradesProps> = (props) => {
 
   if (error) {
     return <div className={styles.error}>Error</div>
-  } else if (!loaded) {
+  } else if (isLoading) {
     return <CircularProgress className={styles.loading} />
   } else {
     return (

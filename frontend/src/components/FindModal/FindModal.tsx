@@ -3,25 +3,28 @@ import { Backdrop, CssBaseline, Fade, Modal } from '@material-ui/core'
 
 import ReusableTable from '../ReusableTable'
 import SearchInput from '../SearchInput'
-import { searchData } from '../ReusableTable/ReusableTableSlice'
 
 import styles from './FindModal.module.css'
-import { useAppDispatch } from '../../hooks/hooks'
+import { UseQueryResult } from 'react-query'
+import { genericSearch } from '../../hooks/useQuery/useGenericQuery'
 
-export interface FindModalProps<T> {
+
+interface FindModalProps<T> {
   onRowSelection: any
-  getData: () => Promise<T[]>
+  query: UseQueryResult<T[]>
   columns: { field: string; width: number; fieldName?: string }[]
   searchPlaceholder?: string
   searchBy: keyof T
   name: string
+  queryKey: string
   open: boolean
   handleClose: () => void
   handleOpen: () => void
 }
 
-const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
-  const dispatch = useAppDispatch()
+const FindModal = <T extends unknown>(
+  props: FindModalProps<T>,
+) => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -30,13 +33,7 @@ const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
   }, [])
 
   useEffect(() => {
-    dispatch(
-      searchData({
-        table: props.name,
-        column: `${props.searchBy}`,
-        search,
-      }),
-    )
+    genericSearch<T>(props.queryKey)(`${props.searchBy}` as keyof T, search)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
@@ -80,7 +77,10 @@ const FindModal = <T extends unknown>(props: FindModalProps<T>) => {
               <div className={styles.container__body__table}>
                 <ReusableTable
                   name={props.name}
-                  getData={props.getData}
+                  data={props.query.data}
+                  isLoading={props.query.isLoading}
+                  isFetching={props.query.isFetching}
+                  error={props.query.error}
                   columns={props.columns}
                   onRowClick={handleRowClick}
                 />

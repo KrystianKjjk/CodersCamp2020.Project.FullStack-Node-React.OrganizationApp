@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import styles from './MainView.module.css'
 import Header from '../../../components/Header'
@@ -19,8 +19,6 @@ import TeamProjects from '../../Admin/TeamProjects'
 import ManageTeams from '../../Admin/ManageTeams'
 import ManageUsers from '../../Admin/ManageUsers'
 import UserGrades from '../../Participant/UserGrades'
-import { fetchUser, selectUserData } from '../HomePage/HomePageSlice'
-import { useDispatch, useSelector } from 'react-redux'
 import ManageUser from '../../Admin/ManageUser'
 import ResetPasswordFromLink from '../ResetPassword/ResetPasswordFromLink'
 import ManageSections from '../../Admin/ManageSections'
@@ -33,8 +31,10 @@ import {
   AddReferenceProject,
 } from '../../Admin/ManageReferenceProject'
 import TeamProject from '../../Admin/TeamProject'
-import BaseService from '../../../app/baseService'
 import ResetPasswordRequest from '../ResetPassword'
+import { api } from '../../../api'
+import { useDidUpdateEffect, useUserMe } from '../../../hooks'
+import { useQueryClient } from 'react-query'
 
 interface LoggedInViewProps {
   onLogout?: Function
@@ -46,28 +46,27 @@ interface LoggedOutViewProps {
 
 const MainView: React.FC = () => {
   const userData = getUserFromLocalStorage()
-  const service = new BaseService()
+  const userID = userData.userId ?? ''
 
   const [isLogged, setIsLogged] = useState(Boolean(userData.userType))
+  const queryClient = useQueryClient()
+
+  useUserMe({
+    enabled: !!userID,
+  })
 
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
 
-  const dispatch = useDispatch()
-  const { loaded } = useSelector(selectUserData)
-
-  useEffect(() => {
-    if (isLogged) {
-      const userID = localStorage.getItem('id')
-      dispatch(fetchUser(userID))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged, loaded])
+  useDidUpdateEffect(() => {
+    if (isLogged) queryClient.refetchQueries(['user', 'me'])
+    else queryClient.removeQueries(['user', 'me'])
+  }, [isLogged])
 
   const handleLogout = async () => {
-    setIsLogged(false)
-    await service.get('logout')
+    await api.get('logout')
     removeCookie('token')
+    setIsLogged(false)
   }
 
   const MainContent = () => {

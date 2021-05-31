@@ -130,3 +130,10 @@ export const addSection = async (data: NewSectionData) => {
 export const deleteSection = async (id: string) => {
   await api.delete(`/sections/${id}`)
 }
+
+export const displayFormattedDate = (date: number) => {
+  if (!date) return ''
+  const dateObject = new Date(date * 1000)
+
+  return `${dateObject.toLocaleDateString()}`
+}
