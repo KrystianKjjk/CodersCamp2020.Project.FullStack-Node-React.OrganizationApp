@@ -1,0 +1,14 @@
+.select {
+  width: 200px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons > * {
+  margin-left: 1rem !important;
+}
