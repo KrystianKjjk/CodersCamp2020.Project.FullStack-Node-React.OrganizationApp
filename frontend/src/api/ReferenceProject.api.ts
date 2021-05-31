@@ -1,6 +1,7 @@
 import api from './api.service'
 import * as sectionService from './Section.api'
 import { ProjectData } from '../models'
+import { Section, SectionData } from '../models/Section.model'
 
 const endpoint = `projects`
 
@@ -11,11 +12,20 @@ export const getRefProjects = async () => {
     endDate: new Date(d.endDate).toLocaleDateString(),
   }))
 }
-export const getRefProject = async (projectID: string) => {
+export const getRefProject = async (
+  projectID: string,
+): Promise<ProjectSectionData> => {
   const response = await api.get<Project>(`${endpoint}/${projectID}`)
-  return response.data
+
+  return {
+    ...response.data,
+    sectionId: {
+      id: response.data.sectionId._id,
+      name: response.data.sectionId.name,
+    },
+  }
 }
-export const createRefProject = async (project: ProjectData) => {
+export const createRefProject = async (project: Omit<ProjectData, '_id'>) => {
   return api.post(`${endpoint}`, project)
 }
 export const deleteRefProject = async (projectID: string) => {
@@ -54,7 +64,7 @@ export interface ProjectDto {
 
 export interface Project {
   _id: string
-  sectionId: NotMappedSection
+  sectionId: SectionData
   projectName: string
   projectUrl: string
   description: string
@@ -62,13 +72,6 @@ export interface Project {
   updatedAt: string
 }
 
-export interface NotMappedSection {
-  _id: string
-  name: string
-  course: string //* id
-  description: string
-  endDate: string
-  materials: unknown[] //! to change
-  startDate: string
-  tests: unknown[] //! to change
+export interface ProjectSectionData extends Omit<Project, 'sectionId'> {
+  sectionId: Section
 }

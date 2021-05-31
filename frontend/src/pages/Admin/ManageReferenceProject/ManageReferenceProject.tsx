@@ -21,7 +21,18 @@ import FindModal from '../../../components/FindModal'
 import { GridValueFormatterParams } from '@material-ui/data-grid'
 import { displayFormattedDate } from '../../../api'
 
+import { InputValues } from './types'
+
 export interface ManageReferenceProjectProps {}
+
+const initialValues = {
+  _id: '',
+  description: '',
+  projectName: '',
+  projectUrl: '',
+  sectionId: '',
+  sectionName: '',
+}
 
 const ManageReferenceProject = (props: any) => {
   const { projectID } = useParams<{ projectID: string }>()
@@ -29,7 +40,7 @@ const ManageReferenceProject = (props: any) => {
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
-  const [project, setProject] = useState<any>()
+  const [project, setProject] = useState<InputValues>(initialValues)
   const { showError } = useSnackbar()
   const { mutate: updateProject } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
@@ -52,17 +63,24 @@ const ManageReferenceProject = (props: any) => {
   }, [])
 
   useEffect(() => {
-    setProject(fetchedProject)
+    if (fetchedProject) {
+      const { sectionId, ...project } = fetchedProject
+      setProject({
+        sectionId: sectionId.id,
+        sectionName: sectionId.name,
+        ...project,
+      })
+    }
   }, [fetchedProject])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
   }
 
-  function handleInputChange(event: any) {
-    const target = event.target
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.currentTarget
     const name = target.id
-    let value = target.value
+    let value: string | number = target.value
     if (name === 'sectionId') value = parseInt(value, 10)
     // @ts-ignore
     setProject({
@@ -73,7 +91,8 @@ const ManageReferenceProject = (props: any) => {
 
   function handleSave() {
     if (isAdding) {
-      addProject(project)
+      const { _id, ...queryData } = project
+      addProject(queryData)
       setIsAdding(false)
       history.push('/projects')
     } else {
@@ -102,7 +121,7 @@ const ManageReferenceProject = (props: any) => {
     setProject({
       ...project,
       sectionId: section.id,
-      'Section name': section.name,
+      sectionName: section.name,
     })
   }
 
@@ -152,8 +171,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Name:'}
             fieldID={'projectName'}
-            fieldValue={project?.projectName}
-            placeholder={project?.projectName || 'example project name'}
+            fieldValue={project.projectName}
+            placeholder={project.projectName || 'example project name'}
             onChange={handleInputChange}
           />
 
@@ -162,7 +181,7 @@ const ManageReferenceProject = (props: any) => {
             isAdding={isAdding}
             fieldName={'Section name:'}
             fieldID={'Section name'}
-            fieldValue={project?.sectionName}
+            fieldValue={project.sectionName}
             modalAction={openSectionsModal}
           />
 
@@ -185,8 +204,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'URL:'}
             fieldID={'projectUrl'}
-            fieldValue={project?.projectUrl}
-            placeholder={project?.projectUrl || 'http://example.project.url'}
+            fieldValue={project.projectUrl}
+            placeholder={project.projectUrl || 'http://example.project.url'}
             onChange={handleInputChange}
           />
 
@@ -194,8 +213,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Description:'}
             fieldID={'description'}
-            fieldValue={project?.description}
-            placeholder={project?.description || 'Some example description'}
+            fieldValue={project.description}
+            placeholder={project.description || 'Some example description'}
             onChange={handleInputChange}
             textArea={true}
           />

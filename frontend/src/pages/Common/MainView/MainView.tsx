@@ -26,10 +26,7 @@ import SectionView from '../../Admin/SectionView'
 import MyProfileView from '../MyProfile'
 import { UserType as Role } from '../../../models/User.model'
 import ReferenceProjects from '../../Admin/ReferenceProjects'
-import {
-  ManageReferenceProject,
-  AddReferenceProject,
-} from '../../Admin/ManageReferenceProject'
+import { ManageReferenceProject } from '../../Admin/ManageReferenceProject'
 import TeamProject from '../../Admin/TeamProject'
 import ResetPasswordRequest from '../ResetPassword'
 import { api } from '../../../api'
@@ -149,7 +146,7 @@ function Admin(props: LoggedInViewProps) {
         <PrivateRoute exact path="/projects">
           <Projects />
         </PrivateRoute>
-        <PrivateRoute path="/projects/add" component={AddReferenceProject} />
+        <PrivateRoute path="/projects/add" component={ManageReferenceProject} />
         <PrivateRoute
           path="/projects/:projectID"
           component={ManageReferenceProject}

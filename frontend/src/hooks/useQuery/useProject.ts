@@ -11,7 +11,9 @@ const queryKey = 'project'
 
 const useProject = (
   id: string,
-  options?: Partial<UseQueryOptions<api.Project, unknown, [string, api.Project]>>,
+  options?: Partial<
+    UseQueryOptions<api.ProjectSectionData, unknown, api.ProjectSectionData>
+  >,
 ) => useQuery([queryKey, id], () => api.getRefProject(id), options)
 export default useProject
 
