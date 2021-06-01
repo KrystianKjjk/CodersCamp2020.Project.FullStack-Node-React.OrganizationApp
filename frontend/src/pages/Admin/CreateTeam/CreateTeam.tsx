@@ -1,28 +1,59 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
-import { useUsersOfType } from '../../../hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useCreateTeam,
+  useUsersOfType,
+} from '../../../hooks'
 
 import styles from './CreateTeam.module.css'
 import AddButton from '../../../components/AddButton'
 import UButton from '../../../components/UButton'
+import { showSnackbar } from '../../../components/Snackbar'
 
 interface Props {
   setIsCreateTeam: Dispatch<SetStateAction<boolean>>
 }
 
-export const CreateTeam = ({ setIsCreateTeam }: Props) => {
+const CreateTeam = ({ setIsCreateTeam }: Props) => {
+  const dispatch = useAppDispatch()
+  const { activeCourse } = useAppSelector((state) => state.courseList)
   const [selectedMentor, setSelectedMentor] = useState('')
   const { data: mentors } = useUsersOfType('Mentor')
+  const { mutate: createTeam } = useCreateTeam()
 
-  //TODO: change useCreateTeam so it will take mentor data as well
   // TODO: mobile view
+  // TODO: add loader (should be a global component)
 
-  const handleMentorSelection = (event: ChangeEvent<{ value: unknown }>) => {
-    setSelectedMentor(event.target.value as string)
+  const handleMentorSelection = (e: ChangeEvent<{ value: unknown }>) => {
+    setSelectedMentor(e.target.value as string)
+  }
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    if (!selectedMentor) {
+      return dispatch(
+        showSnackbar({ message: 'Please choose a mentor.', severity: 'error' }),
+      )
+    }
+
+    createTeam(
+      {
+        courseId: activeCourse?._id || '',
+        mentorId: selectedMentor,
+      },
+      {
+        onSuccess: () => {
+          setIsCreateTeam(false)
+          setSelectedMentor('')
+        },
+      },
+    )
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit} className={styles.container}>
       <h2 className={styles.manageHeader}>Create Team</h2>
       <FormControl variant="outlined">
         <InputLabel id="select-mentor">Select Mentor</InputLabel>
@@ -41,7 +72,7 @@ export const CreateTeam = ({ setIsCreateTeam }: Props) => {
         </Select>
       </FormControl>
       <div className={styles.buttons}>
-        <AddButton text="CREATE" />
+        <AddButton text="CREATE" type="submit" />
         <UButton
           text="CANCEL"
           onClick={() => {
@@ -50,6 +81,8 @@ export const CreateTeam = ({ setIsCreateTeam }: Props) => {
           color="secondary"
         />
       </div>
-    </>
+    </form>
   )
 }
+
+export { CreateTeam }

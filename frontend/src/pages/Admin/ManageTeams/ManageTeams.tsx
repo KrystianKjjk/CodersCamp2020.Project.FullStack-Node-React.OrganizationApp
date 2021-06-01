@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container, CssBaseline, Paper } from '@material-ui/core'
 import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
@@ -21,10 +21,10 @@ import { CreateTeam } from '../CreateTeam'
 
 export interface ManageTeamsProps {}
 
-const ManageTeams: React.FC<ManageTeamsProps> = () => {
+const ManageTeams: FC<ManageTeamsProps> = () => {
   const history = useHistory()
   const { activeCourse } = useAppSelector((state) => state.courseList)
-  const selectedTeams = useRef([] as string[])
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([])
   const { data: teams, isLoading, isFetching, error } = useTeams(
     activeCourse?._id,
   )
@@ -62,14 +62,14 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
   ]
 
   const handleTeamSelection = (params: GridSelectionModelChangeParams) => {
-    selectedTeams.current = [...params.selectionModel] as string[]
+    setSelectedTeams([...params.selectionModel] as string[])
   }
 
   const deleteSelectedTeams = () => {
-    selectedTeams.current.forEach((teamId) => {
+    selectedTeams.forEach((teamId) => {
       deleteTeam(teamId)
     })
-    selectedTeams.current = []
+    setSelectedTeams([])
   }
 
   const handleRowClick = (data: { id: string | number }) => {
@@ -106,7 +106,7 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
                   aria-label="Add team"
                 />
                 <DeleteButton
-                  confirmTitle={`Are you sure you want to delete selected (${selectedTeams.current.length}) teams?`}
+                  confirmTitle={`Are you sure you want to delete selected (${selectedTeams.length}) teams?`}
                   onConfirm={deleteSelectedTeams}
                 />
               </div>

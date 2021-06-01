@@ -27,7 +27,9 @@ export const useDeleteTeam = () =>
     invalidate: queryKey,
   })
 
-export const useCreateTeam = () =>
+export const useCreateTeam = (onSuccess?: () => void) =>
   useMutationWithConfirm(api.createTeam, {
     invalidate: queryKey,
+    onSuccess
   })
+
