@@ -16,7 +16,7 @@ import {
   useCreateSheet,
   useDeleteSheet,
 } from '../../../hooks'
-import { GradeSheet } from '../../../models'
+import { GradeSheetDto } from '../../../models'
 
 export interface ManageSheetsProps {}
 
@@ -30,11 +30,11 @@ const ManageSheets: React.FC<ManageSheetsProps> = () => {
   const { mutate: deleteSheet } = useDeleteSheet({ invalidate: 'sheets' })
 
   const changeSortBy = (value: string) => {
-    sortSheets(value as keyof GradeSheet)
+    sortSheets(value as keyof GradeSheetDto)
   }
 
   const changeSearch = (value: string) => {
-    const column = /^[0-9a-fA-F]{1,16}$/.test(value) ? 'id' : 'mentorSurname'
+    const column = 'mentorSurname'
     const search = value
     searchSheet(column, search)
   }

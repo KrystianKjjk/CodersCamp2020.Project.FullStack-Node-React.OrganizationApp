@@ -1,105 +1,34 @@
 import api from './api.service'
 import {
-  GradeSheet,
-  GradeSheetData,
-  TeamProjectData,
-  UserData,
   Grades,
   Participant,
   Reviewer,
+  GradeSheetDto,
+  GradeSheetDetailsDto,
+  GradeSheetDetails,
+  GradeSheetData,
 } from '../models'
 import _ from 'lodash'
 
 export const getSheets = async () => {
   const response = await api.get('/grade/sheets')
-  const sheetsData = response.data as GradeSheetData[]
-  const sheets: GradeSheet[] = []
-  for (let i in sheetsData) {
-    const sheet = await getSheetInfo(sheetsData[i])
-    sheets.push(sheet)
-  }
-
+  const sheets = response.data as GradeSheetDto[]
   return sheets
 }
 
-export const getSheetInfo = async (
-  sheet: GradeSheetData,
-): Promise<GradeSheet> => {
-  let mentorName: string, mentorSurname: string
-  try {
-    const mentorRes = await api.get('/users/' + sheet.mentorID)
-    const mentor = mentorRes.data as UserData
-    ;[mentorName, mentorSurname] = [mentor.name, mentor.surname]
-  } catch (err) {
-    ;[mentorName, mentorSurname] = ['---', '---']
-  }
-
-  let projectName: string, projectUrl: string, projectDescription: string
-  try {
-    const projectRes = await api.get('/teams/projects/' + sheet.projectID)
-    const project: TeamProjectData = projectRes.data
-    projectName = project.projectName
-    projectUrl = project.projectUrl
-    projectDescription = project.description
-  } catch (err) {
-    projectName = '---'
-    ;[projectName, projectUrl, projectDescription] = ['---', '---', '---']
-  }
-
-  const participants = sheet.participants ?? []
-  for (let i in participants) {
-    const user = participants[i]
-    try {
-      const userRes = await api.get('/users/' + user.participantID)
-      const userData = userRes.data as UserData
-      participants[i].name = userData.name
-      participants[i].surname = userData.surname
-    } catch (err) {
-      participants[i].name = '---'
-      participants[i].surname = '---'
-    }
-  }
-
-  const reviewers = sheet.reviewers ?? []
-  const reviewersInfo = await Promise.all(
-    reviewers.map(async (userId) => {
-      const reviewer: Reviewer = {
-        _id: userId,
-        name: '---',
-        surname: '---',
-        email: '---',
-      }
-      try {
-        const userRes = await api.get('/users/' + userId)
-        const userData = userRes.data as UserData
-        reviewer._id = userId
-        reviewer.name = userData.name
-        reviewer.surname = userData.surname
-        reviewer.email = userData.surname
-      } catch (err) {}
-      return reviewer
-    }),
-  )
-
+export const getSheet = async (id: string): Promise<GradeSheetDetails> => {
+  const response = await api.get<GradeSheetDetailsDto>('/grade/sheets/' + id)
+  const sheet = response.data
+  const reviewers: Reviewer[] = sheet.mentorReviewerGrades.map((rev, idx) => ({
+    id: rev.mentorId,
+    name: sheet.reviewers[idx].name,
+    email: sheet.reviewers[idx].email,
+    grades: rev.grades,
+  }))
   return {
-    ..._.omit(sheet, '_id'),
-    id: sheet._id,
-    projectID: sheet.projectID ?? '',
-    mentorID: sheet.mentorID ?? '',
-    participants,
-    mentorGrades: sheet.mentorGrades ?? {},
-    mentorName,
-    mentorSurname,
-    projectName,
-    projectUrl,
-    projectDescription,
-    reviewers: reviewersInfo,
+    ..._.omit(sheet, 'mentorReviewerGrades'),
+    reviewers,
   }
-}
-
-export const getSheet = async (id: string) => {
-  const response = await api.get('/grade/sheets/' + id)
-  return getSheetInfo(response.data)
 }
 
 export const createSheet = async () => {
@@ -131,7 +60,7 @@ export const getParticipants = async (
   const sheet = await getSheet(id)
   return sheet.participants.map((p) => ({
     ...p,
-    id: p.participantID,
+    id: p.id,
   }))
 }
 

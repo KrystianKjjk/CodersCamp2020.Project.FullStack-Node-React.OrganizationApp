@@ -12,20 +12,17 @@ import axios from 'axios'
 let sheetsDatabase = [
   {
     id: '1',
-    mentorName: 'Krystian',
-    mentorSurname: 'Kijak',
+    mentorName: 'Krystian Kijak',
     projectName: 'FitNotFat',
   },
   {
     id: '2',
-    mentorName: 'MentorName',
-    mentorSurname: 'MentorSurname',
+    mentorName: 'MentorName MentorSurname',
     projectName: 'Pokemon Quiz',
   },
   {
     id: '3',
-    mentorName: 'TorName',
-    mentorSurname: 'OrSurname',
+    mentorName: 'TorName OrSurname',
     projectName: 'StarWars Quiz',
   },
 ]
@@ -36,8 +33,7 @@ let mock = new MockAdapter(axios)
 mock.onPost(endpoint).reply((config) => {
   sheetsDatabase.push({
     id: '7',
-    mentorName: 'Piotr',
-    mentorSurname: 'Bocian',
+    mentorName: 'Piotr Bocian',
     projectName: 'Chess',
   },)
   return [200, config.data]

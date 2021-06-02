@@ -2,6 +2,7 @@ import GradeSheetRepository from '../Repositories/GradeSheetRepository'
 import { GradeSheet, Participant, Grade } from '../Models/GradeSheet'
 import * as mongoose from 'mongoose'
 import * as _ from 'lodash'
+import { GradeSheetDetailsDto, GradeSheetDto, ParticipantDto, ReviewerDto } from '../Models/DTO/GradeSheetDto'
 
 export default class GradeSheetService {
   repository: GradeSheetRepository
@@ -9,23 +10,55 @@ export default class GradeSheetService {
     this.repository = repository
   }
 
-  async findGradeSheetById(id: mongoose.Types.ObjectId) {
-    return this.repository.getById(id)
+  async findGradeSheetById(id: mongoose.Types.ObjectId): Promise<GradeSheetDetailsDto> {
+    const sheet = (await this.repository.getGradeSheet(id))[0]
+    console.log(sheet)
+    const participants: ParticipantDto[] = sheet.participantData.map((user, idx) => ({
+      id: user._id,
+      name: `${user.name} ${user.surname}`,
+      engagement: sheet.participants[idx].engagement,
+      role: sheet.participants[idx].role,
+      rolePoints: sheet.participants[idx].rolePoints,
+    }))
+    const reviewers: ReviewerDto[] = sheet.reviewers.map(reviewer => ({
+      id: reviewer._id,
+      name: `${reviewer.name} ${reviewer.surname}`,
+      email: reviewer.email,
+    }))
+    return {
+      id: sheet._id,
+      mentorId: sheet.mentor[0] && sheet.mentor[0]._id,
+      mentorName: sheet.mentor[0] && `${sheet.mentor[0].name} ${sheet.mentor[0].surname}`,
+      projectId: sheet.project[0] && sheet.project[0]._id,
+      projectName: sheet.project[0] && sheet.project[0].name,
+      projectUrl: sheet.project[0] && sheet.project[0].projectUrl,
+      projectDescription: sheet.project[0] && sheet.project[0].description,
+      mentorGrades: sheet.mentorGrades,
+      reviewers,
+      mentorReviewerGrades: sheet.mentorReviewerGrades,
+      participants,
+    }
   }
 
-  async getGradeSheets(): Promise<
-    (GradeSheet & mongoose.Document<GradeSheet>)[]
-  > {
-    return this.repository.getAll()
+  async getGradeSheets(): Promise<GradeSheetDto[]> {
+    const sheets = await this.repository.getGradeSheets({})
+    return sheets.map((sheet) => ({
+      id: sheet._id,
+      mentorId: sheet.mentor[0] && sheet.mentor[0]._id,
+      mentorName: sheet.mentor[0] && sheet.mentor[0].name,
+      mentorSurname: sheet.mentor[0] && sheet.mentor[0].surname,
+      projectId: sheet.project[0] && sheet.project[0]._id,
+      projectName: sheet.project[0] && sheet.project[0].name,
+    }))
   }
 
   async getReviewerGrades(
     gradeSheetId: mongoose.Types.ObjectId,
     mentorId: mongoose.Types.ObjectId,
   ) {
-    const sheet = (await this.findGradeSheetById(gradeSheetId)) as GradeSheet
+    const sheet = await this.findGradeSheetById(gradeSheetId)
     return sheet.mentorReviewerGrades.find(
-      (elem) => `${elem.mentorID}` === `${mentorId}`,
+      (elem) => `${elem.mentorId}` === `${mentorId}`,
     )
   }
 

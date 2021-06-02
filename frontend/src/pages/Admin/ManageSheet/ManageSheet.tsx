@@ -45,14 +45,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   const participantsTableName = 'Participants'
 
   const [loading, setLoading] = useState<'loading' | 'idle'>('loading')
-  const [mentor, setMentor] = useState<User>()
-  const [project, setProject] = useState({
-    id: '',
-    Name: '---',
-    Mentor: '--- ---',
-    projectUrl: '---',
-    description: '---',
-  })
+
   const [reviewers, setReviewers] = useState<Reviewer[]>([])
   const [mentorGrades, setMentorGrades] = useState<Grades>({})
 
@@ -100,22 +93,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
 
   useEffect(() => {
     if (sheet) {
-      setMentor({
-        id: sheet.mentorID,
-        name: sheet.mentorName,
-        surname: sheet.mentorSurname,
-      })
-      setProject({
-        id: sheet.projectID,
-        Name: sheet.projectName,
-        Mentor: `${sheet.mentorName} ${sheet.mentorSurname}`,
-        projectUrl: sheet.projectUrl,
-        description: sheet.projectDescription,
-      })
-      const reviewersArr = sheet.reviewers.map((rev) => ({
-        ...rev,
-        id: rev._id,
-      }))
+      const reviewersArr = sheet.reviewers
       setReviewers(reviewersArr)
       setMentorGrades(sheet.mentorGrades)
       setLoading('idle')
@@ -144,7 +122,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
 
   const deleteReviewer = (id: string) => {
     const newReviewers = reviewers
-      .map((rev) => rev._id)
+      .map((rev) => rev.id)
       .filter((rev) => rev !== id)
     setReviewersForSheet(newReviewers)
   }
@@ -220,7 +198,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
         <ReusableGoBack
           pageName="Sheets"
           pageLink="/gradesheets"
-          elementName={mentor ? `${mentor.name} ${mentor.surname}` : sheetId}
+          elementName={sheet?.mentorName ?? sheetId}
         />
       </PageHeader>
 
@@ -274,7 +252,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           <ul className={styles.teamInfo}>
             <li className={styles.teamInfoRow}>
               <span>Project:</span>
-              <span>{project.Name}</span>
+              <span>{sheet?.projectName}</span>
               <UButton
                 test-id="change-mentor"
                 text="Change"
@@ -285,7 +263,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             <li className={styles.teamInfoRow}>
               <span>Mentor:</span>
               <span>
-                {mentor?.name ?? '---'} {mentor?.surname ?? '---'}
+                {sheet?.mentorName ?? '--- ---'}
               </span>
               <UButton
                 test-id="change-mentor"
@@ -298,13 +276,13 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
               <span>Reviewers:</span>
               <ul className={styles.reviewers}>
                 {reviewers.map((reviewer) => (
-                  <li className={styles.reviewerInfoRow} key={reviewer._id}>
+                  <li className={styles.reviewerInfoRow} key={reviewer.id}>
                     <span>
-                      {reviewer.name} {reviewer.surname}
+                      {reviewer.name}
                     </span>
                     <DeleteButton
-                      confirmTitle={`Are you sure you want to delete reviewer ${reviewer.name} ${reviewer.surname}?`}
-                      onConfirm={() => deleteReviewer(reviewer._id)}
+                      confirmTitle={`Are you sure you want to delete reviewer ${reviewer.name}?`}
+                      onConfirm={() => deleteReviewer(reviewer.id)}
                     />
                   </li>
                 ))}
@@ -321,11 +299,11 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
           <ul className={styles.teamInfo}>
             <li className={styles.teamInfoRow}>
               <span>Url:</span>
-              <span>{project.projectUrl}</span>
+              <span>{sheet?.projectUrl}</span>
             </li>
             <li className={styles.teamInfoRow}>
               <span>Description:</span>
-              <span>{project.description}</span>
+              <span>{sheet?.projectDescription}</span>
             </li>
           </ul>
         </div>
@@ -365,9 +343,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             name={participantsTableName}
             columns={participantColumns}
             data={sheet?.participants.map((user) => ({
-              id: user.participantID,
+              id: user.id,
               name: user.name,
-              surname: user.surname,
             }))}
             isLoading={isLoading}
             isFetching={isFetching}

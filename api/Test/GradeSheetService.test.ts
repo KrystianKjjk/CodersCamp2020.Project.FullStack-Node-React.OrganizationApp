@@ -1,7 +1,7 @@
 import GradeSheetService from '../Src/Services/GradeSheetService'
 import GradeSheetRepository from '../Src/Repositories/GradeSheetRepository'
-import { GradeSheet } from '../Src/Models/GradeSheet'
-import GradeSheetDbModel from '../Src/Models/GradeSheet'
+import { GradeSheetDetailsDto, GradeSheetDto } from '../Src/Models/DTO/GradeSheetDto'
+import GradeSheetDbModel, { GradeSheet } from '../Src/Models/GradeSheet'
 import { Document, Types } from 'mongoose'
 import * as _ from 'lodash'
 
@@ -80,7 +80,7 @@ const service = new GradeSheetService(testRepo)
 
 describe('Test GradeSheetService ', () => {
   const nSheets = 10
-  let gradeSheets: Array<GradeSheet & Document>
+  let gradeSheets: Array<GradeSheetDto & Document>
 
   beforeEach(async () => {
     await service.createGradeSheet({
@@ -157,7 +157,7 @@ describe('Test GradeSheetService ', () => {
 
   test('set mentor grade', async () => {
     const idx = 7
-    const sheet: GradeSheet = _.cloneDeep(gradeSheets[idx])
+    const sheet: GradeSheetDto = _.cloneDeep(gradeSheets[idx])
     const sheetId = gradeSheets[idx]._id
     const grades = {
       ExtraGrade: { points: 111 },
@@ -178,7 +178,7 @@ describe('Test GradeSheetService ', () => {
 
   test('get/set mentor reviewer grades', async () => {
     const idx = 7
-    const prevSheet: GradeSheet = _.cloneDeep(gradeSheets[idx])
+    const prevSheet: GradeSheetDto = _.cloneDeep(gradeSheets[idx])
     const sheetId = gradeSheets[idx]._id
     const mentorIdx = 0
     const mentorId = gradeSheets[idx].reviewers[0]
