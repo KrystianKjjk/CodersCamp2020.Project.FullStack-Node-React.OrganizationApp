@@ -47,10 +47,12 @@ export default class ProjectRepository extends Repository {
   }
 
   async updateById(id: mongoose.Types.ObjectId, obj: object) {
-    return this.model.findByIdAndUpdate(id, obj, {
-      new: true,
-      useFindAndModify: false,
-      upsert: false,
-    })
+    return this.model
+      .findByIdAndUpdate(id, obj, {
+        new: true,
+        useFindAndModify: false,
+        upsert: false,
+      })
+      .populate('sectionId')
   }
 }
