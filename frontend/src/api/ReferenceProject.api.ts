@@ -14,7 +14,7 @@ export const getRefProjects = async () => {
 }
 export const getRefProject = async (
   projectID: string,
-): Promise<ProjectSectionData> => {
+): Promise<PopulatedProjectData> => {
   const response = await api.get<Project>(`${endpoint}/${projectID}`)
 
   return {
@@ -72,6 +72,6 @@ export interface Project {
   updatedAt: string
 }
 
-export interface ProjectSectionData extends Omit<Project, 'sectionId'> {
+export interface PopulatedProjectData extends Omit<Project, 'sectionId'> {
   sectionId: Section
 }

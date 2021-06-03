@@ -1,1 +1,1 @@
-export { default as ManageReferenceProject } from './ManageReferenceProject'
+export { default } from './ManageReferenceProject'
