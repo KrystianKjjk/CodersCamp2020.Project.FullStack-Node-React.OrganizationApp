@@ -10,11 +10,9 @@ import queryClient from '../../QueryClient'
 
 const queryKey = 'project'
 
-const useProject = (
+export const useProject = (
   id: string,
-  options?: Partial<
-    UseQueryOptions<api.PopulatedProjectData, unknown, api.PopulatedProjectData>
-  >,
+  options?: Partial<UseQueryOptions<api.ProjectDto, unknown, api.ProjectDto>>,
 ) => useQuery([queryKey, id], () => api.getRefProject(id), options)
 export default useProject
 

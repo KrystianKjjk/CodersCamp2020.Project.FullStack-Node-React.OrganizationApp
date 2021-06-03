@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
-import { useHistory, useParams } from 'react-router-dom'
+import { match, useHistory, useParams } from 'react-router-dom'
+import { GridValueFormatterParams } from '@material-ui/data-grid'
 
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
-
-import styles from './ManageReferenceProject.module.css'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
 import {
@@ -14,17 +13,21 @@ import {
   useCreateProject,
   useSections,
   useProjects,
+  useProject,
 } from '../../../hooks'
-import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
 import { Section } from '../../../models'
 import FindModal from '../../../components/FindModal'
-import { GridValueFormatterParams } from '@material-ui/data-grid'
 import { displayFormattedDate } from '../../../api'
 
 import { InputValues } from './types'
+import styles from './ManageReferenceProject.module.css'
 
-export interface ManageReferenceProjectProps {}
+export interface ManageReferenceProjectProps {
+  history: any
+  location: Location
+  match: match
+}
 
 const initialValues = {
   _id: '',
@@ -35,7 +38,7 @@ const initialValues = {
   sectionName: '',
 }
 
-const ManageReferenceProject = (props: any) => {
+const ManageReferenceProject = (props: ManageReferenceProjectProps) => {
   const { projectID } = useParams<{ projectID: string }>()
   const history = useHistory()
 
@@ -78,10 +81,10 @@ const ManageReferenceProject = (props: any) => {
 
   useEffect(() => {
     if (fetchedProject) {
-      const { sectionId, ...project } = fetchedProject
+      const { sectionId, id, ...project } = fetchedProject
       setProject({
-        sectionId: sectionId.id,
-        sectionName: sectionId.name,
+        _id: id,
+        sectionId,
         ...project,
       })
     }
@@ -92,11 +95,8 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target = event.currentTarget
-    const name = target.id
-    let value: string | number = target.value
-    if (name === 'sectionId') value = parseInt(value, 10)
-    // @ts-ignore
+    const { value, id: name } = event.currentTarget
+
     setProject({
       ...project,
       [name]: value,
@@ -104,12 +104,12 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleSave() {
+    const { _id, sectionName, ...queryData } = project
     if (isAdding) {
-      const { _id, sectionName, ...queryData } = project
       addProject(queryData)
       setIsAdding(false)
     } else {
-      updateProject(project)
+      updateProject({ ...queryData, _id })
     }
   }
 

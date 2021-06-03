@@ -1,7 +1,6 @@
 import api from './api.service'
 import * as sectionService from './Section.api'
-import { ProjectData } from '../models'
-import { Section, SectionData } from '../models/Section.model'
+import { ProjectData, SectionData } from '../models'
 
 const endpoint = `projects`
 
@@ -12,27 +11,31 @@ export const getRefProjects = async () => {
     endDate: new Date(d.endDate).toLocaleDateString(),
   }))
 }
-export const getRefProject = async (
-  projectID: string,
-): Promise<PopulatedProjectData> => {
-  const response = await api.get<Project>(`${endpoint}/${projectID}`)
+
+export const getRefProject = async (projectID: string): Promise<ProjectDto> => {
+  const { data } = await api.get<PopulatedProjectData>(
+    `${endpoint}/${projectID}`,
+  )
 
   return {
-    ...response.data,
-    sectionId: {
-      id: response.data.sectionId._id,
-      name: response.data.sectionId.name,
-    },
+    ...data,
+    id: data._id,
+    sectionId: data.sectionId._id,
+    sectionName: data.sectionId.name,
+    startDate: new Date(data.sectionId.startDate).toLocaleDateString(),
+    endDate: new Date(data.sectionId.endDate).toLocaleDateString(),
   }
 }
+
 export const createRefProject = async (project: Omit<ProjectData, '_id'>) => {
   return api.post(`${endpoint}`, project)
 }
+
 export const deleteRefProject = async (projectID: string) => {
-  return api.delete(`${endpoint}/${projectID}`)
+  return api.delete<ProjectData>(`${endpoint}/${projectID}`)
 }
 
-export const addRefProject = async (project: any) => {
+export const addRefProject = async (project: ProjectData) => {
   const res = await createRefProject(project)
   try {
     const section = await sectionService.getOneSection(res.data.sectionId)
@@ -49,8 +52,11 @@ export const addRefProject = async (project: any) => {
   }
 }
 
-export const updateRefProject = async (project: any) => {
-  return api.patch(`${endpoint}/${project._id}`, project)
+export const updateRefProject = async (project: ProjectData) => {
+  return api.patch<ProjectData, PopulatedProjectData>(
+    `${endpoint}/${project._id}`,
+    project,
+  )
 }
 
 export interface ProjectDto {
@@ -59,10 +65,12 @@ export interface ProjectDto {
   sectionName: string
   sectionId: string
   startDate: string
+  description: string
   endDate: string
+  projectUrl: string
 }
 
-export interface Project {
+export interface PopulatedProjectData {
   _id: string
   sectionId: SectionData
   projectName: string
@@ -70,8 +78,4 @@ export interface Project {
   description: string
   createdAt: string
   updatedAt: string
-}
-
-export interface PopulatedProjectData extends Omit<Project, 'sectionId'> {
-  sectionId: Section
 }
