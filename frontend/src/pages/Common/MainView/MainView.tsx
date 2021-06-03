@@ -10,7 +10,7 @@ import CourseCreate from '../../Admin/CourseCreate'
 import Course from '../../Admin/Course'
 import CourseList from '../../Admin/CourseList'
 import LogIn from '../LogIn'
-import RegistrationView from '../Registration'
+import { Registration } from '../Registration'
 import ManageTeam from '../../Admin/ManageTeam'
 import { getUserFromLocalStorage } from '../../../app/utils'
 import ManageSheets from '../../Admin/ManageSheets'
@@ -94,7 +94,7 @@ function LoggedOut(props: LoggedOutViewProps) {
           <LogIn onLogin={props.onLogin} />
         </Route>
         <Route path="/registration">
-          <RegistrationView />
+          <Registration />
         </Route>
         <Route path="/resetpassword">
           <ResetPasswordRequest />
