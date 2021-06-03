@@ -38,13 +38,13 @@ export const addRefProject = async (project: any) => {
     const section = await sectionService.getOneSection(res.data.sectionId)
     return {
       ...res.data,
-      'Section name': section?.name || '',
+      sectionName: section?.name || '',
       course: section?.courseName,
     }
   } catch {
     return {
       ...res.data,
-      'Section name': 'Section does not exist',
+      sectionName: 'Section does not exist',
     }
   }
 }

@@ -13,6 +13,7 @@ import {
   useDeleteProject,
   useCreateProject,
   useSections,
+  useProjects,
 } from '../../../hooks'
 import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
@@ -42,12 +43,19 @@ const ManageReferenceProject = (props: any) => {
   const [isAdding, setIsAdding] = useState(false)
   const [project, setProject] = useState<InputValues>(initialValues)
   const { showError } = useSnackbar()
-  const { mutate: updateProject } = useUpdateProject()
+  const {
+    mutate: updateProject,
+    isSuccess: isUpdatedSuccessfully,
+  } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
-  const { mutate: addProject } = useCreateProject()
+  const {
+    mutate: addProject,
+    isSuccess: isCreatedSuccessfully,
+  } = useCreateProject()
   const { data: fetchedProject, error, isLoading } = useProject(projectID, {
     enabled: !!projectID,
   })
+  useProjects()
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
   const sectionsQuery = useSections({
@@ -61,6 +69,12 @@ const ManageReferenceProject = (props: any) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (isCreatedSuccessfully || isUpdatedSuccessfully) {
+      history.push('/projects')
+    }
+  }, [isCreatedSuccessfully, isUpdatedSuccessfully, history])
 
   useEffect(() => {
     if (fetchedProject) {
@@ -91,20 +105,16 @@ const ManageReferenceProject = (props: any) => {
 
   function handleSave() {
     if (isAdding) {
-      const { _id, ...queryData } = project
+      const { _id, sectionName, ...queryData } = project
       addProject(queryData)
       setIsAdding(false)
-      history.push('/projects')
     } else {
       updateProject(project)
     }
-    toggleEdit()
   }
 
   function handleDelete() {
-    if (!isAdding) {
-      deleteProject(project._id)
-    }
+    if (!isAdding) deleteProject(project._id)
 
     history.push('/projects')
   }
