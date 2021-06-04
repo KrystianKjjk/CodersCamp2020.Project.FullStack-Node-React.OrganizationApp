@@ -12,6 +12,60 @@ export interface GradeSheetFilters {
   mentorReviewerId?: string
 }
 
+const lookupTeamProject = {
+  $lookup: {
+    from: 'teamProjects',
+    localField: 'projectID',
+    foreignField: '_id',
+    as: 'project',
+  },
+}
+
+const lookupParentProject = {
+  $lookup: {
+    from: 'projects',
+    localField: 'project.parentProjectId',
+    foreignField: '_id',
+    as: 'parentProject',
+  },
+}
+
+const lookupSection = {
+  $lookup: {
+    from: 'sections',
+    localField: 'parentProject.sectionId',
+    foreignField: '_id',
+    as: 'section',
+  },
+}
+
+const lookupMentor = {
+  $lookup: {
+    from: 'users',
+    localField: 'mentorID',
+    foreignField: '_id',
+    as: 'mentor',
+  },
+}
+
+const lookupParticipants = {
+  $lookup: {
+    from: 'users',
+    localField: 'participants.participantID',
+    foreignField: '_id',
+    as: 'participantData',
+  },
+}
+
+const lookupReviewers = {
+  $lookup: {
+    from: 'users',
+    localField: 'reviewers',
+    foreignField: '_id',
+    as: 'reviewers',
+  },
+}
+
 export default class GradeSheetRepository extends Repository {
   async getParticipantGradeSheets(
     userId: mongoose.Types.ObjectId,
@@ -99,57 +153,15 @@ export default class GradeSheetRepository extends Repository {
     return this.model.aggregate([
       ...teamProjectFilter,
       ...mentorFilter,
-      {
-        $lookup: {
-          from: 'teamProjects',
-          localField: 'projectID',
-          foreignField: '_id',
-          as: 'project',
-        },
-      },
+      lookupTeamProject,
       ...projectFilter,
-      {
-        $lookup: {
-          from: 'projects',
-          localField: 'project.parentProjectId',
-          foreignField: '_id',
-          as: 'parentProject',
-        },
-      },
+      lookupParentProject,
       ...sectionFilter,
-      {
-        $lookup: {
-          from: 'sections',
-          localField: 'parentProject.sectionId',
-          foreignField: '_id',
-          as: 'section',
-        },
-      },
+      lookupSection,
       ...courseFilter,
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'mentorID',
-          foreignField: '_id',
-          as: 'mentor',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'participants.participantID',
-          foreignField: '_id',
-          as: 'participantData',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'reviewers',
-          foreignField: '_id',
-          as: 'reviewers',
-        },
-      },
+      lookupMentor,
+      lookupParticipants,
+      lookupReviewers,
       {
         $project: {
           _id: 1,
@@ -186,54 +198,12 @@ export default class GradeSheetRepository extends Repository {
       {
         $match: { _id: id },
       },
-      {
-        $lookup: {
-          from: 'teamProjects',
-          localField: 'projectID',
-          foreignField: '_id',
-          as: 'project',
-        },
-      },
-      {
-        $lookup: {
-          from: 'projects',
-          localField: 'project.parentProjectId',
-          foreignField: '_id',
-          as: 'parentProject',
-        },
-      },
-      {
-        $lookup: {
-          from: 'sections',
-          localField: 'parentProject.sectionId',
-          foreignField: '_id',
-          as: 'section',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'mentorID',
-          foreignField: '_id',
-          as: 'mentor',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'participants.participantID',
-          foreignField: '_id',
-          as: 'participantData',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'reviewers',
-          foreignField: '_id',
-          as: 'reviewers',
-        },
-      },
+      lookupTeamProject,
+      lookupParentProject,
+      lookupSection,
+      lookupMentor,
+      lookupParticipants,
+      lookupReviewers,
       {
         $project: {
           _id: 1,
