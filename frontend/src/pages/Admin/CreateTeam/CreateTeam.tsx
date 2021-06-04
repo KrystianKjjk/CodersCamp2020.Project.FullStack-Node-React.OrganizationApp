@@ -56,12 +56,14 @@ const CreateTeam = ({ setIsCreateTeam }: Props) => {
     <form onSubmit={handleSubmit} className={styles.container}>
       <h2 className={styles.manageHeader}>Create Team</h2>
       <FormControl variant="outlined">
-        <InputLabel id="select-mentor">Select Mentor</InputLabel>
+        <InputLabel>Select Mentor</InputLabel>
         <Select
+          data-testid="select-mentor"
           labelId="select-mentor"
           value={selectedMentor}
           onChange={handleMentorSelection}
           className={styles.select}
+          label="Select Mentor"
         >
           {mentors?.map((mentor) => (
             <MenuItem

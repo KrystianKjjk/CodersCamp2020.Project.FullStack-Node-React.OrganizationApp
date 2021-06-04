@@ -1,6 +1,4 @@
 import api from './api.service'
-import { TeamData, Team, TeamInfo } from '../models/Team.model'
-import { CourseData } from '../models/Course.model'
 import {
   calcProjectGrade,
   calcUserProjectGrade,
@@ -8,6 +6,10 @@ import {
   calcUserTestsGrade,
 } from '.'
 import {
+  CourseData,
+  Team,
+  TeamData,
+  TeamInfo,
   TeamProject,
   TeamProjectData,
   User,
