@@ -1,7 +1,6 @@
 import api from './api.service'
 import {
   Grades,
-  Participant,
   Reviewer,
   GradeSheetDto,
   GradeSheetDetailsDto,
@@ -20,7 +19,7 @@ export const getSheet = async (id: string): Promise<GradeSheetDetails> => {
   const response = await api.get<GradeSheetDetailsDto>('/grade/sheets/' + id)
   const sheet = response.data
   const reviewers: Reviewer[] = sheet.mentorReviewerGrades.map((rev, idx) => ({
-    id: rev.mentorId,
+    id: rev.mentorID,
     name: sheet.reviewers[idx].name,
     email: sheet.reviewers[idx].email,
     grades: rev.grades,
@@ -45,28 +44,8 @@ export const deleteSheet = async (id: string) => {
 export const getMentorSheets = async (
   mentorId?: string,
 ): Promise<GradeSheetData[] | null> => {
-  let gradeSheetsRes
-  try {
-    gradeSheetsRes = await api.get(`/mentors/${mentorId}/grade/sheets`)
-  } catch (err) {
-    return null
-  }
+  const gradeSheetsRes = await api.get(`/mentors/${mentorId}/grade/sheets`)
   return gradeSheetsRes.data as GradeSheetData[]
-}
-
-export const getParticipants = async (
-  id: string,
-): Promise<(Participant & { id: string })[]> => {
-  const sheet = await getSheet(id)
-  return sheet.participants.map((p) => ({
-    ...p,
-    id: p.id,
-  }))
-}
-
-export const getMentorGrades = async (id: string): Promise<Grades> => {
-  const sheet = await getSheet(id)
-  return sheet.mentorGrades
 }
 
 export const setMentor = async (id: string, mentorId: string) => {

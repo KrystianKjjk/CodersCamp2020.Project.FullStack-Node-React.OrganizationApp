@@ -94,6 +94,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
   useEffect(() => {
     if (sheet) {
       const reviewersArr = sheet.reviewers
+      console.log(reviewersArr)
       setReviewers(reviewersArr)
       setMentorGrades(sheet.mentorGrades)
       setLoading('idle')
@@ -250,17 +251,17 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             />
           )}
           <ul className={styles.teamInfo}>
-            <li className={styles.teamInfoRow}>
+            <li className={styles.teamInfoRow} key="ProjectInfo">
               <span>Project:</span>
               <span>{sheet?.projectName}</span>
               <UButton
-                test-id="change-mentor"
+                test-id="change-project"
                 text="Change"
                 color="primary"
                 onClick={() => setOpenProjectsModal(true)}
               />
             </li>
-            <li className={styles.teamInfoRow}>
+            <li className={styles.teamInfoRow} key="MentorInfo">
               <span>Mentor:</span>
               <span>
                 {sheet?.mentorName ?? '--- ---'}
@@ -272,7 +273,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
                 onClick={() => setOpenMentorsModal(true)}
               />
             </li>
-            <li className={styles.reviewersInfo}>
+            <li className={styles.reviewersInfo} key="ReviewersInfo">
               <span>Reviewers:</span>
               <ul className={styles.reviewers}>
                 {reviewers.map((reviewer) => (
@@ -286,7 +287,7 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
                     />
                   </li>
                 ))}
-                <li>
+                <li key="AddReviewer">
                   <AddButton
                     text="Add reviewer"
                     onClick={() => setOpenReviewersModal(true)}

@@ -57,7 +57,7 @@ export interface GradeSheetDetailsDto {
   participants: Participant[]
   reviewers: ReviewerDto[]
   mentorReviewerGrades: {
-    mentorId: string
+    mentorID: string
     grades: Grades
   }[]
 }
