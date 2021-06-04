@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   Button,
@@ -12,7 +12,6 @@ import {
 import StyledTextField from '../../../components/StyledTextField'
 import useStyles from './Registration.style'
 import HeaderRegistration from '../../../components/HeaderRegistration'
-import InvalidMessageHandler from '../../../components/InvalidMessageHandler'
 import useSnackbar from '../../../hooks/useSnackbar'
 import { useHistory } from 'react-router-dom'
 import { api } from '../../../api'
@@ -31,6 +30,11 @@ export function Registration() {
   const { showError, showSuccess } = useSnackbar()
 
   const [loading, setLoading] = useState(false)
+  const [invalidName, setInvalidName] = useState(false)
+  const [invalidSurname, setInvalidSurname] = useState(false)
+  const [invalidEmail, setInvalidEmail] = useState(false)
+  const [invalidPasswd, setInvalidPasswd] = useState(false)
+  const [invalidConfirmPasswd, setInvalidConfirmPasswd] = useState(false)
   const [form, setForm] = useState<formProps>({
     name: '',
     surname: '',
@@ -39,103 +43,65 @@ export function Registration() {
     confirmPassword: '',
   })
 
-  const areAllFieldsFilled =
-    form.name &&
-    form.surname &&
-    form.email &&
-    form.password &&
-    form.confirmPassword
-
-  const validateNameAndSurname = (
-    element: HTMLElement,
-    key: keyof formProps,
-  ): boolean => {
-    if (form[key].length < 3 || form[key].length > 30) {
-      element.classList?.add('invalid')
-      return false
-    } else {
-      element.classList?.remove('invalid')
-      return true
-    }
+  const validateName = (): boolean => {
+    const flag = form['name'].length >= 3 && form['name'].length <= 30
+    setInvalidName(!flag)
+    return flag
   }
 
-  const validateEmail = (
-    element: HTMLElement,
-    key: keyof formProps,
-  ): boolean => {
-    if (form[key].indexOf('@') === -1) {
-      element.classList?.add('invalid')
-      return false
-    } else {
-      element.classList?.remove('invalid')
-      return true
-    }
+  const validateSurname = () => {
+    const flag = form['surname'].length >= 3 && form['surname'].length <= 30
+    setInvalidSurname(!flag)
+    return flag
   }
 
-  const validatePasswd = (
-    element: HTMLElement,
-    key: keyof formProps,
-  ): boolean => {
-    // min: 8, max: 26, lowerCase: 1, upperCase: 1, numeric: 1
-    if (
-      form[key].length < 8 ||
-      form[key].length > 26 ||
-      !/\d/.test(form[key]) ||
-      !/[A-Z]/.test(form[key])
-    ) {
-      element.classList?.add('invalid')
-      return false
-    } else {
-      element.classList?.remove('invalid')
-      return true
-    }
+  const validateEmail = (): boolean => {
+    const flag = form['email'].indexOf('@') > -1
+    setInvalidEmail(!flag)
+    return flag
   }
 
-  const validateConfirmPasswd = (
-    element: HTMLElement,
-    key: keyof formProps,
-  ): boolean => {
-    if (form[key] !== form['password']) {
-      element.classList?.add('invalid')
-      return false
-    } else {
-      element.classList?.remove('invalid')
-      return true
-    }
+  const validatePasswd = (): boolean => {
+    // min: 8, max: 26, lowerCase: 1, upperCase: 1
+    const flag =
+      (form['password'].length >= 8 && form['password'].length <= 26) ||
+      /\d/.test(form['password']) ||
+      /[A-Z]/.test(form['password'])
+    setInvalidPasswd(!flag)
+    return flag
+  }
+
+  const validateConfirmPasswd = (): boolean => {
+    const flag = form['confirmPassword'] === form['password']
+    setInvalidConfirmPasswd(!flag)
+    return flag
   }
 
   const validateForm = (): boolean => {
-    for (const key of Object.keys(form)) {
-      const element = document.querySelector(`[data-${key}]`) as HTMLElement
-      if (key === 'name' || key === 'surname') {
-        if (!validateNameAndSurname(element, key)) return false
-      }
-      if (key === 'email') {
-        if (!validateEmail(element, key)) return false
-      }
-      if (key === 'password') {
-        if (!validatePasswd(element, key)) return false
-      }
-      if (key === 'confirmPassword') {
-        if (!validateConfirmPasswd(element, key)) return false
-      }
-    }
-    return true
+    const isValidName = validateName()
+    const isValidSurname = validateSurname()
+    const isValidEmail = validateEmail()
+    const isValidPasswd = validatePasswd()
+    const isValidConfirmPasswd = validateConfirmPasswd()
+
+    return (
+      isValidName &&
+      isValidSurname &&
+      isValidEmail &&
+      isValidPasswd &&
+      isValidConfirmPasswd
+    )
   }
 
   const handleFormChange = (e: any) => {
-    setForm((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      }
-    })
+    setForm((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     if (!validateForm()) return
+
     setLoading(true)
     try {
       await api.post('register', form)
@@ -147,6 +113,24 @@ export function Registration() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (
+      invalidName ||
+      invalidSurname ||
+      invalidEmail ||
+      invalidPasswd ||
+      invalidConfirmPasswd
+    )
+      validateForm()
+  }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const areAllFieldsFilled =
+    form.name &&
+    form.surname &&
+    form.email &&
+    form.password &&
+    form.confirmPassword
 
   return (
     <div>
@@ -168,9 +152,9 @@ export function Registration() {
                   name="name"
                   label="Name"
                   data-testid="r-fname"
-                  data-name
+                  error={invalidName}
+                  helperText={invalidName && 'Name is too short or too long!'}
                 />
-                <InvalidMessageHandler message="Name is too short or too long!" />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <StyledTextField
@@ -180,9 +164,11 @@ export function Registration() {
                   name="surname"
                   autoComplete="lname"
                   data-testid="r-lname"
-                  data-surname
+                  error={invalidSurname}
+                  helperText={
+                    invalidSurname && 'Surname is too short or too long!'
+                  }
                 />
-                <InvalidMessageHandler message="Surname is too short or too long!" />
               </Grid>
               <Grid item xs={12}>
                 <StyledTextField
@@ -193,9 +179,9 @@ export function Registration() {
                   type="email"
                   autoComplete="email"
                   data-testid="r-email"
-                  data-email
+                  error={invalidEmail}
+                  helperText={invalidEmail && 'Incorrect email address!'}
                 />
-                <InvalidMessageHandler message="Incorrect email address!" />
               </Grid>
               <Grid item xs={12}>
                 <StyledTextField
@@ -205,9 +191,11 @@ export function Registration() {
                   label="Password"
                   type="password"
                   data-testid="r-password"
-                  data-password
+                  error={invalidPasswd}
+                  helperText={
+                    invalidPasswd && 'Pasword should be more complex!'
+                  }
                 />
-                <InvalidMessageHandler message="Pasword should be more complex!" />
               </Grid>
               <Grid item xs={12}>
                 <StyledTextField
@@ -217,9 +205,12 @@ export function Registration() {
                   label="Confirm Password"
                   type="password"
                   data-testid="r-cpassword"
-                  data-confirmPassword
+                  error={invalidConfirmPasswd}
+                  helperText={
+                    invalidConfirmPasswd &&
+                    'Confirm password should match the password!'
+                  }
                 />
-                <InvalidMessageHandler message="Confirm Password doesn't match password!" />
               </Grid>
             </Grid>
             {loading ? (
