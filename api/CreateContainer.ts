@@ -4,7 +4,6 @@ import 'dotenv/config'
 import 'express-async-errors'
 import * as cookieParser from 'cookie-parser'
 import App from './App'
-import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as nodemailer from 'nodemailer'
 import 'dotenv/config'
@@ -105,7 +104,7 @@ appContainer.declare('ErrorMiddleware', (c) => new ErrorMiddleware())
 
 // Middlewares
 const middlewares = [
-  bodyParser.json(),
+  express.json(),
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
