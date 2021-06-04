@@ -1,8 +1,14 @@
 import GradeSheetRepository from '../Repositories/GradeSheetRepository'
-import { GradeSheet, Participant, Grade } from '../Models/GradeSheet'
+import GradeSheetModel, { GradeSheet, Grade } from '../Models/GradeSheet'
 import * as mongoose from 'mongoose'
 import * as _ from 'lodash'
-import { GradeSheetDetailsDto, GradeSheetDto, ParticipantDto, ReviewerDto } from '../Models/DTO/GradeSheetDto'
+import {
+  CreateGradeSheetDto,
+  GradeSheetDetailsDto,
+  GradeSheetDto,
+  ParticipantDto,
+  ReviewerDto,
+} from '../Models/DTO/GradeSheetDto'
 
 export default class GradeSheetService {
   repository: GradeSheetRepository
@@ -10,18 +16,22 @@ export default class GradeSheetService {
     this.repository = repository
   }
 
-  async findGradeSheetById(id: mongoose.Types.ObjectId): Promise<GradeSheetDetailsDto> {
+  async findGradeSheetById(
+    id: mongoose.Types.ObjectId,
+  ): Promise<GradeSheetDetailsDto> {
     const sheet = (await this.repository.getGradeSheet(id))[0]
     console.log(sheet)
-    const participants: ParticipantDto[] = sheet.participantData.map((user, idx) => ({
-      id: user._id,
-      name: user.name,
-      surname: user.surname,
-      engagement: sheet.participants[idx].engagement,
-      role: sheet.participants[idx].role,
-      rolePoints: sheet.participants[idx].rolePoints,
-    }))
-    const reviewers: ReviewerDto[] = sheet.reviewers.map(reviewer => ({
+    const participants: ParticipantDto[] = sheet.participantData.map(
+      (user, idx) => ({
+        id: user._id,
+        name: user.name,
+        surname: user.surname,
+        engagement: sheet.participants[idx].engagement,
+        role: sheet.participants[idx].role,
+        rolePoints: sheet.participants[idx].rolePoints,
+      }),
+    )
+    const reviewers: ReviewerDto[] = sheet.reviewers.map((reviewer) => ({
       id: reviewer._id,
       name: `${reviewer.name} ${reviewer.surname}`,
       email: reviewer.email,
@@ -29,7 +39,8 @@ export default class GradeSheetService {
     return {
       id: sheet._id,
       mentorId: sheet.mentor[0] && sheet.mentor[0]._id,
-      mentorName: sheet.mentor[0] && `${sheet.mentor[0].name} ${sheet.mentor[0].surname}`,
+      mentorName:
+        sheet.mentor[0] && `${sheet.mentor[0].name} ${sheet.mentor[0].surname}`,
       projectId: sheet.project[0] && sheet.project[0]._id,
       projectName: sheet.project[0] && sheet.project[0].name,
       projectUrl: sheet.project[0] && sheet.project[0].projectUrl,
@@ -75,22 +86,24 @@ export default class GradeSheetService {
     return await this.repository.getReviewerGradeSheets(userId)
   }
 
-  async createGradeSheet(gradeSheet: GradeSheet) {
+  async createGradeSheet(gradeSheet: CreateGradeSheetDto) {
+    const sheet = new GradeSheetModel(gradeSheet)
+    await sheet.validate()
     if (!gradeSheet.participants) gradeSheet.participants = []
     if (!gradeSheet.mentorGrades) gradeSheet.mentorGrades = {}
     if (!gradeSheet.mentorReviewerGrades) gradeSheet.mentorReviewerGrades = []
     if (!gradeSheet.reviewers) gradeSheet.reviewers = []
     gradeSheet.mentorReviewerGrades = gradeSheet.mentorReviewerGrades.filter(
-      (grades) => gradeSheet.reviewers.includes(grades.mentorID),
+      (grades) => gradeSheet.reviewers.includes(grades.mentorId),
     )
     for (let i in gradeSheet.reviewers) {
-      const mentorID = gradeSheet.reviewers[i]
+      const mentorId = gradeSheet.reviewers[i]
       const index = gradeSheet.mentorReviewerGrades.findIndex(
-        (grades) => grades.mentorID === mentorID,
+        (grades) => grades.mentorId === mentorId,
       )
       if (index === -1)
         gradeSheet.mentorReviewerGrades.push({
-          mentorID,
+          mentorId,
           grades: {},
         })
     }
@@ -239,20 +252,23 @@ export default class GradeSheetService {
 
   async setParticipants(
     gradeSheetId: mongoose.Types.ObjectId,
-    participants: Participant[],
+    participants: ParticipantDto[],
   ) {
     const sheet = (await this.repository.getById(gradeSheetId)) as
       | (GradeSheet & mongoose.Document)
       | null
     if (sheet === null) return null
-    sheet.participants = participants
+    sheet.participants = participants.map((participant) => ({
+      ...participant,
+      participantID: new mongoose.mongo.ObjectID(participant.id),
+    }))
     sheet.markModified('participants')
     return await this.repository.save(sheet)
   }
 
   async updateParticipants(
     gradeSheetId: mongoose.Types.ObjectId,
-    participants: Participant[],
+    participants: ParticipantDto[],
   ) {
     const sheet = (await this.repository.getById(gradeSheetId)) as
       | (GradeSheet & mongoose.Document)
@@ -260,8 +276,7 @@ export default class GradeSheetService {
     if (sheet === null) return null
     for (let i in participants) {
       const index = sheet.participants.findIndex(
-        (part) =>
-          `${part.participantID}` === `${participants[i].participantID}`,
+        (part) => `${part.participantID}` === `${participants[i].id}`,
       )
       if (index === -1) continue
       Object.assign(

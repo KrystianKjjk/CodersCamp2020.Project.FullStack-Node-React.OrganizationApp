@@ -1,7 +1,8 @@
-import GradeSheetModel, { Participant, Grade } from '../Models/GradeSheet'
+import { Grade } from '../Models/GradeSheet'
 import GradeSheetService from '../Services/GradeSheetService'
 import { Request, Response } from 'express'
 import * as mongoose from 'mongoose'
+import { ParticipantDto } from '../Models/DTO/GradeSheetDto'
 
 export default class GradeSheetController {
   gradeSheetService: GradeSheetService
@@ -168,12 +169,7 @@ export default class GradeSheetController {
 
   updateParticipants = async (req: Request, res: Response) => {
     const id = new mongoose.Types.ObjectId(req.params.id)
-    const participants: Participant[] = req.body.participants.map(
-      (part: Participant) => ({
-        ...part,
-        participantID: new mongoose.Types.ObjectId(part.participantID),
-      }),
-    )
+    const participants: ParticipantDto[] = req.body.participants
     const sheet = await this.gradeSheetService.updateParticipants(
       id,
       participants,
@@ -185,12 +181,7 @@ export default class GradeSheetController {
 
   setParticipants = async (req: Request, res: Response) => {
     const id = new mongoose.Types.ObjectId(req.params.id)
-    const participants: Participant[] = req.body.participants.map(
-      (part: Participant) => ({
-        ...part,
-        participantID: new mongoose.Types.ObjectId(part.participantID),
-      }),
-    )
+    const participants: ParticipantDto[] = req.body.participants
     const sheet = await this.gradeSheetService.setParticipants(id, participants)
     if (sheet === null)
       return res.status(404).json({ message: 'Grade sheet not found' })
@@ -221,9 +212,7 @@ export default class GradeSheetController {
 
   createGradeSheet = async (req: Request, res: Response) => {
     try {
-      const sheet = new GradeSheetModel(req.body)
-      await sheet.validate()
-      await this.gradeSheetService.createGradeSheet(sheet)
+      await this.gradeSheetService.createGradeSheet(req.body)
       res.status(201).json({ message: 'Grade sheet created' })
     } catch (err) {
       if (err.name === 'ValidationError')

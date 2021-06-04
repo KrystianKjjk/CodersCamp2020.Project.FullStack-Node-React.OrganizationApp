@@ -41,3 +41,9 @@ export interface GradeSheetDetailsDto {
     grades: { [prop: string]: Grade }
   }[]
 }
+
+export type CreateGradeSheetDto = Partial<GradeSheetDetailsDto> & {
+  mentorId: string
+  projectId: string
+  reviewers: string[]
+}

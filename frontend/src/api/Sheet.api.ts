@@ -32,8 +32,8 @@ export const getSheet = async (id: string): Promise<GradeSheetDetails> => {
 
 export const createSheet = async () => {
   await api.post('/grade/sheets', {
-    mentorID: '507f1f77bcf86cd799439011',
-    projectID: '507f1f77bcf86cd799439011',
+    mentorId: '507f1f77bcf86cd799439011',
+    projectId: '507f1f77bcf86cd799439011',
   })
 }
 
