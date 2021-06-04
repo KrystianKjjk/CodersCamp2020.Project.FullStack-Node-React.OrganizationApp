@@ -1,33 +1,37 @@
-import React, { useRef } from 'react'
+import React, { FC, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Container, CssBaseline, Paper } from '@material-ui/core'
+import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
 import styles from './ManageTeams.module.css'
 import AddButton from '../../../components/AddButton'
 import SelectSortBy from '../../../components/SelectSortBy'
 import SearchInput from '../../../components/SearchInput'
 import ReusableTable from '../../../components/ReusableTable'
-import { Container, CssBaseline, Paper } from '@material-ui/core'
-import { GridSelectionModelChangeParams } from '@material-ui/data-grid'
-import { useHistory } from 'react-router-dom'
 import PageHeader from '../../../components/PageHeader'
 import DeleteButton from '../../../components/DeleteButton'
 import {
   useTeams,
   sortTeams,
   searchTeam,
-  useCreateTeam,
   useDeleteTeam,
   useAppSelector,
 } from '../../../hooks'
 import { Team } from '../../../models'
+import { CreateTeam } from '../CreateTeam'
 
 export interface ManageTeamsProps {}
 
-const ManageTeams: React.FC<ManageTeamsProps> = () => {
+const ManageTeams: FC<ManageTeamsProps> = () => {
   const history = useHistory()
   const { activeCourse } = useAppSelector((state) => state.courseList)
-  const selectedTeams = useRef([] as string[])
-  const { data: teams, isLoading, isFetching, error } = useTeams(activeCourse?._id)
-  const { mutate: createTeam } = useCreateTeam()
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([])
+  const { data: teams, isLoading, isFetching, error } = useTeams(
+    activeCourse?._id,
+  )
   const { mutate: deleteTeam } = useDeleteTeam()
+  const [isCreateTeam, setIsCreateTeam] = useState(false)
+
+  // TODO: mobile view
 
   const tableName = 'Teams'
 
@@ -58,14 +62,14 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
   ]
 
   const handleTeamSelection = (params: GridSelectionModelChangeParams) => {
-    selectedTeams.current = [...params.selectionModel] as string[]
+    setSelectedTeams([...params.selectionModel] as string[])
   }
 
   const deleteSelectedTeams = () => {
-    selectedTeams.current.forEach((teamId) => {
+    selectedTeams.forEach((teamId) => {
       deleteTeam(teamId)
     })
-    selectedTeams.current = []
+    setSelectedTeams([])
   }
 
   const handleRowClick = (data: { id: string | number }) => {
@@ -83,25 +87,31 @@ const ManageTeams: React.FC<ManageTeamsProps> = () => {
       </PageHeader>
       <Paper className={styles.container}>
         <div className={styles.manageContainer}>
-          <h2 className={styles.manageHeader}>Manage Teams</h2>
-          <div className={styles.buttons}>
-            <AddButton
-              text="Add"
-              onClick={() => createTeam(activeCourse?._id)}
-              aria-label="Add team"
-            />
-            <DeleteButton
-              confirmTitle={`Are you sure you want to delete selected (${selectedTeams.current.length}) teams?`}
-              onConfirm={deleteSelectedTeams}
-            />
-          </div>
-          <span className={styles.selectSortBy}>
-            <SelectSortBy
-              onChange={changeSortBy}
-              initialValue=""
-              options={sortByOptions}
-            />
-          </span>
+          {isCreateTeam ? (
+            <CreateTeam setIsCreateTeam={setIsCreateTeam} />
+          ) : (
+            <>
+              <h2 className={styles.manageHeader}>Manage Teams</h2>
+              <span className={styles.selectSortBy}>
+                <SelectSortBy
+                  onChange={changeSortBy}
+                  initialValue=""
+                  options={sortByOptions}
+                />
+              </span>
+              <div className={styles.buttons}>
+                <AddButton
+                  text="Add"
+                  onClick={() => setIsCreateTeam(true)}
+                  aria-label="Add team"
+                />
+                <DeleteButton
+                  confirmTitle={`Are you sure you want to delete selected (${selectedTeams.length}) teams?`}
+                  onConfirm={deleteSelectedTeams}
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className={styles.table}>
           <ReusableTable
