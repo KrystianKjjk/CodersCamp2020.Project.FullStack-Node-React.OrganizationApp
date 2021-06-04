@@ -345,7 +345,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             data={sheet?.participants.map((user) => ({
               id: user.id,
               name: user.name,
-            }))}
+              surname: user.surname,
+            })) ?? []}
             isLoading={isLoading}
             isFetching={isFetching}
             error={error}
@@ -360,8 +361,8 @@ const ManageSheet: React.FC<ManageSheetProps> = () => {
             <EditGradeModal
               quality={editedGrade.quality}
               initPoints={editedGrade.points}
-              initComment={editedGrade.comment}
-              initDescription={editedGrade.description}
+              initComment={editedGrade.comment ?? ''}
+              initDescription={editedGrade.description ?? ''}
               onClickSave={handleEditGrade}
               open={!!editedGrade.quality}
               handleClose={() => setEditedGrade({ quality: '', points: 0 })}

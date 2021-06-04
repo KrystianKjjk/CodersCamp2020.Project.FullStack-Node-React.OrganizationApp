@@ -11,6 +11,7 @@ export interface Grades {
 export interface Participant {
   id: string
   name: string
+  surname: string
   engagement?: number
   role?: string
   rolePoints?: number

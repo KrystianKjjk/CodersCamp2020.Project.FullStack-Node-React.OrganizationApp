@@ -15,7 +15,8 @@ export default class GradeSheetService {
     console.log(sheet)
     const participants: ParticipantDto[] = sheet.participantData.map((user, idx) => ({
       id: user._id,
-      name: `${user.name} ${user.surname}`,
+      name: user.name,
+      surname: user.surname,
       engagement: sheet.participants[idx].engagement,
       role: sheet.participants[idx].role,
       rolePoints: sheet.participants[idx].rolePoints,
