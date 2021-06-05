@@ -148,18 +148,6 @@ export default class GradeSheetRepository extends Repository {
     return this.model.find(filter, projection)
   }
 
-  async getMentorGradeSheets(
-    userId: mongoose.Types.ObjectId,
-  ): Promise<GradeSheet[]> {
-    const filter = {
-      mentorID: userId,
-    }
-    const projection = {
-      _id: 0,
-    }
-    return this.model.find(filter, projection)
-  }
-
   async getGradeSheets(filters: GradeSheetFilters) {
     const {
       teamProjectFilter,

@@ -41,7 +41,7 @@ export default class GradeSheetController {
   }
 
   getMentorGradeSheets = async (req: Request, res: Response) => {
-    const userId = new mongoose.Types.ObjectId(req.params.id)
+    const userId = req.params.id
     const sheets = await this.gradeSheetService.getMentorGradeSheets(userId)
     res.status(200).json(sheets)
   }

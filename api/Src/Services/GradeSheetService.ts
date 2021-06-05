@@ -10,6 +10,17 @@ import {
   ReviewerDto,
 } from '../Models/DTO/GradeSheetDto'
 
+function transformToGradeSheetDto(sheet: any) {
+  return {
+    id: sheet._id,
+    mentorId: sheet.mentor[0] && sheet.mentor[0]._id,
+    mentorName: sheet.mentor[0] && sheet.mentor[0].name,
+    mentorSurname: sheet.mentor[0] && sheet.mentor[0].surname,
+    projectId: sheet.project[0] && sheet.project[0]._id,
+    projectName: sheet.project[0] && sheet.project[0].name,
+  }
+}
+
 export default class GradeSheetService {
   repository: GradeSheetRepository
   constructor(repository: GradeSheetRepository) {
@@ -54,14 +65,7 @@ export default class GradeSheetService {
 
   async getGradeSheets(): Promise<GradeSheetDto[]> {
     const sheets = await this.repository.getGradeSheets({})
-    return sheets.map((sheet) => ({
-      id: sheet._id,
-      mentorId: sheet.mentor[0] && sheet.mentor[0]._id,
-      mentorName: sheet.mentor[0] && sheet.mentor[0].name,
-      mentorSurname: sheet.mentor[0] && sheet.mentor[0].surname,
-      projectId: sheet.project[0] && sheet.project[0]._id,
-      projectName: sheet.project[0] && sheet.project[0].name,
-    }))
+    return sheets.map(transformToGradeSheetDto)
   }
 
   async getReviewerGrades(
@@ -78,8 +82,9 @@ export default class GradeSheetService {
     return await this.repository.getParticipantGradeSheets(userId)
   }
 
-  async getMentorGradeSheets(userId: mongoose.Types.ObjectId) {
-    return await this.repository.getMentorGradeSheets(userId)
+  async getMentorGradeSheets(userId: string) {
+    const sheets = await this.repository.getGradeSheets({mentorId: userId})
+    return sheets.map(transformToGradeSheetDto)
   }
 
   async getReviewerGradeSheets(userId: mongoose.Types.ObjectId) {
