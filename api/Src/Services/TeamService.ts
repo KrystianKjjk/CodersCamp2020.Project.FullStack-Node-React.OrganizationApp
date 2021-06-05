@@ -32,6 +32,8 @@ class TeamService {
   }
 
   async createTeam(team: Omit<Team, '_id'>) {
+    if (!team) return false
+    if (!team.course) return false
     return this.teamRepository.create(team)
   }
 

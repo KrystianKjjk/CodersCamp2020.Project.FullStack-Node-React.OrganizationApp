@@ -29,6 +29,9 @@ export default class TeamsController {
   createTeam = async (req: Request, res: Response) => {
     const teamData = req.body
     const newTeam = await this.service.createTeam(teamData)
+    if (!newTeam) {
+      res.status(400).json({ message: 'Data cannot be null' })
+    }
     res.status(201).json({ ...newTeam, message: 'Team was created' })
   }
 
