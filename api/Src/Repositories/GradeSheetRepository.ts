@@ -1,8 +1,10 @@
 import { GradeSheet } from '../Models/GradeSheet'
 import { Repository } from './Repository'
 import * as mongoose from 'mongoose'
+import * as _ from 'lodash'
 
 export interface GradeSheetFilters {
+  id?: string
   sectionId?: string
   projectId?: string
   teamProjectId?: string
@@ -68,6 +70,7 @@ const lookupReviewers = {
 
 function createFilters(filters: GradeSheetFilters) {
   const {
+    id,
     sectionId,
     projectId,
     teamProjectId,
@@ -76,6 +79,15 @@ function createFilters(filters: GradeSheetFilters) {
     participantId,
     mentorReviewerId,
   } = filters
+
+  const idFilter = id
+    ? [
+        {
+          $match: { _id: new mongoose.mongo.ObjectID(id) },
+        },
+      ]
+    : []
+
   const teamProjectFilter = teamProjectId
     ? [
         {
@@ -141,6 +153,7 @@ function createFilters(filters: GradeSheetFilters) {
     : []
 
   return {
+    idFilter,
     courseFilter,
     sectionFilter,
     projectFilter,
@@ -151,9 +164,48 @@ function createFilters(filters: GradeSheetFilters) {
   }
 }
 
+const gradeSheetDetailsProjection = {
+  $project: {
+    _id: 1,
+    project: {
+      _id: 1,
+      projectName: 1,
+      projectUrl: 1,
+      description: 1,
+    },
+    mentor: {
+      _id: 1,
+      name: 1,
+      surname: 1,
+    },
+    mentorGrades: 1,
+    reviewers: 1,
+    mentorReviewerGrades: 1,
+    participantData: {
+      _id: 1,
+      name: 1,
+      surname: 1,
+    },
+    participants: 1,
+    section: {
+      _id: 1,
+      name: 1,
+    },
+  },
+}
+
+const gradeSheetProjection = {
+  $project: _.pick(gradeSheetDetailsProjection.$project, [
+    '_id',
+    'project',
+    'mentor',
+  ]),
+}
+
 export default class GradeSheetRepository extends Repository {
-  async getGradeSheets(filters: GradeSheetFilters) {
+  async find(filters: GradeSheetFilters) {
     const {
+      idFilter,
       teamProjectFilter,
       mentorFilter,
       projectFilter,
@@ -163,8 +215,10 @@ export default class GradeSheetRepository extends Repository {
       reviewerFilter,
     } = createFilters(filters)
     return this.model.aggregate([
+      ...idFilter,
       ...teamProjectFilter,
       ...mentorFilter,
+      ...reviewerFilter,
       lookupTeamProject,
       ...projectFilter,
       lookupParentProject,
@@ -174,80 +228,17 @@ export default class GradeSheetRepository extends Repository {
       lookupMentor,
       lookupParticipants,
       ...participantFilter,
-      ...reviewerFilter,
       lookupReviewers,
-      {
-        $project: {
-          _id: 1,
-          project: {
-            _id: 1,
-            projectName: 1,
-            projectUrl: 1,
-            description: 1,
-          },
-          mentor: {
-            _id: 1,
-            name: 1,
-            surname: 1,
-          },
-          mentorGrades: 1,
-          reviewers: 1,
-          mentorReviewerGrades: 1,
-          participantData: 1,
-          section: {
-            _id: 1,
-            name: 1,
-          },
-        },
-      },
+      filters.id ? gradeSheetDetailsProjection : gradeSheetProjection,
     ])
   }
 
   async getAllByCourse(courseId: string) {
-    return this.getGradeSheets({ courseId })
+    return this.find({ courseId })
   }
 
-  async getGradeSheet(id: mongoose.Types.ObjectId) {
-    return this.model.aggregate([
-      {
-        $match: { _id: id },
-      },
-      lookupTeamProject,
-      lookupParentProject,
-      lookupSection,
-      lookupMentor,
-      lookupParticipants,
-      lookupReviewers,
-      {
-        $project: {
-          _id: 1,
-          project: {
-            _id: 1,
-            projectName: 1,
-            projectUrl: 1,
-            description: 1,
-          },
-          mentor: {
-            _id: 1,
-            name: 1,
-            surname: 1,
-          },
-          mentorGrades: 1,
-          reviewers: 1,
-          mentorReviewerGrades: 1,
-          participantData: {
-            _id: 1,
-            name: 1,
-            surname: 1,
-          },
-          participants: 1,
-          section: {
-            _id: 1,
-            name: 1,
-          },
-        },
-      },
-    ])
+  async getGradeSheet(id: string) {
+    return this.find({ id })
   }
 
   async addMentorReviewer(

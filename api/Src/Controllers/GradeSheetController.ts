@@ -11,7 +11,7 @@ export default class GradeSheetController {
   }
 
   getGradeSheet = async (req: Request, res: Response) => {
-    const id = new mongoose.Types.ObjectId(req.params.id)
+    const id = req.params.id
     const sheet = await this.gradeSheetService.findGradeSheetById(id)
     if (!sheet)
       return res.status(404).json({ message: 'Grade sheet not found' })
@@ -23,15 +23,6 @@ export default class GradeSheetController {
     res.status(200).json(sheets)
   }
 
-  getReviewerGrades = async (req: Request, res: Response) => {
-    const id = new mongoose.Types.ObjectId(req.params.id)
-    const mentorId = new mongoose.Types.ObjectId(req.params.mentorId)
-    const sheet = await this.gradeSheetService.getReviewerGrades(id, mentorId)
-    if (!sheet)
-      return res.status(404).json({ message: 'Grade sheet not found' })
-    res.status(200).json(sheet.grades)
-  }
-
   getParticipantGradeSheets = async (req: Request, res: Response) => {
     const userId = req.params.id
     const sheets = await this.gradeSheetService.getParticipantGradeSheets(
@@ -40,16 +31,52 @@ export default class GradeSheetController {
     res.status(200).json(sheets)
   }
 
+  getParticipantGradeSheet = async (req: Request, res: Response) => {
+    const id = req.params.id
+    const userId = req.params.userId
+    const sheet = await this.gradeSheetService.getParticipantGradeSheet(id, userId)
+    if (!sheet)
+      return res.status(404).json({ message: 'Grade sheet not found' })
+    res.status(200).json(sheet)
+  }
+
   getMentorGradeSheets = async (req: Request, res: Response) => {
     const userId = req.params.id
     const sheets = await this.gradeSheetService.getMentorGradeSheets(userId)
     res.status(200).json(sheets)
   }
 
+  getMentorGradeSheet = async (req: Request, res: Response) => {
+    const id = req.params.id
+    const userId = req.params.userId
+    const sheet = await this.gradeSheetService.getMentorGradeSheet(id, userId)
+    if (!sheet)
+      return res.status(404).json({ message: 'Grade sheet not found' })
+    res.status(200).json(sheet)
+  }
+
   getReviewerGradeSheets = async (req: Request, res: Response) => {
     const userId = req.params.id
     const sheets = await this.gradeSheetService.getReviewerGradeSheets(userId)
     res.status(200).json(sheets)
+  }
+
+  getReviewerGradeSheet = async (req: Request, res: Response) => {
+    const id = req.params.id
+    const userId = req.params.userId
+    const sheet = await this.gradeSheetService.getReviewerGradeSheet(id, userId)
+    if (!sheet)
+      return res.status(404).json({ message: 'Grade sheet not found' })
+    res.status(200).json(sheet)
+  }
+
+  getReviewerGrades = async (req: Request, res: Response) => {
+    const id = req.params.id
+    const mentorId = req.params.mentorId
+    const sheet = await this.gradeSheetService.getReviewerGrades(id, mentorId)
+    if (!sheet)
+      return res.status(404).json({ message: 'Grade sheet not found' })
+    res.status(200).json(sheet.grades)
   }
 
   addMentorReviewer = async (req: Request, res: Response) => {

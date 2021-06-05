@@ -14,16 +14,16 @@ export interface ReviewerDto {
   email: string
 }
 
-export interface GradeSheetDto {
+export type GradeSheetsDto = {
   id: string
   projectId: string
   projectName: string
   mentorId: string
   mentorName: string
   mentorSurname: string
-}
+}[]
 
-export interface GradeSheetDetailsDto {
+export interface GradeSheetDto {
   id: string
   projectId: string
   projectName: string
@@ -42,8 +42,8 @@ export interface GradeSheetDetailsDto {
   }[]
 }
 
-export type CreateGradeSheetDto = Partial<GradeSheetDetailsDto> & {
+export type CreateGradeSheetDto = Partial<GradeSheetDto> & {
   mentorId: string
   projectId: string
-  reviewers: string[]
+  reviewers?: string[]
 }

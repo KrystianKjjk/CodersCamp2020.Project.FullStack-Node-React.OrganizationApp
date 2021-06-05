@@ -23,16 +23,34 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
       c.getParticipantGradeSheets,
     )
     router.get(
+      '/participants/:userId/grade/sheets/:id',
+      isAdmin,
+      idsValidation(),
+      c.getParticipantGradeSheet,
+    )
+    router.get(
       '/mentors/:id/grade/sheets',
       isAdmin,
       idValidation,
       c.getMentorGradeSheets,
     )
     router.get(
+      '/mentors/:userId/grade/sheets/:id',
+      isAdmin,
+      idsValidation(),
+      c.getMentorGradeSheet,
+    )
+    router.get(
       '/reviewers/:id/grade/sheets',
       isAdmin,
       idValidation,
       c.getReviewerGradeSheets,
+    )
+    router.get(
+      '/reviewers/:userId/grade/sheets/:id',
+      isAdmin,
+      idsValidation(),
+      c.getReviewerGradeSheet,
     )
     router.post('/grade/sheets', isAdmin, c.createGradeSheet)
     router.post(
@@ -121,6 +139,12 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
       idValidation,
       c.getParticipantGradeSheets,
     )
+    router.get(
+      '/participants/me/:userId/grade/sheets/:id',
+      HasId('userId'),
+      idsValidation(),
+      c.getParticipantGradeSheet,
+    )
 
     // Mentor routes
     router.get(
@@ -128,6 +152,12 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
       HasId('id'),
       idValidation,
       c.getMentorGradeSheets,
+    )
+    router.get(
+      '/mentors/me/:userId/grade/sheets/:id',
+      HasId('userId'),
+      idsValidation(),
+      c.getMentorGradeSheet,
     )
     router.patch(
       '/mentor/me/:mentorId/grade/sheets/:id/grades',
@@ -150,6 +180,12 @@ export default function gradeSheetRoutes(c: GradeSheetController) {
       HasId('id'),
       idValidation,
       c.getReviewerGradeSheets,
+    )
+    router.get(
+      '/reviewers/me/:userId/grade/sheets/:id',
+      HasId('userId'),
+      idsValidation(),
+      c.getReviewerGradeSheet,
     )
     router.get(
       '/reviewers/me/:mentorId/grade/sheets/:id/grades',
