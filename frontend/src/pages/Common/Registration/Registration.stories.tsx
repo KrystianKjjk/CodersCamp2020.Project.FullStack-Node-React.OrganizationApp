@@ -1,6 +1,6 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react/types-6-0'
-import Registration from './Registration'
+import { Registration } from './Registration'
 import { Provider } from 'react-redux'
 import { store } from '../../../app/store'
 import { StyledTextFieldProps } from '../../../components/StyledTextField/StyledTextField'
