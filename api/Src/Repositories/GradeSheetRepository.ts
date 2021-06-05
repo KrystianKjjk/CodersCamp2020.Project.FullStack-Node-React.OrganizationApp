@@ -66,6 +66,69 @@ const lookupReviewers = {
   },
 }
 
+function createFilters(filters: GradeSheetFilters) {
+  const {
+    sectionId,
+    projectId,
+    teamProjectId,
+    courseId,
+    mentorId,
+    participantId,
+    mentorReviewerId,
+  } = filters
+  const teamProjectFilter = teamProjectId
+    ? [
+        {
+          $match: { projectID: new mongoose.mongo.ObjectID(teamProjectId) },
+        },
+      ]
+    : []
+
+  const mentorFilter = mentorId
+    ? [
+        {
+          $match: { mentorID: new mongoose.mongo.ObjectID(mentorId) },
+        },
+      ]
+    : []
+
+  const projectFilter = projectId
+    ? [
+        {
+          $match: {
+            'project.parentProjectId': new mongoose.mongo.ObjectID(projectId),
+          },
+        },
+      ]
+    : []
+
+  const sectionFilter = sectionId
+    ? [
+        {
+          $match: {
+            'parentProject.sectionId': new mongoose.mongo.ObjectID(sectionId),
+          },
+        },
+      ]
+    : []
+
+  const courseFilter = courseId
+    ? [
+        {
+          $match: { 'section.course': new mongoose.mongo.ObjectID(courseId) },
+        },
+      ]
+    : []
+
+  return {
+    courseFilter,
+    sectionFilter,
+    projectFilter,
+    mentorFilter,
+    teamProjectFilter,
+  }
+}
+
 export default class GradeSheetRepository extends Repository {
   async getParticipantGradeSheets(
     userId: mongoose.Types.ObjectId,
@@ -99,57 +162,12 @@ export default class GradeSheetRepository extends Repository {
 
   async getGradeSheets(filters: GradeSheetFilters) {
     const {
-      sectionId,
-      projectId,
-      teamProjectId,
-      courseId,
-      mentorId,
-      participantId,
-      mentorReviewerId,
-    } = filters
-    const teamProjectFilter = teamProjectId
-      ? [
-          {
-            $match: { projectID: new mongoose.mongo.ObjectID(teamProjectId) },
-          },
-        ]
-      : []
-
-    const mentorFilter = mentorId
-      ? [
-          {
-            $match: { mentorID: new mongoose.mongo.ObjectID(mentorId) },
-          },
-        ]
-      : []
-
-    const projectFilter = projectId
-      ? [
-          {
-            $match: {
-              'project.parentProjectId': new mongoose.mongo.ObjectID(projectId),
-            },
-          },
-        ]
-      : []
-
-    const sectionFilter = sectionId
-      ? [
-          {
-            $match: {
-              'parentProject.sectionId': new mongoose.mongo.ObjectID(sectionId),
-            },
-          },
-        ]
-      : []
-
-    const courseFilter = courseId
-      ? [
-          {
-            $match: { 'section.course': new mongoose.mongo.ObjectID(courseId) },
-          },
-        ]
-      : []
+      teamProjectFilter,
+      mentorFilter,
+      projectFilter,
+      sectionFilter,
+      courseFilter,
+    } = createFilters(filters)
     return this.model.aggregate([
       ...teamProjectFilter,
       ...mentorFilter,
