@@ -130,6 +130,16 @@ function createFilters(filters: GradeSheetFilters) {
       ]
     : []
 
+  const reviewerFilter = mentorReviewerId
+    ? [
+        {
+          $match: {
+            reviewers: new mongoose.mongo.ObjectID(mentorReviewerId),
+          },
+        },
+      ]
+    : []
+
   return {
     courseFilter,
     sectionFilter,
@@ -137,28 +147,11 @@ function createFilters(filters: GradeSheetFilters) {
     mentorFilter,
     teamProjectFilter,
     participantFilter,
+    reviewerFilter,
   }
 }
 
 export default class GradeSheetRepository extends Repository {
-  async getParticipantGradeSheets(
-    userId: mongoose.Types.ObjectId,
-  ): Promise<GradeSheet[]> {
-    const filter = {
-      participants: { $elemMatch: { participantID: userId } },
-    }
-    const projection = {
-      _id: 0,
-      projectID: 1,
-      participants: { $elemMatch: { participantID: userId } },
-      mentorID: 1,
-      reviewers: 1,
-      mentorGrades: 1,
-      mentorReviewerGrades: 1,
-    }
-    return this.model.find(filter, projection)
-  }
-
   async getGradeSheets(filters: GradeSheetFilters) {
     const {
       teamProjectFilter,
@@ -167,6 +160,7 @@ export default class GradeSheetRepository extends Repository {
       sectionFilter,
       courseFilter,
       participantFilter,
+      reviewerFilter,
     } = createFilters(filters)
     return this.model.aggregate([
       ...teamProjectFilter,
@@ -180,6 +174,7 @@ export default class GradeSheetRepository extends Repository {
       lookupMentor,
       lookupParticipants,
       ...participantFilter,
+      ...reviewerFilter,
       lookupReviewers,
       {
         $project: {
@@ -253,22 +248,6 @@ export default class GradeSheetRepository extends Repository {
         },
       },
     ])
-  }
-
-  async getReviewerGradeSheets(
-    userId: mongoose.Types.ObjectId,
-  ): Promise<GradeSheet[]> {
-    const filter = {
-      reviewers: userId,
-    }
-    const projection = {
-      _id: 0,
-      mentorID: 1,
-      'participants.participantID': 1,
-      'participants.role': 1,
-      mentorReviewerGrades: { $elemMatch: { mentorID: userId } },
-    }
-    return this.model.find(filter, projection)
   }
 
   async addMentorReviewer(
