@@ -13,9 +13,7 @@ export const getRefProjects = async () => {
 }
 
 export const getRefProject = async (projectID: string): Promise<ProjectDto> => {
-  const { data } = await api.get<PopulatedProjectData>(
-    `${endpoint}/${projectID}`,
-  )
+  const { data } = await api.get<PopulatedProject>(`${endpoint}/${projectID}`)
 
   return {
     ...data,
@@ -28,11 +26,11 @@ export const getRefProject = async (projectID: string): Promise<ProjectDto> => {
 }
 
 export const createRefProject = async (project: Omit<ProjectData, '_id'>) => {
-  return api.post(`${endpoint}`, project)
+  return api.post<Omit<ProjectData, '_id'>, Project>(`${endpoint}`, project)
 }
 
 export const deleteRefProject = async (projectID: string) => {
-  return api.delete<ProjectData>(`${endpoint}/${projectID}`)
+  return api.delete<MessageResponse>(`${endpoint}/${projectID}`)
 }
 
 export const addRefProject = async (project: ProjectData) => {
@@ -53,7 +51,7 @@ export const addRefProject = async (project: ProjectData) => {
 }
 
 export const updateRefProject = async (project: ProjectData) => {
-  return api.patch<ProjectData, PopulatedProjectData>(
+  return api.patch<ProjectData, PopulatedProject>(
     `${endpoint}/${project._id}`,
     project,
   )
@@ -70,7 +68,17 @@ export interface ProjectDto {
   projectUrl: string
 }
 
-export interface PopulatedProjectData {
+export interface Project {
+  _id: string
+  sectionId: string
+  projectName: string
+  projectUrl: string
+  description: string
+  createdAt: string
+  updatedAt?: string
+}
+
+export interface PopulatedProject {
   _id: string
   sectionId: SectionData
   projectName: string
@@ -78,4 +86,8 @@ export interface PopulatedProjectData {
   description: string
   createdAt: string
   updatedAt: string
+}
+
+export interface MessageResponse {
+  message: string
 }

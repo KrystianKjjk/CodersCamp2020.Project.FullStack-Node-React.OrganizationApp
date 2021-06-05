@@ -19,26 +19,22 @@ export default useProject
 export const useUpdateProject = () =>
   useMutationWithConfirm(updateRefProject, {
     invalidate: queryKey,
-    onSuccess: ({ data }) => {
+    onSuccess: ({ data: { _id, sectionId, projectName } }) => {
       queryClient.setQueryData(queryKey + 's', (cachedData) => {
-        if (cachedData && Array.isArray(cachedData)) {
-          return cachedData.map((project) => {
-            if (project.id === data._id) {
-              return {
-                ...data,
-                id: project.id,
-                sectionName: data.sectionId.name,
-                sectionId: data.sectionId._id,
-                startDate: new Date(
-                  data.sectionId.startDate,
-                ).toLocaleDateString(),
-                endDate: new Date(data.sectionId.endDate).toLocaleDateString(),
-              }
-            }
-            return project
-          })
-        }
-        return cachedData
+        if (!cachedData || !Array.isArray(cachedData)) return cachedData
+
+        return cachedData.map((project) => {
+          if (project.id !== _id) return project
+
+          return {
+            id: _id,
+            sectionName: sectionId.name,
+            sectionId: sectionId._id,
+            projectName,
+            startDate: new Date(sectionId.startDate).toLocaleDateString(),
+            endDate: new Date(sectionId.endDate).toLocaleDateString(),
+          }
+        })
       })
     },
   })
