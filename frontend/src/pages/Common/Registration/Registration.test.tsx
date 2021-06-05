@@ -1,5 +1,5 @@
 import React from 'react'
-import Registration from './Registration'
+import { Registration } from './Registration'
 import {
   fireEvent,
   render,
@@ -45,25 +45,33 @@ describe('Registration', () => {
     )
 
     const inputFirstNameDiv = screen.getByTestId('r-fname')
-    const inputFirstNameElement = inputFirstNameDiv.querySelector('input')
+    const inputFirstNameElement = inputFirstNameDiv.querySelector(
+      'input',
+    ) as HTMLElement
     fireEvent.change(inputFirstNameElement, { target: { value: 'Jan' } })
 
     const inputLastNameDiv = screen.getByTestId('r-lname')
-    const inputLastNameElement = inputLastNameDiv.querySelector('input')
+    const inputLastNameElement = inputLastNameDiv.querySelector(
+      'input',
+    ) as HTMLElement
     fireEvent.change(inputLastNameElement, { target: { value: 'Nowak' } })
 
     const inputEmailDiv = screen.getByTestId('r-email')
-    const inputEmailElement = inputEmailDiv.querySelector('input')
+    const inputEmailElement = inputEmailDiv.querySelector(
+      'input',
+    ) as HTMLElement
     fireEvent.change(inputEmailElement, { target: { value: 'testowy@o2.pl' } })
 
     const inputPasswordDiv = screen.getByTestId('r-password')
-    const inputPasswordElement = inputPasswordDiv.querySelector('input')
+    const inputPasswordElement = inputPasswordDiv.querySelector(
+      'input',
+    ) as HTMLElement
     fireEvent.change(inputPasswordElement, { target: { value: 'Aaaa1234!' } })
 
     const inputPasswordConfirmDiv = screen.getByTestId('r-cpassword')
     const inputPasswordConfirmElement = inputPasswordConfirmDiv.querySelector(
       'input',
-    )
+    ) as HTMLElement
     fireEvent.change(inputPasswordConfirmElement, {
       target: { value: 'Aaaa1234!' },
     })
