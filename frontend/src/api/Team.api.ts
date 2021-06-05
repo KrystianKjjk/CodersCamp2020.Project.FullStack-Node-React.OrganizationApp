@@ -1,6 +1,4 @@
 import api from './api.service'
-import { TeamData, Team, TeamInfo } from '../models/Team.model'
-import { CourseData } from '../models/Course.model'
 import {
   calcProjectGrade,
   calcUserProjectGrade,
@@ -8,6 +6,10 @@ import {
   calcUserTestsGrade,
 } from '.'
 import {
+  CourseData,
+  Team,
+  TeamData,
+  TeamInfo,
   TeamProject,
   TeamProjectData,
   User,
@@ -127,8 +129,14 @@ export const deleteUserFromTeam = async (teamId: string, userId: string) => {
   await api.delete(`teams/${teamId}/users/${userId}`)
 }
 
-export const createTeam = async (courseId?: string) => {
-  await api.post('/teams', { course: courseId })
+export const createTeam = async ({
+  courseId,
+  mentorId,
+}: {
+  courseId: string
+  mentorId: string
+}) => {
+  await api.post('/teams', { course: courseId ?? null, mentor: mentorId })
 }
 
 export const deleteTeam = async (id: string) => {
