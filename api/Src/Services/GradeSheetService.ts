@@ -78,8 +78,9 @@ export default class GradeSheetService {
     )
   }
 
-  async getParticipantGradeSheets(userId: mongoose.Types.ObjectId) {
-    return await this.repository.getParticipantGradeSheets(userId)
+  async getParticipantGradeSheets(userId: string) {
+    const sheets = await this.repository.getGradeSheets({participantId: userId})
+    return sheets.map(transformToGradeSheetDto)
   }
 
   async getMentorGradeSheets(userId: string) {

@@ -120,12 +120,23 @@ function createFilters(filters: GradeSheetFilters) {
       ]
     : []
 
+  const participantFilter = participantId
+    ? [
+        {
+          $match: {
+            'participantData._id': new mongoose.mongo.ObjectID(participantId),
+          },
+        },
+      ]
+    : []
+
   return {
     courseFilter,
     sectionFilter,
     projectFilter,
     mentorFilter,
     teamProjectFilter,
+    participantFilter,
   }
 }
 
@@ -155,6 +166,7 @@ export default class GradeSheetRepository extends Repository {
       projectFilter,
       sectionFilter,
       courseFilter,
+      participantFilter,
     } = createFilters(filters)
     return this.model.aggregate([
       ...teamProjectFilter,
@@ -167,6 +179,7 @@ export default class GradeSheetRepository extends Repository {
       ...courseFilter,
       lookupMentor,
       lookupParticipants,
+      ...participantFilter,
       lookupReviewers,
       {
         $project: {

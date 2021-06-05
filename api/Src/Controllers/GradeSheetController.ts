@@ -33,7 +33,7 @@ export default class GradeSheetController {
   }
 
   getParticipantGradeSheets = async (req: Request, res: Response) => {
-    const userId = new mongoose.Types.ObjectId(req.params.id)
+    const userId = req.params.id
     const sheets = await this.gradeSheetService.getParticipantGradeSheets(
       userId,
     )
