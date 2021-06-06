@@ -14,7 +14,7 @@ const useMutationWithConfirm = <T, R, D>(
   request: MutationFunction<T, R>,
   {
     successMessage = 'Success!',
-    errorMessage = 'Something wents wrong :(',
+    errorMessage = 'Something went wrong',
     invalidate,
     onSuccess,
     onError,
