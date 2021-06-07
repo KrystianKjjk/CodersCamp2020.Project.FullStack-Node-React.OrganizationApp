@@ -16,7 +16,7 @@ export const getProject = async (id: string): Promise<Project | null> => {
   return {
     id: project._id,
     name: project.projectName,
-    sectionName: section?.name,
+    sectionName: section?.name || '',
     url: project.projectUrl,
     description: project.description,
   }

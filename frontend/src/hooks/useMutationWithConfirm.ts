@@ -3,7 +3,7 @@ import useSnackbar from './useSnackbar'
 
 export interface Options<T, R> {
   successMessage?: string
-  onSuccess?: () => void
+  onSuccess?: (data: any) => void
   errorMessage?: string
   onError?: () => void
   onSettled?: () => void
@@ -40,10 +40,10 @@ const useMutationWithConfirm = <T, R, D>(
 
       return { previousData }
     },
-    onSuccess: () => {
+    onSuccess: (data: T) => {
       invalidate && queryClient.invalidateQueries(invalidate)
       successMessage && showSuccess(successMessage)
-      onSuccess && onSuccess()
+      onSuccess && onSuccess(data)
     },
     onError: () => {
       errorMessage && showError(errorMessage)

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Box, LinearProgress } from '@material-ui/core'
-import { useHistory, useParams } from 'react-router-dom'
+import { match, useHistory, useParams } from 'react-router-dom'
+import { GridValueFormatterParams } from '@material-ui/data-grid'
 
 import EditableField from '../../../components/EditableField'
 import UButton from '../../../components/UButton'
-
-import styles from './ManageReferenceProject.module.css'
 import DeleteButton from '../../../components/DeleteButton'
 import useSnackbar from '../../../hooks/useSnackbar'
 import {
@@ -13,30 +12,53 @@ import {
   useDeleteProject,
   useCreateProject,
   useSections,
+  useProjects,
+  useProject,
 } from '../../../hooks'
-import useProject from '../../../hooks/useQuery/useProject'
 import DetailPage from '../../../components/DetailPage'
 import { Section } from '../../../models'
 import FindModal from '../../../components/FindModal'
-import { GridValueFormatterParams } from '@material-ui/data-grid'
 import { displayFormattedDate } from '../../../api'
 
-export interface ManageReferenceProjectProps {}
+import { InputValues } from './types'
+import styles from './ManageReferenceProject.module.css'
 
-const ManageReferenceProject = (props: any) => {
+export interface ManageReferenceProjectProps {
+  history: any
+  location: Location
+  match: match
+}
+
+const initialValues = {
+  _id: '',
+  description: '',
+  projectName: '',
+  projectUrl: '',
+  sectionId: '',
+  sectionName: '',
+}
+
+const ManageReferenceProject = (props: ManageReferenceProjectProps) => {
   const { projectID } = useParams<{ projectID: string }>()
   const history = useHistory()
 
   const [isEdit, setIsEdit] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
-  const [project, setProject] = useState<any>()
+  const [project, setProject] = useState<InputValues>(initialValues)
   const { showError } = useSnackbar()
-  const { mutate: updateProject } = useUpdateProject()
+  const {
+    mutate: updateProject,
+    isSuccess: isUpdatedSuccessfully,
+  } = useUpdateProject()
   const { mutate: deleteProject } = useDeleteProject()
-  const { mutate: addProject } = useCreateProject()
+  const {
+    mutate: addProject,
+    isSuccess: isCreatedSuccessfully,
+  } = useCreateProject()
   const { data: fetchedProject, error, isLoading } = useProject(projectID, {
     enabled: !!projectID,
   })
+  useProjects()
 
   const [isOpenSectionsModal, setIsOpenSectionsModal] = useState(false)
   const sectionsQuery = useSections({
@@ -52,19 +74,29 @@ const ManageReferenceProject = (props: any) => {
   }, [])
 
   useEffect(() => {
-    setProject(fetchedProject)
+    if (isCreatedSuccessfully || isUpdatedSuccessfully) {
+      history.push('/projects')
+    }
+  }, [isCreatedSuccessfully, isUpdatedSuccessfully, history])
+
+  useEffect(() => {
+    if (fetchedProject) {
+      const { sectionId, id, ...project } = fetchedProject
+      setProject({
+        _id: id,
+        sectionId,
+        ...project,
+      })
+    }
   }, [fetchedProject])
 
   function toggleEdit() {
     setIsEdit(!isEdit)
   }
 
-  function handleInputChange(event: any) {
-    const target = event.target
-    const name = target.id
-    let value = target.value
-    if (name === 'sectionId') value = parseInt(value, 10)
-    // @ts-ignore
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value, id: name } = event.currentTarget
+
     setProject({
       ...project,
       [name]: value,
@@ -72,20 +104,17 @@ const ManageReferenceProject = (props: any) => {
   }
 
   function handleSave() {
+    const { _id, sectionName, ...queryData } = project
     if (isAdding) {
-      addProject(project)
+      addProject(queryData)
       setIsAdding(false)
-      history.push('/projects')
     } else {
-      updateProject(project)
+      updateProject({ ...queryData, _id })
     }
-    toggleEdit()
   }
 
   function handleDelete() {
-    if (!isAdding) {
-      deleteProject(project._id)
-    }
+    if (!isAdding) deleteProject(project._id)
 
     history.push('/projects')
   }
@@ -102,7 +131,7 @@ const ManageReferenceProject = (props: any) => {
     setProject({
       ...project,
       sectionId: section.id,
-      'Section name': section.name,
+      sectionName: section.name,
     })
   }
 
@@ -152,8 +181,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Name:'}
             fieldID={'projectName'}
-            fieldValue={project?.projectName}
-            placeholder={project?.projectName || 'example project name'}
+            fieldValue={project.projectName}
+            placeholder={project.projectName || 'example project name'}
             onChange={handleInputChange}
           />
 
@@ -162,7 +191,7 @@ const ManageReferenceProject = (props: any) => {
             isAdding={isAdding}
             fieldName={'Section name:'}
             fieldID={'Section name'}
-            fieldValue={project?.sectionName}
+            fieldValue={project.sectionName}
             modalAction={openSectionsModal}
           />
 
@@ -185,8 +214,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'URL:'}
             fieldID={'projectUrl'}
-            fieldValue={project?.projectUrl}
-            placeholder={project?.projectUrl || 'http://example.project.url'}
+            fieldValue={project.projectUrl}
+            placeholder={project.projectUrl || 'http://example.project.url'}
             onChange={handleInputChange}
           />
 
@@ -194,8 +223,8 @@ const ManageReferenceProject = (props: any) => {
             isEdit={isEdit}
             fieldName={'Description:'}
             fieldID={'description'}
-            fieldValue={project?.description}
-            placeholder={project?.description || 'Some example description'}
+            fieldValue={project.description}
+            placeholder={project.description || 'Some example description'}
             onChange={handleInputChange}
             textArea={true}
           />
