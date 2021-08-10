@@ -16,6 +16,7 @@ const user = {
   surname: `Test`,
   email: `test@test.pl`,
   password: `Test123!`,
+  type: 0,
 }
 
 class TestRepository extends UserRepository {
