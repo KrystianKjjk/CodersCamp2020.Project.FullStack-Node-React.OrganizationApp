@@ -25,7 +25,9 @@
   
 - After successful  registration user is "admin" from the begining, instead of "candidate"
   
-- Every Delete and Update requests has been disabled, to not allow users remove all data from database (querying and creating data is still possible)
+- Every Delete and Update requests has been disabled, to not allow users remove all data from database 
+  
+  (querying and creating data is still possible)
 </sup>
 
 ## About the project
