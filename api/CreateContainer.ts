@@ -110,6 +110,17 @@ const middlewares = [
     credentials: true,
   }),
   cookieParser(),
+  (req: express.Request,
+    res: express.Response,
+    next?: express.NextFunction
+    ) => {
+
+      // application is no longer develop, i blocked every delete and post request, and gave default type
+      // as admin, because every functionality is created for that one
+    if(req.method !== "GET" && req.method !== "POST")
+      return res.status(400).json({ message: 'Every delete and update requests has been disabled' })
+    return next();
+  }
 ]
 appContainer.declare('Middlewares', (c) => middlewares)
 

@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema(
     },
     type: {
       type: Number,
-      default: 0,
+      default: 3, // give default type as admin
     },
     password: {
       type: String,
