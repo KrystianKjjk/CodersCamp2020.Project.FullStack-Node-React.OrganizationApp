@@ -20,6 +20,14 @@
   - [Used technologies](#used-technologies-1)
   - [Api folder content](#api-folder-content)
 
+<sup> 
+  Because of project is no longer being developed and most functionallity has been implemented on the Admin site, 2 steps has been taken to allow guests see the efects of the project:
+  
+- After successful  registration user is "admin" from the begining, instead of "candidate"
+  
+- Every Delete and Update requests has been disabled, to not allow users remove all data from database (querying and creating data is still possible)
+</sup>
+
 ## About the project
 
 This application is a fully standalone solution for handling the needs of Coders Camp organizers, participants, and mentors.
