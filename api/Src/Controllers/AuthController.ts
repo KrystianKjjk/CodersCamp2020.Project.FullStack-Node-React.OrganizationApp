@@ -66,10 +66,16 @@ export default class AuthController {
       const refreshToken = this.service.generateRefreshToken(user)
 
       return res
-        .cookie('token', token, { maxAge: this.service.getTokenExp() * 1000 })
+        .cookie('token', token, {
+          maxAge: this.service.getTokenExp() * 1000,
+          sameSite: 'none',
+          secure: true,
+        })
         .cookie('refreshToken', refreshToken, {
           httpOnly: true,
           maxAge: this.service.getRefreshTokenExp() * 1000,
+          sameSite: 'none',
+          secure: true,
         })
         .status(200)
         .json({ _id: user._id, type: user.type })
